@@ -1,114 +1,170 @@
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace AbilityRestriction;
 
+[JsonConverter(typeof(ModConfigConverter))]
 public class ModConfig
 {
-    [JsonProperty("DeniedAbilities")]
-    private ModDeniedAbilities deniedAbilities = new ModDeniedAbilities();
+    [JsonProperty("deniedAbilities", DefaultValueHandling = DefaultValueHandling.Include)]
+    public ModDeniedAbilities DeniedAbilities { get; init; } = new ModDeniedAbilities();
 
     public ModDeniedAbility? GetDeniedAbility(int uid)
     {
-        return deniedAbilities.TryGetValue(uid, out var ability) ? ability : null;
+        return DeniedAbilities.TryGetValue(uid, out var ability) ? ability : null;
     }
 
     public void SetDeniedAbility(int uid, ModDeniedAbility deniedAbility)
     {
-        deniedAbilities[uid] = deniedAbility;
+        DeniedAbilities[uid] = deniedAbility;
     }
 
     public bool RemoveDeniedAbility(int uid)
     {
-        return deniedAbilities.Remove(uid);
+        return DeniedAbilities.Remove(uid);
     }
 
-    public void Load(string filePath)
+    public void CleanUp()
     {
-        if (File.Exists(filePath))
-        {
-            var text = IO.IsCompressed(filePath) ? IO.Decompress(filePath) : File.ReadAllText(filePath);
-            deniedAbilities = JsonConvert.DeserializeObject<ModDeniedAbilities>(text, GameIO.jsReadGame);
-        }
-        else
-        {
-            deniedAbilities = new ModDeniedAbilities();
-        }
-
-        cleanUp();
-    }
-
-    public void Save(string filePath)
-    {
-        cleanUp();
-
-        var text = JsonConvert.SerializeObject(deniedAbilities, GameIO.formatting, GameIO.jsWriteGame);
-        if (GameIO.compressSave)
-        {
-            IO.Compress(filePath, text);
-        }
-        else
-        {
-            File.WriteAllText(filePath, text);
-        }
-    }
-
-    private void cleanUp()
-    {
-        foreach (var uid in deniedAbilities.Keys.ToArray())
+        foreach (var uid in DeniedAbilities.Keys.ToArray())
         {
             if (EClass.game.cards.globalCharas.ContainsKey(uid))
             {
                 continue;
             }
-            deniedAbilities.Remove(uid);
+            DeniedAbilities.Remove(uid);
         }
     }
 }
 
-public class ModDeniedAbilities : Dictionary<int, ModDeniedAbility> { }
+public class ModDeniedAbilities : Dictionary<int, ModDeniedAbility>;
+
 
 public class ModDeniedAbility
 {
-    [JsonProperty("acts")]
-    private readonly HashSet<int> acts;
+    [JsonProperty("acts", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonConverter(typeof(ModDeniedActConverter))]
+    public HashSet<ModDeniedAct> Acts { get; init; } = new HashSet<ModDeniedAct>();
 
-    public ModDeniedAbility() : this([]) { }
-
-    public ModDeniedAbility(int[] acts)
+    public bool Contains(ModDeniedAct act)
     {
-        this.acts = [.. acts];
-    }
-
-    public bool Contains(int act)
-    {
-        return acts.Contains(act);
+        return Acts.Contains(act);
     }
 
     public bool IsEmpty()
     {
-        return acts.Count() == 0;
+        return Acts.Count() == 0;
     }
 
     public int Count()
     {
-        return acts.Count();
+        return Acts.Count();
     }
 
-    public bool Add(int act)
+    public bool Add(ModDeniedAct act)
     {
-        return acts.Add(act);
+        return Acts.Add(act);
     }
 
-    public bool Remove(int act)
+    public bool Remove(ModDeniedAct act)
     {
-        return acts.Remove(act);
+        return Acts.Remove(act);
     }
 
-    public void IntersectWith(IEnumerable<int> otherActs)
+    public void IntersectWith(IEnumerable<ModDeniedAct> otherActs)
     {
-        acts.IntersectWith(otherActs);
+        Acts.IntersectWith(otherActs);
+    }
+}
+
+public record ModDeniedAct
+{
+    [JsonProperty("id", DefaultValueHandling = DefaultValueHandling.Include)]
+    public int Id { get; init; }
+    [JsonProperty("pt", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool Pt { get; init; }
+
+    public ModDeniedAct(int id, bool pt)
+    {
+        Id = id;
+        Pt = pt;
+    }
+
+    public ModDeniedAct(ActList.Item act) : this(act.act.id, act.pt) { }
+}
+
+// Converters for migrating old config data to new one.
+public class ModConfigConverter : JsonConverter<ModConfig>
+{
+    public override bool CanWrite => false;
+
+    public override ModConfig ReadJson(JsonReader reader, Type objectType, ModConfig existingValue, bool hasExistingValue, JsonSerializer serializer)
+    {
+        var token = JToken.Load(reader);
+        if (token is not JObject obj)
+        {
+            throw new JsonSerializationException($"Unexpected JSON format in ModConfigConverter: {token}");
+        }
+
+        if (obj.ContainsKey("deniedAbilities"))
+        {
+            var config = new ModConfig();
+            serializer.Populate(obj.CreateReader(), config);
+            return config;
+        }
+        else
+        {
+            var deniedAbilities = obj.ToObject<ModDeniedAbilities>();
+            return new ModConfig
+            {
+                DeniedAbilities = deniedAbilities
+            };
+        }
+    }
+
+    public override void WriteJson(JsonWriter writer, ModConfig value, JsonSerializer serializer)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+public class ModDeniedActConverter : JsonConverter<HashSet<ModDeniedAct>>
+{
+    public override bool CanWrite => false;
+
+    public override HashSet<ModDeniedAct> ReadJson(JsonReader reader, Type objectType, HashSet<ModDeniedAct> existingValue, bool hasExistingValue, JsonSerializer serializer)
+    {
+        var token = JToken.Load(reader);
+        if (token is not JArray array)
+        {
+            throw new JsonSerializationException($"Unexpected JSON format in ModDeniedActConverter: {token}");
+        }
+
+        var acts = new HashSet<ModDeniedAct>();
+        foreach (var element in array)
+        {
+            if (element.Type == JTokenType.Integer)
+            {
+                var id = element.ToObject<int>();
+                acts.Add(new ModDeniedAct(id, false));
+                acts.Add(new ModDeniedAct(id, true));
+            }
+            else
+            {
+                var id = element["id"].ToObject<int>();
+                bool pt = element["pt"].ToObject<bool>();
+                acts.Add(new ModDeniedAct(id, pt));
+            }
+        }
+
+        return acts;
+    }
+
+    public override void WriteJson(JsonWriter writer, HashSet<ModDeniedAct> value, JsonSerializer serializer)
+    {
+        throw new NotImplementedException();
     }
 }
