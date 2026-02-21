@@ -26,7 +26,7 @@ public static class UIContextMenuPatch
         {
             EClass.ui.AddLayer<LayerList>()
                .SetListCheck(originalActs,
-               (item) => item.act.Name,
+               (item) => item.act.Name + (item.pt ? $" ({ModNames.Party.Text})" : ""),
                (item, _) =>
                {
                    var act = new ModDeniedAct(item);

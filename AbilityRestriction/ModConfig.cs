@@ -9,7 +9,7 @@ namespace AbilityRestriction;
 [JsonConverter(typeof(ModConfigConverter))]
 public class ModConfig
 {
-    [JsonProperty("deniedAbilities", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonProperty("deniedAbilities")]
     public ModDeniedAbilities DeniedAbilities { get; init; } = new ModDeniedAbilities();
 
     public ModDeniedAbility? GetDeniedAbility(int uid)
@@ -29,23 +29,24 @@ public class ModConfig
 
     public void CleanUp()
     {
-        foreach (var uid in DeniedAbilities.Keys.ToArray())
+        foreach (var pair in DeniedAbilities.ToArray())
         {
-            if (EClass.game.cards.globalCharas.ContainsKey(uid))
+            var uid = pair.Key;
+            var ability = pair.Value;
+            if (ability.IsEmpty() || !EClass.game.cards.globalCharas.ContainsKey(uid))
             {
-                continue;
+                // Remove if denied ability is empty or its owner has gone from game.
+                DeniedAbilities.Remove(uid);
             }
-            DeniedAbilities.Remove(uid);
         }
     }
 }
 
 public class ModDeniedAbilities : Dictionary<int, ModDeniedAbility>;
 
-
 public class ModDeniedAbility
 {
-    [JsonProperty("acts", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonProperty("acts")]
     [JsonConverter(typeof(ModDeniedActConverter))]
     public HashSet<ModDeniedAct> Acts { get; init; } = new HashSet<ModDeniedAct>();
 
