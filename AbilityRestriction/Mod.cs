@@ -4,7 +4,7 @@ namespace AbilityRestriction;
 
 public static class Mod
 {
-    private static readonly string configFileName = $"{ModInfo.Guid}.txt";
+    private static readonly string configFileName = $"{PluginInfo.Guid}.txt";
     public static readonly ModConfig config = new ModConfig();
     public static readonly ModOriginalActStorage originalActStorage = new ModOriginalActStorage();
 

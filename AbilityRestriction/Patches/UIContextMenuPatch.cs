@@ -1,13 +1,10 @@
 using System;
-using HarmonyLib;
 using UnityEngine;
 
 namespace AbilityRestriction.Patches;
 
-[HarmonyPatch(typeof(UIContextMenu))]
-public static class UIContextMenuPatchPatch
+public static class UIContextMenuPatch
 {
-    [HarmonyPatch(nameof(UIContextMenu.AddButton), [typeof(string), typeof(Action), typeof(bool)]), HarmonyPostfix]
     public static void AddButton_Postfix(UIContextMenu __instance, string idLang = "", Action? action = null, bool hideAfter = true)
     {
         if (BaseListPeoplePatch.TargetChara == null || idLang != "changeName")

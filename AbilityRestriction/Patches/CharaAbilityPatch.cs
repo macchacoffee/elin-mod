@@ -1,12 +1,9 @@
 using System.Linq;
-using HarmonyLib;
 
 namespace AbilityRestriction.Patches;
 
-[HarmonyPatch(typeof(CharaAbility))]
 public static class CharaAbilityPatch
 {
-    [HarmonyPatch(nameof(CharaAbility.Refresh), []), HarmonyPostfix]
     public static void Refresh_Postfix(CharaAbility __instance)
     {
         var owner = __instance.owner;

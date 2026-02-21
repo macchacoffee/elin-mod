@@ -1,12 +1,8 @@
-using HarmonyLib;
-
 namespace AbilityRestriction.Patches;
 
-[HarmonyPatch(typeof(GameIO))]
 public static class GameIOPatch
 {
-    [HarmonyPatch(nameof(GameIO.SaveGame), []), HarmonyPrefix]
-    private static void SaveGame_Pretfix()
+    public static void SaveGame_Prefix()
     {
         Mod.SaveConfig(GameIO.pathCurrentSave);
     }
