@@ -16,7 +16,7 @@ public static class UIContextMenuPatch
         BaseListPeoplePatch.TargetChara = null;
 
         var originalActs = Mod.originalActStorage.GetActs(chara);
-        var deniedAbility = Mod.config.GetDeniedAbility(chara.uid);
+        var deniedAbility = Mod.Config.GetDeniedAbility(chara.uid);
         if (deniedAbility == null)
         {
             deniedAbility = new ModDeniedAbility();
@@ -26,27 +26,27 @@ public static class UIContextMenuPatch
         {
             EClass.ui.AddLayer<LayerList>()
                .SetListCheck(originalActs,
-               (item) => item.act.Name,
+               (item) => item.act.Name + (item.pt ? $" ({ModNames.Party.Text})" : ""),
                (item, _) =>
                {
-                   if (deniedAbility.Contains(item.act.id))
+                   var act = new ModDeniedAct(item);
+                   if (deniedAbility.Contains(act))
                    {
-                       deniedAbility.Remove(item.act.id);
+                       deniedAbility.Remove(act);
                    }
                    else
                    {
-                       deniedAbility.Add(item.act.id);
+                       deniedAbility.Add(act);
                    }
 
                    if (deniedAbility.IsEmpty())
                    {
-                       Mod.config.RemoveDeniedAbility(chara.uid);
+                       Mod.Config.RemoveDeniedAbility(chara.uid);
                    }
                    else
                    {
-                       Mod.config.SetDeniedAbility(chara.uid, deniedAbility);
+                       Mod.Config.SetDeniedAbility(chara.uid, deniedAbility);
                    }
-
                    chara.ability.Refresh();
                }, (buttonPairList) =>
                {
@@ -54,7 +54,8 @@ public static class UIContextMenuPatch
                    {
                        var button = (buttonPair.component as ItemGeneral)!.button1;
                        var item = buttonPair.obj as ActList.Item;
-                       button.SetCheck(!deniedAbility.Contains(item!.act.id));
+                       var act = new ModDeniedAct(item!);
+                       button.SetCheck(!deniedAbility.Contains(act));
                        button.GetComponent<CanvasGroup>().enabled = false;
                    }
                })

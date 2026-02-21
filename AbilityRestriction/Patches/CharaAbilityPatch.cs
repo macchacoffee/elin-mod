@@ -8,7 +8,7 @@ public static class CharaAbilityPatch
     {
         var owner = __instance.owner;
 
-        var deniedAbility = Mod.config.GetDeniedAbility(owner.uid);
+        var deniedAbility = Mod.Config.GetDeniedAbility(owner.uid);
         if (deniedAbility == null)
         {
             Mod.originalActStorage.RemoveActs(owner);
@@ -19,8 +19,8 @@ public static class CharaAbilityPatch
         Mod.originalActStorage.SetActs(owner, __instance.list.items);
 
         // Remove forgotten chara abilities from denied abilities.
-        deniedAbility.IntersectWith(__instance.list.items.Select(item => item.act.id));
+        deniedAbility.IntersectWith(__instance.list.items.Select(item => new ModDeniedAct(item)));
         // Restrict chara abilities.
-        __instance.list.items.RemoveAll(item => deniedAbility.Contains(item.act.id));
+        __instance.list.items.RemoveAll(item => deniedAbility.Contains(new ModDeniedAct(item)));
     }
 }

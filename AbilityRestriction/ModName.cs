@@ -36,4 +36,6 @@ public static class ModNames
     public static readonly ModName modName = new ModName("Ability Restriction", "Ability Restriction", "Ability Restriction");
 
     public static readonly ModName restrictAbilities = new ModName("アビリティの使用制限", "Restrict Abilities", "能力使用限制");
+
+    public static readonly ModName Party = new ModName("全体", "Party", "全部");
 }
