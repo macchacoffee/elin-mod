@@ -2,9 +2,9 @@ namespace AbilityRestriction;
 
 public class ModName
 {
-    private readonly string textJp;
-    private readonly string textEn;
-    private readonly string textCn;
+    private readonly string TextJp;
+    private readonly string TextEn;
+    private readonly string TextCn;
 
     public string Text
     {
@@ -13,29 +13,27 @@ public class ModName
             switch (Lang.langCode)
             {
                 case "JP":
-                    return textJp;
+                    return TextJp;
                 case "EN":
-                    return textEn;
+                    return TextEn;
                 case "CN":
-                    return textCn;
+                    return TextCn;
             }
-            return textJp;
+            return TextJp;
         }
     }
 
     public ModName(string textJp, string textEn, string textCn)
     {
-        this.textJp = textJp;
-        this.textEn = textEn;
-        this.textCn = textCn;
+        TextJp = textJp;
+        TextEn = textEn;
+        TextCn = textCn;
     }
 }
 
 public static class ModNames
 {
-    public static readonly ModName modName = new ModName("Ability Restriction", "Ability Restriction", "Ability Restriction");
-
-    public static readonly ModName restrictAbilities = new ModName("アビリティの使用制限", "Restrict Abilities", "能力使用限制");
-
-    public static readonly ModName Party = new ModName("全体", "Party", "全部");
+    public static readonly ModName ModName = new("Ability Restriction", "Ability Restriction", "Ability Restriction");
+    public static readonly ModName RestrictAbilities = new("アビリティの使用制限", "Restrict Abilities", "能力使用限制");
+    public static readonly ModName Party = new("全体", "Party", "全部");
 }

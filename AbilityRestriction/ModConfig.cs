@@ -10,7 +10,7 @@ namespace AbilityRestriction;
 public class ModConfig
 {
     [JsonProperty("deniedAbilities")]
-    public ModDeniedAbilities DeniedAbilities { get; init; } = new ModDeniedAbilities();
+    public ModDeniedAbilities DeniedAbilities { get; init; } = [];
 
     public ModDeniedAbility? GetDeniedAbility(int uid)
     {
@@ -48,7 +48,7 @@ public class ModDeniedAbility
 {
     [JsonProperty("acts")]
     [JsonConverter(typeof(ModDeniedActConverter))]
-    public HashSet<ModDeniedAct> Acts { get; init; } = new HashSet<ModDeniedAct>();
+    public HashSet<ModDeniedAct> Acts { get; init; } = [];
 
     public bool Contains(ModDeniedAct act)
     {
@@ -119,7 +119,7 @@ public class ModConfigConverter : JsonConverter<ModConfig>
         else
         {
             var deniedAbilities = obj.ToObject<ModDeniedAbilities>();
-            return new ModConfig
+            return new()
             {
                 DeniedAbilities = deniedAbilities
             };
@@ -150,14 +150,14 @@ public class ModDeniedActConverter : JsonConverter<HashSet<ModDeniedAct>>
             if (element.Type == JTokenType.Integer)
             {
                 var id = element.ToObject<int>();
-                acts.Add(new ModDeniedAct(id, false));
-                acts.Add(new ModDeniedAct(id, true));
+                acts.Add(new(id, false));
+                acts.Add(new(id, true));
             }
             else
             {
                 var id = element["id"].ToObject<int>();
                 bool pt = element["pt"].ToObject<bool>();
-                acts.Add(new ModDeniedAct(id, pt));
+                acts.Add(new(id, pt));
             }
         }
 

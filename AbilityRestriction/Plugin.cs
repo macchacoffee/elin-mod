@@ -1,5 +1,7 @@
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using BepInEx;
+using HarmonyLib;
 
 namespace AbilityRestriction;
 
@@ -7,7 +9,7 @@ public static class PluginInfo
 {
     public const string Guid = "maccha-coffee.ability-restriction";
     public const string Name = "Ability Restriction";
-    public const string Version = "1.0.0";
+    public const string Version = "1.1.1";
 }
 
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]
@@ -18,7 +20,7 @@ internal class Plugin : BaseUnityPlugin
     private void Awake()
     {
         Instance = this;
-        Patcher.Patch();
+        Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), PluginInfo.Guid);
     }
 
     internal static void LogDebug(object message, [CallerMemberName] string caller = "")

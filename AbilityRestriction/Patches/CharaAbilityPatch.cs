@@ -1,22 +1,34 @@
 using System.Linq;
+using System.Reflection;
+using HarmonyLib;
 
 namespace AbilityRestriction.Patches;
 
+[HarmonyPatch(typeof(CharaAbility))]
 public static class CharaAbilityPatch
 {
-    public static void Refresh_Postfix(CharaAbility __instance)
+    private static readonly PatchTarget Target = new();
+
+    [HarmonyPrepare]
+    private static bool Prepare(MethodBase? original)
+    {
+        return Target.IsPatchable(original);
+    }
+
+    [HarmonyPatch(nameof(CharaAbility.Refresh), []), HarmonyPostfix]
+    private static void Refresh_Postfix(CharaAbility __instance)
     {
         var owner = __instance.owner;
 
         var deniedAbility = Mod.Config.GetDeniedAbility(owner.uid);
         if (deniedAbility == null)
         {
-            Mod.originalActStorage.RemoveActs(owner);
+            Mod.OriginalActStorage.RemoveActs(owner);
             return;
         }
 
         // Store orginal chara abilities.
-        Mod.originalActStorage.SetActs(owner, __instance.list.items);
+        Mod.OriginalActStorage.SetActs(owner, __instance.list.items);
 
         // Remove forgotten chara abilities from denied abilities.
         deniedAbility.IntersectWith(__instance.list.items.Select(item => new ModDeniedAct(item)));

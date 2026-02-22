@@ -4,11 +4,11 @@ namespace AbilityRestriction;
 
 public class ModOriginalActStorage
 {
-    private readonly Dictionary<int, List<ActList.Item>> uidToActs = new Dictionary<int, List<ActList.Item>>();
+    private readonly Dictionary<int, List<ActList.Item>> UidToActs = [];
 
     public ICollection<ActList.Item>? GetActs(Chara chara)
     {
-        if (uidToActs.TryGetValue(chara.uid, out var acts))
+        if (UidToActs.TryGetValue(chara.uid, out var acts))
         {
             return [.. acts];
         }
@@ -17,11 +17,11 @@ public class ModOriginalActStorage
 
     public void SetActs(Chara chara, IEnumerable<ActList.Item> acts)
     {
-        uidToActs[chara.uid] = [.. acts];
+        UidToActs[chara.uid] = [.. acts];
     }
 
     public bool RemoveActs(Chara chara)
     {
-        return uidToActs.Remove(chara.uid);
+        return UidToActs.Remove(chara.uid);
     }
 }
