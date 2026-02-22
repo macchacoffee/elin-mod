@@ -5,18 +5,19 @@ namespace AbilityRestriction;
 
 public static class Mod
 {
-    private static readonly string configFileName = $"{PluginInfo.Guid}.txt";
-    public static readonly ModOriginalActStorage originalActStorage = new ModOriginalActStorage();
-    public static ModConfig Config { get; private set; } = new ModConfig();
+    private static readonly string ConfigFileName = $"{PluginInfo.Guid}.txt";
 
-    private static string buildConfigFilePath(string root)
+    public static ModOriginalActStorage OriginalActStorage { get; } = new();
+    public static ModConfig Config { get; private set; } = new();
+
+    private static string BuildConfigFilePath(string root)
     {
-        return Path.Combine(root, configFileName);
+        return Path.Combine(root, ConfigFileName);
     }
 
     public static void LoadConfig(string root)
     {
-        var filePath = buildConfigFilePath(root);
+        var filePath = BuildConfigFilePath(root);
         if (File.Exists(filePath))
         {
             var text = IO.IsCompressed(filePath) ? IO.Decompress(filePath) : File.ReadAllText(filePath);
@@ -24,7 +25,7 @@ public static class Mod
         }
         else
         {
-            Config = new ModConfig();
+            Config = new();
         }
 
         Config.CleanUp();
@@ -34,7 +35,7 @@ public static class Mod
     {
         Config.CleanUp();
 
-        var filePath = buildConfigFilePath(root);
+        var filePath = BuildConfigFilePath(root);
         var text = JsonConvert.SerializeObject(Config, GameIO.formatting, GameIO.jsWriteGame);
         if (GameIO.compressSave)
         {

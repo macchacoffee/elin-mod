@@ -1,5 +1,7 @@
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using BepInEx;
+using HarmonyLib;
 
 namespace AbilityRestriction;
 
@@ -18,7 +20,7 @@ internal class Plugin : BaseUnityPlugin
     private void Awake()
     {
         Instance = this;
-        Patcher.Patch();
+        Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), PluginInfo.Guid);
     }
 
     internal static void LogDebug(object message, [CallerMemberName] string caller = "")

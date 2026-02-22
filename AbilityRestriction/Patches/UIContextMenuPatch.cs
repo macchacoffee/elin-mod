@@ -1,11 +1,23 @@
 using System;
+using System.Reflection;
+using HarmonyLib;
 using UnityEngine;
 
 namespace AbilityRestriction.Patches;
 
+[HarmonyPatch(typeof(UIContextMenu))]
 public static class UIContextMenuPatch
 {
-    public static void AddButton_Postfix(UIContextMenu __instance, string idLang = "", Action? action = null, bool hideAfter = true)
+    private static readonly PatchTarget Target = new();
+
+    [HarmonyPrepare]
+    private static bool Prepare(MethodBase? original)
+    {
+        return Target.IsPatchable(original);
+    }
+
+    [HarmonyPatch(nameof(UIContextMenu.AddButton), [typeof(string), typeof(Action), typeof(bool)]), HarmonyPostfix]
+    private static void AddButton_Postfix(UIContextMenu __instance, string idLang = "", Action? action = null, bool hideAfter = true)
     {
         if (BaseListPeoplePatch.TargetChara == null || idLang != "changeName")
         {
@@ -15,14 +27,14 @@ public static class UIContextMenuPatch
         var chara = BaseListPeoplePatch.TargetChara;
         BaseListPeoplePatch.TargetChara = null;
 
-        var originalActs = Mod.originalActStorage.GetActs(chara);
+        var originalActs = Mod.OriginalActStorage.GetActs(chara);
         var deniedAbility = Mod.Config.GetDeniedAbility(chara.uid);
         if (deniedAbility == null)
         {
             deniedAbility = new ModDeniedAbility();
         }
 
-        __instance.AddButton(ModNames.restrictAbilities.Text, () =>
+        __instance.AddButton(ModNames.RestrictAbilities.Text, () =>
         {
             EClass.ui.AddLayer<LayerList>()
                .SetListCheck(originalActs,
@@ -59,7 +71,7 @@ public static class UIContextMenuPatch
                        button.GetComponent<CanvasGroup>().enabled = false;
                    }
                })
-            .SetHeader(ModNames.restrictAbilities.Text)
+            .SetHeader(ModNames.RestrictAbilities.Text)
            .SetSize();
         });
     }
