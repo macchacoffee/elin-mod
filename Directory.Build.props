@@ -55,4 +55,8 @@
             <Private>False</Private>
         </Reference>
     </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="..\ModUtility\**" />
+    </ItemGroup>
 </Project>

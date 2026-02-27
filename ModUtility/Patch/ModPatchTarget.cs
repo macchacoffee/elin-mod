@@ -1,6 +1,8 @@
 using System.Reflection;
 
-public record class PatchTarget(Version? MinVersion = null, Version? MaxVersion = null)
+namespace ModUtility.Patch;
+
+public record class ModPatchTarget(Version? MinVersion = null, Version? MaxVersion = null)
 {
     public bool IsPatchable(MethodBase? targetMethod)
     {
