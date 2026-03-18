@@ -1,5 +1,6 @@
 using System.Reflection;
 using HarmonyLib;
+using ModUtility.Patch;
 
 namespace AbilityRestriction.Patches;
 
@@ -7,12 +8,12 @@ namespace AbilityRestriction.Patches;
 [HarmonyPatch(typeof(BaseListPeople))]
 public static class BaseListPeoplePatch
 {
-    private static readonly PatchTarget Target = new();
+    private static readonly ModPatchTarget PatchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
     {
-        return Target.IsPatchable(original);
+        return PatchTarget.IsPatchable(original);
     }
 
     public static Chara? TargetChara { get; set; }

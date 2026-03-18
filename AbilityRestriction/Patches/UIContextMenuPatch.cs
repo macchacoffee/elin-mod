@@ -2,18 +2,19 @@ using System;
 using System.Reflection;
 using HarmonyLib;
 using UnityEngine;
+using ModUtility.Patch;
 
 namespace AbilityRestriction.Patches;
 
 [HarmonyPatch(typeof(UIContextMenu))]
 public static class UIContextMenuPatch
 {
-    private static readonly PatchTarget Target = new();
+    private static readonly ModPatchTarget PatchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
     {
-        return Target.IsPatchable(original);
+        return PatchTarget.IsPatchable(original);
     }
 
     [HarmonyPatch(nameof(UIContextMenu.AddButton), [typeof(string), typeof(Action), typeof(bool)]), HarmonyPostfix]

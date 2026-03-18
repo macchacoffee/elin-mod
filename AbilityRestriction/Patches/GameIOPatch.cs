@@ -1,17 +1,18 @@
 using System.Reflection;
 using HarmonyLib;
+using ModUtility.Patch;
 
 namespace AbilityRestriction.Patches;
 
 [HarmonyPatch(typeof(GameIO))]
 public static class GameIOPatch
 {
-    private static readonly PatchTarget Target = new();
+    private static readonly ModPatchTarget PatchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
     {
-        return Target.IsPatchable(original);
+        return PatchTarget.IsPatchable(original);
     }
 
     [HarmonyPatch(nameof(GameIO.SaveGame), []), HarmonyPrefix]

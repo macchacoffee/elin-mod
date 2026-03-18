@@ -1,18 +1,19 @@
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using ModUtility.Patch;
 
 namespace AbilityRestriction.Patches;
 
 [HarmonyPatch(typeof(CharaAbility))]
 public static class CharaAbilityPatch
 {
-    private static readonly PatchTarget Target = new();
+    private static readonly ModPatchTarget PatchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
     {
-        return Target.IsPatchable(original);
+        return PatchTarget.IsPatchable(original);
     }
 
     [HarmonyPatch(nameof(CharaAbility.Refresh), []), HarmonyPostfix]
