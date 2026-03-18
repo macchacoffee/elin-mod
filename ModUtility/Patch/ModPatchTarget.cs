@@ -6,7 +6,7 @@ public record class ModPatchTarget(Version? MinVersion = null, Version? MaxVersi
 {
     public bool IsPatchable(MethodBase? targetMethod)
     {
-        if (targetMethod != null)
+        if (targetMethod is not null)
         {
             return true;
         }

@@ -20,7 +20,7 @@ public static class UIContextMenuPatch
     [HarmonyPatch(nameof(UIContextMenu.AddButton), [typeof(string), typeof(Action), typeof(bool)]), HarmonyPostfix]
     private static void AddButton_Postfix(UIContextMenu __instance, string idLang = "", Action? action = null, bool hideAfter = true)
     {
-        if (BaseListPeoplePatch.TargetChara == null || idLang != "changeName")
+        if (BaseListPeoplePatch.TargetChara is null || idLang != "changeName")
         {
             return;
         }
@@ -30,7 +30,7 @@ public static class UIContextMenuPatch
 
         var originalActs = Mod.OriginalActStorage.GetActs(chara);
         var deniedAbility = Mod.Config.GetDeniedAbility(chara.uid);
-        if (deniedAbility == null)
+        if (deniedAbility is null)
         {
             deniedAbility = new ModDeniedAbility();
         }
@@ -74,6 +74,6 @@ public static class UIContextMenuPatch
                })
             .SetHeader(ModNames.RestrictAbilities.Text)
            .SetSize();
-        });
+        });  
     }
 }
