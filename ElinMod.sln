@@ -3,6 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AbilityRestriction", "AbilityRestriction\AbilityRestriction.csproj", "{B1B830EE-5035-541B-FE4C-B33F80B60A96}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCFoodEffectMultiplier", "PCFoodEffectMultiplier\PCFoodEffectMultiplier.csproj", "{B1B830EE-5035-541B-FE4C-B33F80B60A96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
