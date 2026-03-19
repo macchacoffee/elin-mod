@@ -27,14 +27,13 @@ public static class FoodEffectPatch
         // {
         //    num2 *= 3f;
         // }
-
-        // if (!c2.IsPC)
+        // -----
+        // else
         // {
         //    num2 *= Xf;
         // }
+        // -----
         /// ...
-
-        // --------
 
         // ...
         //  1: ldloc.0 NULL [Label33]
@@ -45,13 +44,13 @@ public static class FoodEffectPatch
         //  6: ldc.r4 3
         //  7: mul NULL
         //  8: stloc.3 NULL
-
+        // -----
         //  9: br Label34
         // 10: ldloc.3 NULL [LabelMod1] 
         // 11: ldc.r4 X
         // 12: mul NULL
         // 13: stloc.3 NULL
-
+        // -----
         // 14: ldloc.s 10 (System.Boolean) [Label34]
         // ...
 
@@ -67,7 +66,7 @@ public static class FoodEffectPatch
         var start = matcher.Pos; //  4: brtrue Label34
         var originalLabel = matcher.Instruction.operand;
 
-        matcher.Advance(5); //  8: stloc.3 NULL
+        matcher.Advance(5); //  9: ldloc.s 10 (System.Boolean) [Label34]
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Br, originalLabel), //  9: br Label34
             new CodeInstruction(OpCodes.Ldloc_3)            // 10: ldloc.3 NULL
