@@ -1,0 +1,8 @@
+<Project>
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('$(MSBuildThisFile)', '$(MSBuildThisFileDirectory)../'))" />
+    <ItemGroup>
+        <Reference Include="$(ElinWorkshopPath)\3400020753\YKFramework.dll">
+            <Private>False</Private>
+        </Reference>
+    </ItemGroup>
+</Project>
