@@ -5,8 +5,8 @@
     <Platforms>AnyCPU</Platforms>
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
-    <RootNamespace>ShowAllDNAElementValues</RootNamespace>
-    <AssemblyName>ShowAllDNAElementValues</AssemblyName>
+    <RootNamespace>DisplayDNAEnchantValues</RootNamespace>
+    <AssemblyName>DisplayDNAEnchantValues</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputPath>$(ElinGamePath)\Package\Mod_$(AssemblyName)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

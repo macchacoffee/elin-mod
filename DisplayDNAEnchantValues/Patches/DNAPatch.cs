@@ -4,7 +4,7 @@ using System.Reflection.Emit;
 using HarmonyLib;
 using ModUtility.Patch;
 
-namespace ShowAllDNAElementValues.Patches;
+namespace DisplayDNAEnchantValues.Patches;
 
 [HarmonyPatch(typeof(DNA))]
 public static class DNAPatch
@@ -16,7 +16,7 @@ public static class DNAPatch
     {
         return PatchTarget.IsPatchable(original);
     }
-     
+
     [HarmonyPatch(nameof(DNA.WriteNote), [typeof(UINote), typeof(Chara)]), HarmonyTranspiler]
     private static IEnumerable<CodeInstruction> WriteNote_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {

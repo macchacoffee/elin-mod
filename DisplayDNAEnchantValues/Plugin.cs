@@ -3,12 +3,12 @@ using System.Runtime.CompilerServices;
 using BepInEx;
 using HarmonyLib;
 
-namespace ShowAllDNAElementValues;
+namespace DisplayDNAEnchantValues;
 
 public static class PluginInfo
 {
-    public const string Guid = "maccha-coffee.show-all-dna-element-values";
-    public const string Name = "Show All DNA Element Values";
+    public const string Guid = "maccha-coffee.display-dna-enchant-values";
+    public const string Name = "Display DNA Enchant Values";
     public const string Version = "1.0.0";
 }
 
