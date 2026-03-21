@@ -2,7 +2,7 @@ using System.Reflection;
 using HarmonyLib;
 using ModUtility.Patch;
 
-namespace AbilityRestriction.Patches;
+namespace NoPCC.Patches;
 
 [HarmonyPatch(typeof(Game))]
 public static class GamePatch
@@ -20,6 +20,9 @@ public static class GamePatch
     {
         var root = cloud ? CorePath.RootSaveCloud : CorePath.RootSave + id;
         Mod.LoadConfig(root);
+
+        // Requires to initialize after every game load.
+        ModPCRenderer.Initialize();
+        ModPCRenderer.Update();
     }
 }
-    
