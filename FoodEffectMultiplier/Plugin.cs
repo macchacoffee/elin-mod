@@ -3,12 +3,12 @@ using System.Runtime.CompilerServices;
 using BepInEx;
 using HarmonyLib;
 
-namespace PCFoodEffectMultiplier;
+namespace FoodEffectMultiplier;
 
 public static class PluginInfo
 {
-    public const string Guid = "maccha-coffee.pc-food-effect-multiplier";
-    public const string Name = "PC Food Effect Multiplier";
+    public const string Guid = "maccha-coffee.food-effect-multiplier";
+    public const string Name = "Food Effect Multiplier";
     public const string Version = "1.0.0";
 }
 
