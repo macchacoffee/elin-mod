@@ -32,7 +32,7 @@ public static class FoodEffectPatch
         //    num2 *= FoodEffectPatch::GetPCFoodEffectMultiplier(1f);
         // }
         // -----
-        /// ...
+        // ...
 
         // ...
         //  1: ldloc.0 NULL [Label33]
@@ -101,9 +101,6 @@ public static class FoodEffectPatch
         );
 
         return matcher.InstructionEnumeration();
-        // var insts = matcher.InstructionEnumeration();
-        // insts.Do(Plugin.LogInfo);
-        // return insts;
     }
 
     private static float GetPCFoodEffectMultiplier(float defaultValue)
