@@ -21,7 +21,7 @@ public static class HotItemContextPatch
     [HarmonyPatch(nameof(HotItemContext.Show), [typeof(string), typeof(Vector3)]), HarmonyPostfix]
     private static void Show_Postfix(string id, Vector3 pos)
     {
-        if (EClass.ui.contextMenu.currentMenu == null || id != "system")
+        if (EClass.ui.contextMenu.currentMenu is null || id != "system")
         {
             return;
         }

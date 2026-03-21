@@ -26,18 +26,18 @@ public static class ModPCRenderer
         var prevRenderer = pc.renderer;
 
         var isTrunsmuted = false;
-        if (modRenderer == null)
+        if (modRenderer is null)
         {
             // On first update after initializing.
-            isTrunsmuted = prevRenderer.replacer != null;
+            isTrunsmuted = prevRenderer.replacer is not null;
         }
         else if (modRenderer != prevRenderer)
         {
             // On update with transmuting.
-            isTrunsmuted = prevRenderer.replacer != null;
+            isTrunsmuted = prevRenderer.replacer is not null;
         }
 
-        if (modRenderer == null)
+        if (modRenderer is null)
         {
             var rendererReplacer = RendererReplacer.CreateFrom("adv", 0);
             modRenderer = new CharaRenderer
@@ -57,7 +57,7 @@ public static class ModPCRenderer
         {
             tile = SelectTile(Mod.Config.Sprite.UndressTile, tile);
         }
-        else if (pc.ride != null)
+        else if (pc.ride is not null)
         {
             if (pc.combatCount > 0)
             {
@@ -73,7 +73,7 @@ public static class ModPCRenderer
             tile = SelectTile(Mod.Config.Sprite.CombatTile, Mod.Config.Sprite.CombatSnowTile, tile);
         }
 
-        if (tile == null || tile.Id < 0 || (modRenderer == prevRenderer && modRenderer.replacer.tile == tile.Id))
+        if (tile is null || tile.Id < 0 || (modRenderer == prevRenderer && modRenderer.replacer.tile == tile.Id))
         {
             return;
         }
@@ -91,7 +91,7 @@ public static class ModPCRenderer
     private static Tile? SelectTile(Tile tile, Tile? snowTile, Tile? defaultTile)
     {
         var selected = defaultTile;
-        if (snowTile != null && snowTile.Enable && EClass._zone.IsSnowCovered)
+        if (snowTile is not null && snowTile.Enable && EClass._zone.IsSnowCovered)
         {
             selected = snowTile;
         }
