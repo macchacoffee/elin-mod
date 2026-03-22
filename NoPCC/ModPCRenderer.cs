@@ -26,14 +26,10 @@ public static class ModPCRenderer
         var prevRenderer = pc.renderer;
 
         var isTrunsmuted = false;
-        if (modRenderer is null)
+        if (modRenderer is null || modRenderer != prevRenderer)
         {
-            // On first update after initializing.
-            isTrunsmuted = prevRenderer.replacer is not null;
-        }
-        else if (modRenderer != prevRenderer)
-        {
-            // On update with transmuting.
+            // Initialize呼び出し後に初めてUpdateが呼び出された、またはpcのRendererがModのものと異なる場合、
+            // pcのRendererが存在すれば変容中とみなす
             isTrunsmuted = prevRenderer.replacer is not null;
         }
 

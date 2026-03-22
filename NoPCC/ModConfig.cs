@@ -10,7 +10,7 @@ public class ModConfig
 
 public class Sprite
 {
-    // Oniichan. Oniichan! Oniichan? Oniichan!!
+    // お兄ちゃん お兄ちゃん！ お兄ちゃん？ お兄ちゃん！！
     private static readonly int InitialTileId = 1918;
     private static readonly int InitialSnowTileId = 1919;
     private static readonly int InitialEmptyTileId = 0;

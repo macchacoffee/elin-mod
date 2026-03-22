@@ -28,12 +28,11 @@ public static class CharaAbilityPatch
             return;
         }
 
-        // Store orginal chara abilities.
+        // charaが元々持っているアビリティの情報が必要になるため、保存しておく
         Mod.OriginalActStorage.SetActs(owner, __instance.list.items);
-
-        // Remove forgotten chara abilities from denied abilities.
+        // charaが忘れたアビリティを禁止アビリティの設定から削除する
         deniedAbility.IntersectWith(__instance.list.items.Select(item => new ModDeniedAct(item)));
-        // Restrict chara abilities.
+        // 禁止されているアビリティをcharaのCharaAbilityから削除する
         __instance.list.items.RemoveAll(item => deniedAbility.Contains(new ModDeniedAct(item)));
     }
 }

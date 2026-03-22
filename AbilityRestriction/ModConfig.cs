@@ -35,7 +35,8 @@ public class ModConfig
             var ability = pair.Value;
             if (ability.IsEmpty() || !EClass.game.cards.globalCharas.ContainsKey(uid))
             {
-                // Remove if denied ability is empty or its owner has gone from game.
+                // 所有者のアビリティが禁止されていない、またはその所有者がゲームから消滅している場合、
+                // その所有者の禁止アビリティ設定は不要であるため削除する
                 DeniedAbilities.Remove(uid);
             }
         }

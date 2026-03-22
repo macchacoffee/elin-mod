@@ -20,72 +20,29 @@ public static class DNAPatch
     [HarmonyPatch(nameof(DNA.WriteNote), [typeof(UINote), typeof(Chara)]), HarmonyTranspiler]
     private static IEnumerable<CodeInstruction> WriteNote_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
-        // ...
+        // // 変更前
         // if (flag)
         // {
         //     text2 = text2 + " (" + element.Value + ")";
         // }
-        // n.AddText("NoteText_enc", "gene_info".lang(element.Name.ToTitleCase(wholeText: true), text2), color2);
-        // ...
-
-        // ...
+        // // 変更後
         // text2 = text2 + " (" + element.Value + ")";
-        // n.AddText("NoteText_enc", "gene_info".lang(element.Name.ToTitleCase(wholeText: true), text2), color2);
-        // ...
-
-        // ...
-        //  1: brfalse Label30
-        //  2.:ldloc.s 10 (System.String)
-        //  3: ldstr " ("
-        //  4: ldloc.s 9 (Element)
-        //  5: callvirt int Element::get_Value()
-        //  6: stloc.0 NULL
-        //  7: ldloca.s 0 (System.Int32)
-        //  8: call virtual string int::ToString()
-        //  9: ldstr ")"
-        // 10: call static string string::Concat(string str0, string str1, string str2, string str3)
-        // 11: stloc.s 10 (System.String)
-        // 12: ldarg.1 NULL [Label30]
-        // 13: ldstr "NoteText_enc"
-        // 14: ldstr "gene_info"
-        // 15: ldloc.s 9 (Element)
-        // ...
-
-        // ...
-        //  1: pop
-        //  2.:ldloc.s 10 (System.String)
-        //  3: ldstr " ("
-        //  4: ldloc.s 9 (Element)
-        //  5: callvirt int Element::get_Value()
-        //  6: stloc.0 NULL
-        //  7: ldloca.s 0 (System.Int32)
-        //  8: call virtual string int::ToString()
-        //  9: ldstr ")"
-        // 10: call static string string::Concat(string str0, string str1, string str2, string str3)
-        // 11: stloc.s 10 (System.String)
-        // 12: ldarg.1 NULL [Label30]
-        // 13: ldstr "NoteText_enc"
-        // 14: ldstr "gene_info"
-        // 15: ldloc.s 9 (Element)
-        // ...
-
         var matcher = new CodeMatcher(instructions, generator);
+
+        //  brfalse Label30
+        //  ldloc.s 10 (System.String)
+        //  ldstr " ("
         matcher.MatchStartForward(
             new CodeMatch(OpCodes.Brfalse),
             new CodeMatch(OpCodes.Ldloc_S),
-            new CodeMatch(OpCodes.Ldstr, " ("),
-            new CodeMatch(OpCodes.Ldloc_S),
-            new CodeMatch(OpCodes.Callvirt, AccessTools.PropertyGetter(typeof(Element), nameof(Element.Value))),
-            new CodeMatch(OpCodes.Stloc_0),
-            new CodeMatch(OpCodes.Ldloca_S),
-            new CodeMatch(OpCodes.Call),
-            new CodeMatch(OpCodes.Ldstr, ")")
+            new CodeMatch(OpCodes.Ldstr, " (")
         );
-
-        matcher.RemoveInstruction(); // 1: brfalse Label30
+        // brfalseをpop (スタックの要素を1つ取り出すだけの命令) に置き換える
+        // 条件分岐がなくなり、常に遺伝子Elementの値が追加されるようになる
+        matcher.RemoveInstruction();
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Pop)
-        ); // 1: pop
+        );
 
         return matcher.InstructionEnumeration();
     }
