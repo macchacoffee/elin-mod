@@ -1,4 +1,4 @@
-# Enable Dining Board in Tent
+# Enable Dining Spot Sign in Tent
 
 テント内で食堂の立札が効力を発揮するようにします。
 具体的には以下の効果がテント内でも有効になります。

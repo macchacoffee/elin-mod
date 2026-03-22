@@ -1,16 +1,14 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using BepInEx;
-using EnableDiningBoardInTent.Patches;
 using HarmonyLib;
-using NPOI.SS.Formula.Functions;
 
-namespace EnableDiningBoardInTent;
+namespace EnableDiningSpotSignInTent;
 
 public static class PluginInfo
 {
-    public const string Guid = "maccha-coffee.enable-dining-board-in-tent";
-    public const string Name = "Enable Dining Board in Tent";
+    public const string Guid = "maccha-coffee.enable-dining-spot-sign-in-tent";
+    public const string Name = "Enable Dining Spot Sign in Tent";
     public const string Version = "1.0.0";
 }
 
