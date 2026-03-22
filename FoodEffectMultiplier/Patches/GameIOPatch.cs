@@ -15,7 +15,8 @@ public static class GameIOPatch
         return PatchTarget.IsPatchable(original);
     }
 
-    [HarmonyPatch(nameof(GameIO.SaveGame), []), HarmonyPrefix]
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(GameIO.SaveGame), [])]
     private static void SaveGame_Prefix()
     {
         Mod.SaveConfig();

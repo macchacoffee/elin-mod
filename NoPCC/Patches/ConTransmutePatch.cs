@@ -15,7 +15,8 @@ public static class ConTransmutePatch
         return PatchTarget.IsPatchable(original);
     }
 
-    [HarmonyPatch(nameof(ConTransmute.OnRemoved), []), HarmonyPostfix]
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(ConTransmute.OnRemoved), [])]
     private static void OnRemoved_Postfix(ConTransmute __instance)
     {
         if (!__instance.owner.IsPC)

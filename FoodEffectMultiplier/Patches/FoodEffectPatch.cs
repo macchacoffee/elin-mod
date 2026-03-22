@@ -18,7 +18,8 @@ public static class FoodEffectPatch
         return PatchTarget.IsPatchable(original);
     }
 
-    [HarmonyPatch(nameof(FoodEffect.Proc), [typeof(Chara), typeof(Thing), typeof(bool)]), HarmonyTranspiler]
+    [HarmonyTranspiler]
+    [HarmonyPatch(nameof(FoodEffect.Proc), [typeof(Chara), typeof(Thing), typeof(bool)])]
     private static IEnumerable<CodeInstruction> Proc_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
         // // 変更前
@@ -51,7 +52,7 @@ public static class FoodEffectPatch
         );
         // brtrue Label34 からc2がNPCの場合の遷移先であるLabel34を取得する
         var start = matcher.Pos;
-        var originalLabel = matcher.Instruction.operand;
+        var originalLabel = matcher.Operand;
         // mul NULLの直前に ldc.r4 3 で生成した定数3fを引数とするGetNPCFoodEffectMultiplierの呼び出しを追加し、
         // その戻り値がNPCの食事効果倍率に適用されるようにする
         matcher.Advance(3);
@@ -79,10 +80,7 @@ public static class FoodEffectPatch
         // c2がPCの場合にtrueとなる brtrue Label34 を brtrue LabelMod1 に置き換え、
         // PCの食事効果に倍率が適用されるようにする
         matcher.Advance(start - matcher.Pos);
-        matcher.RemoveInstruction();
-        matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Brtrue, label1)
-        );
+        matcher.Operand = label1;
 
         return matcher.InstructionEnumeration();
     }

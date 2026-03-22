@@ -18,7 +18,8 @@ public static class BaseListPeoplePatch
 
     public static Chara? TargetChara { get; set; }
 
-    [HarmonyPatch(nameof(BaseListPeople.OnClick), [typeof(Chara), typeof(ItemGeneral)]), HarmonyPrefix]
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(BaseListPeople.OnClick), [typeof(Chara), typeof(ItemGeneral)])]
     private static void OnClick_Prefix(BaseListPeople __instance, Chara c, ItemGeneral i)
     {
         if (__instance.GetType() != typeof(ListPeople))

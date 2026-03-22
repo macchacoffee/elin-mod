@@ -17,7 +17,8 @@ public static class DNAPatch
         return PatchTarget.IsPatchable(original);
     }
 
-    [HarmonyPatch(nameof(DNA.WriteNote), [typeof(UINote), typeof(Chara)]), HarmonyTranspiler]
+    [HarmonyTranspiler]
+    [HarmonyPatch(nameof(DNA.WriteNote), [typeof(UINote), typeof(Chara)])]
     private static IEnumerable<CodeInstruction> WriteNote_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
         // // 変更前

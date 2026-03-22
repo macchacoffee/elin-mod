@@ -15,7 +15,8 @@ public static class ZonePatch
         return PatchTarget.IsPatchable(original);
     }
 
-    [HarmonyPatch(nameof(Zone.Activate), []), HarmonyPostfix]
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(Zone.Activate), [])]
     private static void Activate_Postfix()
     {
         ModPCRenderer.Update();

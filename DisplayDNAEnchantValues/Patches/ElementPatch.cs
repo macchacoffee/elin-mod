@@ -19,7 +19,8 @@ public static class ElementPatch
         return PatchTarget.IsPatchable(original);
     }
 
-    [HarmonyPatch(nameof(Element.AddEncNote), [typeof(UINote), typeof(Card), typeof(ElementContainer.NoteMode), typeof(Func<Element, string, string>), typeof(Action<UINote, Element>)]), HarmonyPrefix]
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(Element.AddEncNote), [typeof(UINote), typeof(Card), typeof(ElementContainer.NoteMode), typeof(Func<Element, string, string>), typeof(Action<UINote, Element>)])]
     private static void AddEncNote_Prefix(Element __instance, UINote n, Card Card, ElementContainer.NoteMode mode, ref Func<Element, string, string>? funcText, Action<UINote, Element>? onAddNote)
     {
         if (funcText is null)
@@ -37,7 +38,8 @@ public static class ElementPatch
         };
     }
 
-    [HarmonyPatch(nameof(Element.AddEncNote), [typeof(UINote), typeof(Card), typeof(ElementContainer.NoteMode), typeof(Func<Element, string, string>), typeof(Action<UINote, Element>)]), HarmonyTranspiler]
+    [HarmonyTranspiler]
+    [HarmonyPatch(nameof(Element.AddEncNote), [typeof(UINote), typeof(Card), typeof(ElementContainer.NoteMode), typeof(Func<Element, string, string>), typeof(Action<UINote, Element>)])]
     private static IEnumerable<CodeInstruction> AddEncNote_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
         // // 変更前

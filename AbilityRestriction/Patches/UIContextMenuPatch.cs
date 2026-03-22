@@ -17,7 +17,8 @@ public static class UIContextMenuPatch
         return PatchTarget.IsPatchable(original);
     }
 
-    [HarmonyPatch(nameof(UIContextMenu.AddButton), [typeof(string), typeof(Action), typeof(bool)]), HarmonyPostfix]
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(UIContextMenu.AddButton), [typeof(string), typeof(Action), typeof(bool)])]
     private static void AddButton_Postfix(UIContextMenu __instance, string idLang = "", Action? action = null, bool hideAfter = true)
     {
         if (BaseListPeoplePatch.TargetChara is null || idLang != "changeName")

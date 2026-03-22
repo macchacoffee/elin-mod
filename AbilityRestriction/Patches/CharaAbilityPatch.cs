@@ -16,7 +16,8 @@ public static class CharaAbilityPatch
         return PatchTarget.IsPatchable(original);
     }
 
-    [HarmonyPatch(nameof(CharaAbility.Refresh), []), HarmonyPostfix]
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(CharaAbility.Refresh), [])]
     private static void Refresh_Postfix(CharaAbility __instance)
     {
         var owner = __instance.owner;

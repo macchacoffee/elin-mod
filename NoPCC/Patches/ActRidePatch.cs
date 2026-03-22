@@ -15,7 +15,8 @@ public static class ActRidePatch
         return PatchTarget.IsPatchable(original);
     }
 
-    [HarmonyPatch(nameof(ActRide.Ride), [typeof(Chara), typeof(Chara), typeof(bool), typeof(bool)]), HarmonyPostfix]
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(ActRide.Ride), [typeof(Chara), typeof(Chara), typeof(bool), typeof(bool)])]
     private static void Ride_Postfix(Chara host, Chara t, bool parasite = false, bool talk = true)
     {
         if (!host.IsPC)
@@ -26,7 +27,8 @@ public static class ActRidePatch
         ModPCRenderer.Update();
     }
 
-    [HarmonyPatch(nameof(ActRide.Unride), [typeof(Chara), typeof(Chara), typeof(bool)]), HarmonyPostfix]
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(ActRide.Unride), [typeof(Chara), typeof(Chara), typeof(bool)])]
     private static void Unride_Postfix(Chara host, Chara mount, bool talk = true)
     {
         if (!host.IsPC)
@@ -37,7 +39,8 @@ public static class ActRidePatch
         ModPCRenderer.Update();
     }
 
-    [HarmonyPatch(nameof(ActRide.Unride), [typeof(Chara), typeof(bool), typeof(bool)]), HarmonyPostfix]
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(ActRide.Unride), [typeof(Chara), typeof(bool), typeof(bool)])]
     private static void Unride_Postfix(Chara host, bool parasite = false, bool talk = true)
     {
         if (!host.IsPC)

@@ -15,7 +15,8 @@ public static class CharaPatch
         return PatchTarget.IsPatchable(original);
     }
 
-    [HarmonyPatch(nameof(Chara.Tick), []), HarmonyPrefix]
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(Chara.Tick), [])]
     private static void Tick_Prefix(Chara __instance)
     {
         if (!__instance.IsPC)
@@ -26,7 +27,8 @@ public static class CharaPatch
         ModPCRenderer.Update();
     }
 
-    [HarmonyPatch(nameof(Chara.SetPCCState), [typeof(PCCState)]), HarmonyPostfix]
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(Chara.SetPCCState), [typeof(PCCState)])]
     private static void PCCState_Postfix(Chara __instance)
     {
         if (!__instance.IsPC)

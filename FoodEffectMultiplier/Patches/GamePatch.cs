@@ -15,7 +15,8 @@ public static class GamePatch
         return PatchTarget.IsPatchable(original);
     }
 
-    [HarmonyPatch(nameof(Game.Load), [typeof(string), typeof(bool)]), HarmonyPostfix]
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(Game.Load), [typeof(string), typeof(bool)])]
     private static void Load_Postfix(string id, bool cloud)
     {
         Mod.LoadConfig();
