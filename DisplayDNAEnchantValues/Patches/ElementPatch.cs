@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Text.RegularExpressions;
 using HarmonyLib;
 using ModUtility.Patch;
 
@@ -16,6 +17,20 @@ public static class ElementPatch
     private static bool Prepare(MethodBase? original)
     {
         return PatchTarget.IsPatchable(original);
+    }
+
+    [HarmonyPatch(nameof(Element.AddEncNote), [typeof(UINote), typeof(Card), typeof(ElementContainer.NoteMode), typeof(Func<Element, string, string>), typeof(Action<UINote, Element>)]), HarmonyPrefix]
+    private static void AddEncNote_Prefix(Element __instance, UINote n, Card Card, ElementContainer.NoteMode mode, ref Func<Element, string, string>? funcText, Action<UINote, Element>? onAddNote)
+    {
+        if (funcText is not null)
+        {
+            var textRegex = new Regex(@"(\(\d+\)) (\([^\)]+\))");
+            var originalFuncText = funcText;
+            funcText = (element, text) =>
+            {
+                return textRegex.Replace(originalFuncText(element, text), "$2");
+            };
+        }
     }
 
     [HarmonyPatch(nameof(Element.AddEncNote), [typeof(UINote), typeof(Card), typeof(ElementContainer.NoteMode), typeof(Func<Element, string, string>), typeof(Action<UINote, Element>)]), HarmonyTranspiler]
