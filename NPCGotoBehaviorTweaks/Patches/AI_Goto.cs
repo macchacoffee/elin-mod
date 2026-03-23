@@ -22,51 +22,35 @@ public static class AI_GotoPatch
     internal static IEnumerable<CodeInstruction> TryGoTo_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
         // // 変更前
-        // if (shared.HasChara && !owner.IsPC) {
-        // ...
+        // if (waitCount < 3 || EClass.rnd(5) != 0)
+        // {
+        //     return Status.Running;
         // }
         // // 変更後
-        // if (shared.HasChara && !owner.IsPC && false) {
-        // ...
+        // if (waitCount < 1 || EClass.rnd(2) != 0)
+        // {
+        //     return Status.Running;
         // }
         var matcher = new CodeMatcher(instructions, generator);
 
-        // callvirt bool Point::get_HasChara()
-        // brfalse Label27
-        // ldarg.0 NULL
-        // ldfld Chara AIAct::owner
-        // callvirt virtual bool Card::get_IsPC()
-        // brtrue Label28
-        matcher.MatchEndForward(
-            new CodeMatch(OpCodes.Callvirt, AccessTools.PropertyGetter(typeof(Point), nameof(Point.HasChara))),
-            new CodeMatch(OpCodes.Brfalse),
-            new CodeMatch(OpCodes.Ldarg_0),
-            new CodeMatch(OpCodes.Ldfld),
-            new CodeMatch(OpCodes.Callvirt, AccessTools.PropertyGetter(typeof(Card), nameof(Card.IsPC))),
-            new CodeMatch(OpCodes.Brtrue)
-        );
-        // ロジック追加の場所の基準となる brtrue Label28 の位置を保存する
-        var start = matcher.Pos;
-
+        // ldfld int AI_Goto::waitCount
+        // ldc.i4.3 NULL
+        // blt Label29
+        // ldc.i4.5 NULL
         // call static int EClass::rnd(int a)
-        // brfalse Label30
-        // ldc.i4.0 NULL [Label29]
-        // ret NULL
-        // ldarg.0 NULL [Label27, Label28, Label30]
-        matcher.MatchEndForward(
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(EClass), nameof(EClass.rnd), [typeof(int)])),
-            new CodeMatch(OpCodes.Brfalse),
-            new CodeMatch(OpCodes.Ldc_I4_0),
-            new CodeMatch(OpCodes.Ret),
-            new CodeMatch(OpCodes.Ldarg_0)
+        matcher.MatchStartForward(
+            new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(AI_Goto), nameof(AI_Goto.waitCount))),
+            new CodeMatch(OpCodes.Ldc_I4_3),
+            new CodeMatch(OpCodes.Blt),
+            new CodeMatch(OpCodes.Ldc_I4_5),
+            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(EClass), nameof(EClass.rnd), [typeof(int)]))
         );
-        // 待機しない場合の遷移先となるLabelMod1を生成する
-        matcher.CreateLabel(out var label1);
-        // 常に待機しないような条件を追加する
-        matcher.Advance(start - matcher.Pos + 1);
-        matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Br, label1)
-        );
+        // NPCの移動先に別のキャラクターが存在する場合に発生する
+        // 2回の最小待機回数を無効にし、その待機後にさらに待機を続ける確率を4/5から1/2に変更する
+        matcher.Advance(1);
+        matcher.Opcode = OpCodes.Ldc_I4_1;
+        matcher.Advance(2);
+        matcher.Opcode = OpCodes.Ldc_I4_2;
 
         return matcher.InstructionEnumeration();
     }
