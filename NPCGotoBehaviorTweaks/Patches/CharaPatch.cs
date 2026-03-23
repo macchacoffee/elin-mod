@@ -2,7 +2,7 @@ using System.Reflection;
 using HarmonyLib;
 using ModUtility.Patch;
 
-namespace DiningSpotSignTweaks.Patches;
+namespace NPCGotoBehaviorTweaks.Patches;
 
 [HarmonyPatch(typeof(Chara))]
 public static class CharaPatch
@@ -23,17 +23,12 @@ public static class CharaPatch
         {
             return;
         }
-        if (__instance.ai.child?.child is not AI_Eat aiEat)
-        {
-            return;
-        }
-        if (aiEat.child is not AI_Goto)
+        if (!__instance.ai.IsMoveAI)
         {
             return;
         }
 
-        // 特定のAI階層にAI_EatとAI_Gotoが存在する場合、
-        // 食事のために食堂の立札を目指して移動しているとみなし、押しのけ可能とする
+        // 移動AIの場合は押しのけ可能とする
         __result = true;
     }
 }
