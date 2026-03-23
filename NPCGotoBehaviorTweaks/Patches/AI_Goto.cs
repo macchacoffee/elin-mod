@@ -4,7 +4,7 @@ using System.Reflection.Emit;
 using HarmonyLib;
 using ModUtility.Patch;
 
-namespace DiningSpotSignTweaks.Patches;
+namespace NPCGotoBehaviorTweaks.Patches;
 
 [HarmonyPatch(typeof(AI_Goto))]
 public static class AI_GotoPatch
@@ -26,7 +26,7 @@ public static class AI_GotoPatch
         // ...
         // }
         // // 変更後
-        // if (shared.HasChara && !owner.IsPC && parent is not AI_Eat) {
+        // if (shared.HasChara && !owner.IsPC && false) {
         // ...
         // }
         var matcher = new CodeMatcher(instructions, generator);
@@ -62,13 +62,10 @@ public static class AI_GotoPatch
         );
         // 待機しない場合の遷移先となるLabelMod1を生成する
         matcher.CreateLabel(out var label1);
-        // 親がAI_Eatである場合は待機しないロジックを追加する
+        // 常に待機しないような条件を追加する
         matcher.Advance(start - matcher.Pos + 1);
         matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Ldarg_0),
-            new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(AIAct), nameof(AIAct.parent))),
-            new CodeInstruction(OpCodes.Isinst, typeof(AI_Eat)),
-            new CodeInstruction(OpCodes.Brtrue, label1)
+            new CodeInstruction(OpCodes.Br, label1)
         );
 
         return matcher.InstructionEnumeration();
