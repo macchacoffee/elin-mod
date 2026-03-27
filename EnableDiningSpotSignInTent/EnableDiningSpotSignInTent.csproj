@@ -5,8 +5,8 @@
     <Platforms>AnyCPU</Platforms>
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
-    <RootNamespace>DiningSpotSignTweaks</RootNamespace>
-    <AssemblyName>DiningSpotSignTweaks</AssemblyName>
+    <RootNamespace>EnableDiningSpotSignInTent</RootNamespace>
+    <AssemblyName>EnableDiningSpotSignInTent</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputPath>$(ElinGamePath)\Package\Mod_$(AssemblyName)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

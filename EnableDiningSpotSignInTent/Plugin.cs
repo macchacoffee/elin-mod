@@ -3,12 +3,12 @@ using System.Runtime.CompilerServices;
 using BepInEx;
 using HarmonyLib;
 
-namespace DiningSpotSignTweaks;
+namespace EnableDiningSpotSignInTent;
 
 public static class PluginInfo
 {
-    public const string Guid = "maccha-coffee.dining-spot-sign-tweaks";
-    public const string Name = "Dining Spot Sign Tweaks";
+    public const string Guid = "maccha-coffee.enable-dining-spot-sign-in-tent";
+    public const string Name = "Enable Dining Spot Sign in Tent";
     public const string Version = "1.0.0";
 }
 

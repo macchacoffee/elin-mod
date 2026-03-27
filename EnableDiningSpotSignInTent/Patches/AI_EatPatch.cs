@@ -4,7 +4,7 @@ using System.Reflection.Emit;
 using HarmonyLib;
 using ModUtility.Patch;
 
-namespace DiningSpotSignTweaks.Patches;
+namespace EnableDiningSpotSignInTent.Patches;
 
 [HarmonyPatch(typeof(AI_Eat))]
 public static class AI_EatPatch
