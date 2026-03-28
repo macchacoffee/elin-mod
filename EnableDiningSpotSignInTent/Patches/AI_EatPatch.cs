@@ -19,19 +19,9 @@ public static class AI_EatPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(AI_Eat.Run), [])]
-    internal static IEnumerable<CodeInstruction> Run_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    internal static IEnumerable<CodeInstruction> Run_Transpiler(IEnumerable<CodeInstruction> instructions)
     {
-        // Runはyield returnのメソッドであるため、パッチを当てたい実装は
-        // コンパイラ生成のAI_Eatの内部クラスのメソッドMoveNextに存在する
-        // そのためILから内部クラス名を特定し、MoveNextメソッドを取得する
-        var matcher = new CodeMatcher(instructions, generator);
-
-        // newobj void AI_Eat+<Run>d__9::.ctor(int <>1__state) で内部クラスのコンストラクタが呼び出される
-        // そのコンストラクタから内部クラスとMoveNextメソッドを取得し、パッチを当てる
-        matcher.MatchStartForward(new CodeMatch(OpCodes.Newobj));
-        var ctor = (matcher.Instruction.operand as ConstructorInfo)!;
-        var interClass = ctor.DeclaringType;
-        var moveNextMethod = AccessTools.Method(interClass, "MoveNext");
+        var moveNextMethod = ModPatchTools.FindYeildMoveNextMethod(instructions);
         var transpilerMethod = new HarmonyMethod(typeof(AI_EatRunPatch), nameof(AI_EatRunPatch.MoveNext_Transpiler));
         Plugin.Harmony?.Patch(moveNextMethod, transpiler: transpilerMethod);
 
