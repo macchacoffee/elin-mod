@@ -16,13 +16,11 @@ public static class PluginInfo
 internal class Plugin : BaseUnityPlugin
 {
     internal static Plugin? Instance { get; private set; }
-    internal static Harmony? Harmony { get; private set; }
 
     private void Awake()
     {
         Instance = this;
-        Harmony = new Harmony(PluginInfo.Guid);
-        Harmony.PatchAll(Assembly.GetExecutingAssembly());
+        Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), PluginInfo.Guid);
     }
 
     internal static void LogDebug(object message, [CallerMemberName] string caller = "")

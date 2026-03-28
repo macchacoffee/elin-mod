@@ -7,7 +7,7 @@ using ModUtility.Patch;
 namespace EnableDiningSpotSignInTent.Patches;
 
 [HarmonyPatch(typeof(AI_Eat))]
-public static class AI_EatPatch
+public static class AI_EatRunPatch
 {
     private static readonly ModPatchTarget PatchTarget = new();
 
@@ -18,20 +18,8 @@ public static class AI_EatPatch
     }
 
     [HarmonyTranspiler]
+    [HarmonyPatch(MethodType.Enumerator)]
     [HarmonyPatch(nameof(AI_Eat.Run), [])]
-    internal static IEnumerable<CodeInstruction> Run_Transpiler(IEnumerable<CodeInstruction> instructions)
-    {
-        var moveNextMethod = ModPatchTools.FindYeildMoveNextMethod(instructions);
-        var transpilerMethod = new HarmonyMethod(typeof(AI_EatRunPatch), nameof(AI_EatRunPatch.MoveNext_Transpiler));
-        Plugin.Harmony?.Patch(moveNextMethod, transpiler: transpilerMethod);
-
-        // パッチを当てたいのはこのメソッドではないため、何も変更しない
-        return instructions;
-    }
-}
-
-public static class AI_EatRunPatch
-{
     internal static IEnumerable<CodeInstruction> MoveNext_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
         // // 変更前
