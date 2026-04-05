@@ -426,3 +426,6 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# 実験用ModはGitの管理下にしない
+Playground/
