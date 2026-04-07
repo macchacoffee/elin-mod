@@ -14,15 +14,25 @@ namespace SomewhatEnhancedDisplay.Patches;
 public static class CharaPatch
 {
     private static readonly Color HPColor = new(0.872f, 0.371f, 0.335f);
+    // private static readonly Color32 HPColor = new(222, 95, 85, 255);
     private static readonly Color HPLightenColor = new(0.982f, 0.701f, 0.665f);
+    // private static readonly Color32 HPLightenColor = new(250, 179, 170, 255);
     private static readonly Color ManaColor = new(0.375f, 0.606f, 0.988f);
+    // private static readonly Color32 ManaColor = new(96, 155, 252, 255);
     private static readonly Color ManaLightenColor = new(0.665f, 0.806f, 0.838f);
+    // private static readonly Color32 ManaLightenColor = new(170, 206, 214, 255);
     private static readonly Color StaminaColor = new(0.848f, 0.722f, 0.285f);
+    // private static readonly Color32 StaminaColor = new(216, 184, 73, 255);
     private static readonly Color StaminaLightenColor = new(0.848f, 0.82f, 0.635f);
+    // private static readonly Color32 StaminaLightenColor = new(216, 209, 162, 255);
     private static readonly Color ResistColor = new(0.375f, 0.738f, 0.626f);
+    // private static readonly Color32 ResistColor = new(96, 188, 160, 255);
     private static readonly Color NegativeResistColor = new(0.822f, 0.431f, 0.395f);
+    // private static readonly Color32 NegativeResistColor = new(210, 110, 101, 255);
     private static readonly Color NoneResistColor = new(0.7f, 0.7f, 0.7f);
+    // private static readonly Color32 NoneResistColor = new(178, 178, 178, 255);
     private static readonly Color SubColor1 = new(0.7f, 0.7f, 0.7f);
+    // private static readonly Color32 SubColor1 = new(178, 178, 178, 255);
 
     private static readonly int LowValueThreshold = 10;
 
@@ -203,10 +213,10 @@ public static class CharaPatch
         text = text.StartsWith(Environment.NewLine) ? text.Substring(Environment.NewLine.Length) : text;
         text2 = text2.StartsWith(Environment.NewLine) ? text2.Substring(Environment.NewLine.Length) : text2;
         text3 = text3.StartsWith(Environment.NewLine) ? text3.Substring(Environment.NewLine.Length) : text3;
-        var hoverText = string.Join(Environment.NewLine, new[] {
+        return string.Join(Environment.NewLine, new[] {
             // GetHoverTextProfile1(chara, text2).TagColor(SubColor1),
             // GetHoverTextProfile2(chara, text).TagColor(SubColor1),
-            $"{GetHoverTextHPPercentage(chara)} {GetHoverTextAttr1(chara)}",
+            GetHoverTextAttr1(chara),
             GetHoverTextAttr2(chara),
             // GetHoverTextAttr3(chara).TagColor(SubColor1),
             // GetHoverTextFeat(chara)?.TagColor(SubColor1),
@@ -214,7 +224,6 @@ public static class CharaPatch
             GetHoverTextResist(chara),
             text3,
         }.Where(l => !string.IsNullOrEmpty(l)));
-        return $"{Environment.NewLine}{hoverText}";
     }
 
     private static string GetHoverTextLv(Chara chara)
@@ -239,11 +248,6 @@ public static class CharaPatch
             GetAffinityText(chara),
             fav,
         }.Where(l => !string.IsNullOrEmpty(l))).TagSize(14);
-    }
-
-    private static string GetHoverTextHPPercentage(Chara chara)
-    {
-        return GetHPPercentageText(chara);
     }
 
     private static string GetHoverTextAttr1(Chara chara)
@@ -328,25 +332,6 @@ public static class CharaPatch
     private static string GetAffinityText(Chara chara)
     {
         return $"{chara.affinity.Name}{$"({chara._affinity})".TagSize(12)}";
-    }
-
-    private static string GetHPPercentageText(Chara chara)
-    {
-        var hp = Math.Max(chara.hp, 0);
-        var maxHP = Math.Max(chara.MaxHP, 0);
-        if (chara.HasElement(FEAT.featManaMeat))
-        {
-            // マナの体フィートを持っている場合はマナもHPの一部として扱う
-            hp += Math.Max(chara.mana.value, 0);
-            maxHP += Math.Max(chara.mana.max, 0);
-        }
-        // 0%または100%以上の場合は小数点以下なし、それ以外の場合は小数第1位まで表示する
-        // 現在HPが最大HPよりも1でも低ければ100%とは表示しないようにする
-        var hpRatio = Math.Ceiling((float)hp / maxHP * 1000);
-        var hpPercentage = (hp < maxHP ? Math.Min(hpRatio, 999) : hpRatio) / 10;
-        var hpPercentageColor = Color.Lerp(HPColor, Color.white, (float)(hpPercentage / 100));
-        var hpPercentageText = hpPercentage == 0 || hpPercentage >= 100 ?$"{hpPercentage:0}" :  $"{hpPercentage:0.0}";
-        return $"[{hpPercentageText}%]".TagColor(hpPercentageColor).TagSize(14);
     }
 
     private static string GetHPText(Chara chara)
