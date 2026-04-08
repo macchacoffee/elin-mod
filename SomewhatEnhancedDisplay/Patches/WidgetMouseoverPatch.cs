@@ -5,6 +5,8 @@ using System.Reflection.Emit;
 using HarmonyLib;
 using ModUtility.Patch;
 using SomewhatEnhancedDisplay.UI;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace SomewhatEnhancedDisplay.Patches;
 
@@ -51,9 +53,47 @@ public static class WidgetMouseoverPatch
     private static IEnumerable<CodeInstruction> Refresh_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
         // // 変更前
+        // if (flag)
+        // {
+        // ...
+        // text += EMono.pc.ride.GetHoverText2();
+        // ...
+        // text += EMono.pc.parasite.GetHoverText();
+        // text += EMono.pc.parasite.GetHoverText2();
+        // ...
         // text += "otherCards".lang((count - 1).ToString() ?? "");
+        // ...
+        // text += card.GetHoverText2();
+        // ...
+        // text = text + Environment.NewLine + mouseTarget.target.InspectName;
+        // ...
+        // Show(text);
         // // 変更後
+        // string? localText2;
+        // string? localText3;
+        // string? localText4;
+        // Card? localTarget1;
+        // Card? localTarget2;
+        // if (flag)
+        // {
+        // ...
+        // localText2 += EMono.pc.ride.GetHoverText2();
+        // localTarget1 = EMono.pc.ride;
+        // ...
+        // text += EMono.pc.parasite.GetHoverText();
+        // localText3 = EMono.pc.parasite.GetHoverText();
+        // localText4 = EMono.pc.parasite.GetHoverText2();
+        // localTarget2 = EMono.pc.parasite;
+        // ...
         // text = WidgetMouseoverPatch.BuildGHoverText(text, "otherCards".lang((count - 1).ToString() ?? ""));
+        // ...
+        // localText2 = card.GetHoverText2();
+        // localTarget1 = card;
+        // ...
+        // localText2 = localText2 + Environment.NewLine + mouseTarget.target.InspectName;
+        // ...
+        // WidgetMouseoverPatch.ShowForMod(localText2, localText3, localText4, localTarget1, localTarget2);
+        // Show(text);
         var matcher = new CodeMatcher(instructions, generator);
 
         // ホバーテキスト下部 (おおよそ2行目以降) に表示される文字列、
@@ -186,23 +226,56 @@ public static class WidgetMouseoverPatch
         return matcher.InstructionEnumeration();
     }
 
-    [HarmonyPrefix]
+
+    [HarmonyTranspiler]
     [HarmonyPatch(nameof(WidgetMouseover.Show), [typeof(string)])]
-    private static void Show_Prefix(WidgetMouseover __instance, ref string s)
+    private static IEnumerable<CodeInstruction> Show_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
-        // 15行表示の場合にpivotのyが0.8fとなるようにする
-        var lineCount = s.SplitByNewline().Length;
-        __instance.layout.Rect().pivot = new(0.5f, 0.5f * (1 + 0.043f * (lineCount - 1)));
+        // // 変更前
+        // switch (this.Rect().GetAnchor())
+        // {
+        // // 変更後
+        // switch (RectPosition.CENTER)
+        // {
+        var matcher = new CodeMatcher(instructions, generator);
+
+        // call static RectPosition ClassExtension::GetAnchor(UnityEngine.RectTransform _rect)
+        matcher.MatchStartForward(
+            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.GetAnchor), [typeof(RectTransform)]))
+        );
+        // GetAnchor関数の戻り値を固定値のRectPosition.CENTERに置き換え、
+        // layout.childAlignmentがTextAnchor.MiddleCenterに設定されるようにする
+        matcher.Advance(1);
+        matcher.InsertAndAdvance(
+            new CodeInstruction(OpCodes.Pop),
+            new CodeInstruction(OpCodes.Ldc_I4_5)
+        );
+
+        return matcher.InstructionEnumeration();
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(WidgetMouseover.Show), [typeof(string)])]
+    private static void Show_Postfix(WidgetMouseover __instance, ref string s)
+    {
+        // ホバーテキストの初期位置において、
+        // 1キャラクター分の全ての情報が画面内に収まるぐらいにpivotを調整する
+         __instance.layout.Rect().pivot = new(0.5f, 0.8f);
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(WidgetMouseover.OnManagerActivate), [])]
+    private static void OnManagerActivate_Postfix(WidgetMouseover __instance)
+    {
+        TextName2!.SetActive(false);
+        TextName3!.SetActive(false);
+        TextName4!.SetActive(false);
+        HealthBar1!.SetActive(false);
+        HealthBar2!.SetActive(false);
     }
 
     private static void ShowForMod(string? text2, string? text3, string? text4, Card? target1, Card? target2)
     {
-        // Plugin.LogInfo($"text2: {text2}");
-        // Plugin.LogInfo($"text3: {text3}");
-        // Plugin.LogInfo($"text4: {text4}");
-        // Plugin.LogInfo($"target1: {target1}");
-        // Plugin.LogInfo($"target2: {target2}");
-
         if (!string.IsNullOrEmpty(text2))
         {
             TextName2!.text = text2;
@@ -257,8 +330,5 @@ public static class WidgetMouseoverPatch
     private static string BuildHoverText(string hoverText, string otherCardsText)
     {
          return $"{hoverText}{otherCardsText.TagSize(14)}";
-        // var lines = hoverText.SplitByNewline();
-        // lines[0] = $"{lines[0]}{otherCardsText.TagSize(14)}";
-        // return string.Join(Environment.NewLine, lines);
     }
 }

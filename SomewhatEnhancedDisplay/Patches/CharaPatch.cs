@@ -14,26 +14,16 @@ namespace SomewhatEnhancedDisplay.Patches;
 public static class CharaPatch
 {
     private static readonly Color HPColor = new(0.872f, 0.371f, 0.335f);
-    // private static readonly Color32 HPColor = new(222, 95, 85, 255);
     private static readonly Color HPLightenColor = new(0.982f, 0.701f, 0.665f);
-    // private static readonly Color32 HPLightenColor = new(250, 179, 170, 255);
     private static readonly Color ManaColor = new(0.375f, 0.606f, 0.988f);
-    // private static readonly Color32 ManaColor = new(96, 155, 252, 255);
     private static readonly Color ManaLightenColor = new(0.665f, 0.806f, 0.838f);
-    // private static readonly Color32 ManaLightenColor = new(170, 206, 214, 255);
     private static readonly Color StaminaColor = new(0.848f, 0.722f, 0.285f);
-    // private static readonly Color32 StaminaColor = new(216, 184, 73, 255);
     private static readonly Color StaminaLightenColor = new(0.848f, 0.82f, 0.635f);
-    // private static readonly Color32 StaminaLightenColor = new(216, 209, 162, 255);
     private static readonly Color ResistColor = new(0.375f, 0.738f, 0.626f);
-    // private static readonly Color32 ResistColor = new(96, 188, 160, 255);
     private static readonly Color NegativeResistColor = new(0.822f, 0.431f, 0.395f);
-    // private static readonly Color32 NegativeResistColor = new(210, 110, 101, 255);
     private static readonly Color NoneResistColor = new(0.7f, 0.7f, 0.7f);
-    // private static readonly Color32 NoneResistColor = new(178, 178, 178, 255);
     private static readonly Color SubColor1 = new(0.7f, 0.7f, 0.7f);
-    // private static readonly Color32 SubColor1 = new(178, 178, 178, 255);
-
+ 
     private static readonly int LowValueThreshold = 10;
 
     private static readonly ModPatchTarget PatchTarget = new();
