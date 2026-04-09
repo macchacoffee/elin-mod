@@ -6,7 +6,6 @@ using HarmonyLib;
 using ModUtility.Patch;
 using SomewhatEnhancedDisplay.UI;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace SomewhatEnhancedDisplay.Patches;
 
@@ -21,11 +20,11 @@ public static class WidgetMouseoverPatch
         return PatchTarget.IsPatchable(original);
     }
 
-    private static UIText? TextName2 { get; set; } 
-    private static UIText? TextName3 { get; set; } 
-    private static UIText? TextName4 { get; set; } 
     private static ModHealthBar? HealthBar1 { get; set; }
+    private static UIText? TextName2 { get; set; }
+    private static UIText? TextName3 { get; set; }
     private static ModHealthBar? HealthBar2 { get; set; }
+    private static UIText? TextName4 { get; set; }
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(WidgetMouseover.OnActivate), [])]
@@ -58,6 +57,11 @@ public static class WidgetMouseoverPatch
         // ...
         // text += EMono.pc.ride.GetHoverText2();
         // ...
+        // if (EMono.pc.ride != null)
+        // {
+        //     text += Environment.NewLine;
+        // }
+        // ...
         // text += EMono.pc.parasite.GetHoverText();
         // text += EMono.pc.parasite.GetHoverText2();
         // ...
@@ -80,7 +84,10 @@ public static class WidgetMouseoverPatch
         // localText2 += EMono.pc.ride.GetHoverText2();
         // localTarget1 = EMono.pc.ride;
         // ...
-        // text += EMono.pc.parasite.GetHoverText();
+        // if (EMono.pc.ride != null)
+        // {
+        // }
+        // ...
         // localText3 = EMono.pc.parasite.GetHoverText();
         // localText4 = EMono.pc.parasite.GetHoverText2();
         // localTarget2 = EMono.pc.parasite;
@@ -91,8 +98,9 @@ public static class WidgetMouseoverPatch
         // localTarget1 = card;
         // ...
         // localText2 = localText2 + Environment.NewLine + mouseTarget.target.InspectName;
+        // localText2 = localText2 + Environment.NewLine + mouseTarget.target.InspectName;
         // ...
-        // WidgetMouseoverPatch.ShowForMod(localText2, localText3, localText4, localTarget1, localTarget2);
+        // WidgetMouseoverPatch.ShowForMod(this, text, localText2, localText3, localText4, localTarget1, localTarget2);
         // Show(text);
         var matcher = new CodeMatcher(instructions, generator);
 
@@ -123,17 +131,29 @@ public static class WidgetMouseoverPatch
             new CodeInstruction(OpCodes.Pop)
         );
 
+        // ldloc.2 NULL
+        // Environment::get_NewLine()
+        // call static string string::Concat(string str0, string str1)
+        matcher.MatchStartForward(
+            new CodeMatch(OpCodes.Ldloc_2),
+            new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(Environment), nameof(Environment.NewLine))),
+            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string)]))
+        );
+        // textに改行が追加されないようにする
+        matcher.RemoveInstructions(4);
+
         // ldfld Chara Chara::parasite
         // callvirt virtual string Card::GetHoverText()
         matcher.MatchEndForward(
             new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.parasite))),
             new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Card), nameof(Card.GetHoverText), []))
         );
-        // GetHoverText関数の戻り値を保存する
+        // GetHoverText関数の戻り値を保存し、textに追加されないようにする
         matcher.Advance(1);
+        matcher.RemoveInstructions(2);
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Stloc_S, localText3),
-            new CodeInstruction(OpCodes.Ldloc_S, localText3)
+            new CodeInstruction(OpCodes.Pop)
         );
 
         // ldfld Chara Chara::parasite
@@ -199,14 +219,11 @@ public static class WidgetMouseoverPatch
             new CodeMatch(OpCodes.Callvirt, AccessTools.PropertyGetter(typeof(IInspect), nameof(IInspect.InspectName)))
         );
         // InspectNameを保存し、textには追加されないようにする
-        matcher.RemoveInstruction();
+        matcher.RemoveInstructions(2);
+        matcher.Advance(3);
+        matcher.RemoveInstructions(2);
         matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Ldloc_S, localText2)
-        );
-        matcher.Advance(5); 
-        matcher.RemoveInstruction();
-        matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Stloc_S, localText2)
+            new CodeInstruction(OpCodes.Stloc_S, localText3)
         );
 
         // call void WidgetMouseover::Show(string s)
@@ -215,12 +232,14 @@ public static class WidgetMouseoverPatch
         );
         // Modで追加したUIを更新する
         matcher.InsertAndAdvance(
+            new CodeInstruction(OpCodes.Ldarg_0),
+            new CodeInstruction(OpCodes.Ldloc_2),
             new CodeInstruction(OpCodes.Ldloc_S, localText2),
             new CodeInstruction(OpCodes.Ldloc_S, localText3),
             new CodeInstruction(OpCodes.Ldloc_S, localText4),
             new CodeInstruction(OpCodes.Ldloc_S, localTarget1),
             new CodeInstruction(OpCodes.Ldloc_S, localTarget2),
-            CodeInstruction.Call(() => ShowForMod(default!, default!, default!, default!, default!))
+            CodeInstruction.Call(() => ShowForMod(default!, default!, default!, default!, default!, default!, default!))
         );
 
         return matcher.InstructionEnumeration();
@@ -260,34 +279,61 @@ public static class WidgetMouseoverPatch
     {
         // ホバーテキストの初期位置において、
         // 1キャラクター分の全ての情報が画面内に収まるぐらいにpivotを調整する
-         __instance.layout.Rect().pivot = new(0.5f, 0.8f);
+        __instance.layout.Rect().pivot = new(0.5f, 0.8f);
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(WidgetMouseover.OnManagerActivate), [])]
     private static void OnManagerActivate_Postfix(WidgetMouseover __instance)
     {
+        __instance.textName.SetActive(true);
+        HealthBar1!.SetActive(false);
         TextName2!.SetActive(false);
         TextName3!.SetActive(false);
-        TextName4!.SetActive(false);
-        HealthBar1!.SetActive(false);
         HealthBar2!.SetActive(false);
+        TextName4!.SetActive(false);
     }
 
-    private static void ShowForMod(string? text2, string? text3, string? text4, Card? target1, Card? target2)
+    private static void ShowForMod(WidgetMouseover widget, string? text, string? text2, string? text3, string? text4, Card? target1, Card? target2)
     {
+        var isGroup1Active = false;
+        if (!string.IsNullOrEmpty(text))
+        {
+            widget.textName.SetActive(true);
+            isGroup1Active = true;
+        }
+        else
+        {
+            widget.textName.SetActive(false);
+        }
+        if (target1 is Chara chara1)
+        {
+            HealthBar1!.Update(chara1);
+            HealthBar1!.SetActive(true);
+            isGroup1Active = true;
+        }
+        else
+        {
+            HealthBar1!.SetActive(false);
+        }
         if (!string.IsNullOrEmpty(text2))
         {
             TextName2!.text = text2;
             TextName2.SetActive(true);
+            isGroup1Active = true;
         }
         else
         {
             TextName2!.text = string.Empty;
             TextName2.SetActive(false);
         }
+
         if (!string.IsNullOrEmpty(text3))
         {
+            if (isGroup1Active)
+            {
+                text3 = $"{Environment.NewLine}{text3}";
+            }
             TextName3!.text = text3;
             TextName3.SetActive(true);
         }
@@ -295,6 +341,15 @@ public static class WidgetMouseoverPatch
         {
             TextName3!.text = string.Empty;
             TextName3.SetActive(false);
+        }
+        if (target2 is Chara chara2)
+        {
+            HealthBar2!.Update(chara2);
+            HealthBar2!.SetActive(true);
+        }
+        else
+        {
+            HealthBar2!.SetActive(false);
         }
         if (!string.IsNullOrEmpty(text4))
         {
@@ -306,29 +361,10 @@ public static class WidgetMouseoverPatch
             TextName4!.text = string.Empty;
             TextName4.SetActive(false);
         }
-
-        if (target1 is Chara chara1)
-        {
-            HealthBar1!.Update(chara1);
-            HealthBar1!.SetActive(true);
-        }
-        else
-        {
-            HealthBar1!.SetActive(false);
-        }
-        if (target2 is Chara chara2)
-        {
-            HealthBar2!.Update(chara2);
-            HealthBar2!.SetActive(true);
-        }
-        else
-        {
-            HealthBar2!.SetActive(false);
-        }
     }
 
     private static string BuildHoverText(string hoverText, string otherCardsText)
     {
-         return $"{hoverText}{otherCardsText.TagSize(14)}";
+        return $"{hoverText}{otherCardsText.TagSize(14)}";
     }
 }

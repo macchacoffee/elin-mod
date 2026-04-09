@@ -23,7 +23,7 @@ public static class CharaPatch
     private static readonly Color NegativeResistColor = new(0.822f, 0.431f, 0.395f);
     private static readonly Color NoneResistColor = new(0.7f, 0.7f, 0.7f);
     private static readonly Color SubColor1 = new(0.7f, 0.7f, 0.7f);
- 
+
     private static readonly int LowValueThreshold = 10;
 
     private static readonly ModPatchTarget PatchTarget = new();
@@ -170,7 +170,7 @@ public static class CharaPatch
         // 表示内容の文字列を組み立てる処理を差し替える
         matcher.RemoveInstruction();
         matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Ldarg_0), 
+            new CodeInstruction(OpCodes.Ldarg_0),
              CodeInstruction.Call(() => BuildHoverText2(default!, default!, default!, default!))
         );
 
@@ -373,7 +373,7 @@ public static class CharaPatch
     private static string GetExpText(Chara chara)
     {
         var expText = "EXP:".TagSize(14);
-        var expValueText =  $"{chara.exp}/{chara.ExpToNext}".TagSize(16);
+        var expValueText = $"{chara.exp}/{chara.ExpToNext}".TagSize(16);
         return $"{expText}{expValueText}";
     }
 
@@ -385,9 +385,9 @@ public static class CharaPatch
             return null;
         }
         var mainElementText = $"[{mainElement.Name}]";
-        if (EClass.Colors.elementColors.TryGetValue(mainElement.source.alias, out var color))
+        if (GetElementColor(mainElement.source.alias) is Color color)
         {
-            mainElementText = mainElementText.TagColor(Color.Lerp(color, Color.white, 0.4f));
+            mainElementText = mainElementText.TagColor(color);
         }
         return mainElementText.TagSize(14);
     }
@@ -479,10 +479,17 @@ public static class CharaPatch
                 .GroupBy(r => Element.GetResistLv(r.Value))
                 .Where(g => g.Key != (int)Resist.None)
                 .OrderByDescending(g => g.Key)
-                .Select(g => $"{GetResistLevelText(g.Key)}: {
-                    string.Join(", ", g.OrderBy(r => r.id).Select(GetResistText).Where(t => !string.IsNullOrEmpty(t)))
-                }".TagSize(14).TagColor(GetResistColor(g.Key)))
+                .Select(g => $"{$"{GetResistLevelText(g.Key)}:".TagColor(GetResistColor(g.Key))} {string.Join(", ", g.OrderBy(r => r.id).Select(GetResistText).Where(t => !string.IsNullOrEmpty(t)))}".TagSize(14))
         );
+    }
+
+    private static Color? GetElementColor(string alias)
+    {
+        if (EClass.Colors.elementColors.TryGetValue(alias, out var color))
+        {
+            return Color.Lerp(color, Color.white, 0.4f);
+        }
+        return null;
     }
 
     private static Color GetResistColor(int resistLevel)
@@ -532,6 +539,12 @@ public static class CharaPatch
             return null;
         }
 
-        return $"{resImmunePlusText}{element.GetName()}{resImmunePlusText}";
+        // var resistText = $"{resImmunePlusText}{element.GetName()}{resImmunePlusText}{$"({resist.Value})".TagSize(12)}";
+        var resistText = $"{resImmunePlusText}{element.GetName()}{resImmunePlusText}";
+        if (GetElementColor(eleAlias) is Color color)
+        {
+            resistText = resistText.TagColor(color);
+        }
+        return resistText;
     }
 }

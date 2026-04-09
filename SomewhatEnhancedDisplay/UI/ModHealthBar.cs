@@ -19,7 +19,7 @@ public class ModHealthBar
     private static readonly Texture2D BarTexture = CreateTexture(Color.white);
 
     private GameObject LayoutObj { get; }
-    private LayoutElement Layout { get; }
+    public LayoutElement Layout { get; }
     private UIImage BGImage { get; }
     private UIImage FGImage { get; }
     private UIImage FGDamageImage { get; }
@@ -113,7 +113,7 @@ public class ModHealthBar
         FGImage.fillAmount = ratio;
         FGImage.color = barColor;
         // 体力バーの減少をアニメーションで表現する
-        if (Target == chara && FGDamageImage.fillAmount > ratio)
+        if (Target == chara && Layout.IsActive() && FGDamageImage.fillAmount > ratio)
         {
             FGDamageImage.color = FGDamageColor;
             // フェードアウト時に体力バーの減少を表現するための画像が目立たないようにする
@@ -141,7 +141,7 @@ public class ModHealthBar
 
     public void SetActive(bool value)
     {
-        LayoutObj.SetActive(value);
+        Layout.SetActive(value);
     }
 
     private static float GetHealthRatio(Chara chara)
