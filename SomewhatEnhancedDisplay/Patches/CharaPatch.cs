@@ -170,7 +170,7 @@ public static class CharaPatch
         // 表示内容の文字列を組み立てる処理を差し替える
         matcher.RemoveInstruction();
         matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Ldarg_0), 
+            new CodeInstruction(OpCodes.Ldarg_0),
              CodeInstruction.Call(() => BuildHoverText2(default!, default!, default!, default!))
         );
 
@@ -203,10 +203,10 @@ public static class CharaPatch
         text = text.StartsWith(Environment.NewLine) ? text.Substring(Environment.NewLine.Length) : text;
         text2 = text2.StartsWith(Environment.NewLine) ? text2.Substring(Environment.NewLine.Length) : text2;
         text3 = text3.StartsWith(Environment.NewLine) ? text3.Substring(Environment.NewLine.Length) : text3;
-        var hoverText = string.Join(Environment.NewLine, new[] {
+        return string.Join(Environment.NewLine, new[] {
             // GetHoverTextProfile1(chara, text2).TagColor(SubColor1),
             // GetHoverTextProfile2(chara, text).TagColor(SubColor1),
-            $"{GetHoverTextHPPercentage(chara)} {GetHoverTextAttr1(chara)}",
+            GetHoverTextAttr1(chara),
             GetHoverTextAttr2(chara),
             // GetHoverTextAttr3(chara).TagColor(SubColor1),
             // GetHoverTextFeat(chara)?.TagColor(SubColor1),
@@ -214,7 +214,6 @@ public static class CharaPatch
             GetHoverTextResist(chara),
             text3,
         }.Where(l => !string.IsNullOrEmpty(l)));
-        return $"{Environment.NewLine}{hoverText}";
     }
 
     private static string GetHoverTextLv(Chara chara)
@@ -239,11 +238,6 @@ public static class CharaPatch
             GetAffinityText(chara),
             fav,
         }.Where(l => !string.IsNullOrEmpty(l))).TagSize(14);
-    }
-
-    private static string GetHoverTextHPPercentage(Chara chara)
-    {
-        return GetHPPercentageText(chara);
     }
 
     private static string GetHoverTextAttr1(Chara chara)
@@ -330,25 +324,6 @@ public static class CharaPatch
         return $"{chara.affinity.Name}{$"({chara._affinity})".TagSize(12)}";
     }
 
-    private static string GetHPPercentageText(Chara chara)
-    {
-        var hp = Math.Max(chara.hp, 0);
-        var maxHP = Math.Max(chara.MaxHP, 0);
-        if (chara.HasElement(FEAT.featManaMeat))
-        {
-            // マナの体フィートを持っている場合はマナもHPの一部として扱う
-            hp += Math.Max(chara.mana.value, 0);
-            maxHP += Math.Max(chara.mana.max, 0);
-        }
-        // 0%または100%以上の場合は小数点以下なし、それ以外の場合は小数第1位まで表示する
-        // 現在HPが最大HPよりも1でも低ければ100%とは表示しないようにする
-        var hpRatio = Math.Ceiling((float)hp / maxHP * 1000);
-        var hpPercentage = (hp < maxHP ? Math.Min(hpRatio, 999) : hpRatio) / 10;
-        var hpPercentageColor = Color.Lerp(HPColor, Color.white, (float)(hpPercentage / 100));
-        var hpPercentageText = hpPercentage == 0 || hpPercentage >= 100 ?$"{hpPercentage:0}" :  $"{hpPercentage:0.0}";
-        return $"[{hpPercentageText}%]".TagColor(hpPercentageColor).TagSize(14);
-    }
-
     private static string GetHPText(Chara chara)
     {
         var hpValueColor = Math.Ceiling((float)chara.hp / chara.MaxHP * 100) > LowValueThreshold ? HPLightenColor : HPLightenColor.Darken(0.2f);
@@ -398,7 +373,7 @@ public static class CharaPatch
     private static string GetExpText(Chara chara)
     {
         var expText = "EXP:".TagSize(14);
-        var expValueText =  $"{chara.exp}/{chara.ExpToNext}".TagSize(16);
+        var expValueText = $"{chara.exp}/{chara.ExpToNext}".TagSize(16);
         return $"{expText}{expValueText}";
     }
 
@@ -410,9 +385,9 @@ public static class CharaPatch
             return null;
         }
         var mainElementText = $"[{mainElement.Name}]";
-        if (EClass.Colors.elementColors.TryGetValue(mainElement.source.alias, out var color))
+        if (GetElementColor(mainElement.source.alias) is Color color)
         {
-            mainElementText = mainElementText.TagColor(Color.Lerp(color, Color.white, 0.4f));
+            mainElementText = mainElementText.TagColor(color);
         }
         return mainElementText.TagSize(14);
     }
@@ -504,10 +479,17 @@ public static class CharaPatch
                 .GroupBy(r => Element.GetResistLv(r.Value))
                 .Where(g => g.Key != (int)Resist.None)
                 .OrderByDescending(g => g.Key)
-                .Select(g => $"{GetResistLevelText(g.Key)}: {
-                    string.Join(", ", g.OrderBy(r => r.id).Select(GetResistText).Where(t => !string.IsNullOrEmpty(t)))
-                }".TagSize(14).TagColor(GetResistColor(g.Key)))
+                .Select(g => $"{$"{GetResistLevelText(g.Key)}:".TagColor(GetResistColor(g.Key))} {string.Join(", ", g.OrderBy(r => r.id).Select(GetResistText).Where(t => !string.IsNullOrEmpty(t)))}".TagSize(14))
         );
+    }
+
+    private static Color? GetElementColor(string alias)
+    {
+        if (EClass.Colors.elementColors.TryGetValue(alias, out var color))
+        {
+            return Color.Lerp(color, Color.white, 0.4f);
+        }
+        return null;
     }
 
     private static Color GetResistColor(int resistLevel)
@@ -557,6 +539,12 @@ public static class CharaPatch
             return null;
         }
 
-        return $"{resImmunePlusText}{element.GetName()}{resImmunePlusText}";
+        // var resistText = $"{resImmunePlusText}{element.GetName()}{resImmunePlusText}{$"({resist.Value})".TagSize(12)}";
+        var resistText = $"{resImmunePlusText}{element.GetName()}{resImmunePlusText}";
+        if (GetElementColor(eleAlias) is Color color)
+        {
+            resistText = resistText.TagColor(color);
+        }
+        return resistText;
     }
 }
