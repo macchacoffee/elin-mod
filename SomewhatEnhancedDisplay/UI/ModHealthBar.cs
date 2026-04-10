@@ -2,6 +2,7 @@ using System;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using SomewhatEnhancedDisplay.Extensions;
 
 namespace SomewhatEnhancedDisplay.UI;
 
@@ -12,9 +13,10 @@ public class ModHealthBar
     private static readonly Color FGColor = new Color(0.212f, 0.459f, 0.184f);
     private static readonly Color LowValueFGColor = new Color(0.485f, 0.189f, 0.104f);
     private static readonly Color LowValueTextColor = new(0.872f, 0.371f, 0.335f);
+
     private static readonly float Height = 24;
-    private static readonly float Width = 400;
-    private static readonly float BarHeight = 8;
+    private static readonly float BarHeight = 6;
+    private static readonly int ValueFontSize = 13;
 
     private static readonly Texture2D BarTexture = CreateTexture(Color.white);
 
@@ -37,33 +39,27 @@ public class ModHealthBar
 
         LayoutObj = new GameObject("MCSEDHealthBar", typeof(LayoutElement));
         Layout = LayoutObj.GetComponent<LayoutElement>();
-        Layout.transform.Rect().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Width);
-        Layout.transform.Rect().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Height);
         LayoutObj.transform.SetParent(widget.layout.transform);
         LayoutObj.transform.localScale = localScale;
 
-        BGImage = AddHealthBarImage(Layout, "MCSEDHealthBarBG", Width, BarHeight, localScale, BGColor);
-        FGDamageImage = AddHealthBarImage(Layout, "MCSEDHealthBarFGDamege", Width, BarHeight, localScale, BGColor);
-        FGImage = AddHealthBarImage(Layout, "MCSEDHealthBarFG", Width, BarHeight, localScale, FGColor);
+        BGImage = AddHealthBarImage(Layout, "MCSEDHealthBarBG", localScale, BGColor);
+        FGDamageImage = AddHealthBarImage(Layout, "MCSEDHealthBarFGDamege", localScale, BGColor);
+        FGImage = AddHealthBarImage(Layout, "MCSEDHealthBarFG", localScale, FGColor);
 
         var valueObj = new GameObject("MCSEDHealthBarValue", typeof(UIText), typeof(Shadow));
-        // 体力バー背景の画像を設定する
         ValueText = valueObj.GetComponent<UIText>();
         ValueText.supportRichText = true;
         ValueText.font = font;
-        ValueText.fontSize = 16;
         ValueText.color = ValueTextColor;
         ValueText.text = string.Empty;
-        ValueText.transform.Rect().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Width);
-        ValueText.transform.Rect().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Height);
         ValueText.alignment = TextAnchor.MiddleCenter;
+        valueObj.transform.SetParent(Layout.transform);
+        valueObj.transform.localScale = localScale;
 
         var valueShadow = valueObj.GetComponent<Shadow>();
         valueShadow.effectColor = new Color(0, 0, 0);
         valueShadow.effectDistance = new Vector2(1, -1);
         valueShadow.useGraphicAlpha = true;
-        valueObj.transform.SetParent(Layout.transform);
-        valueObj.transform.localScale = localScale;
     }
 
     private static Texture2D CreateTexture(Color32 color)
@@ -79,7 +75,7 @@ public class ModHealthBar
         return texture;
     }
 
-    private static UIImage AddHealthBarImage(LayoutElement layout, string name, float width, float height, Vector3 localScale, Color color)
+    private static UIImage AddHealthBarImage(LayoutElement layout, string name, Vector3 localScale, Color color)
     {
         // GameObjectを生成し、layoutに挿入する
         var obj = new GameObject(name, typeof(UIImage));
@@ -87,8 +83,6 @@ public class ModHealthBar
         var image = obj.GetComponent<UIImage>();
         image.sprite = Sprite.Create(BarTexture, new Rect(0, 0, BarTexture.width, BarTexture.height), Vector2.zero);
         image.color = color;
-        image.transform.Rect().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
-        image.transform.Rect().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
         image.type = Image.Type.Filled;
         image.fillOrigin = (int)Image.OriginHorizontal.Left;
         image.fillMethod = Image.FillMethod.Horizontal;
@@ -98,13 +92,20 @@ public class ModHealthBar
         return image;
     }
 
+    private void UpdateTransformSize(Component component, float width, float height)
+    {
+        var rect = component.transform.Rect();
+        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+    }
+
     public void Update(Chara chara)
     {
-        var ratio = GetHealthRatio(chara);
+        var ratio = chara.HealthRatio;
         // 0%または100%以上の場合は小数点以下なし、それ以外の場合は小数第1位まで表示する
         // 現在HPが最大HPよりも1でも低ければ100%とは表示しないようにする
         var ceilingRatio = Math.Ceiling(ratio * 1000);
-        var pct =(float)(ratio < 1 ? Math.Min(ceilingRatio, 999) : ceilingRatio) / 10;
+        var pct = (float)(ratio < 1 ? Math.Min(ceilingRatio, 999) : ceilingRatio) / 10;
         var pctColor = Color.Lerp(LowValueTextColor, ValueTextColor, ratio);
         var barColor = Color.Lerp(LowValueFGColor, FGColor, ratio);
         var pctText = pct == 0 || pct >= 100 ? $"{pct:0}" : $"{pct:0.0}";
@@ -123,7 +124,8 @@ public class ModHealthBar
                 .SetEase(Ease.Linear)
                 .OnComplete(() =>
                 {
-                    if (DamageTween is null || !DamageTween.IsPlaying()) {
+                    if (DamageTween is null || !DamageTween.IsPlaying())
+                    {
                         FGDamageImage.color = BGColor;
                     }
                 });
@@ -139,21 +141,42 @@ public class ModHealthBar
         Target = chara;
     }
 
-    public void SetActive(bool value)
+    public bool Enabled 
     {
-        Layout.SetActive(value);
+        get
+        {
+            return Layout.enabled;
+        }
+        set
+        {
+            Layout.enabled = value;
+            BGImage.enabled = value;
+            FGDamageImage.enabled = value;
+            FGImage.enabled = value;
+            ValueText.enabled = value;
+            UpdateSize(value);
+        }
     }
 
-    private static float GetHealthRatio(Chara chara)
+    private void UpdateSize(bool enabled)
     {
-        var health = Math.Max(chara.hp, 0);
-        var maxHealth = Math.Max(chara.MaxHP, 0);
-        if (chara.HasElement(FEAT.featManaMeat))
+        var fontSize = ModUIUtil.ComputeFontSize(ValueFontSize);
+        ValueText.fontSize = fontSize;
+        var width = 0f;
+        var height = 0f;
+        var barHeight = 0f;
+        if (enabled)
         {
-            // マナの体フィートを持っている場合はマナも体力の一部として扱う
-            health += Math.Max(chara.mana.value, 0);
-            maxHealth += Math.Max(chara.mana.max, 0);
+            var sizeRatio = (float)fontSize / ValueFontSize;
+            width = Mod.Config.HoverGuide.CurrentProfile.HealthBar.Width * sizeRatio;
+            height = Height * sizeRatio;
+            barHeight = BarHeight * sizeRatio;
         }
-        return (float)health / maxHealth;
+
+        UpdateTransformSize(Layout, width, height);
+        UpdateTransformSize(BGImage, width, barHeight);
+        UpdateTransformSize(FGDamageImage, width, barHeight);
+        UpdateTransformSize(FGImage, width, barHeight);
+        UpdateTransformSize(ValueText, width, height);
     }
 }
