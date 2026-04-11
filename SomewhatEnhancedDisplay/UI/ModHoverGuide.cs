@@ -1,51 +1,101 @@
 using System;
 using SomewhatEnhancedDisplay.Config;
 using SomewhatEnhancedDisplay.Extensions;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace SomewhatEnhancedDisplay.UI;
 
 public class ModHoverGuide
 {
+    private static readonly float PaddingHeight = 3;
+
     private ModHealthBar HealthBar1 { get; }
+    private UIImage Padding1 { get; }
     private UIText TextName2 { get; }
     private UIText TextName3 { get; }
     private ModHealthBar HealthBar2 { get; }
+    private UIImage Padding2 { get; }
     private UIText TextName4 { get; }
 
     private int BaseFontSize { get; }
 
     public ModHoverGuide(WidgetMouseover widget)
     {
+        var localScale = widget.textName.transform.localScale;
+
         HealthBar1 = new(widget);
+
+        Padding1 = AddPadding(widget.layout, "MCSEDPadding1", localScale);
 
         TextName2 = UnityEngine.Object.Instantiate(widget.textName);
         TextName2.transform.SetParent(widget.layout.transform);
-        TextName2.transform.localScale = widget.textName.transform.localScale;
+        TextName2.transform.localScale = localScale;
 
         TextName3 = UnityEngine.Object.Instantiate(widget.textName);
         TextName3.transform.SetParent(widget.layout.transform);
-        TextName3.transform.localScale = widget.textName.transform.localScale;
+        TextName3.transform.localScale =localScale;
 
         HealthBar2 = new(widget);
 
+        Padding2 = AddPadding(widget.layout, "MCSEDPadding2", localScale);
+
         TextName4 = UnityEngine.Object.Instantiate(widget.textName);
         TextName4.transform.SetParent(widget.layout.transform);
-        TextName4.transform.localScale = widget.textName.transform.localScale;
+        TextName4.transform.localScale = localScale;
 
-        // ゲーム設定のウィジェットのフォントサイズが最小の場合を基準とする
+        // ゲーム設定のウィジェットのフォントサイズが最小の場合を基準のフォントサイズとする
         BaseFontSize = widget.textName.fontSize - EClass.core.config.font.fontWidget.size;
+
+        // ウィジェットを無効から有効に切り替えた際に表示が乱れないようにするため、
+        // 初期状態では追加コンポーネントなどは表示しないようにする
+        HealthBar1.Enabled = false;
+        DisablePadding(Padding1);
+        TextName2.enabled = false;
+        TextName3.enabled = false;
+        HealthBar2.Enabled = false;
+        DisablePadding(Padding2);
+        TextName4.enabled = false;
+    }
+
+    private static UIImage AddPadding(LayoutGroup layout, string name, Vector3 localScale)
+    {
+        // GameObjectを生成し、layoutに挿入する
+        var obj = new GameObject(name, typeof(UIImage));
+        // 体力バーの画像を設定する
+        var image = obj.GetComponent<UIImage>();
+        image.transform.Rect().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0);
+        obj.transform.SetParent(layout.transform);
+        obj.transform.localScale = localScale;
+
+        return image;
+    }
+
+    private void DisablePadding(UIImage padding)
+    {
+        UpdatePadding(padding, false, 0);
+    }
+
+    private void UpdatePadding(UIImage padding, bool enabled, float height)
+    {
+        padding.enabled = enabled;
+        padding.transform.Rect().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, enabled ? height : 0);
     }
 
     public void Show(WidgetMouseover widget, string? text, string? text2, string? text3, string? text4, Card? target1, Card? target2)
     {
+        var fontColor = widget.textName.fontColor;
         var fontSize = ModUIUtil.ComputeFontSize(BaseFontSize);
+        var paddingHeight = PaddingHeight * fontSize / BaseFontSize;
 
         var isGroup1Enabled = false;
+        var isPaddingRequired = false;
         if (!string.IsNullOrEmpty(text))
         {
             widget.textName.fontSize = fontSize;
             widget.textName.enabled = true;
             isGroup1Enabled = true;
+            isPaddingRequired = true;
         }
         else
         {
@@ -57,6 +107,7 @@ public class ModHoverGuide
             HealthBar1.Enabled = enabled;
             HealthBar1.Update(chara1);
             isGroup1Enabled = enabled;
+            isPaddingRequired = !enabled;
         }
         else
         {
@@ -64,6 +115,7 @@ public class ModHoverGuide
         }
         if (!string.IsNullOrEmpty(text2))
         {
+            TextName2.fontColor = fontColor;
             TextName2.fontSize = fontSize;
             TextName2.text = text2.TagSize(fontSize);
             TextName2.enabled = true;
@@ -73,17 +125,23 @@ public class ModHoverGuide
         {
             TextName2.text = string.Empty;
             TextName2.enabled = false;
+            isPaddingRequired = false;
         }
 
+        UpdatePadding(Padding1, isPaddingRequired, paddingHeight);
+
+        isPaddingRequired = false;
         if (!string.IsNullOrEmpty(text3))
         {
             if (isGroup1Enabled)
             {
                 text3 = $"{Environment.NewLine}{text3}";
             }
+            TextName3.fontColor = fontColor;
             TextName3.fontSize = fontSize;
             TextName3.text = text3.TagSize(fontSize);
             TextName3.enabled = true;
+            isPaddingRequired = true;
         }
         else
         {
@@ -92,8 +150,10 @@ public class ModHoverGuide
         }
         if (target2 is Chara chara2)
         {
-            HealthBar2.Enabled = DisplaysHealthBar(chara2);
+            var enabled = DisplaysHealthBar(chara2);
+            HealthBar2.Enabled = enabled;
             HealthBar2.Update(chara2);
+            isPaddingRequired = !enabled;
         }
         else
         {
@@ -101,6 +161,7 @@ public class ModHoverGuide
         }
         if (!string.IsNullOrEmpty(text4))
         {
+            TextName4.fontColor = fontColor;
             TextName4.fontSize = fontSize;
             TextName4.text = text4.TagSize(fontSize);
             TextName4.enabled = true;
@@ -109,7 +170,10 @@ public class ModHoverGuide
         {
             TextName4.text = string.Empty;
             TextName4.enabled = false;
+            isPaddingRequired = false;
         }
+
+        UpdatePadding(Padding2, isPaddingRequired, paddingHeight);
 
         widget.Show(text?.TagSize(fontSize));
     }

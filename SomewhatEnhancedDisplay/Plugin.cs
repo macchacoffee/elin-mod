@@ -2,6 +2,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using BepInEx;
 using HarmonyLib;
+using SomewhatEnhancedDisplay.UI;
 
 namespace SomewhatEnhancedDisplay;
 
@@ -21,6 +22,11 @@ internal class Plugin : BaseUnityPlugin
     {
         Instance = this;
         Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), PluginInfo.Guid);
+    }
+
+    private void Update()
+    {
+        ModUI.Update();
     }
 
     internal static void LogDebug(object message, [CallerMemberName] string caller = "")

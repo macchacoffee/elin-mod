@@ -2,35 +2,28 @@ using System;
 using System.Linq;
 using Empyrean.Utils;
 using UnityEngine;
+using SomewhatEnhancedDisplay.Extensions;
+using SomewhatEnhancedDisplay.Config;
 
 namespace SomewhatEnhancedDisplay.UI;
 
 public static class ModHoverTextBuilder
 {
-    private static readonly Color HPColor = new(0.872f, 0.371f, 0.335f);
-    private static readonly Color HPLightenColor = new(0.982f, 0.701f, 0.665f);
-    private static readonly Color ManaColor = new(0.375f, 0.606f, 0.988f);
-    private static readonly Color ManaLightenColor = new(0.665f, 0.806f, 0.838f);
-    private static readonly Color StaminaColor = new(0.848f, 0.722f, 0.285f);
-    private static readonly Color StaminaLightenColor = new(0.848f, 0.82f, 0.635f);
-    private static readonly Color ResistColor = new(0.375f, 0.738f, 0.626f);
-    private static readonly Color NegativeResistColor = new(0.822f, 0.431f, 0.395f);
-    private static readonly Color NoneResistColor = new(0.7f, 0.7f, 0.7f);
-    private static readonly Color SubColor1 = new(0.7f, 0.7f, 0.7f);
-
     private static readonly int LowValueThreshold = 10;
+
+    private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
+    private static ModHoverGuideProfile ProfileConfig => Config.CurrentProfile;
 
     public static string BuildHoverText(string text, string text2, string s, Chara chara)
     {
-        // text1: 名前
+        // text: 名前
         // text2: レベル差、赤ちゃん、高低差、賞金首、信仰
         // s: ゲスト・家畜、血の風味
-        text2 = text2.IsEmpty() ? text2 : text2.TagColor(SubColor1);
-        s = s.IsEmpty() ? s : s.TagColor(SubColor1);
-        return string.Join(" ", new[] {
+        var hoverText = string.Join(" ", new[] {
             GetHoverTextLv(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)),
             $"{text}{text2}{s}",
         }.Where(t => !string.IsNullOrEmpty(t)));
+        return !string.IsNullOrEmpty(hoverText) ? hoverText.TagColorNullable(Config.MainTextColor) : hoverText;
     }
 
     public static string BuildHoverText2(string text, string text2, string text3, Chara chara)
@@ -41,17 +34,18 @@ public static class ModHoverTextBuilder
         text = text.StartsWith(Environment.NewLine) ? text.Substring(Environment.NewLine.Length) : text;
         text2 = text2.StartsWith(Environment.NewLine) ? text2.Substring(Environment.NewLine.Length) : text2;
         text3 = text3.StartsWith(Environment.NewLine) ? text3.Substring(Environment.NewLine.Length) : text3;
-        return string.Join(Environment.NewLine, new[] {
-            GetHoverTextProfile1(chara, text2)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColor(SubColor1),
-            GetHoverTextProfile2(chara, text)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColor(SubColor1),
+        var hoverText = string.Join(Environment.NewLine, new[] {
+            GetHoverTextProfile1(chara, text2)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(Config.SubTextColor),
+            GetHoverTextProfile2(chara, text)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(Config.SubTextColor),
             GetHoverStatusAttribute(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)),
             GetHoverStatus(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)),
-            GetHoverTextPrimaryAttribute(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColor(SubColor1),
-            GetHoverTextFeat(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColor(SubColor1),
+            GetHoverTextPrimaryAttribute(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(Config.SubTextColor),
+            GetHoverTextFeat(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(Config.SubTextColor),
             GetHoverTextAct(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)),
-            GetHoverTextResist(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)),
+            GetHoverTextResist(chara),
             text3,
         }.Where(t => !string.IsNullOrEmpty(t)));
+        return !string.IsNullOrEmpty(hoverText) ? hoverText.TagColorNullable(Config.MainTextColor) : hoverText;
     }
 
     public static string BuildStatsExtraText(string text4, BaseStats stats)
@@ -73,11 +67,11 @@ public static class ModHoverTextBuilder
     private static string? GetHoverTextProfile1(Chara chara, string hobby)
     {
         var text = string.Join(" ", new[] {
-            Mod.Config.HoverGuide.CurrentProfile.DisplayGender ? GetGenderText(chara) : null,
-            Mod.Config.HoverGuide.CurrentProfile.DisplayAge ? GetAgeText(chara) : null,
-            Mod.Config.HoverGuide.CurrentProfile.DisplayRace ? GetRaceText(chara) : null,
-            Mod.Config.HoverGuide.CurrentProfile.DisplayJobTactics ? $"{GetJobText(chara)}/{GetTacticsText(chara)}" : null,
-            Mod.Config.HoverGuide.CurrentProfile.DisplayHobby ? hobby : null,
+            ProfileConfig.DisplayGender ? GetGenderText(chara) : null,
+            ProfileConfig.DisplayAge ? GetAgeText(chara) : null,
+            ProfileConfig.DisplayRace ? GetRaceText(chara) : null,
+            ProfileConfig.DisplayJobTactics ? $"{GetJobText(chara)}/{GetTacticsText(chara)}" : null,
+            ProfileConfig.DisplayHobby ? hobby : null,
         }.Where(t => !string.IsNullOrEmpty(t)));
         return !string.IsNullOrEmpty(text) ? text : null;
     }
@@ -85,8 +79,8 @@ public static class ModHoverTextBuilder
     private static string? GetHoverTextProfile2(Chara chara, string fav)
     {
         var text = string.Join(" ", new[] {
-            Mod.Config.HoverGuide.CurrentProfile.DisplayGender ? GetAffinityText(chara) : null,
-            Mod.Config.HoverGuide.CurrentProfile.DisplayFavorite ? fav: null,
+            ProfileConfig.DisplayAffinity ? GetAffinityText(chara) : null,
+            ProfileConfig.DisplayFavorite ? fav: null,
         }.Where(t => !string.IsNullOrEmpty(t)));
         return !string.IsNullOrEmpty(text) ? text : null;
     }
@@ -94,9 +88,9 @@ public static class ModHoverTextBuilder
     private static string? GetHoverStatusAttribute(Chara chara)
     {
         var text = string.Join(" ", new[] {
-            Mod.Config.HoverGuide.CurrentProfile.DisplayHP ? GetHPText(chara) : null,
-            Mod.Config.HoverGuide.CurrentProfile.DisplayMana ? GetManaText(chara) : null,
-            Mod.Config.HoverGuide.CurrentProfile.DisplayStamina ? GetStaminaText(chara) : null,
+            ProfileConfig.DisplayHP ? GetHPText(chara) : null,
+            ProfileConfig.DisplayMana ? GetManaText(chara) : null,
+            ProfileConfig.DisplayStamina ? GetStaminaText(chara) : null,
         }.Where(t => !string.IsNullOrEmpty(t)));
         return !string.IsNullOrEmpty(text) ? text : null;
     }
@@ -104,18 +98,18 @@ public static class ModHoverTextBuilder
     private static string? GetHoverStatus(Chara chara)
     {
         var text = string.Join(" ", new[] {
-            Mod.Config.HoverGuide.CurrentProfile.DisplayDVPV ? GetDVText(chara) : null,
-            Mod.Config.HoverGuide.CurrentProfile.DisplayDVPV ? GetPVText(chara) : null,
-            Mod.Config.HoverGuide.CurrentProfile.DisplaySpeed ? GetSkillSpdText(chara) : null,
-            Mod.Config.HoverGuide.CurrentProfile.DisplayExp ? GetExpText(chara) : null,
-            Mod.Config.HoverGuide.CurrentProfile.DisplayMainElement ? GetMainElementText(chara) : null,
+            ProfileConfig.DisplayDVPV ? GetDVText(chara) : null,
+            ProfileConfig.DisplayDVPV ? GetPVText(chara) : null,
+            ProfileConfig.DisplaySpeed ? GetSkillSpdText(chara) : null,
+            ProfileConfig.DisplayExp ? GetExpText(chara) : null,
+            ProfileConfig.DisplayMainElement ? GetMainElementText(chara) : null,
         }.Where(t => !string.IsNullOrEmpty(t)));
         return !string.IsNullOrEmpty(text) ? text : null;
     }
 
     private static string? GetHoverTextPrimaryAttribute(Chara chara)
     {
-        if (!Mod.Config.HoverGuide.CurrentProfile.DisplayPrimaryAttributes)
+        if (!ProfileConfig.DisplayPrimaryAttributes)
         {
             return null;
         }
@@ -134,17 +128,17 @@ public static class ModHoverTextBuilder
 
     private static string? GetHoverTextFeat(Chara chara)
     {
-        return Mod.Config.HoverGuide.CurrentProfile.DisplayFeat ? GetFeatListText(chara) : null;
+        return ProfileConfig.DisplayFeat ? GetFeatListText(chara) : null;
     }
 
     private static string? GetHoverTextAct(Chara chara)
     {
-        return Mod.Config.HoverGuide.CurrentProfile.DisplayAct ? GetActListText(chara) : null;
+        return ProfileConfig.DisplayAct ? GetActListText(chara) : null;
     }
 
     private static string? GetHoverTextResist(Chara chara)
     {
-        return Mod.Config.HoverGuide.CurrentProfile.DisplayResist ? GetResistListText(chara) : null;
+        return ProfileConfig.DisplayResist ? GetResistListText(chara) : null;
     }
 
     private static string GetLvText(Chara chara)
@@ -184,24 +178,24 @@ public static class ModHoverTextBuilder
 
     private static string GetHPText(Chara chara)
     {
-        var hpValueColor = Math.Ceiling((float)chara.hp / chara.MaxHP * 100) > LowValueThreshold ? HPLightenColor : HPLightenColor.Darken(0.2f);
-        var hpText = "HP:".TagColor(HPColor).TagSize(ModUIUtil.ComputeFontSize(11));
+        var hpValueColor = Math.Ceiling((float)chara.hp / chara.MaxHP * 100) > LowValueThreshold ? Config.HPLightenColor : Config.HPLightenColor.Darken(0.2f);
+        var hpText = "HP:".TagColor(Config.HPColor).TagSize(ModUIUtil.ComputeFontSize(11));
         var hpValueText = $"{chara.hp}/{chara.MaxHP}".TagColor(hpValueColor);
         return $"{hpText}{hpValueText}";
     }
 
     private static string GetManaText(Chara chara)
     {
-        var manaValueColor = Math.Ceiling((float)chara.mana.value / chara.mana.max * 100) > LowValueThreshold ? ManaLightenColor : ManaLightenColor.Darken(0.2f);
-        var manaText = "MP:".TagColor(ManaColor).TagSize(ModUIUtil.ComputeFontSize(11));
+        var manaValueColor = Math.Ceiling((float)chara.mana.value / chara.mana.max * 100) > LowValueThreshold ? Config.ManaLightenColor : Config.ManaLightenColor.Darken(0.2f);
+        var manaText = "MP:".TagColor(Config.ManaColor).TagSize(ModUIUtil.ComputeFontSize(11));
         var manaValueText = $"{chara.mana.value}/{chara.mana.max}".TagColor(manaValueColor);
         return $"{manaText}{manaValueText}";
     }
 
     private static string GetStaminaText(Chara chara)
     {
-        var staminaValueColor = Math.Ceiling((float)chara.stamina.value / chara.stamina.max * 100) > LowValueThreshold ? StaminaLightenColor : StaminaLightenColor.Darken(0.2f);
-        var staminaText = "SP:".TagColor(StaminaColor).TagSize(ModUIUtil.ComputeFontSize(11));
+        var staminaValueColor = Math.Ceiling((float)chara.stamina.value / chara.stamina.max * 100) > LowValueThreshold ? Config.StaminaLightenColor : Config.StaminaLightenColor.Darken(0.2f);
+        var staminaText = "SP:".TagColor(Config.StaminaColor).TagSize(ModUIUtil.ComputeFontSize(11));
         var staminaValuetext = $"{chara.stamina.value}/{chara.stamina.max}".TagColor(staminaValueColor);
         return $"{staminaText}{staminaValuetext}";
     }
@@ -304,9 +298,10 @@ public static class ModHoverTextBuilder
             return null;
         }
 
+        bool includesValue = ProfileConfig.DisplayFeatValue;
         return string.Join(
             ", ",
-            feats.Select(f => $"{f.Name}{(f.Value > 1 ? $"({f.Value})".TagSize(ModUIUtil.ComputeFontSize(9)) : "")}")
+            feats.Select(f => $"{f.Name}{(includesValue && f.Value > 1 ? $"({f.Value})".TagSize(ModUIUtil.ComputeFontSize(9)) : "")}")
         );
     }
 
@@ -317,9 +312,10 @@ public static class ModHoverTextBuilder
             return null;
         }
 
+        bool includesParty = ProfileConfig.DisplayActParty;
         return string.Join(
             ", ",
-            chara.ability.list.items.Select(a => $"{a.act.Name}{(a.pt ? "(pt)".TagSize(ModUIUtil.ComputeFontSize(9)) : "")}")
+            chara.ability.list.items.Select(a => $"{a.act.Name}{(includesParty && a.pt ? "(pt)".TagSize(ModUIUtil.ComputeFontSize(9)) : "")}")
         );
     }
 
@@ -331,14 +327,29 @@ public static class ModHoverTextBuilder
             return null;
         }
 
+        bool includesValue = ProfileConfig.DisplayResistValue;
         return string.Join(
             Environment.NewLine,
             resists
                 .GroupBy(r => Element.GetResistLv(r.Value))
                 .Where(g => g.Key != (int)Resist.None)
                 .OrderByDescending(g => g.Key)
-                .Select(g => $"{$"{GetResistLevelText(g.Key)}:".TagColor(GetResistColor(g.Key))} {string.Join(", ", g.OrderBy(r => r.id).Select(GetResistText).Where(t => !string.IsNullOrEmpty(t)))}")
+                .Select(g => GetResistListLineText(g, includesValue)?.TagSize(ModUIUtil.ComputeFontSize(11)))
         );
+    }
+
+    private static string? GetResistListLineText(IGrouping<int, Element> group, bool includesValue)
+    {
+        var resistLevelText = GetResistLevelText(group.Key);
+        if (!string.IsNullOrEmpty(resistLevelText))
+        {
+            resistLevelText = $"{resistLevelText}:".TagColor(GetResistColor(group.Key));
+        }
+        var resistListText = string.Join(", ", group
+            .OrderBy(r => r.id)
+            .Select(r => GetResistText(r, includesValue))
+            .Where(t => !string.IsNullOrEmpty(t)));
+        return !string.IsNullOrEmpty(resistLevelText) && !string.IsNullOrEmpty(resistListText) ? $"{resistLevelText} {resistListText}" : null;
     }
 
     private static Color? GetElementColor(string alias)
@@ -354,36 +365,42 @@ public static class ModHoverTextBuilder
     {
         if (resistLevel > (int)Resist.None)
         {
-            return Color.Lerp(NoneResistColor, ResistColor, 1 * (resistLevel / (float)Resist.Immune));
+            return Color.Lerp(Config.NoneResistColor, Config.ResistColor, 1 * (resistLevel / (float)Resist.Immune));
         }
         else if (resistLevel < (int)Resist.None)
         {
-            return Color.Lerp(NoneResistColor, NegativeResistColor, 1 * (resistLevel / (float)Resist.CriticalWeakness));
+            return Color.Lerp(Config.NoneResistColor, Config.NegativeResistColor, 1 * (resistLevel / (float)Resist.CriticalWeakness));
         }
         else
         {
-            return NoneResistColor;
+            return Config.NoneResistColor;
         }
     }
 
-    private static string GetResistLevelText(int resistLevel)
+    private static string? GetResistLevelText(int resistLevel)
     {
-        var level = (Resist)Math.Max(Mathf.Min(resistLevel, (int)Resist.Immune), (int)Resist.CriticalWeakness);
-        return level switch
+        var level = Math.Max(Mathf.Min(resistLevel, (int)Resist.Immune + 1), (int)Resist.CriticalWeakness);
+        switch (ProfileConfig.ResistLevelLabelType)
         {
-            Resist.Immune => "+20",
-            Resist.Great => "+15",
-            Resist.Strong => "+10",
-            Resist.Normal => "+5",
-            Resist.None => "0",
-            Resist.Weakness => "-5",
-            Resist.CriticalWeakness => "-10",
-            _ => throw new ArgumentException(),
-        };
-        // return resistLevel <= 0 ? Lang.GetList("resistNeg")[-resistLevel] : Lang.GetList("resist")[Mathf.Min(resistLevel, (int)Resist.Immune + 1)];
+            case ModHoverGuideResistLevelLabelType.LangText:
+                return level <= 0 ? Lang.GetList("resistNeg")[-level] : Lang.GetList("resist")[level];
+            case ModHoverGuideResistLevelLabelType.Value:
+                return (Resist)level switch
+                {
+                    Resist.Immune => "+20",
+                    Resist.Great => "+15",
+                    Resist.Strong => "+10",
+                    Resist.Normal => "+5",
+                    Resist.None => "0",
+                    Resist.Weakness => "-5",
+                    Resist.CriticalWeakness => "-10",
+                    _ => level == (int)Resist.Immune + 1 ? "+25" : null,
+                };
+        }
+        return null;
     }
 
-    private static string? GetResistText(Element resist)
+    private static string? GetResistText(Element resist, bool includesValue)
     {
         var eleAlias = resist.source.aliasParent;
         if (eleAlias is null || !eleAlias.StartsWith("ele"))
@@ -397,8 +414,7 @@ public static class ModHoverTextBuilder
             return null;
         }
 
-        // var resistText = $"{resImmunePlusText}{element.GetName()}{resImmunePlusText}{$"({resist.Value})".TagSize(ModUIUtil.ComputeFontSize(9))}";
-        var resistText = $"{resImmunePlusText}{element.GetName()}{resImmunePlusText}";
+        var resistText = $"{resImmunePlusText}{element.GetName()}{resImmunePlusText}{(includesValue ? $"({resist.Value})".TagSize(ModUIUtil.ComputeFontSize(9)) : "")}";
         if (GetElementColor(eleAlias) is Color color)
         {
             resistText = resistText.TagColor(color);
