@@ -7,26 +7,25 @@ using SomewhatEnhancedDisplay.Config;
 
 namespace SomewhatEnhancedDisplay.UI;
 
-public static class ModHoverTextBuilder
+public static class ModCharaHoverTextBuilder
 {
     private static readonly int LowValueThreshold = 10;
 
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
-    private static ModHoverGuideProfile ProfileConfig => Config.CurrentProfile;
+    private static ModConfigHoverGuideProfileChara ProfileConfig => Config.CurrentProfile.Chara;
 
-    public static string BuildHoverText(string text, string text2, string s, Chara chara)
+    public static string BuildHoverText(Chara chara, string text, string text2, string s)
     {
         // text: 名前
         // text2: レベル差、赤ちゃん、高低差、賞金首、信仰
         // s: ゲスト・家畜、血の風味
-        var hoverText = string.Join(" ", new[] {
+        return string.Join(" ", new[] {
             GetHoverTextLv(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)),
             $"{text}{text2}{s}",
         }.Where(t => !string.IsNullOrEmpty(t)));
-        return !string.IsNullOrEmpty(hoverText) ? hoverText.TagColorNullable(Config.MainTextColor) : hoverText;
     }
 
-    public static string BuildHoverText2(string text, string text2, string text3, Chara chara)
+    public static string BuildHoverText2(Chara chara, string text, string text2, string text3)
     {
         // text: 好物
         // text2: 趣味・仕事
@@ -34,7 +33,7 @@ public static class ModHoverTextBuilder
         text = text.StartsWith(Environment.NewLine) ? text.Substring(Environment.NewLine.Length) : text;
         text2 = text2.StartsWith(Environment.NewLine) ? text2.Substring(Environment.NewLine.Length) : text2;
         text3 = text3.StartsWith(Environment.NewLine) ? text3.Substring(Environment.NewLine.Length) : text3;
-        var hoverText = string.Join(Environment.NewLine, new[] {
+        return string.Join(Environment.NewLine, new[] {
             GetHoverTextProfile1(chara, text2)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(Config.SubTextColor),
             GetHoverTextProfile2(chara, text)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(Config.SubTextColor),
             GetHoverStatusAttribute(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)),
@@ -43,13 +42,16 @@ public static class ModHoverTextBuilder
             GetHoverTextFeat(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(Config.SubTextColor),
             GetHoverTextAct(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)),
             GetHoverTextResist(chara),
-            text3,
+            ProfileConfig.DisplayStats ? text3 : null,
         }.Where(t => !string.IsNullOrEmpty(t)));
-        return !string.IsNullOrEmpty(hoverText) ? hoverText.TagColorNullable(Config.MainTextColor) : hoverText;
     }
 
     public static string BuildStatsExtraText(string text4, BaseStats stats)
     {
+        if (!ProfileConfig.DisplayStatsValue)
+        {
+            return text4;
+        }
         var statsValueText = $"({stats.GetValue()})".TagSize(ModUIUtil.ComputeFontSize(9));
         return $"{text4}{statsValueText}";
     }
@@ -61,7 +63,7 @@ public static class ModHoverTextBuilder
 
     private static string? GetHoverTextLv(Chara chara)
     {
-        return Mod.Config.HoverGuide.CurrentProfile.DisplayLv ? GetLvText(chara) : null;
+        return ProfileConfig.DisplayLv ? GetLvText(chara) : null;
     }
 
     private static string? GetHoverTextProfile1(Chara chara, string hobby)

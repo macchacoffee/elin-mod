@@ -74,7 +74,7 @@ public static class WidgetMouseoverPatch
         // localText4 = EMono.pc.parasite.GetHoverText2();
         // localTarget2 = EMono.pc.parasite;
         // ...
-        // text = ModHoverTextBuilder.BuildOtherCardsText(text, "otherCards".lang((count - 1).ToString() ?? ""));
+        // text = ModCharaHoverTextBuilder.BuildOtherCardsText(text, "otherCards".lang((count - 1).ToString() ?? ""));
         // ...
         // localText2 = card.GetHoverText2();
         // localTarget1 = card;
@@ -86,7 +86,7 @@ public static class WidgetMouseoverPatch
         var matcher = new CodeMatcher(instructions, generator);
 
         // ホバーテキスト下部 (おおよそ2行目以降) に表示される文字列、
-        // GetHoverTextとGetHoverText2関数を呼び出したインスタンスの参照を保存する変数を定義する
+        // GetHoverTextとGetHoverText2()を呼び出したインスタンスの参照を保存する変数を定義する
         var localText2 = generator.DeclareLocal(typeof(string));
         var localText3 = generator.DeclareLocal(typeof(string));
         var localText4 = generator.DeclareLocal(typeof(string));
@@ -99,8 +99,8 @@ public static class WidgetMouseoverPatch
             new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.ride))),
             new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Card), nameof(Card.GetHoverText2), []))
         );
-        // GetHoverText2関数の戻り値と呼び出したインスタンスの参照 (騎乗Chara) を保存する
-        // GetHoverText2関数の戻り値がtextに追加されないようにする
+        // GetHoverText2()の戻り値と呼び出したインスタンスの参照 (騎乗Chara) を保存する
+        // GetHoverText2()の戻り値がtextに追加されないようにする
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Dup)
         );
@@ -129,7 +129,7 @@ public static class WidgetMouseoverPatch
             new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.parasite))),
             new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Card), nameof(Card.GetHoverText), []))
         );
-        // GetHoverText関数の戻り値を保存し、textに追加されないようにする
+        // GetHoverText()の戻り値を保存し、textに追加されないようにする
         matcher.Advance(1);
         matcher.RemoveInstructions(2);
         matcher.InsertAndAdvance(
@@ -143,8 +143,8 @@ public static class WidgetMouseoverPatch
             new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.parasite))),
             new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Card), nameof(Card.GetHoverText2), []))
         );
-        // GetHoverText2関数の戻り値と呼び出したインスタンスの参照 (寄生Chara) を保存する
-        // GetHoverText2関数の戻り値がtextに追加されないようにする
+        // GetHoverText2()の戻り値と呼び出したインスタンスの参照 (寄生Chara) を保存する
+        // GetHoverText2()の戻り値がtextに追加されないようにする
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Dup)
         );
@@ -162,10 +162,10 @@ public static class WidgetMouseoverPatch
             new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.lang), [typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string)])),
             new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string)]))
         );
-        // "(他+n)"の文字列を調整し、GetHoverText関数の戻り値の末尾に追加されるようにする
+        // "(他+n)"の文字列を調整し、GetHoverText()の戻り値の末尾に追加されるようにする
         matcher.RemoveInstruction();
         matcher.InsertAndAdvance(
-            CodeInstruction.Call(() => ModHoverTextBuilder.BuildOtherCardsText(default!, default!))
+            CodeInstruction.Call(() => ModCharaHoverTextBuilder.BuildOtherCardsText(default!, default!))
         );
 
         // ldloc.3 NULL [Label21, Label22]
@@ -174,8 +174,8 @@ public static class WidgetMouseoverPatch
             new CodeMatch(OpCodes.Ldloc_3),
             new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Card), nameof(Card.GetHoverText2), []))
         );
-        // GetHoverText2関数の戻り値と呼び出したインスタンスの参照 (card) を保存する
-        // GetHoverText2関数の戻り値がtextに追加されないようにする
+        // GetHoverText2()の戻り値と呼び出したインスタンスの参照 (card) を保存する
+        // GetHoverText2()の戻り値がtextに追加されないようにする
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Dup)
         );
@@ -242,7 +242,7 @@ public static class WidgetMouseoverPatch
         matcher.MatchStartForward(
             new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.GetAnchor), [typeof(RectTransform)]))
         );
-        // GetAnchor関数の戻り値を固定値のRectPosition.CENTERに置き換え、
+        // GetAnchor()の戻り値を固定値のRectPosition.CENTERに置き換え、
         // layout.childAlignmentがTextAnchor.MiddleCenterに設定されるようにする
         matcher.Advance(1);
         matcher.InsertAndAdvance(

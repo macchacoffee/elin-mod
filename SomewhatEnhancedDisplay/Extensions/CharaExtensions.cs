@@ -23,5 +23,18 @@ public static class CharaExtensions
         }
 
         public bool IsInFullHealth => chara.HealthRatio >= 1;
+
+
+        public Chara? MimicryChara => chara.mimicry is ConTransmuteHuman trans ? trans.chara : null;
+
+        public Thing? MimicryThing => chara.mimicry is ConTransmuteMimic trans ? trans.thing : null;
+
+        public Chara MimicryOrSelf => chara.MimicryChara is Chara c ? c : chara;
+
+        public bool IsMimicry => chara.mimicry is not null;
+
+        public bool IsMimicryChara => chara.MimicryChara is not null;
+
+        public bool IsMimicryThing => chara.MimicryThing is not null;
     }
 }

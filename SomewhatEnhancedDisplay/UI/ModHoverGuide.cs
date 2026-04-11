@@ -20,6 +20,9 @@ public class ModHoverGuide
 
     private int BaseFontSize { get; }
 
+    private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
+    private static ModConfigHoverGuideProfileChara ProfileConfig => Config.CurrentProfile.Chara;
+
     public ModHoverGuide(WidgetMouseover widget)
     {
         var localScale = widget.textName.transform.localScale;
@@ -34,7 +37,7 @@ public class ModHoverGuide
 
         TextName3 = UnityEngine.Object.Instantiate(widget.textName);
         TextName3.transform.SetParent(widget.layout.transform);
-        TextName3.transform.localScale =localScale;
+        TextName3.transform.localScale = localScale;
 
         HealthBar2 = new(widget);
 
@@ -44,7 +47,7 @@ public class ModHoverGuide
         TextName4.transform.SetParent(widget.layout.transform);
         TextName4.transform.localScale = localScale;
 
-        // ゲーム設定のウィジェットのフォントサイズが最小の場合を基準のフォントサイズとする
+        // ゲーム設定のウィジェットのフォントサイズが "すごく小さい" (最小値) の場合を基準のフォントサイズとする
         BaseFontSize = widget.textName.fontSize - EClass.core.config.font.fontWidget.size;
 
         // ウィジェットを無効から有効に切り替えた際に表示が乱れないようにするため、
@@ -92,6 +95,7 @@ public class ModHoverGuide
         var isPaddingRequired = false;
         if (!string.IsNullOrEmpty(text))
         {
+            text = text?.TagSize(fontSize).TagColorNullable(Config.MainTextColor);
             widget.textName.fontSize = fontSize;
             widget.textName.enabled = true;
             isGroup1Enabled = true;
@@ -101,7 +105,7 @@ public class ModHoverGuide
         {
             widget.textName.enabled = false;
         }
-        if (target1 is Chara chara1)
+        if (target1 is Chara chara1 && !chara1.IsMimicryThing)
         {
             var enabled = DisplaysHealthBar(chara1);
             HealthBar1.Enabled = enabled;
@@ -115,6 +119,7 @@ public class ModHoverGuide
         }
         if (!string.IsNullOrEmpty(text2))
         {
+            text2 = text2?.TagColorNullable(Config.MainTextColor);
             TextName2.fontColor = fontColor;
             TextName2.fontSize = fontSize;
             TextName2.text = text2.TagSize(fontSize);
@@ -137,6 +142,7 @@ public class ModHoverGuide
             {
                 text3 = $"{Environment.NewLine}{text3}";
             }
+            text3 = text3?.TagColorNullable(Config.MainTextColor);
             TextName3.fontColor = fontColor;
             TextName3.fontSize = fontSize;
             TextName3.text = text3.TagSize(fontSize);
@@ -148,7 +154,7 @@ public class ModHoverGuide
             TextName3.text = string.Empty;
             TextName3.enabled = false;
         }
-        if (target2 is Chara chara2)
+        if (target2 is Chara chara2 && !chara2.IsMimicryThing)
         {
             var enabled = DisplaysHealthBar(chara2);
             HealthBar2.Enabled = enabled;
@@ -161,6 +167,7 @@ public class ModHoverGuide
         }
         if (!string.IsNullOrEmpty(text4))
         {
+            text4 = text4?.TagColorNullable(Config.MainTextColor);
             TextName4.fontColor = fontColor;
             TextName4.fontSize = fontSize;
             TextName4.text = text4.TagSize(fontSize);
@@ -175,7 +182,7 @@ public class ModHoverGuide
 
         UpdatePadding(Padding2, isPaddingRequired, paddingHeight);
 
-        widget.Show(text?.TagSize(fontSize));
+        widget.Show(text);
     }
 
     public void ShowForManager(WidgetMouseover widget)
@@ -190,13 +197,12 @@ public class ModHoverGuide
 
     private bool DisplaysHealthBar(Chara chara)
     {
-        var configProfile = Mod.Config.HoverGuide.CurrentProfile;
-        if (!configProfile.DisplayHealthBar)
+        if (!ProfileConfig.DisplayHealthBar)
         {
             return false;
         }
 
-        var config = configProfile.HealthBar;
+        var config = ProfileConfig.HealthBar;
         switch (chara.hostility)
         {
             case Hostility.Enemy:
@@ -212,7 +218,7 @@ public class ModHoverGuide
         }
     }
 
-    private bool DisplaysHealthBar(Chara chara, ModHealthBarDisplay config)
+    private bool DisplaysHealthBar(Chara chara, ModConfigHealthBarDisplay config)
     {
         var displays = config.Target switch
         {

@@ -27,7 +27,7 @@ public static class CharaPatch
         // ...
         // .TagSize(...)
         // // 変更後
-        // return ModHoverTextBuilder.BuildHoverText(text, text2, s, this);
+        // return BuildHoverText(text, text2, s, this);
         // ...
         // .TagSize(CharaPatch.ComputeFontSize(...))
         var matcher = new CodeMatcher(instructions, generator);
@@ -42,7 +42,7 @@ public static class CharaPatch
         matcher.RemoveInstruction();
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Ldarg_0),
-            CodeInstruction.Call(() => ModHoverTextBuilder.BuildHoverText(default!, default!, default!, default!))
+            CodeInstruction.Call(() => BuildHoverText(default!, default!, default!, default!))
         );
 
         // call static string ClassExtension::TagColor(string s, UnityEngine.Color c)
@@ -85,7 +85,7 @@ public static class CharaPatch
         // ...
         // text = text + $"<size={CharaPatch.ComputeFontSize(14)}>♡" + GetFavCat().GetName().ToLower() + "/" + GetFavFood().GetName() + "</size>";
         // ...
-        // text4 = ModHoverTextBuilder.BuildStatsExtraText(text4, item3);
+        // text4 = ModCharaHoverTextBuilder.BuildStatsExtraText(text4, item3);
         // text3 = text3 + text4.TagColor(c) + ", ";
         // ...
         // else
@@ -93,7 +93,7 @@ public static class CharaPatch
         //      text3 = text3.TrimEnd(", ".ToCharArray()) + "</size>";
         // }
         // ...
-        // return ModHoverTextBuilder.BuildHoverText2(text, text2, text3, this);
+        // return BuildHoverText2(text, text2, text3, this);
         var matcher = new CodeMatcher(instructions, generator);
 
         // ldstr "<size=14>"
@@ -172,7 +172,7 @@ public static class CharaPatch
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Ldloc_S, 12),
             new CodeInstruction(OpCodes.Ldloc_S, 11),
-            CodeInstruction.Call(() => ModHoverTextBuilder.BuildStatsExtraText(default!, default!)),
+            CodeInstruction.Call(() => ModCharaHoverTextBuilder.BuildStatsExtraText(default!, default!)),
             new CodeInstruction(OpCodes.Stloc_S, 12)
         );
 
@@ -200,7 +200,7 @@ public static class CharaPatch
         matcher.RemoveInstruction();
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Ldarg_0),
-             CodeInstruction.Call(() => ModHoverTextBuilder.BuildHoverText2(default!, default!, default!, default!))
+             CodeInstruction.Call(() => BuildHoverText2(default!, default!, default!, default!))
         );
 
         return matcher.InstructionEnumeration();
@@ -208,11 +208,22 @@ public static class CharaPatch
 
     private static int ComputeFontSize(int fontSize)
     {
+        // ゲーム設定のウィジェットのフォントサイズが "大きめ" の場合を基準にする
         return ModUIUtil.ComputeFontSize(fontSize - 3);
     }
 
     private static string IntToString(int value)
     {
         return value.ToString();
+    }
+
+    private static string BuildHoverText(string text, string text2, string s, Chara chara)
+    {
+        return ModCharaHoverTextBuilder.BuildHoverText(chara, text, text2, s);
+    }
+
+    private static string BuildHoverText2(string text, string text2, string text3, Chara chara)
+    {
+        return ModCharaHoverTextBuilder.BuildHoverText2(chara, text, text2, text3);
     }
 }

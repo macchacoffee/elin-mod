@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using SomewhatEnhancedDisplay.Extensions;
 using SomewhatEnhancedDisplay.Config;
+using ModUtility.Util;
 
 namespace SomewhatEnhancedDisplay.UI;
 
@@ -25,7 +26,7 @@ public class ModHealthBar
     private Tween? DamageTween { get; set; }
 
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
-    private static ModHoverGuideProfile ProfileConfig => Config.CurrentProfile;
+    private static ModConfigHoverGuideProfileChara ProfileConfig => Config.CurrentProfile.Chara;
 
     public ModHealthBar(WidgetMouseover widget)
     {
@@ -99,8 +100,7 @@ public class ModHealthBar
         var ratio = chara.HealthRatio;
         // 0%または100%以上の場合は小数点以下なし、それ以外の場合は小数第1位まで表示する
         // 現在HPが最大HPよりも1でも低ければ100%とは表示しないようにする
-        var ceilingRatio = Math.Ceiling(ratio * 1000);
-        var pct = (float)(ratio < 1 ? Math.Min(ceilingRatio, 999) : ceilingRatio) / 10;
+        var pct = ModMath.Ceiling((ratio < 1 ? Math.Min(ratio, 0.999f) : ratio) * 100, 1);
         var pctColor = Color.Lerp(Config.HealthBarLowValueTextColor, Config.HealthBarValueTextColor, ratio);
         var barColor = Color.Lerp(Config.HealthBarLowValueFGColor, Config.HealthBarFGColor, ratio);
         var pctText = pct == 0 || pct >= 100 ? $"{pct:0}" : $"{pct:0.0}";

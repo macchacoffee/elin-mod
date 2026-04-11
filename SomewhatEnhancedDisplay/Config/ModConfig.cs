@@ -89,7 +89,7 @@ public class ModConfigHoverGuide
     [JsonConverter(typeof(ColorConverter))]
     public Color HealthBarLowValueFGColor { get; set; } = new(0.485f, 0.189f, 0.104f); // #7C301BFF
 
-    [JsonProperty("healthBarValueTextColor", DefaultValueHandling = DefaultValueHandling.Include, NullValueHandling = NullValueHandling.Include)]
+    [JsonProperty("healthBarValueTextColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ColorConverter))]
     public Color HealthBarValueTextColor { get; set; } = new(0.8f, 0.8f, 0.8f); // #CCCCCCFF
 
@@ -97,23 +97,55 @@ public class ModConfigHoverGuide
     [JsonConverter(typeof(ColorConverter))]
     public Color HealthBarLowValueTextColor { get; set; } = new(0.872f, 0.371f, 0.335f); // #DE5F55FF
 
+    [JsonProperty("fressnessValueColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonConverter(typeof(ColorConverter))]
+    public Color FressnessValueColor { get; set; } = new(0.375f, 0.738f, 0.626f); // #60BCA0FF
+
+    [JsonProperty("fressnessLowValueColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonConverter(typeof(ColorConverter))]
+    public Color FressnessLowValueColor { get; set; } = new(0.822f, 0.431f, 0.395f); // #D26E65FF
+
+    [JsonProperty("rariryCrudeColor", DefaultValueHandling = DefaultValueHandling.Include, NullValueHandling = NullValueHandling.Include)]
+    [JsonConverter(typeof(ColorConverter))]
+    public Color? RariryCrudeColor { get; set; } = new(0.62f, 0.62f, 0.62f); // #9E9E9EFF
+
+    [JsonProperty("rariryNormalColor", DefaultValueHandling = DefaultValueHandling.Include, NullValueHandling = NullValueHandling.Include)]
+    [JsonConverter(typeof(ColorConverter))]
+    public Color? RariryNormalColor { get; set; } = null;
+
+    [JsonProperty("rarirySuperiorColor", DefaultValueHandling = DefaultValueHandling.Include, NullValueHandling = NullValueHandling.Include)]
+    [JsonConverter(typeof(ColorConverter))]
+    public Color? RarirySuperiorColor { get; set; } = new(0.412f, 0.797f, 0.526f); // #69CB86FF
+
+    [JsonProperty("rariryLegendaryColor", DefaultValueHandling = DefaultValueHandling.Include, NullValueHandling = NullValueHandling.Include)]
+    [JsonConverter(typeof(ColorConverter))]
+    public Color? RariryLegendaryColor { get; set; } = new(0.83f, 0.762f, 0.411f); // #D4C269FF
+
+    [JsonProperty("rariryMythicalColor", DefaultValueHandling = DefaultValueHandling.Include, NullValueHandling = NullValueHandling.Include)]
+    [JsonConverter(typeof(ColorConverter))]
+    public Color? RariryMythicalColor { get; set; } = new(0.888f, 0.525f, 0.364f); // #E2865DFF
+
+    [JsonProperty("rariryArtifactColor", DefaultValueHandling = DefaultValueHandling.Include, NullValueHandling = NullValueHandling.Include)]
+    [JsonConverter(typeof(ColorConverter))]
+    public Color? RariryArtifactColor { get; set; } = new(0.64f, 0.614f, 0.891f); // #A39DE3FF
+
     [JsonProperty("profiles", DefaultValueHandling = DefaultValueHandling.Include, ObjectCreationHandling = ObjectCreationHandling.Replace)]
-    public List<ModHoverGuideProfile> Profiles { get; private set; } = [
-        new ModHoverGuideProfile(),
-        ModHoverGuideProfile.CreateDisplayAll(),
+    public List<ModConfigHoverGuideProfile> Profiles { get; private set; } = [
+        new ModConfigHoverGuideProfile(),
+        ModConfigHoverGuideProfile.CreateDisplayAll(),
     ];
 
     [JsonProperty("currentProfileIndex", DefaultValueHandling = DefaultValueHandling.Include, ObjectCreationHandling = ObjectCreationHandling.Replace)]
     private int CurrentProfileIndex { get; set; } = 0;
 
     [JsonIgnore]
-    public ModHoverGuideProfile CurrentProfile
+    public ModConfigHoverGuideProfile CurrentProfile
     {
         get
         {
             if (Profiles.Count == 0)
             {
-                Profiles.Add(new ModHoverGuideProfile());
+                Profiles.Add(new ModConfigHoverGuideProfile());
             }
             CurrentProfileIndex = Math.Min(CurrentProfileIndex, Profiles.Count - 1);
             return Profiles[CurrentProfileIndex];
@@ -131,7 +163,25 @@ public class ModConfigHoverGuide
     }
 }
 
-public class ModHoverGuideProfile
+public class ModConfigHoverGuideProfile
+{
+    [JsonProperty("chara", DefaultValueHandling = DefaultValueHandling.Include)]
+    public ModConfigHoverGuideProfileChara Chara { get; set; } = new();
+
+    [JsonProperty("thing", DefaultValueHandling = DefaultValueHandling.Include)]
+    public ModConfigHoverGuideProfileThing Thing { get; set; } = new();
+
+    public static ModConfigHoverGuideProfile CreateDisplayAll()
+    {
+        return new()
+        {
+            Chara = ModConfigHoverGuideProfileChara.CreateDisplayAll(),
+            Thing = ModConfigHoverGuideProfileThing.CreateDisplayAll(),
+        };
+    }
+}
+
+public class ModConfigHoverGuideProfileChara
 {
     [JsonProperty("displayLv", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayLv { get; set; } = true;
@@ -205,12 +255,19 @@ public class ModHoverGuideProfile
     [JsonProperty("resistLevelLabelType", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModHoverGuideResistLevelLabelType ResistLevelLabelType { get; set; } = ModHoverGuideResistLevelLabelType.LangText;
 
-    [JsonProperty("healthBar", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModHoverGuideHealthBar HealthBar { get; private set; } = new ModHoverGuideHealthBar();
+    [JsonProperty("displayStats", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool DisplayStats { get; set; } = true;
 
-    public static ModHoverGuideProfile CreateDisplayAll()
+    [JsonProperty("displayStatsValue", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool DisplayStatsValue { get; set; } = false;
+
+    [JsonProperty("healthBar", DefaultValueHandling = DefaultValueHandling.Include)]
+    public ModConfigHoverGuideHealthBar HealthBar { get; private set; } = new();
+
+    public static ModConfigHoverGuideProfileChara CreateDisplayAll()
     {
-        return new() {
+        return new()
+        {
             DisplayLv = true,
             DisplayHealthBar = true,
             DisplayGender = true,
@@ -234,12 +291,14 @@ public class ModHoverGuideProfile
             DisplayActParty = true,
             DisplayResist = true,
             DisplayResistValue = true,
-            HealthBar = ModHoverGuideHealthBar.CreateDisplayAll()
+            DisplayStats = true,
+            DisplayStatsValue = true,
+            HealthBar = ModConfigHoverGuideHealthBar.CreateDisplayAll()
         };
     }
 }
 
-public class ModHoverGuideHealthBar
+public class ModConfigHoverGuideHealthBar
 {
     [JsonProperty("displayValue", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayValue { get; set; } = true;
@@ -248,46 +307,51 @@ public class ModHoverGuideHealthBar
     public int Width { get; set; } = 300;
 
     [JsonProperty("displayForEnemy", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModHealthBarDisplay DisplayForEnemy { get; set; } = new() {
+    public ModConfigHealthBarDisplay DisplayForEnemy { get; set; } = new()
+    {
         Target = ModHealthBarDisplayTarget.All,
         NotInCombat = true,
         InFullHealth = false,
     };
 
     [JsonProperty("displayForNetural", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModHealthBarDisplay DisplayForNetural { get; set; } =  new() {
+    public ModConfigHealthBarDisplay DisplayForNetural { get; set; } = new()
+    {
         Target = ModHealthBarDisplayTarget.None,
         NotInCombat = true,
         InFullHealth = false,
     };
 
     [JsonProperty("displayForFriend", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModHealthBarDisplay DisplayForFriend { get; set; } = new() {
+    public ModConfigHealthBarDisplay DisplayForFriend { get; set; } = new()
+    {
         Target = ModHealthBarDisplayTarget.None,
         NotInCombat = true,
         InFullHealth = false,
     };
 
     [JsonProperty("displayForAlly", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModHealthBarDisplay DisplayForAlly { get; set; } = new() {
+    public ModConfigHealthBarDisplay DisplayForAlly { get; set; } = new()
+    {
         Target = ModHealthBarDisplayTarget.None,
         NotInCombat = true,
         InFullHealth = false,
     };
 
-    public static ModHoverGuideHealthBar CreateDisplayAll()
+    public static ModConfigHoverGuideHealthBar CreateDisplayAll()
     {
-        return new() {
+        return new()
+        {
             DisplayValue = true,
-            DisplayForEnemy = ModHealthBarDisplay.CreateDisplayAll(),
-            DisplayForNetural = ModHealthBarDisplay.CreateDisplayAll(),
-            DisplayForFriend = ModHealthBarDisplay.CreateDisplayAll(),
-            DisplayForAlly = ModHealthBarDisplay.CreateDisplayAll(),
+            DisplayForEnemy = ModConfigHealthBarDisplay.CreateDisplayAll(),
+            DisplayForNetural = ModConfigHealthBarDisplay.CreateDisplayAll(),
+            DisplayForFriend = ModConfigHealthBarDisplay.CreateDisplayAll(),
+            DisplayForAlly = ModConfigHealthBarDisplay.CreateDisplayAll(),
         };
     }
 }
 
-public record ModHealthBarDisplay
+public record ModConfigHealthBarDisplay
 {
     [JsonProperty("target", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModHealthBarDisplayTarget Target { get; set; } = ModHealthBarDisplayTarget.All;
@@ -298,12 +362,39 @@ public record ModHealthBarDisplay
     [JsonProperty("inFullHealth", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool InFullHealth { get; set; } = false;
 
-    public static ModHealthBarDisplay CreateDisplayAll()
+    public static ModConfigHealthBarDisplay CreateDisplayAll()
     {
-        return new() {
+        return new()
+        {
             Target = ModHealthBarDisplayTarget.All,
             NotInCombat = true,
             InFullHealth = true,
+        };
+    }
+}
+
+public class ModConfigHoverGuideProfileThing
+{
+    [JsonProperty("displayLv", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool DisplayLv { get; set; } = false;
+
+    [JsonProperty("displayFressness", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool DisplayFressness { get; set; } = false;
+
+    [JsonProperty("displayLockLv", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool DisplayLockLv { get; set; } = false;
+
+    [JsonProperty("useRarityColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool UseRarityColor { get; set; } = true;
+
+    public static ModConfigHoverGuideProfileThing CreateDisplayAll()
+    {
+        return new()
+        {
+            DisplayLv = true,
+            DisplayFressness = true,
+            DisplayLockLv = true,
+            UseRarityColor = true,
         };
     }
 }
