@@ -29,7 +29,6 @@ public static class Mod
         {
             Config = new();
         }
-        Plugin.LogInfo(Config.HoverGuide.Scale);
     }
 
     public static void SaveConfig(string root)

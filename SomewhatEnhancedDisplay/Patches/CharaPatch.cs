@@ -5,6 +5,7 @@ using HarmonyLib;
 using ModUtility.Patch;
 using SomewhatEnhancedDisplay.Config;
 using SomewhatEnhancedDisplay.UI;
+using SomewhatEnhancedDisplay.UI.HoverGuide;
 
 namespace SomewhatEnhancedDisplay.Patches;
 
@@ -20,7 +21,7 @@ public static class CharaPatch
     }
 
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
-    private static ModConfigHoverGuideProfileChara ProfileConfig => Config.CurrentProfile.Chara;
+    private static ModConfigHoverGuideStyleChara StyleConfig => Config.CurrentStyle.Chara;
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(Chara.GetName), [typeof(NameStyle), typeof(int)])]
@@ -307,8 +308,7 @@ public static class CharaPatch
 
     private static bool IsMimicryEnabled()
     {
-        Plugin.LogInfo($"IsMimicryEnabled: {ProfileConfig.EnableMimicry}");
-        return ProfileConfig.EnableMimicry;
+        return StyleConfig.EnableMimicry;
     }
 
     private static int ComputeFontSize(int fontSize)

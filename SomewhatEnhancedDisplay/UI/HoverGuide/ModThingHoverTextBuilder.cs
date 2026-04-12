@@ -1,22 +1,21 @@
 using System;
 using System.Linq;
-using ModUtility.Util;
 using SomewhatEnhancedDisplay.Config;
 using SomewhatEnhancedDisplay.Extensions;
 using UnityEngine;
 
-namespace SomewhatEnhancedDisplay.UI;
+namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
 public static class ModThingHoverTextBuilder
 {
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
-    private static ModConfigHoverGuideProfileThing ProfileConfig => Config.CurrentProfile.Thing;
+    private static ModConfigHoverGuideStyleThing StyleConfig => Config.CurrentStyle.Thing;
 
     public static string BuildHoverText(Thing thing, string cardText, string text)
     {
         // cardText: Card.GetHoverText()の戻り値 (名前)
         // text: thingの追加情報
-        cardText = ProfileConfig.UseRarityColor ? cardText.TagColorIfNotEmptyNullable(GetRarityColor(thing)) : cardText; 
+        cardText = StyleConfig.UseRarityColor ? cardText.TagColorIfNotEmptyNullable(GetRarityColor(thing)) : cardText; 
         return string.Join(" ", new[] {
             GetHoverTextLv(thing)?.TagSize(ModUIUtil.ComputeFontSize(11)),
             $"{cardText}{text}"
@@ -37,14 +36,14 @@ public static class ModThingHoverTextBuilder
 
     private static string? GetHoverTextLv(Thing thing)
     {
-        return ProfileConfig.DisplayLv ? GetLvText(thing) : null;
+        return StyleConfig.DisplayLv ? GetLvText(thing) : null;
     }
 
     private static string? GetHoverTextExtra1(Thing thing)
     {
         var text = string.Join(" ", new[] {
-            ProfileConfig.DisplayFressness ? GetFressnessText(thing) : null,
-            ProfileConfig.DisplayLockLv ? GetLockLvText(thing) : null,
+            StyleConfig.DisplayFressness ? GetFressnessText(thing) : null,
+            StyleConfig.DisplayLockLv ? GetLockLvText(thing) : null,
         }.Where(t => !string.IsNullOrEmpty(t)));
         return !string.IsNullOrEmpty(text) ? text : null;
     }
@@ -80,12 +79,12 @@ public static class ModThingHoverTextBuilder
     {
         return thing.rarity switch
         {
-            Rarity.Crude => Config.RariryCrudeColor,
-            Rarity.Normal => Config.RariryNormalColor,
-            Rarity.Superior => Config.RarirySuperiorColor,
-            Rarity.Legendary => Config.RariryLegendaryColor,
-            Rarity.Mythical => Config.RariryMythicalColor,
-            Rarity.Artifact => Config.RariryArtifactColor,
+            Rarity.Crude => Config.RarityCrudeColor,
+            Rarity.Normal => Config.RarityNormalColor,
+            Rarity.Superior => Config.RaritySuperiorColor,
+            Rarity.Legendary => Config.RarityLegendaryColor,
+            Rarity.Mythical => Config.RarityMythicalColor,
+            Rarity.Artifact => Config.RarityArtifactColor,
             _ => null,
         };
     }

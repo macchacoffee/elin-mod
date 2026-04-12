@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using ModUtility.Patch;
-using SomewhatEnhancedDisplay.UI;
+using SomewhatEnhancedDisplay.UI.HoverGuide;
 using UnityEngine;
 
 namespace SomewhatEnhancedDisplay.Patches;

@@ -4,7 +4,7 @@ using SomewhatEnhancedDisplay.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SomewhatEnhancedDisplay.UI;
+namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
 public class ModHoverGuide
 {
@@ -21,7 +21,7 @@ public class ModHoverGuide
     private int BaseFontSize { get; }
 
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
-    private static ModConfigHoverGuideProfileChara ProfileConfig => Config.CurrentProfile.Chara;
+    private static ModConfigHoverGuideStyleChara StyleConfig => Config.CurrentStyle.Chara;
 
     public ModHoverGuide(WidgetMouseover widget)
     {
@@ -29,7 +29,7 @@ public class ModHoverGuide
 
         HealthBar1 = new(widget);
 
-        Padding1 = AddPadding(widget.layout, "MCSEDPadding1", localScale);
+        Padding1 = AddPadding(widget.layout, ModConsts.GameObjectName.HoverGuidePadding, localScale);
 
         TextName2 = UnityEngine.Object.Instantiate(widget.textName);
         TextName2.transform.SetParent(widget.layout.transform);
@@ -41,7 +41,7 @@ public class ModHoverGuide
 
         HealthBar2 = new(widget);
 
-        Padding2 = AddPadding(widget.layout, "MCSEDPadding2", localScale);
+        Padding2 = AddPadding(widget.layout, ModConsts.GameObjectName.HoverGuidePadding, localScale);
 
         TextName4 = UnityEngine.Object.Instantiate(widget.textName);
         TextName4.transform.SetParent(widget.layout.transform);
@@ -64,9 +64,9 @@ public class ModHoverGuide
     private static UIImage AddPadding(LayoutGroup layout, string name, Vector3 localScale)
     {
         // GameObjectを生成し、layoutに挿入する
-        var obj = new GameObject(name, typeof(UIImage));
+        var obj = new GameObject(name);
         // 体力バーの画像を設定する
-        var image = obj.GetComponent<UIImage>();
+        var image = obj.AddComponent<UIImage>();
         image.transform.Rect().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0);
         obj.transform.SetParent(layout.transform);
         obj.transform.localScale = localScale;
@@ -105,7 +105,7 @@ public class ModHoverGuide
         {
             widget.textName.enabled = false;
         }
-        if (target1 is Chara chara1 && (!ProfileConfig.EnableMimicry || !chara1.HasMimicryThing))
+        if (target1 is Chara chara1 && (!StyleConfig.EnableMimicry || !chara1.HasMimicryThing))
         {
             var enabled = DisplaysHealthBar(chara1);
             HealthBar1.Enabled = enabled;
@@ -154,7 +154,7 @@ public class ModHoverGuide
             TextName3.text = string.Empty;
             TextName3.enabled = false;
         }
-        if (target2 is Chara chara2 && (!ProfileConfig.EnableMimicry || !chara2.HasMimicryThing))
+        if (target2 is Chara chara2 && (!StyleConfig.EnableMimicry || !chara2.HasMimicryThing))
         {
             var enabled = DisplaysHealthBar(chara2);
             HealthBar2.Enabled = enabled;
@@ -197,12 +197,12 @@ public class ModHoverGuide
 
     private bool DisplaysHealthBar(Chara chara)
     {
-        if (!ProfileConfig.DisplayHealthBar)
+        if (!StyleConfig.DisplayHealthBar)
         {
             return false;
         }
 
-        var config = ProfileConfig.HealthBar;
+        var config = StyleConfig.HealthBar;
         switch (chara.hostility)
         {
             case Hostility.Enemy:

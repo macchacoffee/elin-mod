@@ -14,7 +14,7 @@ public static class ModUI
             return;
         }
 
-        Mod.Config.HoverGuide.AdvanceProfile();
+        Mod.Config.HoverGuide.AdvanceStyle();
         SE.ClickGeneral();
     }
 }

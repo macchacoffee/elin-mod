@@ -3,6 +3,7 @@ using HarmonyLib;
 using ModUtility.Patch;
 using SomewhatEnhancedDisplay.Extensions;
 using SomewhatEnhancedDisplay.UI;
+using SomewhatEnhancedDisplay.UI.HoverGuide;
 
 namespace SomewhatEnhancedDisplay.Patches;
 

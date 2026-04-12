@@ -6,16 +6,13 @@ using SomewhatEnhancedDisplay.Extensions;
 using SomewhatEnhancedDisplay.Config;
 using ModUtility.Util;
 
-namespace SomewhatEnhancedDisplay.UI;
+namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
 public class ModHealthBar
 {
     private static readonly float Height = 24;
     private static readonly float BarHeight = 6;
     private static readonly int ValueFontSize = 13;
-
-    private static readonly Texture2D BarTexture = CreateTexture(Color.white);
-
     private GameObject LayoutObj { get; }
     public LayoutElement Layout { get; }
     private UIImage BGImage { get; }
@@ -26,7 +23,7 @@ public class ModHealthBar
     private Tween? DamageTween { get; set; }
 
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
-    private static ModConfigHoverGuideProfileChara ProfileConfig => Config.CurrentProfile.Chara;
+    private static ModConfigHoverGuideStyleChara StyleConfig => Config.CurrentStyle.Chara;
 
     public ModHealthBar(WidgetMouseover widget)
     {
@@ -34,18 +31,18 @@ public class ModHealthBar
         var localScale = widget.textName.transform.localScale;
         var font = widget.textName.font;
 
-        LayoutObj = new GameObject("MCSEDHealthBar", typeof(LayoutElement));
-        Layout = LayoutObj.GetComponent<LayoutElement>();
+        LayoutObj = new GameObject(ModConsts.GameObjectName.HealthBar);
+        Layout = LayoutObj.AddComponent<LayoutElement>();
         LayoutObj.transform.SetParent(widget.layout.transform);
         LayoutObj.transform.localScale = localScale;
 
-        BGImage = AddHealthBarImage(Layout, "MCSEDHealthBarBG", localScale, Config.HealthBarBGColor);
-        FGDamageImage = AddHealthBarImage(Layout, "MCSEDHealthBarFGDamege", localScale, Config.HealthBarBGColor);
-        FGImage = AddHealthBarImage(Layout, "MCSEDHealthBarFG", localScale, Config.HealthBarFGColor);
+        BGImage = AddHealthBarImage(Layout, ModConsts.GameObjectName.HealthBarBG, localScale, Config.HealthBarBGColor);
+        FGDamageImage = AddHealthBarImage(Layout, ModConsts.GameObjectName.HealthBarFGDamege, localScale, Config.HealthBarBGColor);
+        FGImage = AddHealthBarImage(Layout, ModConsts.GameObjectName.HealthBarFG, localScale, Config.HealthBarFGColor);
 
-        var valueObj = new GameObject("MCSEDHealthBarValue", typeof(UIText), typeof(Shadow));
-        ValueText = valueObj.GetComponent<UIText>();
-        ValueText.enabled = ProfileConfig.HealthBar.DisplayValue;
+        var valueObj = new GameObject(ModConsts.GameObjectName.HealthBarValue);
+        ValueText = valueObj.AddComponent<UIText>();
+        ValueText.enabled = StyleConfig.HealthBar.DisplayValue;
         ValueText.supportRichText = true;
         ValueText.font = font;
         ValueText.text = string.Empty;
@@ -53,32 +50,19 @@ public class ModHealthBar
         valueObj.transform.SetParent(Layout.transform);
         valueObj.transform.localScale = localScale;
 
-        var valueShadow = valueObj.GetComponent<Shadow>();
+        var valueShadow = valueObj.AddComponent<Shadow>();
         valueShadow.effectColor = new Color(0, 0, 0);
         valueShadow.effectDistance = new Vector2(1, -1);
         valueShadow.useGraphicAlpha = true;
     }
 
-    private static Texture2D CreateTexture(Color32 color)
-    {
-        var texture = new Texture2D(1, 1, TextureFormat.RGBA32, false);
-        var pixelData = texture.GetPixelData<Color32>(0);
-        for (var i = 0; i < pixelData.Length; i++)
-        {
-            pixelData[i] = color;
-        }
-        texture.Apply();
-
-        return texture;
-    }
-
     private static UIImage AddHealthBarImage(LayoutElement layout, string name, Vector3 localScale, Color color)
     {
         // GameObjectを生成し、layoutに挿入する
-        var obj = new GameObject(name, typeof(UIImage));
+        var obj = new GameObject(name);
         // 体力バーの画像を設定する
-        var image = obj.GetComponent<UIImage>();
-        image.sprite = Sprite.Create(BarTexture, new Rect(0, 0, BarTexture.width, BarTexture.height), Vector2.zero);
+        var image = obj.AddComponent<UIImage>();
+        image.sprite = ModUIUtil.Create1x1WhiteSprite();
         image.color = color;
         image.type = Image.Type.Filled;
         image.fillOrigin = (int)Image.OriginHorizontal.Left;
@@ -102,7 +86,7 @@ public class ModHealthBar
         // 0%または100%以上の場合は小数点以下なし、それ以外の場合は小数第1位まで表示する
         // 現在HPが最大HPよりも1でも低ければ100%とは表示しないようにする
         var pct = ModMath.Ceiling((ratio < 1 ? Math.Min(ratio, 0.999f) : ratio) * 100, 1);
-        var pctColor = Color.Lerp(Config.HealthBarLowValueTextColor, Config.HealthBarValueTextColor, ratio);
+        var pctColor = Color.Lerp(Config.HealthBarLowValueTextColor, Config.HealthBarTextColor, ratio);
         var barColor = Color.Lerp(Config.HealthBarLowValueFGColor, Config.HealthBarFGColor, ratio);
         var pctText = pct == 0 || pct >= 100 ? $"{pct:0}" : $"{pct:0.0}";
 
@@ -149,7 +133,7 @@ public class ModHealthBar
             BGImage.enabled = value;
             FGDamageImage.enabled = value;
             FGImage.enabled = value;
-            ValueText.enabled = value && ProfileConfig.HealthBar.DisplayValue;
+            ValueText.enabled = value && StyleConfig.HealthBar.DisplayValue;
             UpdateSize(value);
         }
     }
@@ -164,7 +148,7 @@ public class ModHealthBar
         if (enabled)
         {
             var sizeRatio = (float)fontSize / ValueFontSize;
-            width = ProfileConfig.HealthBar.Width * sizeRatio;
+            width = StyleConfig.HealthBar.Width * sizeRatio;
             height = Height * sizeRatio;
             barHeight = BarHeight * sizeRatio;
         }

@@ -22,81 +22,110 @@ public enum ModHealthBarDisplayTarget
 public class ModConfig
 {
     [JsonProperty("hoverGuide", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModConfigHoverGuide HoverGuide { get; } = new();
+    public ModConfigHoverGuide HoverGuide { get; set; } = new();
+
+    public void ResetHoverGuide()
+    {
+        HoverGuide = new();
+    }
 }
 
 public class ModConfigHoverGuide
 {
-    [JsonProperty("scale", DefaultValueHandling = DefaultValueHandling.Include)]
-    public float Scale { get; set; } = 1.2f;
+    [JsonProperty("zoomScale", DefaultValueHandling = DefaultValueHandling.Include)]
+    public float ZoomScale { get; set; } = 1.2f;
 
-    [JsonProperty("mainTextColor", DefaultValueHandling = DefaultValueHandling.Include, NullValueHandling = NullValueHandling.Include)]
+    [JsonProperty("mainTextColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ColorConverter))]
-    public Color? MainTextColor { get; set; } = null;
+    public Color MainTextColor { get; set; } = new(0.9028f, 0.8804f, 0.8354f); // #E6E1D5FF
 
-    [JsonProperty("subTextColor", DefaultValueHandling = DefaultValueHandling.Include, NullValueHandling = NullValueHandling.Include)]
+    [JsonProperty("subTextColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ColorConverter))]
-    public Color? SubTextColor { get; set; } = null;
+    public Color SubTextColor { get; set; } = new(0.703f, 0.681f, 0.636f); // #B3AEA2FF
 
-    [JsonProperty("hpColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonProperty("hpLabelColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ColorConverter))]
-    public Color HPColor { get; set; } = new(0.872f, 0.371f, 0.335f); // #DE5F55FF
+    public Color HPLabelColor { get; set; } = new(0.872f, 0.371f, 0.335f); // #DE5F55FF
 
-    [JsonProperty("hpLightenColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonProperty("hpValueColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ColorConverter))]
-    public Color HPLightenColor { get; set; } = new(0.982f, 0.701f, 0.665f); // #FAB3AAFF
+    public Color HPValueColor { get; set; } = new(0.982f, 0.701f, 0.665f); // #FAB3AAFF
 
-    [JsonProperty("manaColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonProperty("manaLabelColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ColorConverter))]
-    public Color ManaColor { get; set; } = new(0.375f, 0.606f, 0.988f); // #609BFCFF
+    public Color ManaLabelColor { get; set; } = new(0.375f, 0.606f, 0.988f); // #609BFCFF
 
-    [JsonProperty("manaLightenColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonProperty("manaValueColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ColorConverter))]
-    public Color ManaLightenColor { get; set; } = new(0.665f, 0.806f, 0.838f); // #AACED6FF
+    public Color ManaValueColor { get; set; } = new(0.665f, 0.806f, 0.838f); // #AACED6FF
 
-    [JsonProperty("staminaColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonProperty("staminaLabelColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ColorConverter))]
-    public Color StaminaColor { get; set; } = new(0.848f, 0.722f, 0.285f); // #D8B849FF
+    public Color StaminaLabelColor { get; set; } = new(0.848f, 0.722f, 0.285f); // #D8B849FF
 
-    [JsonProperty("staminaLightenColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonProperty("staminaValueColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ColorConverter))]
-    public Color StaminaLightenColor { get; set; } = new(0.848f, 0.82f, 0.635f); // #D8D1A2FF
+    public Color StaminaValueColor { get; set; } = new(0.848f, 0.82f, 0.635f); // #D8D1A2FF
 
-    [JsonProperty("resistColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonProperty("resistLabelColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ColorConverter))]
-    public Color ResistColor { get; set; } = new(0.375f, 0.738f, 0.626f); // #60BCA0FF
+    public Color ResistLabelColor { get; set; } = new(0.375f, 0.738f, 0.626f); // #60BCA0FF
 
-    [JsonProperty("negativeResistColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonProperty("negativeResistLabelColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ColorConverter))]
-    public Color NegativeResistColor { get; set; } = new(0.822f, 0.431f, 0.395f); // #D26E65FF
+    public Color NegativeResistLabelColor { get; set; } = new(0.822f, 0.431f, 0.395f); // #D26E65FF
 
-    [JsonProperty("noneResistColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonProperty("noneResistLabelColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ColorConverter))]
-    public Color NoneResistColor { get; set; } = new(0.7f, 0.7f, 0.7f); // #B2B2B2FF
+    public Color NoneResistLabelColor { get; set; } = new(0.7f, 0.7f, 0.7f); // #B2B2B2FF
 
     [JsonProperty("healthBarBGColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ColorConverter))]
     public Color HealthBarBGColor { get; set; } = new(0.2f, 0.1f, 0.1f); // #331A1AFF
 
-    [JsonProperty("healthBarFGDamageColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
-    public Color HealthBarFGDamageColor { get; set; } = new(0.6f, 0.6f, 0.6f); // #999999FF
-
     [JsonProperty("healthBarFGColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ColorConverter))]
     public Color HealthBarFGColor { get; set; } = new(0.212f, 0.459f, 0.184f); // #36752FFF
+
+    [JsonProperty("healthBarFGDamageColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonConverter(typeof(ColorConverter))]
+    public Color HealthBarFGDamageColor { get; set; } = new(0.6f, 0.6f, 0.6f); // #999999FF
 
     [JsonProperty("healthBarLowValueFGColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ColorConverter))]
     public Color HealthBarLowValueFGColor { get; set; } = new(0.485f, 0.189f, 0.104f); // #7C301BFF
 
-    [JsonProperty("healthBarValueTextColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonProperty("healthBarTextColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ColorConverter))]
-    public Color HealthBarValueTextColor { get; set; } = new(0.8f, 0.8f, 0.8f); // #CCCCCCFF
+    public Color HealthBarTextColor { get; set; } = new(0.8f, 0.8f, 0.8f); // #CCCCCCFF
 
     [JsonProperty("healthBarLowValueTextColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ColorConverter))]
     public Color HealthBarLowValueTextColor { get; set; } = new(0.872f, 0.371f, 0.335f); // #DE5F55FF
+
+    [JsonProperty("rarityCrudeColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonConverter(typeof(ColorConverter))]
+    public Color RarityCrudeColor { get; set; } = new(0.62f, 0.62f, 0.62f); // #9E9E9EFF
+
+    [JsonProperty("rarityNormalColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonConverter(typeof(ColorConverter))]
+    public Color RarityNormalColor { get; set; } = new(0.9028f, 0.8804f, 0.8354f); // #E6E1D5FF
+
+    [JsonProperty("raritySuperiorColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonConverter(typeof(ColorConverter))]
+    public Color RaritySuperiorColor { get; set; } = new(0.412f, 0.797f, 0.526f); // #69CB86FF
+
+    [JsonProperty("rarityLegendaryColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonConverter(typeof(ColorConverter))]
+    public Color RarityLegendaryColor { get; set; } = new(0.83f, 0.762f, 0.411f); // #D4C269FF
+
+    [JsonProperty("rarityMythicalColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonConverter(typeof(ColorConverter))]
+    public Color RarityMythicalColor { get; set; } = new(0.888f, 0.525f, 0.364f); // #E2865DFF
+
+    [JsonProperty("rarityArtifactColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonConverter(typeof(ColorConverter))]
+    public Color RarityArtifactColor { get; set; } = new(0.64f, 0.614f, 0.891f); // #A39DE3FF
 
     [JsonProperty("fressnessValueColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ColorConverter))]
@@ -106,83 +135,97 @@ public class ModConfigHoverGuide
     [JsonConverter(typeof(ColorConverter))]
     public Color FressnessLowValueColor { get; set; } = new(0.822f, 0.431f, 0.395f); // #D26E65FF
 
-    [JsonProperty("rariryCrudeColor", DefaultValueHandling = DefaultValueHandling.Include, NullValueHandling = NullValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
-    public Color? RariryCrudeColor { get; set; } = new(0.62f, 0.62f, 0.62f); // #9E9E9EFF
-
-    [JsonProperty("rariryNormalColor", DefaultValueHandling = DefaultValueHandling.Include, NullValueHandling = NullValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
-    public Color? RariryNormalColor { get; set; } = null;
-
-    [JsonProperty("rarirySuperiorColor", DefaultValueHandling = DefaultValueHandling.Include, NullValueHandling = NullValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
-    public Color? RarirySuperiorColor { get; set; } = new(0.412f, 0.797f, 0.526f); // #69CB86FF
-
-    [JsonProperty("rariryLegendaryColor", DefaultValueHandling = DefaultValueHandling.Include, NullValueHandling = NullValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
-    public Color? RariryLegendaryColor { get; set; } = new(0.83f, 0.762f, 0.411f); // #D4C269FF
-
-    [JsonProperty("rariryMythicalColor", DefaultValueHandling = DefaultValueHandling.Include, NullValueHandling = NullValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
-    public Color? RariryMythicalColor { get; set; } = new(0.888f, 0.525f, 0.364f); // #E2865DFF
-
-    [JsonProperty("rariryArtifactColor", DefaultValueHandling = DefaultValueHandling.Include, NullValueHandling = NullValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
-    public Color? RariryArtifactColor { get; set; } = new(0.64f, 0.614f, 0.891f); // #A39DE3FF
-
-    [JsonProperty("profiles", DefaultValueHandling = DefaultValueHandling.Include, ObjectCreationHandling = ObjectCreationHandling.Replace)]
-    public List<ModConfigHoverGuideProfile> Profiles { get; private set; } = [
-        new ModConfigHoverGuideProfile(),
-        ModConfigHoverGuideProfile.CreateDisplayAll(),
+    [JsonProperty("styles", DefaultValueHandling = DefaultValueHandling.Include, ObjectCreationHandling = ObjectCreationHandling.Replace)]
+    public List<ModConfigHoverGuideStyle> Styles { get; private set; } = [
+        new ModConfigHoverGuideStyle(),
+        ModConfigHoverGuideStyle.CreateDisplayAll(),
     ];
 
-    [JsonProperty("currentProfileIndex", DefaultValueHandling = DefaultValueHandling.Include, ObjectCreationHandling = ObjectCreationHandling.Replace)]
-    private int CurrentProfileIndex { get; set; } = 0;
+    [JsonProperty("currentStyleIndex", DefaultValueHandling = DefaultValueHandling.Include, ObjectCreationHandling = ObjectCreationHandling.Replace)]
+    private int CurrentStyleIndex { get; set; } = 0;
 
     [JsonIgnore]
-    public ModConfigHoverGuideProfile CurrentProfile
+    public ModConfigHoverGuideStyle CurrentStyle
     {
         get
         {
-            if (Profiles.Count == 0)
+            if (Styles.Count == 0)
             {
-                Profiles.Add(new ModConfigHoverGuideProfile());
+                Styles.Add(new ModConfigHoverGuideStyle());
             }
-            CurrentProfileIndex = Math.Min(CurrentProfileIndex, Profiles.Count - 1);
-            return Profiles[CurrentProfileIndex];
+            CurrentStyleIndex = Math.Min(CurrentStyleIndex, Styles.Count - 1);
+            return Styles[CurrentStyleIndex];
         }
     }
 
-    public void AdvanceProfile()
+    public void AdvanceStyle()
     {
-        var index = CurrentProfileIndex + 1;
-        if (index >= Profiles.Count)
+        var index = CurrentStyleIndex + 1;
+        if (index >= Styles.Count)
         {
             index = 0;
         }
-        CurrentProfileIndex = index;
+        CurrentStyleIndex = index;
+    }
+
+    public void ResetGeneral()
+    {
+        var defaultConfig = new ModConfigHoverGuide();
+        ZoomScale = defaultConfig.ZoomScale;
+        MainTextColor = defaultConfig.MainTextColor;
+        SubTextColor = defaultConfig.SubTextColor;
+        HPLabelColor = defaultConfig.HPLabelColor;
+        HPValueColor = defaultConfig.HPValueColor;
+        ManaLabelColor = defaultConfig.ManaLabelColor;
+        ManaValueColor = defaultConfig.ManaValueColor;
+        StaminaLabelColor = defaultConfig.StaminaLabelColor;
+        StaminaValueColor = defaultConfig.StaminaValueColor;
+        ResistLabelColor = defaultConfig.ResistLabelColor;
+        NegativeResistLabelColor = defaultConfig.NegativeResistLabelColor;
+        NoneResistLabelColor  = defaultConfig.NoneResistLabelColor;
+        HealthBarBGColor = defaultConfig.HealthBarBGColor;
+        HealthBarFGColor = defaultConfig.HealthBarFGColor;
+        HealthBarFGDamageColor = defaultConfig.HealthBarFGDamageColor;
+        HealthBarLowValueFGColor = defaultConfig.HealthBarLowValueFGColor;
+        HealthBarTextColor = defaultConfig.HealthBarTextColor;
+        HealthBarLowValueTextColor = defaultConfig.HealthBarLowValueTextColor;
+        RarityCrudeColor = defaultConfig.RarityCrudeColor;
+        RarityNormalColor = defaultConfig.RarityNormalColor;
+        RaritySuperiorColor = defaultConfig.RaritySuperiorColor;
+        RarityLegendaryColor = defaultConfig.RarityLegendaryColor;
+        RarityMythicalColor = defaultConfig.RarityMythicalColor;
+        RarityArtifactColor = defaultConfig.RarityArtifactColor;
+        FressnessValueColor = defaultConfig.FressnessValueColor;
+        FressnessLowValueColor = defaultConfig.FressnessLowValueColor;
+    }
+
+    public void ResetStyle()
+    {
+        var defaultConfig = new ModConfigHoverGuide();
+        Styles = defaultConfig.Styles;
+        CurrentStyleIndex = defaultConfig.CurrentStyleIndex;
     }
 }
 
-public class ModConfigHoverGuideProfile
+public class ModConfigHoverGuideStyle
 {
     [JsonProperty("chara", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModConfigHoverGuideProfileChara Chara { get; set; } = new();
+    public ModConfigHoverGuideStyleChara Chara { get; set; } = new();
 
     [JsonProperty("thing", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModConfigHoverGuideProfileThing Thing { get; set; } = new();
+    public ModConfigHoverGuideStyleThing Thing { get; set; } = new();
 
-    public static ModConfigHoverGuideProfile CreateDisplayAll()
+    public static ModConfigHoverGuideStyle CreateDisplayAll()
     {
         return new()
         {
-            Chara = ModConfigHoverGuideProfileChara.CreateDisplayAll(),
-            Thing = ModConfigHoverGuideProfileThing.CreateDisplayAll(),
+            Chara = ModConfigHoverGuideStyleChara.CreateDisplayAll(),
+            Thing = ModConfigHoverGuideStyleThing.CreateDisplayAll(),
         };
     }
 }
 
-public class ModConfigHoverGuideProfileChara
+public class ModConfigHoverGuideStyleChara
 {
     [JsonProperty("displayType", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayType { get; set; } = true;
@@ -271,7 +314,7 @@ public class ModConfigHoverGuideProfileChara
     [JsonProperty("healthBar", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHoverGuideHealthBar HealthBar { get; private set; } = new();
 
-    public static ModConfigHoverGuideProfileChara CreateDisplayAll()
+    public static ModConfigHoverGuideStyleChara CreateDisplayAll()
     {
         return new()
         {
@@ -382,7 +425,7 @@ public record ModConfigHealthBarDisplay
     }
 }
 
-public class ModConfigHoverGuideProfileThing
+public class ModConfigHoverGuideStyleThing
 {
     [JsonProperty("displayLv", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayLv { get; set; } = false;
@@ -396,7 +439,7 @@ public class ModConfigHoverGuideProfileThing
     [JsonProperty("useRarityColor", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool UseRarityColor { get; set; } = true;
 
-    public static ModConfigHoverGuideProfileThing CreateDisplayAll()
+    public static ModConfigHoverGuideStyleThing CreateDisplayAll()
     {
         return new()
         {
