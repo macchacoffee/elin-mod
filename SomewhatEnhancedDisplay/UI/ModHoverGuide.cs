@@ -105,7 +105,7 @@ public class ModHoverGuide
         {
             widget.textName.enabled = false;
         }
-        if (target1 is Chara chara1 && !chara1.IsMimicryThing)
+        if (target1 is Chara chara1 && (!ProfileConfig.EnableMimicry || !chara1.HasMimicryThing))
         {
             var enabled = DisplaysHealthBar(chara1);
             HealthBar1.Enabled = enabled;
@@ -154,7 +154,7 @@ public class ModHoverGuide
             TextName3.text = string.Empty;
             TextName3.enabled = false;
         }
-        if (target2 is Chara chara2 && !chara2.IsMimicryThing)
+        if (target2 is Chara chara2 && (!ProfileConfig.EnableMimicry || !chara2.HasMimicryThing))
         {
             var enabled = DisplaysHealthBar(chara2);
             HealthBar2.Enabled = enabled;
@@ -223,7 +223,8 @@ public class ModHoverGuide
         var displays = config.Target switch
         {
             ModHealthBarDisplayTarget.None => false,
-            ModHealthBarDisplayTarget.Elite => chara.IsPowerful,
+            ModHealthBarDisplayTarget.Boss => chara.IsBoss,
+            ModHealthBarDisplayTarget.Elite => chara.IsElite,
             ModHealthBarDisplayTarget.All => true,
             _ => false,
         };

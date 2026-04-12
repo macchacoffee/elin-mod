@@ -16,6 +16,7 @@ public enum ModHealthBarDisplayTarget
     None = 0,
     All,
     Elite,
+    Boss,
 }
 
 public class ModConfig
@@ -183,6 +184,9 @@ public class ModConfigHoverGuideProfile
 
 public class ModConfigHoverGuideProfileChara
 {
+    [JsonProperty("displayType", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool DisplayType { get; set; } = true;
+
     [JsonProperty("displayLv", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayLv { get; set; } = true;
 
@@ -261,6 +265,9 @@ public class ModConfigHoverGuideProfileChara
     [JsonProperty("displayStatsValue", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayStatsValue { get; set; } = false;
 
+    [JsonProperty("enableMimicry", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool EnableMimicry { get; set; } = true;
+
     [JsonProperty("healthBar", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHoverGuideHealthBar HealthBar { get; private set; } = new();
 
@@ -268,6 +275,7 @@ public class ModConfigHoverGuideProfileChara
     {
         return new()
         {
+            DisplayType = true,
             DisplayLv = true,
             DisplayHealthBar = true,
             DisplayGender = true,
@@ -293,6 +301,7 @@ public class ModConfigHoverGuideProfileChara
             DisplayResistValue = true,
             DisplayStats = true,
             DisplayStatsValue = true,
+            EnableMimicry = false,
             HealthBar = ModConfigHoverGuideHealthBar.CreateDisplayAll()
         };
     }

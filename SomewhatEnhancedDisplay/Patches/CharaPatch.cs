@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using ModUtility.Patch;
+using SomewhatEnhancedDisplay.Config;
 using SomewhatEnhancedDisplay.UI;
 
 namespace SomewhatEnhancedDisplay.Patches;
@@ -18,19 +19,103 @@ public static class CharaPatch
         return PatchTarget.IsPatchable(original);
     }
 
+    private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
+    private static ModConfigHoverGuideProfileChara ProfileConfig => Config.CurrentProfile.Chara;
+
+    [HarmonyTranspiler]
+    [HarmonyPatch(nameof(Chara.GetName), [typeof(NameStyle), typeof(int)])]
+    private static IEnumerable<CodeInstruction> GetName_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    {
+        // // 変更前
+        // if (mimicry != null)
+        // {
+        // // 変更後
+        // if (CharaPatch.IsMimicryEnabled() && mimicry != null)
+        // {
+        var matcher = new CodeMatcher(instructions, generator);
+
+        // ldfld ConBaseTransmuteMimic Chara::mimicry
+        // brfalse Label1
+        matcher.MatchEndForward(
+            new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.mimicry))),
+            new CodeMatch(OpCodes.Brfalse)
+        );
+        // Modの設定で擬態が無効になっている場合は擬態先の名前を取得しないようにする
+        var label1 = matcher.Operand;
+        matcher.Advance(-2);
+        matcher.InsertAndAdvance(
+            CodeInstruction.Call(() => IsMimicryEnabled()),
+            new CodeInstruction(OpCodes.Brfalse, label1)
+        );
+
+        return matcher.InstructionEnumeration();
+    }
+
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(Chara.GetHoverText), [])]
     private static IEnumerable<CodeInstruction> GetHoverText_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
         // // 変更前
+        // if (mimicry != null && mimicry.IsThing)
+        // {
+        // ...
+        // string text = ((mimicry != null) ? mimicry.GetName(NameStyle.Full) : base.Name);
+        // ...
         // return text + text2 + s;
         // ...
         // .TagSize(...)
         // // 変更後
+        // if (CharaPatch.IsMimicryEnabled() && mimicry != null && mimicry.IsThing)
+        // {
+        // ...
+        // string text = ((mimicry != null && CharaPatch.IsMimicryEnabled()) ? mimicry.GetName(NameStyle.Full) : base.Name);
+        // ...
         // return BuildHoverText(text, text2, s, this);
         // ...
         // .TagSize(CharaPatch.ComputeFontSize(...))
         var matcher = new CodeMatcher(instructions, generator);
+
+        // ldfld ConBaseTransmuteMimic Chara::mimicry
+        // brfalse Label1
+        matcher.MatchEndForward(
+            new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.mimicry))),
+            new CodeMatch(OpCodes.Brfalse)
+        );
+        // Modの設定で擬態が無効になっている場合は擬態先のホバーテキストを取得しないようにする
+        var label1 = matcher.Operand;
+        matcher.Advance(-2);
+        matcher.InsertAndAdvance(
+            CodeInstruction.Call(() => IsMimicryEnabled()),
+            new CodeInstruction(OpCodes.Brfalse, label1)
+        );
+
+        // ret NULL
+        // ldarg.0 NULL [Label1, Label2]
+        // ldfld ConBaseTransmuteMimic Chara::mimicry
+        // brtrue Label3
+        matcher.MatchEndForward(
+            new CodeMatch(OpCodes.Ret),
+            new CodeMatch(OpCodes.Ldarg_0),
+            new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.mimicry))),
+            new CodeMatch(OpCodes.Brtrue)
+        );
+        // 後で生成するラベルへ遷移する処理を挿入する場所を保存する
+        var start = matcher.Pos;
+
+        // ldarg.0 NULL
+        // call string Card::get_Name()
+        matcher.MatchStartForward(
+            new CodeMatch(OpCodes.Ldarg_0),
+            new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(Card), nameof(Card.Name)))
+        );
+        // Modの設定で擬態が無効になっている場合の遷移先となるLabelMod1を生成する
+        matcher.CreateLabel(out var LabelMod1);
+        matcher.Advance(start - matcher.Pos);
+        // Modの設定で擬態が無効になっている場合は常に正体のキャラの名前を取得するようにする
+        matcher.InsertAndAdvance(
+            new CodeInstruction(OpCodes.Brfalse, LabelMod1),
+            CodeInstruction.Call(() => IsMimicryEnabled())
+        );
 
         // call static string string::Concat(string str0, string str1, string str2)
         // ret NULL
@@ -95,6 +180,20 @@ public static class CharaPatch
         // ...
         // return BuildHoverText2(text, text2, text3, this);
         var matcher = new CodeMatcher(instructions, generator);
+
+        // ldfld ConBaseTransmuteMimic Chara::mimicry
+        // brfalse Label1
+        matcher.MatchEndForward(
+            new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.mimicry))),
+            new CodeMatch(OpCodes.Brfalse)
+        );
+        // Modの設定で擬態が無効になっている場合は擬態先のホバーテキストを取得しないようにする
+        var label1 = matcher.Operand;
+        matcher.Advance(-2);
+        matcher.InsertAndAdvance(
+            CodeInstruction.Call(() => IsMimicryEnabled()),
+            new CodeInstruction(OpCodes.Brfalse, label1)
+        );
 
         // ldstr "<size=14>"
         matcher.MatchStartForward(
@@ -204,6 +303,12 @@ public static class CharaPatch
         );
 
         return matcher.InstructionEnumeration();
+    }
+
+    private static bool IsMimicryEnabled()
+    {
+        Plugin.LogInfo($"IsMimicryEnabled: {ProfileConfig.EnableMimicry}");
+        return ProfileConfig.EnableMimicry;
     }
 
     private static int ComputeFontSize(int fontSize)

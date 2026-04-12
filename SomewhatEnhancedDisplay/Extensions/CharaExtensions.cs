@@ -24,6 +24,9 @@ public static class CharaExtensions
 
         public bool IsInFullHealth => chara.HealthRatio >= 1;
 
+        public bool IsElite => chara.IsPowerful;
+
+        public bool IsBoss => chara.uid == EClass._zone.uidBoss;
 
         public Chara? MimicryChara => chara.mimicry is ConTransmuteHuman trans ? trans.chara : null;
 
@@ -31,10 +34,10 @@ public static class CharaExtensions
 
         public Chara MimicryOrSelf => chara.MimicryChara is Chara c ? c : chara;
 
-        public bool IsMimicry => chara.mimicry is not null;
+        public bool HasMimicry => chara.mimicry is not null;
 
-        public bool IsMimicryChara => chara.MimicryChara is not null;
+        public bool HasMimicryChara => chara.MimicryChara is not null;
 
-        public bool IsMimicryThing => chara.MimicryThing is not null;
+        public bool HasMimicryThing => chara.MimicryThing is not null;
     }
 }

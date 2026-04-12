@@ -19,7 +19,9 @@ public static class ModCharaHoverTextBuilder
         // text: 名前
         // text2: レベル差、赤ちゃん、高低差、賞金首、信仰
         // s: ゲスト・家畜、血の風味
+        chara = ProfileConfig.EnableMimicry ? chara.MimicryOrSelf : chara;
         return string.Join(" ", new[] {
+            GetHoverTextType(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)),
             GetHoverTextLv(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)),
             $"{text}{text2}{s}",
         }.Where(t => !string.IsNullOrEmpty(t)));
@@ -30,13 +32,15 @@ public static class ModCharaHoverTextBuilder
         // text: 好物
         // text2: 趣味・仕事
         // text3: バフ・デバフ・状態・呪い
+        var realChara = chara;
+        chara = ProfileConfig.EnableMimicry ? chara.MimicryOrSelf : chara;
         text = text.StartsWith(Environment.NewLine) ? text.Substring(Environment.NewLine.Length) : text;
         text2 = text2.StartsWith(Environment.NewLine) ? text2.Substring(Environment.NewLine.Length) : text2;
         text3 = text3.StartsWith(Environment.NewLine) ? text3.Substring(Environment.NewLine.Length) : text3;
         return string.Join(Environment.NewLine, new[] {
             GetHoverTextProfile1(chara, text2)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(Config.SubTextColor),
             GetHoverTextProfile2(chara, text)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(Config.SubTextColor),
-            GetHoverStatusAttribute(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)),
+            GetHoverStatusAttribute(chara, realChara)?.TagSize(ModUIUtil.ComputeFontSize(13)),
             GetHoverStatus(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)),
             GetHoverTextPrimaryAttribute(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(Config.SubTextColor),
             GetHoverTextFeat(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(Config.SubTextColor),
@@ -59,6 +63,11 @@ public static class ModCharaHoverTextBuilder
     public static string BuildOtherCardsText(string hoverText, string otherCardsText)
     {
         return $"{hoverText}{otherCardsText.TagSize(ModUIUtil.ComputeFontSize(11))}";
+    }
+
+    private static string? GetHoverTextType(Chara chara)
+    {
+        return ProfileConfig.DisplayType ? GetTypeText(chara) : null;
     }
 
     private static string? GetHoverTextLv(Chara chara)
@@ -87,12 +96,12 @@ public static class ModCharaHoverTextBuilder
         return !string.IsNullOrEmpty(text) ? text : null;
     }
 
-    private static string? GetHoverStatusAttribute(Chara chara)
+    private static string? GetHoverStatusAttribute(Chara chara, Chara realChara)
     {
         var text = string.Join(" ", new[] {
-            ProfileConfig.DisplayHP ? GetHPText(chara) : null,
-            ProfileConfig.DisplayMana ? GetManaText(chara) : null,
-            ProfileConfig.DisplayStamina ? GetStaminaText(chara) : null,
+            ProfileConfig.DisplayHP ? GetHPText(chara, realChara) : null,
+            ProfileConfig.DisplayMana ? GetManaText(chara, realChara) : null,
+            ProfileConfig.DisplayStamina ? GetStaminaText(chara, realChara) : null,
         }.Where(t => !string.IsNullOrEmpty(t)));
         return !string.IsNullOrEmpty(text) ? text : null;
     }
@@ -143,6 +152,14 @@ public static class ModCharaHoverTextBuilder
         return ProfileConfig.DisplayResist ? GetResistListText(chara) : null;
     }
 
+    private static string? GetTypeText(Chara chara)
+    {
+        var bossText = chara.IsBoss ? "[BOSS]" : null;
+        var rankText = chara.IsUnique ? "★" : (chara.IsElite ? "☆" : null);
+        var typeText = $"{bossText}{rankText}";
+        return !string.IsNullOrEmpty(typeText) ? typeText : null;
+    }
+
     private static string GetLvText(Chara chara)
     {
         return $"Lv.{chara.LV}";
@@ -178,27 +195,36 @@ public static class ModCharaHoverTextBuilder
         return $"{chara.affinity.Name}{$"({chara._affinity})".TagSize(ModUIUtil.ComputeFontSize(9))}";
     }
 
-    private static string GetHPText(Chara chara)
+    private static string GetHPText(Chara chara, Chara realChara)
     {
-        var hpValueColor = Math.Ceiling((float)chara.hp / chara.MaxHP * 100) > LowValueThreshold ? Config.HPLightenColor : Config.HPLightenColor.Darken(0.2f);
+        // 擬人状態の場合は正体のキャラのHP割合を見かけ上のキャラの現在HPに反映する
+        var ratio = (float)realChara.hp / realChara.MaxHP;
+        var hp = chara == realChara ? chara.hp : (int)(chara.MaxHP * ratio);
+        var hpValueColor = Math.Ceiling(ratio * 100) > LowValueThreshold ? Config.HPLightenColor : Config.HPLightenColor.Darken(0.2f);
         var hpText = "HP:".TagColor(Config.HPColor).TagSize(ModUIUtil.ComputeFontSize(11));
-        var hpValueText = $"{chara.hp}/{chara.MaxHP}".TagColor(hpValueColor);
+        var hpValueText = $"{hp}/{chara.MaxHP}".TagColor(hpValueColor);
         return $"{hpText}{hpValueText}";
     }
 
-    private static string GetManaText(Chara chara)
+    private static string GetManaText(Chara chara, Chara realChara)
     {
-        var manaValueColor = Math.Ceiling((float)chara.mana.value / chara.mana.max * 100) > LowValueThreshold ? Config.ManaLightenColor : Config.ManaLightenColor.Darken(0.2f);
+        // 擬人状態の場合は正体のキャラのマナ割合を見かけ上のキャラの現在マナに反映する
+        var ratio = (float)realChara.mana.value / realChara.mana.max;
+        var mana = chara == realChara ? chara.mana.value : (int)(chara.mana.max * ratio);
+        var manaValueColor = Math.Ceiling(ratio * 100) > LowValueThreshold ? Config.ManaLightenColor : Config.ManaLightenColor.Darken(0.2f);
         var manaText = "MP:".TagColor(Config.ManaColor).TagSize(ModUIUtil.ComputeFontSize(11));
-        var manaValueText = $"{chara.mana.value}/{chara.mana.max}".TagColor(manaValueColor);
+        var manaValueText = $"{mana}/{chara.mana.max}".TagColor(manaValueColor);
         return $"{manaText}{manaValueText}";
     }
 
-    private static string GetStaminaText(Chara chara)
+    private static string GetStaminaText(Chara chara, Chara realChara)
     {
-        var staminaValueColor = Math.Ceiling((float)chara.stamina.value / chara.stamina.max * 100) > LowValueThreshold ? Config.StaminaLightenColor : Config.StaminaLightenColor.Darken(0.2f);
+        // 擬人状態の場合は正体のキャラのスタミナ割合を見かけ上のキャラの現在スタミナに反映する
+        var ratio = (float)realChara.stamina.value / realChara.stamina.max;
+        var stamina = chara == realChara ? chara.stamina.value : (int)(chara.stamina.max * ratio);
+        var staminaValueColor = Math.Ceiling(ratio * 100) > LowValueThreshold ? Config.StaminaLightenColor : Config.StaminaLightenColor.Darken(0.2f);
         var staminaText = "SP:".TagColor(Config.StaminaColor).TagSize(ModUIUtil.ComputeFontSize(11));
-        var staminaValuetext = $"{chara.stamina.value}/{chara.stamina.max}".TagColor(staminaValueColor);
+        var staminaValuetext = $"{stamina}/{chara.stamina.max}".TagColor(staminaValueColor);
         return $"{staminaText}{staminaValuetext}";
     }
 
