@@ -22,7 +22,7 @@ public class ModHealthBar
     private UIImage FGImage { get; }
     private UIImage FGDamageImage { get; }
     private UIText ValueText { get; }
-    private Chara? Target { get; set; }
+    private WeakReference<Chara?> Target { get; set; }
     private Tween? DamageTween { get; set; }
 
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
@@ -30,6 +30,7 @@ public class ModHealthBar
 
     public ModHealthBar(WidgetMouseover widget)
     {
+        Target = new(null);
         var localScale = widget.textName.transform.localScale;
         var font = widget.textName.font;
 
@@ -109,7 +110,7 @@ public class ModHealthBar
         FGImage.fillAmount = ratio;
         FGImage.color = barColor;
         // 体力バーの減少をアニメーションで表現する
-        if (Target == chara && Layout.IsActive() && FGDamageImage.fillAmount > ratio)
+        if (Target.TryGetTarget(out var target) && target == chara && Layout.IsActive() && FGDamageImage.fillAmount > ratio)
         {
             FGDamageImage.color = Config.HealthBarFGDamageColor;
             // フェードアウト時に体力バーの減少を表現するための画像が目立たないようにする
@@ -133,7 +134,7 @@ public class ModHealthBar
             FGDamageImage.fillAmount = ratio;
         }
 
-        Target = chara;
+        Target.SetTarget(chara);
     }
 
     public bool Enabled 
