@@ -38,10 +38,14 @@ public static class ModConsts
         public static readonly string ConfigThing = Prefixed("configThing");
         public static readonly string ConfigDisplay = Prefixed("configDisplay");
         public static readonly string ConfigColors = Prefixed("configColors");
+        public static readonly string ConfigSelectStyleToEdit = Prefixed("configSelectStyleToEdit");
+        public static readonly string ConfigAddStyle = Prefixed("configAddStyle");
+        public static readonly string ConfigDeleteStyle = Prefixed("configDeleteStyle");
         public static readonly string ResetConfig = Prefixed("resetConfig");
         public static readonly string ResetConfigTab = Prefixed("resetConfigTab");
         public static readonly string DialogResetConfig = Prefixed("dialogResetConfig");
         public static readonly string DialogResetConfigTab = Prefixed("dialogResetConfigTab"); 
+        public static readonly string DialogDeleteStyle = Prefixed("dialogDeleteStyle"); 
         public static readonly string ZoomScale = Prefixed("zoomScale");
         public static readonly string DefaultColor = Prefixed("defaultColor");
         public static readonly string MainTextColor = Prefixed("mainTextColor");

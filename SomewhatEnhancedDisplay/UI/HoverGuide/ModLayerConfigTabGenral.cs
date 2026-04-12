@@ -15,9 +15,10 @@ public class ModLayerConfigTabGenral : YKLayout<object>
     {
         Header(ModConsts.SourceId.ConfigDisplay);
         Spacer(36);
+
         var displayLayout = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
         AddSlider(
-            displayLayout,
+            layout: displayLayout,
             label: ModConsts.SourceId.ZoomScale,
             init: Config.ZoomScale,
             min: 0.1f,
@@ -227,7 +228,7 @@ public class ModLayerConfigTabGenral : YKLayout<object>
         }
     }
 
-    private void AddSlider(YKLayout layout, string label, float init, float min, float max, float step, Action<float> valueChangedFunc, int? width = null)
+    private Slider AddSlider(YKLayout layout, string label, float init, float min, float max, float step, Action<float> valueChangedFunc, int? width = null)
     {
         if (step <= 0)
         {
@@ -242,9 +243,11 @@ public class ModLayerConfigTabGenral : YKLayout<object>
             value => $"{label.lang()}(x{value * step})"
         ).WithWidth(width ?? 200);
         slider.wholeNumbers = true;
+
+        return slider;
     }
 
-    private void AddColorPicker(YKLayout layout, string label, Color? init, Action<Color> colorChangedFunc)
+    private ButtonGeneral AddColorPicker(YKLayout layout, string label, Color? init, Action<Color> colorChangedFunc)
     {
         var initColor = init ?? Color.clear;
 
@@ -270,5 +273,7 @@ public class ModLayerConfigTabGenral : YKLayout<object>
                 colorChangedFunc(color);
             });
         });
+
+        return button;
     }
 }
