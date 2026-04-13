@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -19,7 +20,25 @@ public enum ModHealthBarDisplayTarget
     Boss,
 }
 
-public class ModConfig
+public abstract class ModConfigBase<T> where T : ModConfigBase<T>
+{
+    public string Serialize()
+    {
+        return JsonConvert.SerializeObject(this, GameIO.formatting, GameIO.jsWriteGame);
+    }
+
+    public static T Deserialize(string json)
+    {
+        return JsonConvert.DeserializeObject<T>(json, GameIO.jsReadGame);
+    }
+
+    public T DeepCopy()
+    {
+        return Deserialize(Serialize());
+    }
+} 
+
+public class ModConfig : ModConfigBase<ModConfig>
 {
     [JsonProperty("hoverGuide", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHoverGuide HoverGuide { get; set; } = new();
@@ -28,13 +47,80 @@ public class ModConfig
     {
         HoverGuide = new();
     }
+
+    public void ResetHoverGuideGeneral()
+    {
+        HoverGuide = HoverGuide.DeepCopyWithoutGeneral();
+    }
+
+    public void ResetHoverGuideStyle()
+    {
+        HoverGuide = HoverGuide.DeepCopyWithoutStyle();
+    }
 }
 
-public class ModConfigHoverGuide
+public class ModConfigHoverGuide : ModConfigBase<ModConfigHoverGuide>
 {
     [JsonProperty("zoomScale", DefaultValueHandling = DefaultValueHandling.Include)]
     public float ZoomScale { get; set; } = 1.2f;
 
+    [JsonProperty("colorSet", DefaultValueHandling = DefaultValueHandling.Include)]
+    public ModConfigHoverGuideColorSet ColorSet { get; set; } = new();
+
+    [JsonProperty("styles", DefaultValueHandling = DefaultValueHandling.Include, ObjectCreationHandling = ObjectCreationHandling.Replace)]
+    public List<ModConfigHoverGuideStyle> Styles { get; private set; } = [
+        new ModConfigHoverGuideStyle(),
+        ModConfigHoverGuideStyle.CreateDisplayAll(),
+    ];
+
+    [JsonProperty("currentStyleIndex", DefaultValueHandling = DefaultValueHandling.Include, ObjectCreationHandling = ObjectCreationHandling.Replace)]
+    private int CurrentStyleIndex { get; set; } = 0;
+
+    [JsonIgnore]
+    public ModConfigHoverGuideStyle CurrentStyle
+    {
+        get
+        {
+            if (Styles.Count == 0)
+            {
+                Styles.Add(new ModConfigHoverGuideStyle());
+            }
+            CurrentStyleIndex = Math.Min(CurrentStyleIndex, Styles.Count - 1);
+            return Styles[CurrentStyleIndex];
+        }
+    }
+
+    public void AdvanceStyle()
+    {
+        var index = CurrentStyleIndex + 1;
+        if (index >= Styles.Count)
+        {
+            index = 0;
+        }
+        CurrentStyleIndex = index;
+    }
+
+    public ModConfigHoverGuide DeepCopyWithoutGeneral()
+    {
+        return new ModConfigHoverGuide()
+        {
+            Styles = [.. Styles.Select(s => s.DeepCopy())],
+            CurrentStyleIndex = CurrentStyleIndex,
+        };
+    }
+
+    public ModConfigHoverGuide DeepCopyWithoutStyle()
+    {
+        var newConfig = DeepCopy();
+        var defaultConfig = new ModConfigHoverGuide();
+        newConfig.Styles = [.. defaultConfig.Styles.Select(s => s.DeepCopy())];
+        newConfig.CurrentStyleIndex = defaultConfig.CurrentStyleIndex;
+        return newConfig;
+    }
+}
+
+public class ModConfigHoverGuideColorSet : ModConfigBase<ModConfigHoverGuide>
+{
     [JsonProperty("mainTextColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ColorConverter))]
     public Color MainTextColor { get; set; } = new(0.9028f, 0.8804f, 0.8354f); // #E6E1D5FF
@@ -134,80 +220,9 @@ public class ModConfigHoverGuide
     [JsonProperty("fressnessLowValueColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ColorConverter))]
     public Color FressnessLowValueColor { get; set; } = new(0.822f, 0.431f, 0.395f); // #D26E65FF
-
-    [JsonProperty("styles", DefaultValueHandling = DefaultValueHandling.Include, ObjectCreationHandling = ObjectCreationHandling.Replace)]
-    public List<ModConfigHoverGuideStyle> Styles { get; private set; } = [
-        new ModConfigHoverGuideStyle(),
-        ModConfigHoverGuideStyle.CreateDisplayAll(),
-    ];
-
-    [JsonProperty("currentStyleIndex", DefaultValueHandling = DefaultValueHandling.Include, ObjectCreationHandling = ObjectCreationHandling.Replace)]
-    private int CurrentStyleIndex { get; set; } = 0;
-
-    [JsonIgnore]
-    public ModConfigHoverGuideStyle CurrentStyle
-    {
-        get
-        {
-            if (Styles.Count == 0)
-            {
-                Styles.Add(new ModConfigHoverGuideStyle());
-            }
-            CurrentStyleIndex = Math.Min(CurrentStyleIndex, Styles.Count - 1);
-            return Styles[CurrentStyleIndex];
-        }
-    }
-
-    public void AdvanceStyle()
-    {
-        var index = CurrentStyleIndex + 1;
-        if (index >= Styles.Count)
-        {
-            index = 0;
-        }
-        CurrentStyleIndex = index;
-    }
-
-    public void ResetGeneral()
-    {
-        var defaultConfig = new ModConfigHoverGuide();
-        ZoomScale = defaultConfig.ZoomScale;
-        MainTextColor = defaultConfig.MainTextColor;
-        SubTextColor = defaultConfig.SubTextColor;
-        HPLabelColor = defaultConfig.HPLabelColor;
-        HPValueColor = defaultConfig.HPValueColor;
-        ManaLabelColor = defaultConfig.ManaLabelColor;
-        ManaValueColor = defaultConfig.ManaValueColor;
-        StaminaLabelColor = defaultConfig.StaminaLabelColor;
-        StaminaValueColor = defaultConfig.StaminaValueColor;
-        ResistLabelColor = defaultConfig.ResistLabelColor;
-        NegativeResistLabelColor = defaultConfig.NegativeResistLabelColor;
-        NoneResistLabelColor  = defaultConfig.NoneResistLabelColor;
-        HealthBarBGColor = defaultConfig.HealthBarBGColor;
-        HealthBarFGColor = defaultConfig.HealthBarFGColor;
-        HealthBarFGDamageColor = defaultConfig.HealthBarFGDamageColor;
-        HealthBarLowValueFGColor = defaultConfig.HealthBarLowValueFGColor;
-        HealthBarTextColor = defaultConfig.HealthBarTextColor;
-        HealthBarLowValueTextColor = defaultConfig.HealthBarLowValueTextColor;
-        RarityCrudeColor = defaultConfig.RarityCrudeColor;
-        RarityNormalColor = defaultConfig.RarityNormalColor;
-        RaritySuperiorColor = defaultConfig.RaritySuperiorColor;
-        RarityLegendaryColor = defaultConfig.RarityLegendaryColor;
-        RarityMythicalColor = defaultConfig.RarityMythicalColor;
-        RarityArtifactColor = defaultConfig.RarityArtifactColor;
-        FressnessValueColor = defaultConfig.FressnessValueColor;
-        FressnessLowValueColor = defaultConfig.FressnessLowValueColor;
-    }
-
-    public void ResetStyle()
-    {
-        var defaultConfig = new ModConfigHoverGuide();
-        Styles = defaultConfig.Styles;
-        CurrentStyleIndex = defaultConfig.CurrentStyleIndex;
-    }
 }
 
-public class ModConfigHoverGuideStyle
+public class ModConfigHoverGuideStyle : ModConfigBase<ModConfigHoverGuideStyle>
 {
     [JsonProperty("chara", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHoverGuideStyleChara Chara { get; set; } = new();
@@ -225,7 +240,7 @@ public class ModConfigHoverGuideStyle
     }
 }
 
-public class ModConfigHoverGuideStyleChara
+public class ModConfigHoverGuideStyleChara : ModConfigBase<ModConfigHoverGuideStyleChara>
 {
     [JsonProperty("displayType", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayType { get; set; } = true;
@@ -350,7 +365,7 @@ public class ModConfigHoverGuideStyleChara
     }
 }
 
-public class ModConfigHoverGuideHealthBar
+public class ModConfigHoverGuideHealthBar : ModConfigBase<ModConfigHoverGuideHealthBar>
 {
     [JsonProperty("displayValue", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayValue { get; set; } = true;
@@ -403,7 +418,7 @@ public class ModConfigHoverGuideHealthBar
     }
 }
 
-public record ModConfigHealthBarDisplay
+public class ModConfigHealthBarDisplay : ModConfigBase<ModConfigHealthBarDisplay>
 {
     [JsonProperty("target", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModHealthBarDisplayTarget Target { get; set; } = ModHealthBarDisplayTarget.All;
@@ -425,7 +440,7 @@ public record ModConfigHealthBarDisplay
     }
 }
 
-public class ModConfigHoverGuideStyleThing
+public class ModConfigHoverGuideStyleThing : ModConfigBase<ModConfigHoverGuideStyleThing>
 {
     [JsonProperty("displayLv", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayLv { get; set; } = false;

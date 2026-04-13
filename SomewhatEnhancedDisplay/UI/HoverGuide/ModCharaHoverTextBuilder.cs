@@ -12,6 +12,7 @@ public static class ModCharaHoverTextBuilder
     private static readonly int LowValueThreshold = 10;
 
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
+    private static ModConfigHoverGuideColorSet ColorConfig => Config.ColorSet;
     private static ModConfigHoverGuideStyleChara StyleConfig => Config.CurrentStyle.Chara;
 
     public static string BuildHoverText(Chara chara, string text, string text2, string s)
@@ -38,12 +39,12 @@ public static class ModCharaHoverTextBuilder
         text2 = text2.StartsWith(Environment.NewLine) ? text2.Substring(Environment.NewLine.Length) : text2;
         text3 = text3.StartsWith(Environment.NewLine) ? text3.Substring(Environment.NewLine.Length) : text3;
         return string.Join(Environment.NewLine, new[] {
-            GetHoverTextProfile1(chara, text2)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(Config.SubTextColor),
-            GetHoverTextProfile2(chara, text)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(Config.SubTextColor),
+            GetHoverTextProfile1(chara, text2)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(ColorConfig.SubTextColor),
+            GetHoverTextProfile2(chara, text)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(ColorConfig.SubTextColor),
             GetHoverStatusAttribute(chara, realChara)?.TagSize(ModUIUtil.ComputeFontSize(13)),
             GetHoverStatus(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)),
-            GetHoverTextPrimaryAttribute(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(Config.SubTextColor),
-            GetHoverTextFeat(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(Config.SubTextColor),
+            GetHoverTextPrimaryAttribute(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(ColorConfig.SubTextColor),
+            GetHoverTextFeat(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(ColorConfig.SubTextColor),
             GetHoverTextAct(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)),
             GetHoverTextResist(chara),
             StyleConfig.DisplayStats ? text3 : null,
@@ -200,8 +201,8 @@ public static class ModCharaHoverTextBuilder
         // 擬人状態の場合は正体のキャラのHP割合を見かけ上のキャラの現在HPに反映する
         var ratio = (float)realChara.hp / realChara.MaxHP;
         var hp = chara == realChara ? chara.hp : (int)(chara.MaxHP * ratio);
-        var hpValueColor = Math.Ceiling(ratio * 100) > LowValueThreshold ? Config.HPValueColor : Config.HPValueColor.Darken(0.2f);
-        var hpText = "HP:".TagColor(Config.HPLabelColor).TagSize(ModUIUtil.ComputeFontSize(11));
+        var hpValueColor = Math.Ceiling(ratio * 100) > LowValueThreshold ? ColorConfig.HPValueColor : ColorConfig.HPValueColor.Darken(0.2f);
+        var hpText = "HP:".TagColor(ColorConfig.HPLabelColor).TagSize(ModUIUtil.ComputeFontSize(11));
         var hpValueText = $"{hp}/{chara.MaxHP}".TagColor(hpValueColor);
         return $"{hpText}{hpValueText}";
     }
@@ -211,8 +212,8 @@ public static class ModCharaHoverTextBuilder
         // 擬人状態の場合は正体のキャラのマナ割合を見かけ上のキャラの現在マナに反映する
         var ratio = (float)realChara.mana.value / realChara.mana.max;
         var mana = chara == realChara ? chara.mana.value : (int)(chara.mana.max * ratio);
-        var manaValueColor = Math.Ceiling(ratio * 100) > LowValueThreshold ? Config.ManaValueColor : Config.ManaValueColor.Darken(0.2f);
-        var manaText = "MP:".TagColor(Config.ManaLabelColor).TagSize(ModUIUtil.ComputeFontSize(11));
+        var manaValueColor = Math.Ceiling(ratio * 100) > LowValueThreshold ? ColorConfig.ManaValueColor : ColorConfig.ManaValueColor.Darken(0.2f);
+        var manaText = "MP:".TagColor(ColorConfig.ManaLabelColor).TagSize(ModUIUtil.ComputeFontSize(11));
         var manaValueText = $"{mana}/{chara.mana.max}".TagColor(manaValueColor);
         return $"{manaText}{manaValueText}";
     }
@@ -222,8 +223,8 @@ public static class ModCharaHoverTextBuilder
         // 擬人状態の場合は正体のキャラのスタミナ割合を見かけ上のキャラの現在スタミナに反映する
         var ratio = (float)realChara.stamina.value / realChara.stamina.max;
         var stamina = chara == realChara ? chara.stamina.value : (int)(chara.stamina.max * ratio);
-        var staminaValueColor = Math.Ceiling(ratio * 100) > LowValueThreshold ? Config.StaminaValueColor : Config.StaminaValueColor.Darken(0.2f);
-        var staminaText = "SP:".TagColor(Config.StaminaLabelColor).TagSize(ModUIUtil.ComputeFontSize(11));
+        var staminaValueColor = Math.Ceiling(ratio * 100) > LowValueThreshold ? ColorConfig.StaminaValueColor : ColorConfig.StaminaValueColor.Darken(0.2f);
+        var staminaText = "SP:".TagColor(ColorConfig.StaminaLabelColor).TagSize(ModUIUtil.ComputeFontSize(11));
         var staminaValuetext = $"{stamina}/{chara.stamina.max}".TagColor(staminaValueColor);
         return $"{staminaText}{staminaValuetext}";
     }
@@ -393,15 +394,15 @@ public static class ModCharaHoverTextBuilder
     {
         if (resistLevel > (int)Resist.None)
         {
-            return Color.Lerp(Config.NoneResistLabelColor, Config.ResistLabelColor, 1 * (resistLevel / (float)Resist.Immune));
+            return Color.Lerp(ColorConfig.NoneResistLabelColor, ColorConfig.ResistLabelColor, 1 * (resistLevel / (float)Resist.Immune));
         }
         else if (resistLevel < (int)Resist.None)
         {
-            return Color.Lerp(Config.NoneResistLabelColor, Config.NegativeResistLabelColor, 1 * (resistLevel / (float)Resist.CriticalWeakness));
+            return Color.Lerp(ColorConfig.NoneResistLabelColor, ColorConfig.NegativeResistLabelColor, 1 * (resistLevel / (float)Resist.CriticalWeakness));
         }
         else
         {
-            return Config.NoneResistLabelColor;
+            return ColorConfig.NoneResistLabelColor;
         }
     }
 

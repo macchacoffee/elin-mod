@@ -9,6 +9,7 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 public static class ModThingHoverTextBuilder
 {
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
+    private static ModConfigHoverGuideColorSet ColorConfig => Config.ColorSet;
     private static ModConfigHoverGuideStyleThing StyleConfig => Config.CurrentStyle.Thing;
 
     public static string BuildHoverText(Thing thing, string cardText, string text)
@@ -29,7 +30,7 @@ public static class ModThingHoverTextBuilder
         traitText = !string.IsNullOrEmpty(traitText) ? traitText.TagSize(ModUIUtil.ComputeFontSize(11)) : traitText;
         return string.Join(Environment.NewLine, new[] {
             text.TagSizeIfNotEmpty(ModUIUtil.ComputeFontSize(11)),
-            GetHoverTextExtra1(thing)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(Config.SubTextColor),
+            GetHoverTextExtra1(thing)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(ColorConfig.SubTextColor),
             traitText
         }.Where(t => !string.IsNullOrEmpty(t)));
     }
@@ -62,7 +63,7 @@ public static class ModThingHoverTextBuilder
         }
         var ratio = (float)(thing.MaxDecay - Math.Min(thing.decay, thing.MaxDecay)) / thing.MaxDecay;
         var pct = Math.Ceiling(ratio * 100);
-        return $"{ModConsts.SourceId.Fressness.lang()}:{pct:0}%".TagColor(Color.Lerp(Config.FressnessLowValueColor, Config.FressnessValueColor, ratio));
+        return $"{ModConsts.SourceId.Fressness.lang()}:{pct:0}%".TagColor(Color.Lerp(ColorConfig.FressnessLowValueColor, ColorConfig.FressnessValueColor, ratio));
     }
 
     private static string? GetLockLvText(Thing thing)
@@ -79,12 +80,12 @@ public static class ModThingHoverTextBuilder
     {
         return thing.rarity switch
         {
-            Rarity.Crude => Config.RarityCrudeColor,
-            Rarity.Normal => Config.RarityNormalColor,
-            Rarity.Superior => Config.RaritySuperiorColor,
-            Rarity.Legendary => Config.RarityLegendaryColor,
-            Rarity.Mythical => Config.RarityMythicalColor,
-            Rarity.Artifact => Config.RarityArtifactColor,
+            Rarity.Crude => ColorConfig.RarityCrudeColor,
+            Rarity.Normal => ColorConfig.RarityNormalColor,
+            Rarity.Superior => ColorConfig.RaritySuperiorColor,
+            Rarity.Legendary => ColorConfig.RarityLegendaryColor,
+            Rarity.Mythical => ColorConfig.RarityMythicalColor,
+            Rarity.Artifact => ColorConfig.RarityArtifactColor,
             _ => null,
         };
     }

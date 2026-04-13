@@ -23,6 +23,7 @@ public class ModHealthBar
     private Tween? DamageTween { get; set; }
 
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
+    private static ModConfigHoverGuideColorSet ColorConfig => Config.ColorSet;
     private static ModConfigHoverGuideStyleChara StyleConfig => Config.CurrentStyle.Chara;
 
     public ModHealthBar(WidgetMouseover widget)
@@ -36,9 +37,9 @@ public class ModHealthBar
         LayoutObj.transform.SetParent(widget.layout.transform);
         LayoutObj.transform.localScale = localScale;
 
-        BGImage = AddHealthBarImage(Layout, ModConsts.GameObjectName.HealthBarBG, localScale, Config.HealthBarBGColor);
-        FGDamageImage = AddHealthBarImage(Layout, ModConsts.GameObjectName.HealthBarFGDamege, localScale, Config.HealthBarBGColor);
-        FGImage = AddHealthBarImage(Layout, ModConsts.GameObjectName.HealthBarFG, localScale, Config.HealthBarFGColor);
+        BGImage = AddHealthBarImage(Layout, ModConsts.GameObjectName.HealthBarBG, localScale, ColorConfig.HealthBarBGColor);
+        FGDamageImage = AddHealthBarImage(Layout, ModConsts.GameObjectName.HealthBarFGDamege, localScale, ColorConfig.HealthBarBGColor);
+        FGImage = AddHealthBarImage(Layout, ModConsts.GameObjectName.HealthBarFG, localScale, ColorConfig.HealthBarFGColor);
 
         var valueObj = new GameObject(ModConsts.GameObjectName.HealthBarValue);
         ValueText = valueObj.AddComponent<UIText>();
@@ -86,8 +87,8 @@ public class ModHealthBar
         // 0%または100%以上の場合は小数点以下なし、それ以外の場合は小数第1位まで表示する
         // 現在HPが最大HPよりも1でも低ければ100%とは表示しないようにする
         var pct = ModMath.Ceiling((ratio < 1 ? Math.Min(ratio, 0.999f) : ratio) * 100, 1);
-        var pctColor = Color.Lerp(Config.HealthBarLowValueTextColor, Config.HealthBarTextColor, ratio);
-        var barColor = Color.Lerp(Config.HealthBarLowValueFGColor, Config.HealthBarFGColor, ratio);
+        var pctColor = Color.Lerp(ColorConfig.HealthBarLowValueTextColor, ColorConfig.HealthBarTextColor, ratio);
+        var barColor = Color.Lerp(ColorConfig.HealthBarLowValueFGColor, ColorConfig.HealthBarFGColor, ratio);
         var pctText = pct == 0 || pct >= 100 ? $"{pct:0}" : $"{pct:0.0}";
 
         ValueText.text = $"{pctText}%".TagColor(pctColor);
@@ -96,7 +97,7 @@ public class ModHealthBar
         // 体力バーの減少をアニメーションで表現する
         if (Target.TryGetTarget(out var target) && target == chara && Layout.IsActive() && FGDamageImage.fillAmount > ratio)
         {
-            FGDamageImage.color = Config.HealthBarFGDamageColor;
+            FGDamageImage.color = ColorConfig.HealthBarFGDamageColor;
             // フェードアウト時に体力バーの減少を表現するための画像が目立たないようにする
             DamageTween = FGDamageImage
                 .DOFillAmount(ratio, (FGDamageImage.fillAmount - ratio) * 3)
@@ -106,7 +107,7 @@ public class ModHealthBar
                 {
                     if (DamageTween is null || !DamageTween.IsPlaying())
                     {
-                        FGDamageImage.color = Config.HealthBarBGColor;
+                        FGDamageImage.color = ColorConfig.HealthBarBGColor;
                     }
                 });
         }

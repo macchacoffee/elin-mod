@@ -211,7 +211,7 @@ public static class WidgetMouseoverPatch
         matcher.MatchStartForward(
             new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(WidgetMouseover), nameof(WidgetMouseover.Show), [typeof(string)]))
         );
-        // Modで追加したUIを更新する
+        // Show()を呼び出す代わりにModで追加したUIを更新するメソッドを呼び出す
         matcher.RemoveInstruction();
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Ldloc_S, localText2),
@@ -251,15 +251,6 @@ public static class WidgetMouseoverPatch
         );
 
         return matcher.InstructionEnumeration();
-    }
-
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(WidgetMouseover.Show), [typeof(string)])]
-    private static void Show_Postfix(WidgetMouseover __instance, ref string s)
-    {
-        // ホバーテキストの初期位置において、
-        // 1キャラクター分の全ての情報が画面内に収まるぐらいにpivotを調整する
-        __instance.layout.Rect().pivot = new(0.5f, 0.8f);
     }
 
     [HarmonyPostfix]

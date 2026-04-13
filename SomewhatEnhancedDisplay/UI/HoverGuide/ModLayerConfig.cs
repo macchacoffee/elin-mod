@@ -33,11 +33,11 @@ public class ModLayerConfig : YKLayer<object>
                 Close();
                 if (Window.CurrentTab.idLang == ModConsts.SourceId.ConfigGeneral)
                 {
-                    Mod.Config.HoverGuide.ResetGeneral();
+                    Mod.Config.ResetHoverGuideGeneral();
                 }
                 else if (Window.CurrentTab.idLang == ModConsts.SourceId.ConfigStyle)
                 {
-                    Mod.Config.HoverGuide.ResetStyle();
+                    Mod.Config.ResetHoverGuideStyle();
                 }
                 YK.CreateLayer<ModLayerConfig>();
             });

@@ -18,9 +18,13 @@ public class ModHoverGuide
     private UIImage Padding2 { get; }
     private UIText TextName4 { get; }
 
+    private Vector2 OriginalPivot { get; }
+    private int OriginalFontSize { get; }
     private int BaseFontSize { get; }
 
+
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
+    private static ModConfigHoverGuideColorSet ColorConfig => Config.ColorSet;
     private static ModConfigHoverGuideStyleChara StyleConfig => Config.CurrentStyle.Chara;
 
     public ModHoverGuide(WidgetMouseover widget)
@@ -47,7 +51,9 @@ public class ModHoverGuide
         TextName4.transform.SetParent(widget.layout.transform);
         TextName4.transform.localScale = localScale;
 
+        OriginalPivot = widget.layout.Rect().pivot;
         // ゲーム設定のウィジェットのフォントサイズが "すごく小さい" (最小値) の場合を基準のフォントサイズとする
+        OriginalFontSize = widget.textName.fontSize;
         BaseFontSize = widget.textName.fontSize - EClass.core.config.font.fontWidget.size;
 
         // ウィジェットを無効から有効に切り替えた際に表示が乱れないようにするため、
@@ -95,7 +101,7 @@ public class ModHoverGuide
         var isPaddingRequired = false;
         if (!string.IsNullOrEmpty(text))
         {
-            text = text?.TagSize(fontSize).TagColorNullable(Config.MainTextColor);
+            text = text?.TagSize(fontSize).TagColorNullable(ColorConfig.MainTextColor);
             widget.textName.fontSize = fontSize;
             widget.textName.enabled = true;
             isGroup1Enabled = true;
@@ -119,7 +125,7 @@ public class ModHoverGuide
         }
         if (!string.IsNullOrEmpty(text2))
         {
-            text2 = text2?.TagColorNullable(Config.MainTextColor);
+            text2 = text2?.TagColorNullable(ColorConfig.MainTextColor);
             TextName2.fontColor = fontColor;
             TextName2.fontSize = fontSize;
             TextName2.text = text2.TagSize(fontSize);
@@ -142,7 +148,7 @@ public class ModHoverGuide
             {
                 text3 = $"{Environment.NewLine}{text3}";
             }
-            text3 = text3?.TagColorNullable(Config.MainTextColor);
+            text3 = text3?.TagColorNullable(ColorConfig.MainTextColor);
             TextName3.fontColor = fontColor;
             TextName3.fontSize = fontSize;
             TextName3.text = text3.TagSize(fontSize);
@@ -167,7 +173,7 @@ public class ModHoverGuide
         }
         if (!string.IsNullOrEmpty(text4))
         {
-            text4 = text4?.TagColorNullable(Config.MainTextColor);
+            text4 = text4?.TagColorNullable(ColorConfig.MainTextColor);
             TextName4.fontColor = fontColor;
             TextName4.fontSize = fontSize;
             TextName4.text = text4.TagSize(fontSize);
@@ -183,16 +189,25 @@ public class ModHoverGuide
         UpdatePadding(Padding2, isPaddingRequired, paddingHeight);
 
         widget.Show(text);
+
+        // ホバーテキストの初期位置において、
+        // 1キャラクター分の全ての情報が画面内に収まるぐらいにpivotを調整する
+        widget.layout.Rect().pivot = new(0.5f, 0.8f);
     }
 
     public void ShowForManager(WidgetMouseover widget)
     {
+        widget.layout.Rect().pivot = OriginalPivot;
+        widget.textName.fontSize = OriginalFontSize;
         widget.textName.enabled = true;
         HealthBar1.Enabled = false;
+        DisablePadding(Padding1);
         TextName2.enabled = false;
         TextName3.enabled = false;
         HealthBar2.Enabled = false;
+        DisablePadding(Padding2);
         TextName4.enabled = false;
+        widget.layout.RebuildLayout();
     }
 
     private bool DisplaysHealthBar(Chara chara)

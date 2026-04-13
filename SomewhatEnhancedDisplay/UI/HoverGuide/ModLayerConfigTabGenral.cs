@@ -10,6 +10,7 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 public class ModLayerConfigTabGenral : YKLayout<object>
 {
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
+    private static ModConfigHoverGuideColorSet ColorConfig => Config.ColorSet;
 
     public override void OnLayout()
     {
@@ -40,13 +41,13 @@ public class ModLayerConfigTabGenral : YKLayout<object>
             maxColumn: maxColumn,
             new(
                 Label: ModConsts.SourceId.MainTextColor,
-                InitColor: Config.MainTextColor,
-                ColorChangedFunc: color => Config.MainTextColor = color
+                InitColor: ColorConfig.MainTextColor,
+                ColorChangedFunc: color => ColorConfig.MainTextColor = color
             ),
             new(
                 Label: ModConsts.SourceId.SubTextColor,
-                InitColor: Config.SubTextColor,
-                ColorChangedFunc: color => Config.SubTextColor = color
+                InitColor: ColorConfig.SubTextColor,
+                ColorChangedFunc: color => ColorConfig.SubTextColor = color
             )
         );
 
@@ -57,13 +58,13 @@ public class ModLayerConfigTabGenral : YKLayout<object>
             maxColumn: maxColumn,
             new(
                 Label: ModConsts.SourceId.AttributeLabelColor,
-                InitColor: Config.HPLabelColor,
-                ColorChangedFunc: color => Config.HPLabelColor = color
+                InitColor: ColorConfig.HPLabelColor,
+                ColorChangedFunc: color => ColorConfig.HPLabelColor = color
             ),
             new(
                 Label: ModConsts.SourceId.AttributeValueColor,
-                InitColor: Config.HPValueColor,
-                ColorChangedFunc: color => Config.HPValueColor = color
+                InitColor: ColorConfig.HPValueColor,
+                ColorChangedFunc: color => ColorConfig.HPValueColor = color
             )
         );
 
@@ -74,13 +75,13 @@ public class ModLayerConfigTabGenral : YKLayout<object>
             maxColumn: maxColumn,
             new(
                 Label: ModConsts.SourceId.AttributeLabelColor,
-                InitColor: Config.ManaLabelColor,
-                ColorChangedFunc: color => Config.ManaLabelColor = color
+                InitColor: ColorConfig.ManaLabelColor,
+                ColorChangedFunc: color => ColorConfig.ManaLabelColor = color
             ),
             new(
                 Label: ModConsts.SourceId.AttributeValueColor,
-                InitColor: Config.ManaValueColor,
-                ColorChangedFunc: color => Config.ManaValueColor = color
+                InitColor: ColorConfig.ManaValueColor,
+                ColorChangedFunc: color => ColorConfig.ManaValueColor = color
             )
         );
 
@@ -91,13 +92,13 @@ public class ModLayerConfigTabGenral : YKLayout<object>
             maxColumn: maxColumn,
             new(
                 Label: ModConsts.SourceId.AttributeLabelColor,
-                InitColor: Config.StaminaLabelColor,
-                ColorChangedFunc: color => Config.StaminaLabelColor = color
+                InitColor: ColorConfig.StaminaLabelColor,
+                ColorChangedFunc: color => ColorConfig.StaminaLabelColor = color
             ),
             new(
                 Label: ModConsts.SourceId.AttributeValueColor,
-                InitColor: Config.StaminaValueColor,
-                ColorChangedFunc: color => Config.StaminaValueColor = color
+                InitColor: ColorConfig.StaminaValueColor,
+                ColorChangedFunc: color => ColorConfig.StaminaValueColor = color
             )
         );
 
@@ -108,18 +109,18 @@ public class ModLayerConfigTabGenral : YKLayout<object>
             maxColumn: maxColumn,
             new(
                 Label: ModConsts.SourceId.ResistLabelColor,
-                InitColor: Config.ResistLabelColor,
-                ColorChangedFunc: color => Config.ResistLabelColor = color
+                InitColor: ColorConfig.ResistLabelColor,
+                ColorChangedFunc: color => ColorConfig.ResistLabelColor = color
             ),
             new(
                 Label: ModConsts.SourceId.NegativeResistLabelColor,
-                InitColor: Config.NegativeResistLabelColor,
-                ColorChangedFunc: color => Config.NegativeResistLabelColor = color
+                InitColor: ColorConfig.NegativeResistLabelColor,
+                ColorChangedFunc: color => ColorConfig.NegativeResistLabelColor = color
             ),
             new(
                 Label: ModConsts.SourceId.NoneResistLabelColor,
-                InitColor: Config.NoneResistLabelColor,
-                ColorChangedFunc: color => Config.NoneResistLabelColor = color
+                InitColor: ColorConfig.NoneResistLabelColor,
+                ColorChangedFunc: color => ColorConfig.NoneResistLabelColor = color
             )
         );
 
@@ -130,33 +131,33 @@ public class ModLayerConfigTabGenral : YKLayout<object>
             maxColumn: maxColumn,
             new(
                 Label: ModConsts.SourceId.HealthBarBGColor,
-                InitColor: Config.HealthBarBGColor,
-                ColorChangedFunc: color => Config.HealthBarBGColor = color
+                InitColor: ColorConfig.HealthBarBGColor,
+                ColorChangedFunc: color => ColorConfig.HealthBarBGColor = color
             ),
             new(
                 Label: ModConsts.SourceId.HealthBarFGColor,
-                InitColor: Config.HealthBarFGColor,
-                ColorChangedFunc: color => Config.HealthBarFGColor = color
+                InitColor: ColorConfig.HealthBarFGColor,
+                ColorChangedFunc: color => ColorConfig.HealthBarFGColor = color
             ),
             new(
                 Label: ModConsts.SourceId.HealthBarFGDamageColor,
-                InitColor: Config.HealthBarFGDamageColor,
-                ColorChangedFunc: color => Config.HealthBarFGDamageColor = color
+                InitColor: ColorConfig.HealthBarFGDamageColor,
+                ColorChangedFunc: color => ColorConfig.HealthBarFGDamageColor = color
             ),
             new(
                 Label: ModConsts.SourceId.HealthBarLowValueFGColor,
-                InitColor: Config.HealthBarLowValueFGColor,
-                ColorChangedFunc: color => Config.HealthBarLowValueFGColor = color
+                InitColor: ColorConfig.HealthBarLowValueFGColor,
+                ColorChangedFunc: color => ColorConfig.HealthBarLowValueFGColor = color
             ),
             new(
                 Label: ModConsts.SourceId.HealthBarTextColor,
-                InitColor: Config.HealthBarTextColor,
-                ColorChangedFunc: color => Config.HealthBarTextColor = color
+                InitColor: ColorConfig.HealthBarTextColor,
+                ColorChangedFunc: color => ColorConfig.HealthBarTextColor = color
             ),
             new(
                 Label: ModConsts.SourceId.HealthBarLowValueTextColor,
-                InitColor: Config.HealthBarLowValueTextColor,
-                ColorChangedFunc: color => Config.HealthBarLowValueTextColor = color
+                InitColor: ColorConfig.HealthBarLowValueTextColor,
+                ColorChangedFunc: color => ColorConfig.HealthBarLowValueTextColor = color
             )
         );
 
@@ -167,33 +168,33 @@ public class ModLayerConfigTabGenral : YKLayout<object>
             maxColumn: maxColumn,
             new(
                 Label: ModConsts.SourceId.RarityCrudeColor,
-                InitColor: Config.RarityCrudeColor,
-                ColorChangedFunc: color => Config.RarityCrudeColor = color
+                InitColor: ColorConfig.RarityCrudeColor,
+                ColorChangedFunc: color => ColorConfig.RarityCrudeColor = color
             ),
             new(
                 Label: ModConsts.SourceId.RarityNormalColor,
-                InitColor: Config.RarityNormalColor,
-                ColorChangedFunc: color => Config.RarityNormalColor = color
+                InitColor: ColorConfig.RarityNormalColor,
+                ColorChangedFunc: color => ColorConfig.RarityNormalColor = color
             ),
             new(
                 Label: ModConsts.SourceId.RaritySuperiorColor,
-                InitColor: Config.RaritySuperiorColor,
-                ColorChangedFunc: color => Config.RaritySuperiorColor = color
+                InitColor: ColorConfig.RaritySuperiorColor,
+                ColorChangedFunc: color => ColorConfig.RaritySuperiorColor = color
             ),
             new(
                 Label: ModConsts.SourceId.RarityLegendaryColor,
-                InitColor: Config.RarityLegendaryColor,
-                ColorChangedFunc: color => Config.RarityLegendaryColor = color
+                InitColor: ColorConfig.RarityLegendaryColor,
+                ColorChangedFunc: color => ColorConfig.RarityLegendaryColor = color
             ),
             new(
                 Label: ModConsts.SourceId.RarityMythicalColor,
-                InitColor: Config.RarityMythicalColor,
-                ColorChangedFunc: color => Config.RarityMythicalColor = color
+                InitColor: ColorConfig.RarityMythicalColor,
+                ColorChangedFunc: color => ColorConfig.RarityMythicalColor = color
             ),
             new(
                 Label: ModConsts.SourceId.RarityArtifactColor,
-                InitColor: Config.RarityArtifactColor,
-                ColorChangedFunc: color => Config.RarityArtifactColor = color
+                InitColor: ColorConfig.RarityArtifactColor,
+                ColorChangedFunc: color => ColorConfig.RarityArtifactColor = color
             )
         );
 
@@ -204,13 +205,13 @@ public class ModLayerConfigTabGenral : YKLayout<object>
             maxColumn: maxColumn,
             new(
                 Label: ModConsts.SourceId.FressnessValueColor,
-                InitColor: Config.FressnessValueColor,
-                ColorChangedFunc: color => Config.FressnessValueColor = color
+                InitColor: ColorConfig.FressnessValueColor,
+                ColorChangedFunc: color => ColorConfig.FressnessValueColor = color
             ),
             new(
                 Label: ModConsts.SourceId.FressnessLowValueColor,
-                InitColor: Config.FressnessLowValueColor,
-                ColorChangedFunc: color => Config.FressnessLowValueColor = color
+                InitColor: ColorConfig.FressnessLowValueColor,
+                ColorChangedFunc: color => ColorConfig.FressnessLowValueColor = color
             )
         );
     }

@@ -23,7 +23,7 @@ public static class Mod
         if (File.Exists(filePath))
         {
             var text = IO.IsCompressed(filePath) ? IO.Decompress(filePath) : File.ReadAllText(filePath);
-            Config = JsonConvert.DeserializeObject<ModConfig>(text, GameIO.jsReadGame);
+            Config = ModConfig.Deserialize(text);
         }
         else
         {
@@ -34,7 +34,7 @@ public static class Mod
     public static void SaveConfig(string root)
     {
         var filePath = BuildConfigFilePath(root);
-        var text = JsonConvert.SerializeObject(Config, GameIO.formatting, GameIO.jsWriteGame);
+        var text = Config.Serialize();
         if (GameIO.compressSave)
         {
             IO.Compress(filePath, text);
