@@ -94,8 +94,11 @@ public class ModHealthBar
         ValueText.text = $"{pctText}%".TagColor(pctColor);
         FGImage.fillAmount = ratio;
         FGImage.color = barColor;
-        // 体力バーの減少をアニメーションで表現する
-        if (Target.TryGetTarget(out var target) && target == chara && Layout.IsActive() && FGDamageImage.fillAmount > ratio)
+        // 設定で有効な場合は体力バーの減少をアニメーションで表現する
+        if (StyleConfig.HealthBar.UseAnimation
+            && Target.TryGetTarget(out var target) && target == chara
+            && Layout.IsActive()
+            && FGDamageImage.fillAmount > ratio)
         {
             FGDamageImage.color = ColorConfig.HealthBarFGDamageColor;
             // フェードアウト時に体力バーの減少を表現するための画像が目立たないようにする
@@ -122,7 +125,7 @@ public class ModHealthBar
         Target.SetTarget(chara);
     }
 
-    public bool Enabled 
+    public bool Enabled
     {
         get
         {

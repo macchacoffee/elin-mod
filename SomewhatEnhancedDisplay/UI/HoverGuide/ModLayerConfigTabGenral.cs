@@ -1,6 +1,6 @@
 using System;
-using System.Linq;
 using SomewhatEnhancedDisplay.Config;
+using SomewhatEnhancedDisplay.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
 using YKF;
@@ -17,15 +17,36 @@ public class ModLayerConfigTabGenral : YKLayout<object>
         Header(ModConsts.SourceId.ConfigDisplay);
         Spacer(36);
 
-        var displayLayout = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
-        AddSlider(
-            layout: displayLayout,
-            label: ModConsts.SourceId.ZoomScale,
+        var displayLayout1 = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
+        displayLayout1.AddModSlider(
+            getLabel: value => $"{ModConsts.SourceId.ZoomScale.lang()}({value * 100}%)",
             init: Config.ZoomScale,
             min: 0.1f,
             max: 2,
             step: 0.1f,
-            valueChangedFunc: value => Config.ZoomScale = value
+            onChanged: value => Config.ZoomScale = value
+        );
+
+        Spacer(36);
+
+        var displayLayout2 = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
+        displayLayout2.AddModSlider(
+            getLabel: value => $"{ModConsts.SourceId.HorizontalPivot.lang()}({value})",
+            init: Config.HorizontalPivot,
+            min: 0,
+            max: 1,
+            step: 0.1f,
+            onChanged: value => Config.HorizontalPivot = value
+        );
+
+        displayLayout2.Spacer(0, 18);
+        displayLayout2.AddModSlider(
+            getLabel: value => $"{ModConsts.SourceId.VerticalPivot.lang()}({value})",
+            init: Config.VerticalPivot,
+            min: 0,
+            max: 1,
+            step: 0.1f,
+            onChanged: value => Config.VerticalPivot = value
         );
 
         var cellWidth = 200;
@@ -34,247 +55,198 @@ public class ModLayerConfigTabGenral : YKLayout<object>
         Spacer(20);
         Header(ModConsts.SourceId.ConfigColors);
 
-        AddColorSettings(
+        AddColorPickers(
             layout: this,
             headerLabel: ModConsts.SourceId.DefaultColor,
             cellWidth: cellWidth,
             maxColumn: maxColumn,
             new(
                 Label: ModConsts.SourceId.MainTextColor,
-                InitColor: ColorConfig.MainTextColor,
-                ColorChangedFunc: color => ColorConfig.MainTextColor = color
+                Init: ColorConfig.MainTextColor,
+                OnChanged: color => ColorConfig.MainTextColor = color
             ),
             new(
                 Label: ModConsts.SourceId.SubTextColor,
-                InitColor: ColorConfig.SubTextColor,
-                ColorChangedFunc: color => ColorConfig.SubTextColor = color
+                Init: ColorConfig.SubTextColor,
+                OnChanged: color => ColorConfig.SubTextColor = color
             )
         );
 
-        AddColorSettings(
+        AddColorPickers(
             layout: this,
             headerLabel: ModConsts.SourceId.HP,
             cellWidth: cellWidth,
             maxColumn: maxColumn,
             new(
                 Label: ModConsts.SourceId.AttributeLabelColor,
-                InitColor: ColorConfig.HPLabelColor,
-                ColorChangedFunc: color => ColorConfig.HPLabelColor = color
+                Init: ColorConfig.HPLabelColor,
+                OnChanged: color => ColorConfig.HPLabelColor = color
             ),
             new(
                 Label: ModConsts.SourceId.AttributeValueColor,
-                InitColor: ColorConfig.HPValueColor,
-                ColorChangedFunc: color => ColorConfig.HPValueColor = color
+                Init: ColorConfig.HPValueColor,
+                OnChanged: color => ColorConfig.HPValueColor = color
             )
         );
 
-        AddColorSettings(
+        AddColorPickers(
             layout: this,
             headerLabel: ModConsts.SourceId.Mana,
             cellWidth: cellWidth,
             maxColumn: maxColumn,
             new(
                 Label: ModConsts.SourceId.AttributeLabelColor,
-                InitColor: ColorConfig.ManaLabelColor,
-                ColorChangedFunc: color => ColorConfig.ManaLabelColor = color
+                Init: ColorConfig.ManaLabelColor,
+                OnChanged: color => ColorConfig.ManaLabelColor = color
             ),
             new(
                 Label: ModConsts.SourceId.AttributeValueColor,
-                InitColor: ColorConfig.ManaValueColor,
-                ColorChangedFunc: color => ColorConfig.ManaValueColor = color
+                Init: ColorConfig.ManaValueColor,
+                OnChanged: color => ColorConfig.ManaValueColor = color
             )
         );
 
-        AddColorSettings(
+        AddColorPickers(
             layout: this,
             headerLabel: ModConsts.SourceId.Stamina,
             cellWidth: cellWidth,
             maxColumn: maxColumn,
             new(
                 Label: ModConsts.SourceId.AttributeLabelColor,
-                InitColor: ColorConfig.StaminaLabelColor,
-                ColorChangedFunc: color => ColorConfig.StaminaLabelColor = color
+                Init: ColorConfig.StaminaLabelColor,
+                OnChanged: color => ColorConfig.StaminaLabelColor = color
             ),
             new(
                 Label: ModConsts.SourceId.AttributeValueColor,
-                InitColor: ColorConfig.StaminaValueColor,
-                ColorChangedFunc: color => ColorConfig.StaminaValueColor = color
+                Init: ColorConfig.StaminaValueColor,
+                OnChanged: color => ColorConfig.StaminaValueColor = color
             )
         );
 
-        AddColorSettings(
+        AddColorPickers(
             layout: this,
             headerLabel: ModConsts.SourceId.Resist,
             cellWidth: cellWidth,
             maxColumn: maxColumn,
             new(
                 Label: ModConsts.SourceId.ResistLabelColor,
-                InitColor: ColorConfig.ResistLabelColor,
-                ColorChangedFunc: color => ColorConfig.ResistLabelColor = color
+                Init: ColorConfig.ResistLabelColor,
+                OnChanged: color => ColorConfig.ResistLabelColor = color
             ),
             new(
                 Label: ModConsts.SourceId.NegativeResistLabelColor,
-                InitColor: ColorConfig.NegativeResistLabelColor,
-                ColorChangedFunc: color => ColorConfig.NegativeResistLabelColor = color
+                Init: ColorConfig.NegativeResistLabelColor,
+                OnChanged: color => ColorConfig.NegativeResistLabelColor = color
             ),
             new(
                 Label: ModConsts.SourceId.NoneResistLabelColor,
-                InitColor: ColorConfig.NoneResistLabelColor,
-                ColorChangedFunc: color => ColorConfig.NoneResistLabelColor = color
+                Init: ColorConfig.NoneResistLabelColor,
+                OnChanged: color => ColorConfig.NoneResistLabelColor = color
             )
         );
 
-        AddColorSettings(
+        AddColorPickers(
             layout: this,
             headerLabel: ModConsts.SourceId.HealthBar,
             cellWidth: cellWidth,
             maxColumn: maxColumn,
             new(
                 Label: ModConsts.SourceId.HealthBarBGColor,
-                InitColor: ColorConfig.HealthBarBGColor,
-                ColorChangedFunc: color => ColorConfig.HealthBarBGColor = color
+                Init: ColorConfig.HealthBarBGColor,
+                OnChanged: color => ColorConfig.HealthBarBGColor = color
             ),
             new(
                 Label: ModConsts.SourceId.HealthBarFGColor,
-                InitColor: ColorConfig.HealthBarFGColor,
-                ColorChangedFunc: color => ColorConfig.HealthBarFGColor = color
+                Init: ColorConfig.HealthBarFGColor,
+                OnChanged: color => ColorConfig.HealthBarFGColor = color
             ),
             new(
                 Label: ModConsts.SourceId.HealthBarFGDamageColor,
-                InitColor: ColorConfig.HealthBarFGDamageColor,
-                ColorChangedFunc: color => ColorConfig.HealthBarFGDamageColor = color
+                Init: ColorConfig.HealthBarFGDamageColor,
+                OnChanged: color => ColorConfig.HealthBarFGDamageColor = color
             ),
             new(
                 Label: ModConsts.SourceId.HealthBarLowValueFGColor,
-                InitColor: ColorConfig.HealthBarLowValueFGColor,
-                ColorChangedFunc: color => ColorConfig.HealthBarLowValueFGColor = color
+                Init: ColorConfig.HealthBarLowValueFGColor,
+                OnChanged: color => ColorConfig.HealthBarLowValueFGColor = color
             ),
             new(
                 Label: ModConsts.SourceId.HealthBarTextColor,
-                InitColor: ColorConfig.HealthBarTextColor,
-                ColorChangedFunc: color => ColorConfig.HealthBarTextColor = color
+                Init: ColorConfig.HealthBarTextColor,
+                OnChanged: color => ColorConfig.HealthBarTextColor = color
             ),
             new(
                 Label: ModConsts.SourceId.HealthBarLowValueTextColor,
-                InitColor: ColorConfig.HealthBarLowValueTextColor,
-                ColorChangedFunc: color => ColorConfig.HealthBarLowValueTextColor = color
+                Init: ColorConfig.HealthBarLowValueTextColor,
+                OnChanged: color => ColorConfig.HealthBarLowValueTextColor = color
             )
         );
 
-        AddColorSettings(
+        AddColorPickers(
             layout: this,
             headerLabel: ModConsts.SourceId.Rarity,
             cellWidth: cellWidth,
             maxColumn: maxColumn,
             new(
                 Label: ModConsts.SourceId.RarityCrudeColor,
-                InitColor: ColorConfig.RarityCrudeColor,
-                ColorChangedFunc: color => ColorConfig.RarityCrudeColor = color
+                Init: ColorConfig.RarityCrudeColor,
+                OnChanged: color => ColorConfig.RarityCrudeColor = color
             ),
             new(
                 Label: ModConsts.SourceId.RarityNormalColor,
-                InitColor: ColorConfig.RarityNormalColor,
-                ColorChangedFunc: color => ColorConfig.RarityNormalColor = color
+                Init: ColorConfig.RarityNormalColor,
+                OnChanged: color => ColorConfig.RarityNormalColor = color
             ),
             new(
                 Label: ModConsts.SourceId.RaritySuperiorColor,
-                InitColor: ColorConfig.RaritySuperiorColor,
-                ColorChangedFunc: color => ColorConfig.RaritySuperiorColor = color
+                Init: ColorConfig.RaritySuperiorColor,
+                OnChanged: color => ColorConfig.RaritySuperiorColor = color
             ),
             new(
                 Label: ModConsts.SourceId.RarityLegendaryColor,
-                InitColor: ColorConfig.RarityLegendaryColor,
-                ColorChangedFunc: color => ColorConfig.RarityLegendaryColor = color
+                Init: ColorConfig.RarityLegendaryColor,
+                OnChanged: color => ColorConfig.RarityLegendaryColor = color
             ),
             new(
                 Label: ModConsts.SourceId.RarityMythicalColor,
-                InitColor: ColorConfig.RarityMythicalColor,
-                ColorChangedFunc: color => ColorConfig.RarityMythicalColor = color
+                Init: ColorConfig.RarityMythicalColor,
+                OnChanged: color => ColorConfig.RarityMythicalColor = color
             ),
             new(
                 Label: ModConsts.SourceId.RarityArtifactColor,
-                InitColor: ColorConfig.RarityArtifactColor,
-                ColorChangedFunc: color => ColorConfig.RarityArtifactColor = color
+                Init: ColorConfig.RarityArtifactColor,
+                OnChanged: color => ColorConfig.RarityArtifactColor = color
             )
         );
 
-        AddColorSettings(
+        AddColorPickers(
             layout: this,
             headerLabel: ModConsts.SourceId.Fressness,
             cellWidth: cellWidth,
             maxColumn: maxColumn,
             new(
                 Label: ModConsts.SourceId.FressnessValueColor,
-                InitColor: ColorConfig.FressnessValueColor,
-                ColorChangedFunc: color => ColorConfig.FressnessValueColor = color
+                Init: ColorConfig.FressnessValueColor,
+                OnChanged: color => ColorConfig.FressnessValueColor = color
             ),
             new(
                 Label: ModConsts.SourceId.FressnessLowValueColor,
-                InitColor: ColorConfig.FressnessLowValueColor,
-                ColorChangedFunc: color => ColorConfig.FressnessLowValueColor = color
+                Init: ColorConfig.FressnessLowValueColor,
+                OnChanged: color => ColorConfig.FressnessLowValueColor = color
             )
         );
     }
 
-    private record ColorSettingItem(string Label, Color? InitColor, Action<Color> ColorChangedFunc);
+    private record ColorConfigItem(string Label, Color? Init, Action<Color> OnChanged);
 
-    private void AddColorSettings(YKLayout layout, string headerLabel, int cellWidth, int maxColumn, params ColorSettingItem[] items)
+    private void AddColorPickers(YKLayout layout, string headerLabel, int cellWidth, int maxColumn, params ColorConfigItem[] items)
     {
         layout.HeaderSmall(headerLabel);
         var grid = layout.Grid().WithPivot(0, 0.5f).WithCellSize(cellWidth, 50).WithConstraintCount(maxColumn);
         grid.Layout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
         foreach (var item in items)
         {
-            AddColorPicker(grid, item.Label, item.InitColor, item.ColorChangedFunc);
+            grid.AddModColorPicker(item.Label, item.Init, item.OnChanged);
         }
-    }
-
-    private Slider AddSlider(YKLayout layout, string label, float init, float min, float max, float step, Action<float> valueChangedFunc, int? width = null)
-    {
-        if (step <= 0)
-        {
-            new ArgumentException("Step of slider must be more than 0");
-        }
-
-        var slider = layout.Slider(
-            init / step,
-            value => valueChangedFunc(value * step),
-            min / step,
-            max / step,
-            value => $"{label.lang()}(x{value * step})"
-        ).WithWidth(width ?? 200);
-        slider.wholeNumbers = true;
-
-        return slider;
-    }
-
-    private ButtonGeneral AddColorPicker(YKLayout layout, string label, Color? init, Action<Color> colorChangedFunc)
-    {
-        var initColor = init ?? Color.clear;
-
-        var button = Util.Instantiate<ButtonGeneral>($"{CorePath.UI.Button}ButtonColor", layout);
-        button.icon.color = initColor;
-        button.mainText.text = label.lang();
-        button.LayoutElement().preferredWidth = button.mainText.preferredWidth + button.image.preferredWidth;
-        button.SetOnClick(() =>
-        {
-            var colorPicker = EClass.ui.AddLayer<LayerColorPicker>();
-            colorPicker.SetColor(button.icon.color , button.icon.color, (state, color) =>
-            {
-                switch (state)
-                {
-                    case PickerState.Confirm:
-                        button.icon.color = color;
-                        break;
-                    case PickerState.Reset:
-                    case PickerState.Cancel:
-                        color = initColor;
-                        break;
-                }
-                colorChangedFunc(color);
-            });
-        });
-
-        return button;
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using SomewhatEnhancedDisplay.Config;
 using SomewhatEnhancedDisplay.Extensions;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -190,9 +191,7 @@ public class ModHoverGuide
 
         widget.Show(text);
 
-        // ホバーテキストの初期位置において、
-        // 1キャラクター分の全ての情報が画面内に収まるぐらいにpivotを調整する
-        widget.layout.Rect().pivot = new(0.5f, 0.8f);
+        widget.layout.Rect().pivot = new(Config.HorizontalPivot, Config.VerticalPivot);
     }
 
     public void ShowForManager(WidgetMouseover widget)

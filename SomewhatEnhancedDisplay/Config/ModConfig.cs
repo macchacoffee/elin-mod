@@ -64,6 +64,12 @@ public class ModConfigHoverGuide : ModConfigBase<ModConfigHoverGuide>
     [JsonProperty("zoomScale", DefaultValueHandling = DefaultValueHandling.Include)]
     public float ZoomScale { get; set; } = 1.2f;
 
+    [JsonProperty("horizontalPivot", DefaultValueHandling = DefaultValueHandling.Include)]
+    public float HorizontalPivot { get; set; } = 0.5f;
+
+    [JsonProperty("verticalPivot", DefaultValueHandling = DefaultValueHandling.Include)]
+    public float VerticalPivot { get; set; } = 0.8f;
+
     [JsonProperty("colorSet", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHoverGuideColorSet ColorSet { get; set; } = new();
 
@@ -367,11 +373,14 @@ public class ModConfigHoverGuideStyleChara : ModConfigBase<ModConfigHoverGuideSt
 
 public class ModConfigHoverGuideHealthBar : ModConfigBase<ModConfigHoverGuideHealthBar>
 {
+    [JsonProperty("width", DefaultValueHandling = DefaultValueHandling.Include)]
+    public int Width { get; set; } = 300;
+
     [JsonProperty("displayValue", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayValue { get; set; } = true;
 
-    [JsonProperty("width", DefaultValueHandling = DefaultValueHandling.Include)]
-    public int Width { get; set; } = 300;
+    [JsonProperty("useAnimation", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool UseAnimation { get; set; } = true;
 
     [JsonProperty("displayForEnemy", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHealthBarDisplay DisplayForEnemy { get; set; } = new()

@@ -6,10 +6,14 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 public class ModLayerConfig : YKLayer<object>
 {
     public override string Title { get; } = $"{ModConsts.SourceId.ModName.lang()} {ModConsts.SourceId.ConfigHoverGuide.lang()}";
-    // public override Rect Bound { get; } = new Rect(0, 0, 800, 600);
     public override Rect Bound { get; } = new Rect(0, 0, 720, 540);
 
     private UIButton? ButtonReset { get; set; }
+
+    public override string GetTextHeader(Window window)
+    {
+        return $"{ModConsts.SourceId.ConfigHoverGuide.lang()} {ModConsts.SourceId.ConfigOf.lang(base.GetTextHeader(window))}";
+    }
 
     public override void OnLayout()
     {
@@ -30,6 +34,7 @@ public class ModLayerConfig : YKLayer<object>
         {
             Dialog.YesNo(CurrentTabLang(ModConsts.SourceId.DialogResetConfigTab), () =>
             {
+                
                 Close();
                 if (Window.CurrentTab.idLang == ModConsts.SourceId.ConfigGeneral)
                 {
