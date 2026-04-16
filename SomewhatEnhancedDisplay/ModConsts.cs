@@ -1,3 +1,5 @@
+namespace SomewhatEnhancedDisplay;
+
 public static class ModConsts
 {
     public static class GameObjectName

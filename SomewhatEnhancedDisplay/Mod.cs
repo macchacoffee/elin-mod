@@ -1,6 +1,4 @@
 using System.IO;
-using BepInEx;
-using Newtonsoft.Json;
 using SomewhatEnhancedDisplay.Config;
 
 namespace SomewhatEnhancedDisplay;
