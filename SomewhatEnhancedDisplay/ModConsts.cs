@@ -38,6 +38,7 @@ public static class ModConsts
         public static readonly string LockLv = Prefixed("lockLv");
         public static readonly string Line = Prefixed("line");
         public static readonly string Others = Prefixed("others");
+        public static readonly string Type = Prefixed("type");
         public static readonly string Lv = Prefixed("lv");
         public static readonly string Gender = Prefixed("gender");
         public static readonly string Age = Prefixed("age");

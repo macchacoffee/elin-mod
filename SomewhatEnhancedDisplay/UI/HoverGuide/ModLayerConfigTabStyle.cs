@@ -84,11 +84,17 @@ public class ModLayerConfigTabStyle : YKLayout<object>
         styleEditLayout.Header(ModConsts.SourceId.ConfigDisplayItems.lang(ModConsts.SourceId.Chara.lang()));
 
         line++;
-        EditStyleUI.AddToggle(
+        EditStyleUI.AddToggles(
             layout: styleEditLayout,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
+            new(
+                Label: ModConsts.SourceId.Type,
+                Init: SelectedStyle.Chara.DisplayType,
+                OnChanged: value => SelectedStyle.Chara.DisplayType = value,
+                GetConfig: () => SelectedStyle.Chara.DisplayType
+            ),
             new(
                 Label: ModConsts.SourceId.Lv,
                 Init: SelectedStyle.Chara.DisplayLv,
