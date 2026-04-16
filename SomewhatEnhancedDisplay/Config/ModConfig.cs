@@ -75,7 +75,7 @@ public class ModConfigHoverGuide : ModConfigBase<ModConfigHoverGuide>
 
     [JsonProperty("styles", DefaultValueHandling = DefaultValueHandling.Include, ObjectCreationHandling = ObjectCreationHandling.Replace)]
     public List<ModConfigHoverGuideStyle> Styles { get; private set; } = [
-        new ModConfigHoverGuideStyle(),
+        new(),
         ModConfigHoverGuideStyle.CreateDisplayAll(),
     ];
 
@@ -454,6 +454,9 @@ public class ModConfigHoverGuideStyleThing : ModConfigBase<ModConfigHoverGuideSt
     [JsonProperty("displayLv", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayLv { get; set; } = false;
 
+    [JsonProperty("displayMaterial", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool DisplayMaterial { get; set; } = false;
+
     [JsonProperty("displayFressness", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayFressness { get; set; } = false;
 
@@ -468,6 +471,7 @@ public class ModConfigHoverGuideStyleThing : ModConfigBase<ModConfigHoverGuideSt
         return new()
         {
             DisplayLv = true,
+            DisplayMaterial = true,
             DisplayFressness = true,
             DisplayLockLv = true,
             UseRarityColor = true,

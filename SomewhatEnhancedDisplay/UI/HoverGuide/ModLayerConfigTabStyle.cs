@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using SomewhatEnhancedDisplay.Config;
 using SomewhatEnhancedDisplay.Extensions;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 using YKF;
 
 namespace SomewhatEnhancedDisplay.UI.HoverGuide;
@@ -64,7 +65,7 @@ public class ModLayerConfigTabStyle : YKLayout<object>
                 var d = Dialog.YesNo(ModConsts.SourceId.DialogDeleteStyle, () =>
                 {
                     Config.Styles.RemoveAt(SelectedStyleIndex);
-                    SelectedStyleIndex = 0;
+                    SelectedStyleIndex = Math.Max(0, SelectedStyleIndex - 1);
                     updateStyleDropdown(SelectedStyleIndex, Config.Styles);
                 });
             },
@@ -387,6 +388,12 @@ public class ModLayerConfigTabStyle : YKLayout<object>
             cellWidth: cellWidth,
             maxColumn: maxColumn,
             new(
+                Label: ModConsts.SourceId.Material,
+                Init: SelectedStyle.Thing.DisplayMaterial,
+                OnChanged: value => SelectedStyle.Thing.DisplayMaterial = value,
+                GetConfig: () => SelectedStyle.Thing.DisplayMaterial
+            ),
+            new(
                 Label: ModConsts.SourceId.LockLv,
                 Init: SelectedStyle.Thing.DisplayLockLv,
                 OnChanged: value => SelectedStyle.Thing.DisplayLockLv = value,
@@ -401,7 +408,7 @@ public class ModLayerConfigTabStyle : YKLayout<object>
         );
     }
 
-    private record EditStyleToogleUIItem(string Label, bool Init, Action<bool> OnChanged, Func<bool> GetConfig);
+    private record EditStyleToogleUIItem(string Label, bool Init, Action<bool> OnChanged, Func<bool> GetConfig, string? Tooltip = null);
 
     private class EditStyleUIManager
     {
@@ -431,6 +438,11 @@ public class ModLayerConfigTabStyle : YKLayout<object>
             foreach (var item in items)
             {
                 var toogle = grid.AddModToggle(item.Label, item.Init, item.OnChanged);
+                if (item.Tooltip is string tooltip)
+                {
+                    toogle.SetTooltipLang(tooltip);
+                    toogle.tooltip.icon = true;
+                }
                 StyleChangedFuncs.Add(() => toogle.SetCheck(item.GetConfig()));
             }
         }

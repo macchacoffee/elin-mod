@@ -31,6 +31,7 @@ public static class ModConsts
         public static readonly string Resist = Prefixed("resist");
         public static readonly string HealthBar = Prefixed("healthBar");
         public static readonly string Rarity = Prefixed("rarity");
+        public static readonly string Material = Prefixed("material");
         public static readonly string Fressness = Prefixed("fressness");
         public static readonly string LockLv = Prefixed("lockLv");
         public static readonly string Line = Prefixed("line");

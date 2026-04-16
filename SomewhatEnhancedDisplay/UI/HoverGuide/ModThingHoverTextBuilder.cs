@@ -43,6 +43,7 @@ public static class ModThingHoverTextBuilder
     private static string? GetHoverTextExtra1(Thing thing)
     {
         var text = string.Join(" ", new[] {
+            StyleConfig.DisplayMaterial ? GetMaterialText(thing) : null,
             StyleConfig.DisplayFressness ? GetFressnessText(thing) : null,
             StyleConfig.DisplayLockLv ? GetLockLvText(thing) : null,
         }.Where(t => !string.IsNullOrEmpty(t)));
@@ -52,6 +53,12 @@ public static class ModThingHoverTextBuilder
     private static string GetLvText(Thing thing)
     {
         return $"Lv.{thing.LV}";
+    }
+
+    private static string? GetMaterialText(Thing thing)
+    {
+        var material = thing.material;
+        return material.GetName().TagColorNullable(GetMaterialColor(material.alias));
     }
 
     private static string? GetFressnessText(Thing thing)
@@ -76,6 +83,15 @@ public static class ModThingHoverTextBuilder
         return $"{ModConsts.SourceId.LockLv.lang()}:{thing.c_lockLv}";
     }
 
+    private static Color? GetMaterialColor(string alias)
+    {
+        if (EClass.Colors.matColors.TryGetValue(alias, out var matColor))
+        {
+            return Color.Lerp(matColor.main, Color.white, 0.4f);
+        }
+        return null;
+    }
+
     private static Color? GetRarityColor(Thing thing)
     {
         return thing.rarity switch
@@ -89,5 +105,4 @@ public static class ModThingHoverTextBuilder
             _ => null,
         };
     }
-
 }
