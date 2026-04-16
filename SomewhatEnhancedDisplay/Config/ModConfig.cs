@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ModUtility.Config;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -19,24 +20,6 @@ public enum ModHealthBarDisplayTarget
     Elite,
     Boss,
 }
-
-public abstract class ModConfigBase<T> where T : ModConfigBase<T>
-{
-    public string Serialize()
-    {
-        return JsonConvert.SerializeObject(this, GameIO.formatting, GameIO.jsWriteGame);
-    }
-
-    public static T Deserialize(string json)
-    {
-        return JsonConvert.DeserializeObject<T>(json, GameIO.jsReadGame);
-    }
-
-    public T DeepCopy()
-    {
-        return Deserialize(Serialize());
-    }
-} 
 
 public class ModConfig : ModConfigBase<ModConfig>
 {
@@ -128,103 +111,103 @@ public class ModConfigHoverGuide : ModConfigBase<ModConfigHoverGuide>
 public class ModConfigHoverGuideColorSet : ModConfigBase<ModConfigHoverGuide>
 {
     [JsonProperty("mainTextColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color MainTextColor { get; set; } = new(0.9028f, 0.8804f, 0.8354f); // #E6E1D5FF
 
     [JsonProperty("subTextColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color SubTextColor { get; set; } = new(0.703f, 0.681f, 0.636f); // #B3AEA2FF
 
     [JsonProperty("hpLabelColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color HPLabelColor { get; set; } = new(0.872f, 0.371f, 0.335f); // #DE5F55FF
 
     [JsonProperty("hpValueColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color HPValueColor { get; set; } = new(0.982f, 0.701f, 0.665f); // #FAB3AAFF
 
     [JsonProperty("manaLabelColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color ManaLabelColor { get; set; } = new(0.375f, 0.606f, 0.988f); // #609BFCFF
 
     [JsonProperty("manaValueColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color ManaValueColor { get; set; } = new(0.665f, 0.806f, 0.838f); // #AACED6FF
 
     [JsonProperty("staminaLabelColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color StaminaLabelColor { get; set; } = new(0.848f, 0.722f, 0.285f); // #D8B849FF
 
     [JsonProperty("staminaValueColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color StaminaValueColor { get; set; } = new(0.848f, 0.82f, 0.635f); // #D8D1A2FF
 
     [JsonProperty("resistLabelColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color ResistLabelColor { get; set; } = new(0.375f, 0.738f, 0.626f); // #60BCA0FF
 
     [JsonProperty("negativeResistLabelColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color NegativeResistLabelColor { get; set; } = new(0.822f, 0.431f, 0.395f); // #D26E65FF
 
     [JsonProperty("noneResistLabelColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color NoneResistLabelColor { get; set; } = new(0.7f, 0.7f, 0.7f); // #B2B2B2FF
 
     [JsonProperty("healthBarBGColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color HealthBarBGColor { get; set; } = new(0.2f, 0.1f, 0.1f); // #331A1AFF
 
     [JsonProperty("healthBarFGColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color HealthBarFGColor { get; set; } = new(0.212f, 0.459f, 0.184f); // #36752FFF
 
     [JsonProperty("healthBarFGDamageColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color HealthBarFGDamageColor { get; set; } = new(0.6f, 0.6f, 0.6f); // #999999FF
 
     [JsonProperty("healthBarLowValueFGColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color HealthBarLowValueFGColor { get; set; } = new(0.485f, 0.189f, 0.104f); // #7C301BFF
 
     [JsonProperty("healthBarTextColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color HealthBarTextColor { get; set; } = new(0.8f, 0.8f, 0.8f); // #CCCCCCFF
 
     [JsonProperty("healthBarLowValueTextColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color HealthBarLowValueTextColor { get; set; } = new(0.872f, 0.371f, 0.335f); // #DE5F55FF
 
     [JsonProperty("rarityCrudeColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color RarityCrudeColor { get; set; } = new(0.62f, 0.62f, 0.62f); // #9E9E9EFF
 
     [JsonProperty("rarityNormalColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color RarityNormalColor { get; set; } = new(0.9028f, 0.8804f, 0.8354f); // #E6E1D5FF
 
     [JsonProperty("raritySuperiorColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color RaritySuperiorColor { get; set; } = new(0.412f, 0.797f, 0.526f); // #69CB86FF
 
     [JsonProperty("rarityLegendaryColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color RarityLegendaryColor { get; set; } = new(0.83f, 0.762f, 0.411f); // #D4C269FF
 
     [JsonProperty("rarityMythicalColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color RarityMythicalColor { get; set; } = new(0.888f, 0.525f, 0.364f); // #E2865DFF
 
     [JsonProperty("rarityArtifactColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color RarityArtifactColor { get; set; } = new(0.64f, 0.614f, 0.891f); // #A39DE3FF
 
     [JsonProperty("fressnessValueColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color FressnessValueColor { get; set; } = new(0.375f, 0.738f, 0.626f); // #60BCA0FF
 
     [JsonProperty("fressnessLowValueColor", DefaultValueHandling = DefaultValueHandling.Include)]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(ModColorConverter))]
     public Color FressnessLowValueColor { get; set; } = new(0.822f, 0.431f, 0.395f); // #D26E65FF
 }
 
@@ -476,32 +459,5 @@ public class ModConfigHoverGuideStyleThing : ModConfigBase<ModConfigHoverGuideSt
             DisplayLockLv = true,
             UseRarityColor = true,
         };
-    }
-}
-
-public class ColorConverter : JsonConverter<Color?>
-{
-    public override bool CanWrite => true;
-
-    public override Color? ReadJson(JsonReader reader, Type objectType, Color? existingValue, bool hasExistingValue, JsonSerializer serializer)
-    {
-        if (reader.Value is null && Nullable.GetUnderlyingType(objectType) is not null)
-        {
-            return null;
-        }
-        if (reader.Value is not string colorString)
-        {
-            throw new JsonSerializationException($"Unexpected JSON format in ColorConverter: {reader.Value}");
-        }
-        if (!ColorUtility.TryParseHtmlString(colorString, out var color))
-        {
-            throw new JsonSerializationException($"Unexpected color format in ColorConverter: {colorString}");
-        }
-        return color;
-    }
-
-    public override void WriteJson(JsonWriter writer, Color? value, JsonSerializer serializer)
-    {
-        writer.WriteValue(value is Color color ? $"#{ColorUtility.ToHtmlStringRGBA(color)}" : null);
     }
 }

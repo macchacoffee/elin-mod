@@ -9,14 +9,14 @@ namespace AddPalmiaTimesNewsToLog;
 public static class PluginInfo
 {
     public const string Guid = "maccha-coffee.add-palmia-times-news-to-log";
-    public const string Name = "Add Palmia Times News ToLog";
+    public const string Name = "Add Palmia Times News To Log";
     public const string Version = "1.0.0";
 }
 
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]
 internal class Plugin : BaseUnityPlugin
 {
-    internal static Plugin? Instance;
+    internal static Plugin? Instance { get; private set; }
 
     private void Awake()
     {
@@ -26,7 +26,7 @@ internal class Plugin : BaseUnityPlugin
 
     private void Update()
     {
-        if (EClass.core.IsGameStarted)
+        if (!EClass.core.IsGameStarted)
         {
             return;
         }

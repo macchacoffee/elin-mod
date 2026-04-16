@@ -22,7 +22,7 @@ public abstract class ModConfigBase<T> where T : ModConfigBase<T>
     }
 } 
 
-public class ColorConverter : JsonConverter<Color?>
+public class ModColorConverter : JsonConverter<Color?>
 {
     public override bool CanWrite => true;
 

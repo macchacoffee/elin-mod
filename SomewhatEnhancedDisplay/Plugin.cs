@@ -16,7 +16,7 @@ public static class PluginInfo
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]
 internal class Plugin : BaseUnityPlugin
 {
-    internal static Plugin? Instance;
+    internal static Plugin? Instance { get; private set; }
 
     private void Awake()
     {

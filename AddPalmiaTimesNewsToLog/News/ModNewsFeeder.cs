@@ -6,18 +6,29 @@ using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
+using HarmonyLib;
 
 namespace AddPalmiaTimesNewsToLog.News;
 
 public class ModNewsFeeder
 {
+    private enum RunningState
+    {
+        Stopped = 0,
+        WaitingInterval,
+        WaitingFetchRequest,
+        FetchRequestAccepted,
+    }
+
     private List<NewsList.Item> NewsItems { get; set; } = [];
     private List<ModChatLog> ChatItems { get; set; } = [];
+    private int? Seed { get; set; }
 
     private CancellationTokenSource Cancellation { get; }= new();
 
-    public bool IsRunning { get; private set; } = false;
-    public bool IsNewsReady { get; set; } = false;
+    private RunningState State { get; set; } = RunningState.Stopped;
+    private bool IsNewsReady { get; set; } = false;
+    public bool IsRunning => State != RunningState.Stopped;
 
     private static ModConfig Config => Mod.Config;
 
@@ -27,18 +38,25 @@ public class ModNewsFeeder
         {
             return [];
         }
-       
-        return [
-            .. NewsItems.Copy().Shuffle().Take(Config.News.MaxCount).Select(i => i.content),
+
+       return [
+            .. PopRandownNewItems().Select(i => i.content),
             .. ChatItems.Copy().Shuffle().Where(IsValidChat).Take(Config.Chat.MaxCount).Select(i => i.Msg),
         ];
+    }
+
+    private List<NewsList.Item> PopRandownNewItems()
+    {
+        var items = NewsItems.Copy().Shuffle();
+        var newsItems = items.Take(Config.News.MaxCount).ToList();
+        NewsItems = [.. items.Skip(newsItems.Count)];
+        return newsItems;
     }
 
     private static bool IsValidChat(ModChatLog chat)
     {
         return chat.Cat switch
         {
-            ChatCategory.Test => false,
             ChatCategory.Dead => Mod.Config.Chat.FetchDead,
             ChatCategory.Wish => Mod.Config.Chat.FetchWish,
             ChatCategory.Marriage => Mod.Config.Chat.FetchMarriage,
@@ -46,13 +64,23 @@ public class ModNewsFeeder
         };
     }
 
+    public void InvalidateNews()
+    {
+        IsNewsReady = false;
+    }
+
     public async void StartFetching()
     {
-        IsRunning = true;
         var token = Cancellation.Token;
+        State = RunningState.WaitingInterval;
         while (IsRunning)
         {
+            // 特定の時間待機し、取得リクエストがあるまでさらに待機を続ける
+            // (無操作時などにおいて、不必要にデータを取得しないようにするため)
+            State = RunningState.WaitingInterval;
             await UniTask.Delay(Config.FrequencyMinute * 60 * 1000, cancellationToken: token);
+            State = RunningState.WaitingFetchRequest;
+            await UniTask.WaitUntil(() => State == RunningState.FetchRequestAccepted, cancellationToken: token);
             await FetchAsync(token);
         }
     }
@@ -60,7 +88,16 @@ public class ModNewsFeeder
     public async void StopFetching()
     {
         Cancellation.Cancel();
-        IsRunning = false;
+        State = RunningState.Stopped;
+    }
+
+    public void RequestFetch()
+    {
+        if (State != RunningState.WaitingFetchRequest)
+        {
+            return;
+        }
+        State = RunningState.FetchRequestAccepted;
     }
 
     private async UniTask FetchAsync(CancellationToken token)
@@ -68,22 +105,35 @@ public class ModNewsFeeder
         token.ThrowIfCancellationRequested();
         IsNewsReady = false;
         token.ThrowIfCancellationRequested();
-        NewsItems = NewsList.GetNews(ELayer.world.dayData.seed);
+        NewsItems = FetchNews();
         token.ThrowIfCancellationRequested();
-        ChatItems = await FetchChatAsync(Lang.langCode);
+        ChatItems = await FetchChatAsync(token, Lang.langCode);
         IsNewsReady = true;
     }
 
-    private async UniTask<List<ModChatLog>> FetchChatAsync(string idLang)
+    private List<NewsList.Item> FetchNews()
+    {
+        var daySeed = ELayer.world.dayData.seed;
+        if (Seed is not null && Seed == daySeed)
+        {
+            return NewsItems;
+        }
+
+        Seed = daySeed;
+        return NewsList.GetNews(daySeed);
+    }
+
+    private async UniTask<List<ModChatLog>> FetchChatAsync(CancellationToken token, string idLang)
     {
         string uri = $"{Net.urlChat}logs/all_{idLang}.json";
         using var request = UnityWebRequest.Get(uri);
-        await request.SendWebRequest();
+        await request.SendWebRequest().ToUniTask(cancellationToken: token);
         if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
         {
             return [];
         }
 
+        Plugin.LogInfo(request.downloadHandler.text);
         var chatList = JsonConvert.DeserializeObject<List<ModChatLog>>(request.downloadHandler.text);
         chatList.Reverse();
         foreach (var chat in chatList)

@@ -1,4 +1,5 @@
 using System.Reflection;
+using AddPalmiaTimesNewsToLog.Config;
 using HarmonyLib;
 using ModUtility.Patch;
 
@@ -24,16 +25,31 @@ public static class CharaPatch
             return;
         }
 
+        Mod.NewsFeeder.RequestFetch();
         var newsList = Mod.NewsFeeder.GetRandomNews();
         if (newsList.Count == 0)
         {
             return;
         }
 
-        Mod.NewsFeeder.IsNewsReady = false;
+        Mod.NewsFeeder.InvalidateNews();
         foreach (var news in newsList)
         {
-            Msg.Say(news.TagColor(Mod.Config.LogColor));
+            LogNews(news);
+        }
+    }
+
+    private static void LogNews(string news)
+    {
+        switch (Mod.Config.LogTarget)
+        {
+            case ModLogTarget.Log:
+                Msg.Say(news.TagColor(Mod.Config.LogColor));
+                break;
+            case ModLogTarget.Feed:
+                // TODO 1件ずつ表示する
+                WidgetFeed.Instance?.Nerun(news);
+                break;
         }
     }
 }
