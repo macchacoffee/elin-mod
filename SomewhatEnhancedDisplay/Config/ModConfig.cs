@@ -166,6 +166,10 @@ public class ModConfigHoverGuideColorSet : ModConfigBase<ModConfigHoverGuide>
     [JsonConverter(typeof(ModColorConverter))]
     public Color HealthBarFGDamageColor { get; set; } = new(0.6f, 0.6f, 0.6f); // #999999FF
 
+    [JsonProperty("healthBarFGRestoreColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonConverter(typeof(ModColorConverter))]
+    public Color HealthBarFGRestoreColor { get; set; } = new(0.416f, 0.612f, 0.203f); // #6A9C34FF
+
     [JsonProperty("healthBarLowValueFGColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ModColorConverter))]
     public Color HealthBarLowValueFGColor { get; set; } = new(0.485f, 0.189f, 0.104f); // #7C301BFF

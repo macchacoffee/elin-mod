@@ -161,6 +161,11 @@ public class ModLayerConfigTabGenral : YKLayout<object>
                 OnChanged: color => ColorConfig.HealthBarFGColor = color
             ),
             new(
+                Label: ModConsts.SourceId.HealthBarFGRestoreColor,
+                Init: ColorConfig.HealthBarFGRestoreColor,
+                OnChanged: color => ColorConfig.HealthBarFGRestoreColor = color
+            ),
+            new(
                 Label: ModConsts.SourceId.HealthBarFGDamageColor,
                 Init: ColorConfig.HealthBarFGDamageColor,
                 OnChanged: color => ColorConfig.HealthBarFGDamageColor = color
