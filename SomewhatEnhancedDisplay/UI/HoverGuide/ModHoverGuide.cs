@@ -1,7 +1,6 @@
 using System;
 using SomewhatEnhancedDisplay.Config;
 using SomewhatEnhancedDisplay.Extensions;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -10,8 +10,9 @@ public static class ModConsts
         public static readonly string HoverGuidePadding = Prefixed("HoverGuidePadding");
         public static readonly string HealthBar = Prefixed("HealthBar");
         public static readonly string HealthBarBG = Prefixed("HealthBarBG");
-        public static readonly string HealthBarFGDamege = Prefixed("HealthBarBG");
-        public static readonly string HealthBarFG = Prefixed("HealthBarBG");
+        public static readonly string HealthBarFG = Prefixed("HealthBarFG1");
+        public static readonly string HealthBarFGDamage = Prefixed("HealthBarFGDamage");
+        public static readonly string HealthBarFGRestore = Prefixed("HealthBarFGRestore");
         public static readonly string HealthBarValue = Prefixed("HealthBarValue");
         public static readonly string Config = Prefixed("Config");
         public static readonly string ConfigGenaral = Prefixed("ConfigGenaral");
@@ -61,7 +62,6 @@ public static class ModConsts
         public static readonly string StatsValue = Prefixed("statsValue");
         public static readonly string EnableMimicry = Prefixed("enableMimicry");
         public static readonly string UseRarityColor = Prefixed("useRarityColor");
-
         public static readonly string Width = Prefixed("width");
         public static readonly string DisplayValue = Prefixed("displayValue");
         public static readonly string UseAnimation = Prefixed("useAnimation");
@@ -105,6 +105,7 @@ public static class ModConsts
         public static readonly string NoneResistLabelColor = Prefixed("noneResistLabelColor");
         public static readonly string HealthBarBGColor = Prefixed("healthBarBGColor");
         public static readonly string HealthBarFGColor = Prefixed("healthBarFGColor");
+        public static readonly string HealthBarFGRestoreColor = Prefixed("healthBarFGRestoreColor");
         public static readonly string HealthBarFGDamageColor = Prefixed("healthBarFGDamageColor");
         public static readonly string HealthBarLowValueFGColor = Prefixed("healthBarLowValueFGColor");
         public static readonly string HealthBarTextColor = Prefixed("healthBarTextColor");
