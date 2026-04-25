@@ -98,9 +98,6 @@ public class ModHealthBar
 
         ValueText.text = $"{pctText}%".TagColor(pctColor);
 
-        // FGImage        増加: 低速, 低下: 一瞬
-        // FGDamageImage  増加: 一瞬, 低下: 低速
-        // FGRestoreImage 増加: 一瞬, 低下: 一瞬
         // 設定で有効な場合は体力バーの増減をアニメーションで表現する
         if (!StyleConfig.HealthBar.UseAnimation
             || !Layout.IsActive()
@@ -134,6 +131,7 @@ public class ModHealthBar
         {
             return;
         }
+        var hasOldTween = FGImageTween?.IsPlaying() ?? false;
         FGImageTween?.Kill();
         if (ratioDelta < 0)
         {
@@ -147,13 +145,13 @@ public class ModHealthBar
                 FGImage
                 .DOFillAmount(valueRatio, duration)
                 .SetLink(LayoutObj)
-                .SetDelay(0.1f)
+                .SetDelay(hasOldTween ? 0 : 0.1f)
                 .SetEase(Ease.Linear))
             .Join(
                 FGImage
                 .DOColor(barColor, duration)
                 .SetLink(LayoutObj)
-                .SetDelay(0.1f)
+                .SetDelay(hasOldTween ? 0 : 0.1f)
                 .SetEase(Ease.Linear))
         .OnStart(() =>
         {
@@ -163,7 +161,7 @@ public class ModHealthBar
             }
             FGRestoreImage.color = ColorConfig.HealthBarFGRestoreColor;
         })
-        .OnKill(() =>
+        .OnComplete(() =>
         {
             FGRestoreImage.color = ColorConfig.HealthBarBGColor;
         });
@@ -176,6 +174,7 @@ public class ModHealthBar
         {
             return;
         }
+        var hasOldTween = FGDamageImageTween?.IsPlaying() ?? false;
         FGDamageImageTween?.Kill();
         if (ratioDelta > 0)
         {
@@ -186,7 +185,7 @@ public class ModHealthBar
         FGDamageImageTween = FGDamageImage
             .DOFillAmount(valueRatio, duration)
             .SetLink(LayoutObj)
-            .SetDelay(0.1f)
+            .SetDelay(hasOldTween ? 0 : 0.1f)
             .SetEase(Ease.Linear)
             .OnStart(() =>
             {
@@ -197,7 +196,7 @@ public class ModHealthBar
                 }
                 FGDamageImage.color = ColorConfig.HealthBarFGDamageColor;
             })
-            .OnKill(() =>
+            .OnComplete(() =>
             {
                 FGDamageImage.color = ColorConfig.HealthBarBGColor;
             });
