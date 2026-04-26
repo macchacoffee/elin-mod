@@ -264,10 +264,7 @@ public static class WidgetMouseoverPatch
             CodeInstruction.Call(() => ShowHoverGuide(default!, default!, default!, default!, default!, default!, default!))
         );
 
-        var insts = matcher.InstructionEnumeration();
-        insts.Do(Plugin.LogInfo);
-        return insts;
-        // return matcher.InstructionEnumeration();
+        return matcher.InstructionEnumeration();
     }
 
 
@@ -316,10 +313,11 @@ public static class WidgetMouseoverPatch
         Card? lockedCard = null;
         if (Config.LockTarget && !LockedCard.TryGetTarget(out lockedCard))
         {
-            if (newCard is not null)
+            if (newCard is Chara chara)
             {
-                LockedCard.SetTarget(newCard);
-                lockedCard = newCard;
+                // Cardであれば固定できるが、実用性を考慮してCharaのみ固定可能とする
+                LockedCard.SetTarget(chara);
+                lockedCard = chara;
             }
         }
         else if (!Config.LockTarget || (lockedCard is Card card && !card.ExistsOnMap))
@@ -345,31 +343,28 @@ public static class WidgetMouseoverPatch
             return false;
         }
 
-        var targetExtra = new ModHoverGuideTarget(card.GetHoverText(), card.GetHoverText2(), card);
-        HoverGuide!.Show(widget, null, null, targetExtra);
+        var target = new ModHoverGuideTarget(card.GetHoverText(), card.GetHoverText2(), card);
+        HoverGuide!.Show(widget, target, null);
 
         return true;
     }
 
     private static void ShowHoverGuide(WidgetMouseover widget, string? text, string? text2, string? text3, string? text4, Card? card1, Card? card2)
     {
-        var cardExtra = GetOrUpdateLockedCard(card1);
+        var lockedCard = GetOrUpdateLockedCard(card1);
 
         var target1 = new ModHoverGuideTarget(text, text2, card1);
         var target2 = new ModHoverGuideTarget(text3, text4, card2);
-        var targetExtra = new ModHoverGuideTarget(cardExtra?.GetHoverText(), cardExtra?.GetHoverText2(), cardExtra);
 
-        if (cardExtra == card1)
+        if (lockedCard is not null)
         {
-            targetExtra = target1;
-            target1 = null;
-        }
-        if (cardExtra == card2)
-        {
-            targetExtra = target2;
+            if (lockedCard != card1)
+            {
+                target1 = new ModHoverGuideTarget(lockedCard?.GetHoverText(), lockedCard?.GetHoverText2(), lockedCard);
+            }
             target2 = null;
         }
 
-        HoverGuide!.Show(widget, target1, target2, targetExtra);
+        HoverGuide!.Show(widget, target1, target2);
     }
 }

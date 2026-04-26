@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Text.RegularExpressions;
 using HarmonyLib;
 using ModUtility.Patch;
 using SomewhatEnhancedDisplay.Config;
@@ -19,6 +20,9 @@ public static class CharaPatch
     {
         return PatchTarget.IsPatchable(original);
     }
+
+    // タグのフォントサイズ値にマッチする正規表現
+    private static readonly Regex TagSizeRegex = new(@"(?<=<size=)(\d+)", RegexOptions.Compiled);
 
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
     private static ModConfigHoverGuideStyleChara StyleConfig => Config.CurrentStyle.Chara;
@@ -62,6 +66,10 @@ public static class CharaPatch
         // ...
         // string text = ((mimicry != null) ? mimicry.GetName(NameStyle.Full) : base.Name);
         // ...
+        // text2 += "lowerGround".lang();
+        // ...
+        // text2 += "higherGround".lang();
+        // ...
         // return text + text2 + s;
         // ...
         // .TagSize(...)
@@ -71,7 +79,11 @@ public static class CharaPatch
         // ...
         // string text = ((mimicry != null && CharaPatch.IsMimicryEnabled()) ? mimicry.GetName(NameStyle.Full) : base.Name);
         // ...
-        // return BuildHoverText(text, text2, s, this);
+        // text2 += CharaPatch.ReplaceReplaceTagSizeComputed("lowerGround".lang());
+        // ...
+        // text2 += CharaPatch.ReplaceReplaceTagSizeComputed("higherGround".lang());
+        // ...
+        // return CharaPatch.BuildHoverText(text, text2, s, this);
         // ...
         // .TagSize(CharaPatch.ComputeFontSize(...))
         var matcher = new CodeMatcher(instructions, generator);
@@ -116,6 +128,30 @@ public static class CharaPatch
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Brfalse, LabelMod1),
             CodeInstruction.Call(() => IsMimicryEnabled())
+        );
+
+        // ldstr "lowerGround"
+        // call static string ClassExtension::lang(string s)
+        matcher.MatchEndForward(
+            new CodeMatch(OpCodes.Ldstr, "lowerGround"),
+            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.lang), [typeof(string)]))
+        );
+        // langテキストのタグで指定されたフォントサイズを置き換える
+        matcher.Advance(1);
+        matcher.InsertAndAdvance(
+            CodeInstruction.Call(() => ReplaceTagSizeComputed(default!))
+        );
+
+        // ldstr "higherGround"
+        // call static string ClassExtension::lang(string s)
+        matcher.MatchEndForward(
+            new CodeMatch(OpCodes.Ldstr, "higherGround"),
+            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.lang), [typeof(string)]))
+        );
+        // langテキストのタグで指定されたフォントサイズを置き換える
+        matcher.Advance(1);
+        matcher.InsertAndAdvance(
+            CodeInstruction.Call(() => ReplaceTagSizeComputed(default!))
         );
 
         // call static string string::Concat(string str0, string str1, string str2)
@@ -309,6 +345,11 @@ public static class CharaPatch
     private static bool IsMimicryEnabled()
     {
         return StyleConfig.EnableMimicry;
+    }
+
+    private static string ReplaceTagSizeComputed(string text)
+    {
+        return TagSizeRegex.Replace(text, m => ComputeFontSize(int.Parse(m.Value)).ToString());
     }
 
     private static int ComputeFontSize(int fontSize)
