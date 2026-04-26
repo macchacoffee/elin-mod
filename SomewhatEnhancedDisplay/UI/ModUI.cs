@@ -21,5 +21,19 @@ public static class ModUI
             SE.ClickGeneral();
             return;
         }
+
+        key = new KeyboardShortcut(KeyCode.L);
+        if (key.IsDown())
+        {
+            if (EClass.ui.GetLayer<HoverGuide.ModLayerConfig>() is not null)
+            {
+                // Modのホバーガイド設定画面が開いている時は処理を中断する
+                return;
+            }
+
+            Mod.Config.HoverGuide.LockTarget = !Mod.Config.HoverGuide.LockTarget;
+            SE.SelectHotitem();
+            return;
+        }
     }
 }
