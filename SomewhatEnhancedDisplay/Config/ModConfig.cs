@@ -79,6 +79,9 @@ public class ModConfigHoverGuide : ModConfigBase<ModConfigHoverGuide>
         }
     }
 
+    [JsonIgnore]
+    public bool LockTarget { get; set; } = false;
+
     public void AdvanceStyle()
     {
         var index = CurrentStyleIndex + 1;

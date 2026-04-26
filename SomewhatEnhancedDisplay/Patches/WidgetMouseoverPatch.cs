@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using ModUtility.Patch;
+using SomewhatEnhancedDisplay.Config;
 using SomewhatEnhancedDisplay.UI.HoverGuide;
 using UnityEngine;
 
@@ -21,6 +22,9 @@ public static class WidgetMouseoverPatch
     }
 
     private static ModHoverGuide? HoverGuide { get; set; }
+    private static WeakReference<Card?> LockedCard { get; set; } = new(null);
+
+    private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(WidgetMouseover.OnActivate), [])]
@@ -34,6 +38,17 @@ public static class WidgetMouseoverPatch
     private static IEnumerable<CodeInstruction> Refresh_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
         // // 変更前
+        // if (!mouseTarget.hasTargetChanged && timer < 0.1f)
+        // {
+        //     return;
+        // }
+        // ...
+        // if (((!flag && mouseTarget.target == null) || (ActionMode.IsAdv && Input.GetMouseButton(0))) && roster == null)
+        // {
+        //     Hide();
+        //     return;
+        // }
+        // ...
         // if (flag)
         // {
         // ...
@@ -60,6 +75,14 @@ public static class WidgetMouseoverPatch
         // string? localText4;
         // Card? localTarget1;
         // Card? localTarget2;
+        // if (((!flag && mouseTarget.target == null) || (ActionMode.IsAdv && Input.GetMouseButton(0))) && roster == null)
+        // {
+        //     if (!WidgetMouseoverPatch.ShowHoverGuideForLockedTarget(this)) {
+        //         Hide();
+        //     }
+        //     return;
+        // }
+        // ...
         // if (flag)
         // {
         // ...
@@ -92,6 +115,25 @@ public static class WidgetMouseoverPatch
         var localText4 = generator.DeclareLocal(typeof(string));
         var localTarget1 = generator.DeclareLocal(typeof(Card));
         var localTarget2 = generator.DeclareLocal(typeof(Card));
+
+        // ldarg.0 NULL
+        // ldc.i4.0 NULL
+        // call void WidgetMouseover::Hide(bool immediate)
+        // ret NULL
+        matcher.MatchStartForward(
+            new CodeMatch(OpCodes.Ldarg_0),
+            new CodeMatch(OpCodes.Ldc_I4_0),
+            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(WidgetMouseover), nameof(WidgetMouseover.Hide), [typeof(bool)])),
+            new CodeMatch(OpCodes.Ret)
+        );
+        // 固定ターゲットを表示する場合の遷移先となるLabelMod1を生成する
+        matcher.CreateLabelWithOffsets(3, out var LabelMod1);
+        // 固定ターゲットの表示を試行し、表示する場合はHide()の呼び出しをスキップする処理を追加する
+        matcher.InsertAndAdvance(
+            new CodeInstruction(OpCodes.Ldarg_0),
+            CodeInstruction.Call(() => ShowHoverGuideForLockedTarget(default!)),
+            new CodeInstruction(OpCodes.Brtrue, LabelMod1)
+        );
 
         // ldfld Chara Chara::ride
         // callvirt virtual string Card::GetHoverText2()
@@ -222,7 +264,10 @@ public static class WidgetMouseoverPatch
             CodeInstruction.Call(() => ShowHoverGuide(default!, default!, default!, default!, default!, default!, default!))
         );
 
-        return matcher.InstructionEnumeration();
+        var insts = matcher.InstructionEnumeration();
+        insts.Do(Plugin.LogInfo);
+        return insts;
+        // return matcher.InstructionEnumeration();
     }
 
 
@@ -257,11 +302,74 @@ public static class WidgetMouseoverPatch
     [HarmonyPatch(nameof(WidgetMouseover.OnManagerActivate), [])]
     private static void OnManagerActivate_Postfix(WidgetMouseover __instance)
     {
+        UnlockLockedCard();
         HoverGuide!.ShowForManager(__instance);
     }
 
-    private static void ShowHoverGuide(WidgetMouseover widget, string? text, string? text2, string? text3, string? text4, Card? target1, Card? target2)
+    private static Card? GetOrUpdateLockedCard()
     {
-        HoverGuide!.Show(widget, text, text2, text3, text4, target1, target2);
+        return GetOrUpdateLockedCard(null);
+    }
+
+    private static Card? GetOrUpdateLockedCard(Card? newCard)
+    {
+        Card? lockedCard = null;
+        if (Config.LockTarget && !LockedCard.TryGetTarget(out lockedCard))
+        {
+            if (newCard is not null)
+            {
+                LockedCard.SetTarget(newCard);
+                lockedCard = newCard;
+            }
+        }
+        else if (!Config.LockTarget || (lockedCard is Card card && !card.ExistsOnMap))
+        {
+            UnlockLockedCard();
+            lockedCard = null;
+        }
+
+        return lockedCard;
+    }
+
+    private static void UnlockLockedCard()
+    {
+            LockedCard.SetTarget(null);
+            Config.LockTarget = false;
+    }
+
+
+    private static bool ShowHoverGuideForLockedTarget(WidgetMouseover widget)
+    {
+        if (GetOrUpdateLockedCard() is not Card card)
+        {
+            return false;
+        }
+
+        var targetExtra = new ModHoverGuideTarget(card.GetHoverText(), card.GetHoverText2(), card);
+        HoverGuide!.Show(widget, null, null, targetExtra);
+
+        return true;
+    }
+
+    private static void ShowHoverGuide(WidgetMouseover widget, string? text, string? text2, string? text3, string? text4, Card? card1, Card? card2)
+    {
+        var cardExtra = GetOrUpdateLockedCard(card1);
+
+        var target1 = new ModHoverGuideTarget(text, text2, card1);
+        var target2 = new ModHoverGuideTarget(text3, text4, card2);
+        var targetExtra = new ModHoverGuideTarget(cardExtra?.GetHoverText(), cardExtra?.GetHoverText2(), cardExtra);
+
+        if (cardExtra == card1)
+        {
+            targetExtra = target1;
+            target1 = null;
+        }
+        if (cardExtra == card2)
+        {
+            targetExtra = target2;
+            target2 = null;
+        }
+
+        HoverGuide!.Show(widget, target1, target2, targetExtra);
     }
 }

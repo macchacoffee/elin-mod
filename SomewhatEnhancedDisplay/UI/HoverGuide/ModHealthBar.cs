@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using SomewhatEnhancedDisplay.Extensions;
 using SomewhatEnhancedDisplay.Config;
 using ModUtility.Util;
-using System.Net.Sockets;
 
 namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
@@ -14,6 +13,7 @@ public class ModHealthBar
     private static readonly float Height = 24;
     private static readonly float BarHeight = 6;
     private static readonly int ValueFontSize = 13;
+    private static readonly float TweenDelay = 0.1f;
     private GameObject LayoutObj { get; }
     public LayoutElement Layout { get; }
     private UIImage BGImage { get; }
@@ -23,8 +23,26 @@ public class ModHealthBar
     private UIText ValueText { get; }
     private float ValueRatio { get; set; }
     private WeakReference<Chara?> Target { get; }
-    private Tween? FGImageTween { get; set; }
-    private Tween? FGDamageImageTween { get; set; }
+    private Tween? FGRestoreTween { get; set; }
+    private Tween? FGDamageTween { get; set; }
+
+    public bool Enabled
+    {
+        get
+        {
+            return Layout.enabled;
+        }
+        set
+        {
+            Layout.enabled = value;
+            BGImage.enabled = value;
+            FGImage.enabled = value;
+            FGDamageImage.enabled = value;
+            FGRestoreImage.enabled = value;
+            ValueText.enabled = value && StyleConfig.HealthBar.DisplayValue;
+            UpdateSize(value);
+        }
+    }
 
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
     private static ModConfigHoverGuideColorSet ColorConfig => Config.ColorSet;
@@ -89,14 +107,8 @@ public class ModHealthBar
     public void Update(Chara chara)
     {
         var ratio = chara.HealthRatio;
-        // 0%または100%以上の場合は小数点以下なし、それ以外の場合は小数第1位まで表示する
-        // 現在HPが最大HPよりも1でも低ければ100%とは表示しないようにする
-        var pct = ModMath.Ceiling((ratio < 1 ? Math.Min(ratio, 0.999f) : ratio) * 100, 1);
         var pctColor = Color.Lerp(ColorConfig.HealthBarLowValueTextColor, ColorConfig.HealthBarTextColor, ratio);
         var barColor = Color.Lerp(ColorConfig.HealthBarLowValueFGColor, ColorConfig.HealthBarFGColor, ratio);
-        var pctText = pct == 0 || pct >= 100 ? $"{pct:0}" : $"{pct:0.0}";
-
-        ValueText.text = $"{pctText}%".TagColor(pctColor);
 
         // 設定で有効な場合は体力バーの増減をアニメーションで表現する
         if (!StyleConfig.HealthBar.UseAnimation
@@ -105,8 +117,10 @@ public class ModHealthBar
         {
             // 対象が変わった場合も体力の割合が変わりうるため、
             // 体力バーのアニメーションを行わないようにする
-            FGImageTween?.Kill(true);
-            FGDamageImageTween?.Kill(true);
+            FGRestoreTween?.Kill(true);
+            FGDamageTween?.Kill(true);
+            ValueText.text = GetValueText(ratio).TagColor(pctColor);
+            ValueText.color = pctColor;
             FGDamageImage.fillAmount = ratio;
             FGRestoreImage.fillAmount = ratio;
             FGImage.fillAmount = ratio;
@@ -115,49 +129,76 @@ public class ModHealthBar
             FGImage.color = barColor;
         } else if (ValueRatio != ratio)
         {
-            UpdateFGImage(ratio, barColor);
-            UpdateFGDamageImage(ratio, barColor);
-            UpdateFGRestoreImage(ratio);
+            UpdateRestore(ratio, barColor, pctColor);
+            UpdateDamage(ratio, barColor, pctColor);
         }
         ValueRatio = ratio;
 
         Target.SetTarget(chara);
     }
 
-    private void UpdateFGImage(float valueRatio, Color barColor)
+    private static string GetValueText(float ratio)
     {
+        // 0%または100%以上の場合は小数点以下なし、それ以外の場合は小数第1位まで表示する
+        // 現在HPが最大HPよりも1でも低ければ100%とは表示しないようにする
+        var pct = ModMath.Ceiling((ratio < 1 ? Math.Min(ratio, 0.999f) : ratio) * 100, 1);
+        var pctText = pct == 0 || pct >= 100 ? $"{pct:0}" : $"{pct:0.0}";
+        return $"{pctText}%";
+    }
+
+    private void UpdateRestore(float valueRatio, Color barColor, Color textColor)
+    {
+        float ratio1 = Math.Min(1, valueRatio);
+        FGRestoreImage.fillAmount = ratio1;
+
         var ratioDelta = valueRatio - FGImage.fillAmount;
         if (ratioDelta == 0)
         {
             return;
         }
-        var hasOldTween = FGImageTween?.IsPlaying() ?? false;
-        FGImageTween?.Kill();
+        var hasOldTween = FGRestoreTween?.IsPlaying() ?? false;
+        FGRestoreTween?.Kill();
         if (ratioDelta < 0)
         {
             return;
         }
 
-        var duration = Math.Abs(ratioDelta) * 1.5f;
-        FGImageTween = DOTween.Sequence()
+        var barRatio = FGImage.fillAmount;
+        var duration = Math.Abs(ratio1 - barRatio) * 1.5f;
+        FGRestoreTween = DOTween.Sequence()
             .SetLink(LayoutObj)
             .Join(
                 FGImage
-                .DOFillAmount(valueRatio, duration)
+                .DOFillAmount(ratio1, duration)
                 .SetLink(LayoutObj)
-                .SetDelay(hasOldTween ? 0 : 0.1f)
+                .SetDelay(hasOldTween ? 0 : TweenDelay)
                 .SetEase(Ease.Linear))
             .Join(
                 FGImage
                 .DOColor(barColor, duration)
                 .SetLink(LayoutObj)
-                .SetDelay(hasOldTween ? 0 : 0.1f)
+                .SetDelay(hasOldTween ? 0 : TweenDelay)
+                .SetEase(Ease.Linear))
+            .Join(
+                DOTween.To(
+                    () => barRatio,
+                    value => ValueText.text = GetValueText(value),
+                    valueRatio,
+                    duration)
+                .SetLink(LayoutObj)
+                .SetDelay(hasOldTween ? 0 : TweenDelay)
+                .SetEase(Ease.Linear))
+            .Join(
+                ValueText
+                .DOColor(textColor, duration)
+                .SetLink(LayoutObj)
+                .SetDelay(hasOldTween ? 0 : TweenDelay)
                 .SetEase(Ease.Linear))
         .OnStart(() =>
         {
             if (valueRatio > FGDamageImage.fillAmount)
             {
-                FGDamageImage.fillAmount = valueRatio;
+                FGDamageImage.fillAmount = ratio1;
             }
             FGRestoreImage.color = ColorConfig.HealthBarFGRestoreColor;
         })
@@ -167,32 +208,36 @@ public class ModHealthBar
         });
     }
 
-    private void UpdateFGDamageImage(float valueRatio, Color barColor)
+    private void UpdateDamage(float valueRatio, Color barColor, Color textColor)
     {
+        float ratio1 = Math.Min(1, valueRatio);
         var ratioDelta = valueRatio - FGDamageImage.fillAmount;
         if (ratioDelta == 0)
         {
             return;
         }
-        var hasOldTween = FGDamageImageTween?.IsPlaying() ?? false;
-        FGDamageImageTween?.Kill();
+        var hasOldTween = FGDamageTween?.IsPlaying() ?? false;
+        FGDamageTween?.Kill();
         if (ratioDelta > 0)
         {
             return;
         }
 
-        var duration = Math.Abs(ratioDelta) * 3;
-        FGDamageImageTween = FGDamageImage
-            .DOFillAmount(valueRatio, duration)
+        var barRatio = FGDamageImage.fillAmount;
+        var duration = Math.Abs(ratio1 - barRatio) * 3;
+        FGDamageTween = FGDamageImage
+            .DOFillAmount(ratio1, duration)
             .SetLink(LayoutObj)
-            .SetDelay(hasOldTween ? 0 : 0.1f)
+            .SetDelay(hasOldTween ? 0 : TweenDelay)
             .SetEase(Ease.Linear)
             .OnStart(() =>
             {
                 if (valueRatio < FGImage.fillAmount)
                 {
-                    FGImage.fillAmount = valueRatio;
+                    FGImage.fillAmount = ratio1;
                     FGImage.color = barColor;
+                    ValueText.text = GetValueText(valueRatio);
+                    ValueText.color = textColor;
                 }
                 FGDamageImage.color = ColorConfig.HealthBarFGDamageColor;
             })
@@ -200,29 +245,6 @@ public class ModHealthBar
             {
                 FGDamageImage.color = ColorConfig.HealthBarBGColor;
             });
-    }
-
-    private void UpdateFGRestoreImage(float valueRatio)
-    {
-        FGRestoreImage.fillAmount = valueRatio;
-    }
-
-    public bool Enabled
-    {
-        get
-        {
-            return Layout.enabled;
-        }
-        set
-        {
-            Layout.enabled = value;
-            BGImage.enabled = value;
-            FGImage.enabled = value;
-            FGDamageImage.enabled = value;
-            FGRestoreImage.enabled = value;
-            ValueText.enabled = value && StyleConfig.HealthBar.DisplayValue;
-            UpdateSize(value);
-        }
     }
 
     private void UpdateSize(bool enabled)
