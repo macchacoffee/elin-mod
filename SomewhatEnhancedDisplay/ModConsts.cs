@@ -7,10 +7,11 @@ public static class ModConsts
         private const string PREFIX = "MCSED";
         private static string Prefixed(string id) => $"{PREFIX}{id}";
 
+        public static readonly string HoverGuideText = Prefixed("HoverGuideText");
         public static readonly string HoverGuidePadding = Prefixed("HoverGuidePadding");
         public static readonly string HealthBar = Prefixed("HealthBar");
         public static readonly string HealthBarBG = Prefixed("HealthBarBG");
-        public static readonly string HealthBarFG = Prefixed("HealthBarFG1");
+        public static readonly string HealthBarFG = Prefixed("HealthBarFG");
         public static readonly string HealthBarFGDamage = Prefixed("HealthBarFGDamage");
         public static readonly string HealthBarFGRestore = Prefixed("HealthBarFGRestore");
         public static readonly string HealthBarValue = Prefixed("HealthBarValue");

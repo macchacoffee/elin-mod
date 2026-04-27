@@ -4,7 +4,7 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
 public class ModHoverGuidePadding
 {
-    public UIImage Image { get; }
+    private UIImage Image { get; }
 
     private float Height { get; set; }
 
@@ -34,8 +34,7 @@ public class ModHoverGuidePadding
 
         // ウィジェットを無効から有効に切り替えた際に表示が乱れないようにするため、
         // 初期状態では追加コンポーネントなどは表示しないようにする
-        Height = 0;
-        Update(false, Height);
+        Update(false, 0);
     }
 
     public void Update(bool enabled, float height)

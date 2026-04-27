@@ -344,7 +344,7 @@ public static class WidgetMouseoverPatch
         }
 
         var target = new ModHoverGuideTarget(card.GetHoverText(), card.GetHoverText2(), card);
-        HoverGuide!.Show(widget, target, null);
+        HoverGuide!.Show(widget, target, null, true);
 
         return true;
     }
@@ -365,6 +365,6 @@ public static class WidgetMouseoverPatch
             target2 = null;
         }
 
-        HoverGuide!.Show(widget, target1, target2);
+        HoverGuide!.Show(widget, target1, target2, lockedCard is not null);
     }
 }

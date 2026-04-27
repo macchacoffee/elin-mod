@@ -35,13 +35,12 @@ public class ModHoverGuideItem
     private static ModConfigHoverGuideColorSet ColorConfig => Config.ColorSet;
     private static ModConfigHoverGuideStyleChara StyleConfig => Config.CurrentStyle.Chara;
 
-    public ModHoverGuideItem(WidgetMouseover widget) : this(widget, false) { }
-
-    public ModHoverGuideItem(WidgetMouseover widget, bool prepends)
+    public ModHoverGuideItem(WidgetMouseover widget)
     {
         var localScale = widget.textName.transform.localScale;
 
         TextName1 = UnityEngine.Object.Instantiate(widget.textName);
+        TextName1.name = ModConsts.GameObjectName.HoverGuideText;
         TextName1.transform.SetParent(widget.layout.transform);
         TextName1.transform.localScale = localScale;
 
@@ -50,18 +49,9 @@ public class ModHoverGuideItem
         Padding = new(widget);
 
         TextName2 = UnityEngine.Object.Instantiate(widget.textName);
+        TextName2.name = ModConsts.GameObjectName.HoverGuideText;
         TextName2.transform.SetParent(widget.layout.transform);
         TextName2.transform.localScale = localScale;
-
-        if (prepends)
-        {
-            // 先頭 (textNameの前) に追加する
-            var index = widget.textName.transform.GetSiblingIndex();
-            TextName2.transform.SetSiblingIndex(index);
-            Padding.Image.transform.SetSiblingIndex(index);
-            HealthBar.Layout.transform.SetSiblingIndex(index);
-            TextName1.transform.SetSiblingIndex(index);
-        }
 
         // ウィジェットを無効から有効に切り替えた際に表示が乱れないようにするため、
         // 初期状態では追加コンポーネントなどは表示しないようにする
@@ -71,14 +61,15 @@ public class ModHoverGuideItem
         TextName2.enabled = false;
     }
 
-    public bool Show(FontColor fontColor, int fontSize, int baseFontSize, ModHoverGuideTarget? target)
+    public bool Show(FontColor fontColor, int fontSize, float sizeRatio, ModHoverGuideTarget? target, bool isLocked)
     {
-        var paddingHeight = PaddingHeight * fontSize / baseFontSize;
+        var paddingHeight = PaddingHeight * sizeRatio;
 
         var displays = false;
         var isPaddingRequired = false;
         if (target?.Text1 is string text1 && !text1.IsEmpty())
         {
+            text1 = isLocked ? $"* {text1} *" : text1;
             text1 = text1.TagColorNullable(ColorConfig.MainTextColor);
             TextName1.fontColor = fontColor;
             TextName1.fontSize = fontSize;
