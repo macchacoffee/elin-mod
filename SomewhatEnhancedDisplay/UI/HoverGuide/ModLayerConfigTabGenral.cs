@@ -21,7 +21,7 @@ public class ModLayerConfigTabGenral : YKLayout<object>
         displayLayout1.AddModSlider(
             getLabel: value => $"{ModConsts.SourceId.ZoomScale.lang()}({value * 100}%)",
             init: Config.ZoomScale,
-            min: 0.1f,
+            min: 1,
             max: 2,
             step: 0.1f,
             onChanged: value => Config.ZoomScale = value

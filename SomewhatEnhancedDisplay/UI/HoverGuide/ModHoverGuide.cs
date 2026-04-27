@@ -24,7 +24,6 @@ public class ModHoverGuide
 
         OriginalPivot = widget.layout.Rect().pivot;
         // ゲーム設定のウィジェットのフォントサイズが "すごく小さい" (最小値) の場合を基準のフォントサイズとする
-        // OriginalFontSize = widget.textName.fontSize;
         BaseFontSize = widget.textName.fontSize - EClass.core.config.font.fontWidget.size;
 
         // ウィジェットを無効から有効に切り替えた際に表示が乱れないようにするため、
@@ -34,14 +33,15 @@ public class ModHoverGuide
         Item2.Enabled = false;
     }
 
-    public void Show(WidgetMouseover widget, ModHoverGuideTarget? target1, ModHoverGuideTarget? target2)
+    public void Show(WidgetMouseover widget, ModHoverGuideTarget? target1, ModHoverGuideTarget? target2, bool isLocked)
     {
         var fontColor = widget.textName.fontColor;
         var fontSize = ModUIUtil.ComputeFontSize(BaseFontSize);
-        var paddingHeight = PaddingHeight * fontSize / BaseFontSize;
+        var sizeRatio = fontSize / BaseFontSize;
+        var paddingHeight = PaddingHeight * sizeRatio;
 
-        var isItem1Enabled = Item1.Show(fontColor, fontSize, BaseFontSize, target1);
-        var isItem2Enabled = Item2.Show(fontColor, fontSize, BaseFontSize, target2);
+        var isItem1Enabled = Item1.Show(fontColor, fontSize, sizeRatio, target1, isLocked);
+        var isItem2Enabled = Item2.Show(fontColor, fontSize, sizeRatio, target2, false);
         Padding1.Update(isItem1Enabled && isItem2Enabled, paddingHeight);
 
         widget.textName.enabled = false;

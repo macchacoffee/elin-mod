@@ -2,9 +2,9 @@ using System;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using ModUtility.Util;
 using SomewhatEnhancedDisplay.Extensions;
 using SomewhatEnhancedDisplay.Config;
-using ModUtility.Util;
 
 namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
@@ -59,10 +59,10 @@ public class ModHealthBar
         LayoutObj.transform.SetParent(widget.layout.transform);
         LayoutObj.transform.localScale = localScale;
 
-        BGImage = AddHealthBarImage(Layout, ModConsts.GameObjectName.HealthBarBG, localScale, ColorConfig.HealthBarBGColor);
-        FGDamageImage = AddHealthBarImage(Layout, ModConsts.GameObjectName.HealthBarFGDamage, localScale, ColorConfig.HealthBarBGColor);
-        FGRestoreImage = AddHealthBarImage(Layout, ModConsts.GameObjectName.HealthBarFGRestore, localScale, ColorConfig.HealthBarFGColor);
-        FGImage = AddHealthBarImage(Layout, ModConsts.GameObjectName.HealthBarFG, localScale, ColorConfig.HealthBarFGColor);
+        BGImage = AddHealthBarImage(Layout.transform, ModConsts.GameObjectName.HealthBarBG, localScale, ColorConfig.HealthBarBGColor);
+        FGDamageImage = AddHealthBarImage(Layout.transform, ModConsts.GameObjectName.HealthBarFGDamage, localScale, ColorConfig.HealthBarBGColor);
+        FGRestoreImage = AddHealthBarImage(Layout.transform, ModConsts.GameObjectName.HealthBarFGRestore, localScale, ColorConfig.HealthBarFGColor);
+        FGImage = AddHealthBarImage(Layout.transform, ModConsts.GameObjectName.HealthBarFG, localScale, ColorConfig.HealthBarFGColor);
 
         var valueObj = new GameObject(ModConsts.GameObjectName.HealthBarValue);
         ValueText = valueObj.AddComponent<UIText>();
@@ -80,7 +80,7 @@ public class ModHealthBar
         valueShadow.useGraphicAlpha = true;
     }
 
-    private static UIImage AddHealthBarImage(LayoutElement layout, string name, Vector3 localScale, Color color)
+    private static UIImage AddHealthBarImage(Transform transform, string name, Vector3 localScale, Color color)
     {
         // GameObjectを生成し、layoutに挿入する
         var obj = new GameObject(name);
@@ -91,7 +91,7 @@ public class ModHealthBar
         image.type = Image.Type.Filled;
         image.fillOrigin = (int)Image.OriginHorizontal.Left;
         image.fillMethod = Image.FillMethod.Horizontal;
-        obj.transform.SetParent(layout.transform);
+        obj.transform.SetParent(transform);
         obj.transform.localScale = localScale;
 
         return image;
@@ -127,7 +127,8 @@ public class ModHealthBar
             FGDamageImage.color = ColorConfig.HealthBarBGColor;
             FGRestoreImage.color = ColorConfig.HealthBarBGColor;
             FGImage.color = barColor;
-        } else if (ValueRatio != ratio)
+        }
+        else if (ValueRatio != ratio)
         {
             UpdateRestore(ratio, barColor, pctColor);
             UpdateDamage(ratio, barColor, pctColor);
@@ -171,13 +172,11 @@ public class ModHealthBar
                 FGImage
                 .DOFillAmount(ratio1, duration)
                 .SetLink(LayoutObj)
-                .SetDelay(hasOldTween ? 0 : TweenDelay)
                 .SetEase(Ease.Linear))
             .Join(
                 FGImage
                 .DOColor(barColor, duration)
                 .SetLink(LayoutObj)
-                .SetDelay(hasOldTween ? 0 : TweenDelay)
                 .SetEase(Ease.Linear))
             .Join(
                 DOTween.To(
@@ -186,14 +185,14 @@ public class ModHealthBar
                     valueRatio,
                     duration)
                 .SetLink(LayoutObj)
-                .SetDelay(hasOldTween ? 0 : TweenDelay)
                 .SetEase(Ease.Linear))
             .Join(
                 ValueText
                 .DOColor(textColor, duration)
                 .SetLink(LayoutObj)
-                .SetDelay(hasOldTween ? 0 : TweenDelay)
                 .SetEase(Ease.Linear))
+        .SetLink(LayoutObj)
+        .SetDelay(hasOldTween ? 0 : TweenDelay)
         .OnStart(() =>
         {
             if (valueRatio > FGDamageImage.fillAmount)
