@@ -153,7 +153,15 @@ public class ModLayerConfigTabStyle : YKLayout<object>
                 Init: SelectedStyle.Chara.DisplayHobby,
                 OnChanged: value => SelectedStyle.Chara.DisplayHobby = value,
                 GetConfig: () => SelectedStyle.Chara.DisplayHobby
-            ),
+            )
+        );
+
+        line++;
+        EditStyleUI.AddToggles(
+            layout: styleEditLayout,
+            headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
+            cellWidth: cellWidth,
+            maxColumn: maxColumn,
             new(
                 Label: ModConsts.SourceId.Affinity,
                 Init: SelectedStyle.Chara.DisplayAffinity,
