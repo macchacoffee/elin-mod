@@ -27,11 +27,11 @@ public static class ModThingHoverTextBuilder
     {
         // text: thing.GetHoverText2()の戻り値 (空文字列)
         // traitText: trait.GetHoverText()の戻り値
-        return string.Join(Environment.NewLine, new[] {
+        return ModCardHoverTextBuilder.BuildHoverTextSection(
             text.TagSizeIfNotEmpty(ModUIUtil.ComputeFontSize(13)),
             GetHoverTextExtra1(thing)?.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor),
             traitText.TagSizeIfNotEmpty(ModUIUtil.ComputeFontSize(13))
-        }.Where(t => !string.IsNullOrEmpty(t)));
+        );
     }
 
     private static string? GetHoverTextLv(Thing thing)

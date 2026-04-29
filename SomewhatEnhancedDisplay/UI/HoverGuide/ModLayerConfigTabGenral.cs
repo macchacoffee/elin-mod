@@ -35,7 +35,7 @@ public class ModLayerConfigTabGenral : YKLayout<object>
             init: Config.HorizontalPivot,
             min: 0,
             max: 1,
-            step: 0.1f,
+            step: 0.05f,
             onChanged: value => Config.HorizontalPivot = value
         );
 
@@ -45,7 +45,7 @@ public class ModLayerConfigTabGenral : YKLayout<object>
             init: Config.VerticalPivot,
             min: 0,
             max: 1,
-            step: 0.1f,
+            step: 0.05f,
             onChanged: value => Config.VerticalPivot = value
         );
 

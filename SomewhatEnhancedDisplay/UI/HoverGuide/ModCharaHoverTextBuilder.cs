@@ -26,10 +26,7 @@ public static class ModCharaHoverTextBuilder
             GetHoverTextLv(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)),
             text.TagSize(ModUIUtil.ComputeFontSize(18)),
         }.Where(t => !string.IsNullOrEmpty(t)));
-        return string.Join(Environment.NewLine, new[] {
-            hoverText,
-            $"{text2}{s}",
-        }.Where(t => !string.IsNullOrEmpty(t)));
+        return ModCardHoverTextBuilder.BuildHoverTextSection(hoverText, $"{text2}{s}");
     }
 
     public static string BuildHoverText2(Chara chara, string text, string text2, string text3)
@@ -42,20 +39,23 @@ public static class ModCharaHoverTextBuilder
         text = text.StartsWith(Environment.NewLine) ? text.Substring(Environment.NewLine.Length) : text;
         text2 = text2.StartsWith(Environment.NewLine) ? text2.Substring(Environment.NewLine.Length) : text2;
         text3 = text3.StartsWith(Environment.NewLine) ? text3.Substring(Environment.NewLine.Length) : text3;
-        var profileText = string.Join(" ", new[] {
-            GetHoverTextProfile1(chara, text2)?.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor),
-            GetHoverTextProfile2(chara, text)?.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor),
-        }.Where(t => !string.IsNullOrEmpty(t)));
-        return string.Join(Environment.NewLine, new[] {
-            profileText,
-            GetHoverStatusAttribute(chara, realChara)?.TagSize(ModUIUtil.ComputeFontSize(16)),
-            GetHoverStatus(chara)?.TagSize(ModUIUtil.ComputeFontSize(16)),
-            GetHoverTextPrimaryAttribute(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor),
-            GetHoverTextFeat(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor),
+        return ModCardHoverTextBuilder.BuildHoverText(
+            ModCardHoverTextBuilder.BuildHoverTextSection(
+                GetHoverTextProfile1(chara, text2)?.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor),
+                GetHoverTextProfile2(chara, text)?.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor)
+            ),
+            ModCardHoverTextBuilder.BuildHoverTextSection(
+                GetHoverStatusAttribute(chara, realChara)?.TagSize(ModUIUtil.ComputeFontSize(16)),
+                GetHoverStatus(chara)?.TagSize(ModUIUtil.ComputeFontSize(16))
+            ),
+            ModCardHoverTextBuilder.BuildHoverTextSection(
+                GetHoverTextPrimaryAttribute(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor),
+                GetHoverTextFeat(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor)
+            ),
             GetHoverTextAct(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)),
             GetHoverTextResist(chara),
-            StyleConfig.DisplayStats ? text3 : null,
-        }.Where(t => !string.IsNullOrEmpty(t)));
+            StyleConfig.DisplayStats ? text3 : null
+        );
     }
 
     private static string? GetHoverTextType(Chara chara)

@@ -51,7 +51,7 @@ public class ModConfigHoverGuide : ModConfigBase<ModConfigHoverGuide>
     public float HorizontalPivot { get; set; } = 0.5f;
 
     [JsonProperty("verticalPivot", DefaultValueHandling = DefaultValueHandling.Include)]
-    public float VerticalPivot { get; set; } = 0.8f;
+    public float VerticalPivot { get; set; } = 0.9f;
 
     [JsonProperty("colorSet", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHoverGuideColorSet ColorSet { get; set; } = new();
