@@ -18,8 +18,8 @@ public static class ModThingHoverTextBuilder
         // text: thingの追加情報
         cardText = StyleConfig.UseRarityColor ? cardText.TagColorIfNotEmptyNullable(GetRarityColor(thing)) : cardText; 
         return string.Join(" ", new[] {
-            GetHoverTextLv(thing)?.TagSize(ModUIUtil.ComputeFontSize(11)),
-            $"{cardText}{text}"
+            GetHoverTextLv(thing)?.TagSize(ModUIUtil.ComputeFontSize(13)),
+            $"{cardText.TagSize(ModUIUtil.ComputeFontSize(18))}{text.TagSizeIfNotEmpty(ModUIUtil.ComputeFontSize(13))}"
         }.Where(t => !string.IsNullOrEmpty(t)));
     }
 
@@ -27,11 +27,10 @@ public static class ModThingHoverTextBuilder
     {
         // text: thing.GetHoverText2()の戻り値 (空文字列)
         // traitText: trait.GetHoverText()の戻り値
-        traitText = !string.IsNullOrEmpty(traitText) ? traitText.TagSize(ModUIUtil.ComputeFontSize(11)) : traitText;
         return string.Join(Environment.NewLine, new[] {
-            text.TagSizeIfNotEmpty(ModUIUtil.ComputeFontSize(11)),
-            GetHoverTextExtra1(thing)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(ColorConfig.SubTextColor),
-            traitText
+            text.TagSizeIfNotEmpty(ModUIUtil.ComputeFontSize(13)),
+            GetHoverTextExtra1(thing)?.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor),
+            traitText.TagSizeIfNotEmpty(ModUIUtil.ComputeFontSize(13))
         }.Where(t => !string.IsNullOrEmpty(t)));
     }
 

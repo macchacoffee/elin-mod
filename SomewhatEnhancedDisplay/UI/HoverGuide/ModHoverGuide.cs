@@ -5,7 +5,7 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
 public class ModHoverGuide
 {
-    private static readonly float PaddingHeight = 21;
+    private static readonly float PaddingHeight = 24;
 
     private ModHoverGuideItem Item1 { get; }
     private ModHoverGuidePadding Padding1 { get; }
@@ -36,12 +36,14 @@ public class ModHoverGuide
     public void Show(WidgetMouseover widget, ModHoverGuideTarget? target1, ModHoverGuideTarget? target2, bool isLocked)
     {
         var fontColor = widget.textName.fontColor;
-        var fontSize = ModUIUtil.ComputeFontSize(BaseFontSize);
-        var sizeRatio = fontSize / BaseFontSize;
+        // 行間を広げるためにフォントサイズを少し大きく設定する
+        var fontSize1 = ModUIUtil.ComputeFontSize(BaseFontSize + 2);
+        var fontSize2 = ModUIUtil.ComputeFontSize(BaseFontSize + 4);
+        var sizeRatio = (float)fontSize2 / BaseFontSize;
         var paddingHeight = PaddingHeight * sizeRatio;
 
-        var isItem1Enabled = Item1.Show(fontColor, fontSize, sizeRatio, target1, isLocked);
-        var isItem2Enabled = Item2.Show(fontColor, fontSize, sizeRatio, target2, false);
+        var isItem1Enabled = Item1.Show(fontColor, fontSize1, target1, isLocked);
+        var isItem2Enabled = Item2.Show(fontColor, fontSize2, target2, false);
         Padding1.Update(isItem1Enabled && isItem2Enabled, paddingHeight);
 
         widget.textName.enabled = false;

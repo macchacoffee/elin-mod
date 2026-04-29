@@ -1,3 +1,4 @@
+using System;
 using SomewhatEnhancedDisplay.Config;
 using SomewhatEnhancedDisplay.Extensions;
 
@@ -5,11 +6,10 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
 public class ModHoverGuideItem
 {
-    private static readonly float PaddingHeight = 3;
+    private static readonly int PaddingHeight = 1;
 
     private UIText TextName1 { get; }
     private ModHealthBar HealthBar { get; }
-    private ModHoverGuidePadding Padding { get; }
     private UIText TextName2 { get; }
 
     public bool Enabled
@@ -19,14 +19,12 @@ public class ModHoverGuideItem
             return
                 TextName1.enabled
                 || HealthBar.Enabled
-                || Padding.Enabled
                 || TextName2.enabled;
         }
         set
         {
             TextName1.enabled = value;
             HealthBar.Enabled = value;
-            Padding.Enabled = value;
             TextName2.enabled = value;
         }
     }
@@ -46,8 +44,6 @@ public class ModHoverGuideItem
 
         HealthBar = new(widget);
 
-        Padding = new(widget);
-
         TextName2 = UnityEngine.Object.Instantiate(widget.textName);
         TextName2.name = ModConsts.GameObjectName.HoverGuideText;
         TextName2.transform.SetParent(widget.layout.transform);
@@ -57,19 +53,24 @@ public class ModHoverGuideItem
         // 初期状態では追加コンポーネントなどは表示しないようにする
         TextName1.enabled = false;
         HealthBar.Enabled = false;
-        Padding.Enabled = false;
         TextName2.enabled = false;
     }
 
-    public bool Show(FontColor fontColor, int fontSize, float sizeRatio, ModHoverGuideTarget? target, bool isLocked)
+    public bool Show(FontColor fontColor, int fontSize, ModHoverGuideTarget? target, bool isLocked)
     {
-        var paddingHeight = PaddingHeight * sizeRatio;
-
         var displays = false;
         var isPaddingRequired = false;
         if (target?.Text1 is string text1 && !text1.IsEmpty())
         {
-            text1 = isLocked ? $"* {text1} *" : text1;
+            if (isLocked)
+            {
+                var lines = text1.Split([Environment.NewLine], StringSplitOptions.None);
+                if (lines.Length > 1)
+                {
+                    lines[0] = $"* {lines[0]} *";
+                }
+                text1 = string.Join(Environment.NewLine, lines);
+            }
             text1 = text1.TagColorNullable(ColorConfig.MainTextColor);
             TextName1.fontColor = fontColor;
             TextName1.fontSize = fontSize;
@@ -97,6 +98,10 @@ public class ModHoverGuideItem
         }
         if (target?.Text2 is string text2 && !text2.IsEmpty())
         {
+            if (isPaddingRequired)
+            {
+                text2 = $"{Environment.NewLine.TagSize(ModUIUtil.ComputeFontSize(PaddingHeight))}{text2}";
+            }
             text2 = text2.TagColorNullable(ColorConfig.MainTextColor);
             TextName2.fontColor = fontColor;
             TextName2.fontSize = fontSize;
@@ -108,10 +113,7 @@ public class ModHoverGuideItem
         {
             TextName2.text = string.Empty;
             TextName2.enabled = false;
-            isPaddingRequired = false;
         }
-
-        Padding.Update(isPaddingRequired, paddingHeight);
 
         return displays;
     }
@@ -120,7 +122,6 @@ public class ModHoverGuideItem
     {
         TextName1.enabled = false;
         HealthBar.Enabled = false;
-        Padding.Enabled = false;
         TextName2.enabled = false;
     }
 

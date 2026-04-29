@@ -19,6 +19,8 @@ public static class ElementPatch
         return PatchTarget.IsPatchable(original);
     }
 
+    private static readonly Regex EnchantTextRegex = new(@"(\(-?\d+\)) (\(-?\d+[^\)]*\))", RegexOptions.Compiled);
+
     [HarmonyPrefix]
     [HarmonyPatch(nameof(Element.AddEncNote), [typeof(UINote), typeof(Card), typeof(ElementContainer.NoteMode), typeof(Func<Element, string, string>), typeof(Action<UINote, Element>)])]
     private static void AddEncNote_Prefix(Element __instance, UINote n, Card Card, ElementContainer.NoteMode mode, ref Func<Element, string, string>? funcText, Action<UINote, Element>? onAddNote)
@@ -30,11 +32,10 @@ public static class ElementPatch
 
         // xキーの調査表示でエンチャント値が "(10) -> (10)" のように二重表示される可能性がある
         // 二重表示になっている場合、Modで追加したエンチャントの値を取り除く
-        var textRegex = new Regex(@"(\(-?\d+\)) (\(-?\d+[^\)]*\))");
         var originalFuncText = funcText;
         funcText = (element, text) =>
         {
-            return textRegex.Replace(originalFuncText(element, text), "$2");
+            return EnchantTextRegex.Replace(originalFuncText(element, text), "$2");
         };
     }
 

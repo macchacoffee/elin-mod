@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text.RegularExpressions;
 using HarmonyLib;
 using ModUtility.Patch;
 using SomewhatEnhancedDisplay.Config;
+using SomewhatEnhancedDisplay.Extensions;
 using SomewhatEnhancedDisplay.UI;
 using SomewhatEnhancedDisplay.UI.HoverGuide;
 
@@ -21,39 +21,62 @@ public static class CharaPatch
         return PatchTarget.IsPatchable(original);
     }
 
-    // タグのフォントサイズ値にマッチする正規表現
-    private static readonly Regex TagSizeRegex = new(@"(?<=<size=)(\d+)", RegexOptions.Compiled);
-
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
     private static ModConfigHoverGuideStyleChara StyleConfig => Config.CurrentStyle.Chara;
 
-    [HarmonyTranspiler]
+    [HarmonyReversePatch(HarmonyReversePatchType.Original)]
     [HarmonyPatch(nameof(Chara.GetName), [typeof(NameStyle), typeof(int)])]
-    private static IEnumerable<CodeInstruction> GetName_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static string CharaGetNameForHoverText(Chara insrance, NameStyle nameStyle, int num = -1)
     {
-        // // 変更前
-        // if (mimicry != null)
-        // {
-        // // 変更後
-        // if (CharaPatch.IsMimicryEnabled() && mimicry != null)
-        // {
-        var matcher = new CodeMatcher(instructions, generator);
+        // Chara.GetName()をコードを複製し、ホバーテキスト取得処理向けに変更したスタブを作成する
+        static IEnumerable<CodeInstruction> transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+        {
+            // // 変更前
+            // if (mimicry != null)
+            // {
+            // ...
+            // if (HasCondition<ConTransmuteShadow>())
+            // {
+            // // 変更後
+            // if (CharaPatch.IsMimicryEnabled() && mimicry != null)
+            // {
+            // ...
+            // if (CharaPatch.IsShadowformEnabled() && HasCondition<ConTransmuteShadow>())
+            // {
+            var matcher = new CodeMatcher(instructions, generator);
 
-        // ldfld ConBaseTransmuteMimic Chara::mimicry
-        // brfalse Label1
-        matcher.MatchEndForward(
-            new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.mimicry))),
-            new CodeMatch(OpCodes.Brfalse)
-        );
-        // Modの設定で擬態が無効になっている場合は擬態先の名前を取得しないようにする
-        var label1 = matcher.Operand;
-        matcher.Advance(-2);
-        matcher.InsertAndAdvance(
-            CodeInstruction.Call(() => IsMimicryEnabled()),
-            new CodeInstruction(OpCodes.Brfalse, label1)
-        );
+            // ldfld ConBaseTransmuteMimic Chara::mimicry
+            // brfalse Label1
+            matcher.MatchEndForward(
+                new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.mimicry))),
+                new CodeMatch(OpCodes.Brfalse)
+            );
+            // Modの設定で擬態が無効になっている場合は擬態先の名前を取得しないようにする
+            var label1 = matcher.Operand;
+            matcher.Advance(-2);
+            matcher.InsertAndAdvance(
+                CodeInstruction.Call(() => IsMimicryEnabled()),
+                new CodeInstruction(OpCodes.Brfalse, label1)
+            );
 
-        return matcher.InstructionEnumeration();
+            // // ldstr "shade"
+            matcher.MatchStartForward(
+                new CodeMatch(OpCodes.Ldstr, "shade")
+            );
+            // Modの設定で影被りが無効になっている場合はシェイドの名前を取得しないようにする
+            matcher.Advance(-4);
+            var label2 = matcher.Operand;
+            matcher.Advance(-2);
+            matcher.InsertAndAdvance(
+                CodeInstruction.Call(() => IsShadowformEnabled()),
+                new CodeInstruction(OpCodes.Brfalse, label2)
+            );
+
+            return matcher.InstructionEnumeration();
+        };
+
+        _ = transpiler(null!, null!);
+        return default!;
     }
 
     [HarmonyTranspiler]
@@ -66,26 +89,14 @@ public static class CharaPatch
         // ...
         // string text = ((mimicry != null) ? mimicry.GetName(NameStyle.Full) : base.Name);
         // ...
-        // text2 += "lowerGround".lang();
-        // ...
-        // text2 += "higherGround".lang();
-        // ...
         // return text + text2 + s;
-        // ...
-        // .TagSize(...)
         // // 変更後
         // if (CharaPatch.IsMimicryEnabled() && mimicry != null && mimicry.IsThing)
         // {
         // ...
-        // string text = ((mimicry != null && CharaPatch.IsMimicryEnabled()) ? mimicry.GetName(NameStyle.Full) : base.Name);
-        // ...
-        // text2 += CharaPatch.ReplaceReplaceTagSizeComputed("lowerGround".lang());
-        // ...
-        // text2 += CharaPatch.ReplaceReplaceTagSizeComputed("higherGround".lang());
+        // string text = ((mimicry != null && CharaPatch.IsMimicryEnabled()) ? mimicry.GetName(NameStyle.Full) : CharaPatch.CharaGetNameForHoverText(this, NameStyle.Full));
         // ...
         // return CharaPatch.BuildHoverText(text, text2, s, this);
-        // ...
-        // .TagSize(CharaPatch.ComputeFontSize(...))
         var matcher = new CodeMatcher(instructions, generator);
 
         // ldfld ConBaseTransmuteMimic Chara::mimicry
@@ -123,35 +134,19 @@ public static class CharaPatch
         );
         // Modの設定で擬態が無効になっている場合の遷移先となるLabelMod1を生成する
         matcher.CreateLabel(out var LabelMod1);
-        matcher.Advance(start - matcher.Pos);
+        // Nameプロパティの呼び出しをCharaGetNameForHoverText(this, NameStyle.Full, -1)に置き換える
+        matcher.Advance(1);
+        matcher.RemoveInstruction();
+        matcher.InsertAndAdvance(
+            new CodeInstruction(OpCodes.Ldc_I4_1),
+            new CodeInstruction(OpCodes.Ldc_I4_M1),
+            CodeInstruction.Call(() => CharaGetNameForHoverText(default!, default, default))
+        );
         // Modの設定で擬態が無効になっている場合は常に正体のキャラの名前を取得するようにする
+        matcher.Advance(start - matcher.Pos);
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Brfalse, LabelMod1),
             CodeInstruction.Call(() => IsMimicryEnabled())
-        );
-
-        // ldstr "lowerGround"
-        // call static string ClassExtension::lang(string s)
-        matcher.MatchEndForward(
-            new CodeMatch(OpCodes.Ldstr, "lowerGround"),
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.lang), [typeof(string)]))
-        );
-        // langテキストのタグで指定されたフォントサイズを置き換える
-        matcher.Advance(1);
-        matcher.InsertAndAdvance(
-            CodeInstruction.Call(() => ReplaceTagSizeComputed(default!))
-        );
-
-        // ldstr "higherGround"
-        // call static string ClassExtension::lang(string s)
-        matcher.MatchEndForward(
-            new CodeMatch(OpCodes.Ldstr, "higherGround"),
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.lang), [typeof(string)]))
-        );
-        // langテキストのタグで指定されたフォントサイズを置き換える
-        matcher.Advance(1);
-        matcher.InsertAndAdvance(
-            CodeInstruction.Call(() => ReplaceTagSizeComputed(default!))
         );
 
         // call static string string::Concat(string str0, string str1, string str2)
@@ -167,20 +162,6 @@ public static class CharaPatch
             CodeInstruction.Call(() => BuildHoverText(default!, default!, default!, default!))
         );
 
-        // call static string ClassExtension::TagColor(string s, UnityEngine.Color c)
-        matcher.Start();
-        matcher.MatchStartForward(
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.TagSize), [typeof(string), typeof(int)]))
-        );
-        // フォントサイズのタグを生成する処理をすべて差し替える
-        matcher.Repeat(m =>
-        {
-            m.InsertAndAdvance(
-                CodeInstruction.Call(() => ComputeFontSize(default))
-            );
-            m.Advance(1);
-        });
-
         return matcher.InstructionEnumeration();
     }
 
@@ -189,8 +170,6 @@ public static class CharaPatch
     private static IEnumerable<CodeInstruction> GetHoverText2_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
         // // 変更前
-        // "<size=14>"
-        // ...
         // text = text + "<size=14>" + "favgift".lang(GetFavCat().GetName().ToLower(), GetFavFood().GetName()) + "</size>";
         // ...
         // text3 = text3 + text4.TagColor(c) + ", ";
@@ -203,11 +182,9 @@ public static class CharaPatch
         // ...
         // return text + text2 + text3;
         // // 変更後
-        // $"<size={CharaPatch.ComputeFontSize(14)}>"
+        // text = text + $"<size=14>♡" + GetFavCat().GetName().ToLower() + "/" + GetFavFood().GetName() + "</size>";
         // ...
-        // text = text + $"<size={CharaPatch.ComputeFontSize(14)}>♡" + GetFavCat().GetName().ToLower() + "/" + GetFavFood().GetName() + "</size>";
-        // ...
-        // text4 = ModCharaHoverTextBuilder.BuildStatsExtraText(text4, item3);
+        // text4 = BuildStatsExtraText(text4, item3);
         // text3 = text3 + text4.TagColor(c) + ", ";
         // ...
         // else
@@ -233,35 +210,15 @@ public static class CharaPatch
         );
 
         // ldstr "<size=14>"
-        matcher.MatchStartForward(
-            new CodeMatch(OpCodes.Ldstr, "<size=14>")
-        );
-        // フォントサイズのタグを構築する処理をすべて差し替える
-        matcher.Repeat(m =>
-        {
-            m.RemoveInstruction();
-            m.InsertAndAdvance(
-                new CodeInstruction(OpCodes.Ldstr, "<size="),
-                new CodeInstruction(OpCodes.Ldc_I4_S, 14),
-                CodeInstruction.Call(() => ComputeFontSize(default)),
-                CodeInstruction.Call(() => IntToString(default)),
-                new CodeInstruction(OpCodes.Ldstr, ">"),
-                CodeInstruction.Call(() => string.Concat(default, default, default))
-            );
-        });
-
-        // ldstr ">"
-        // call static string string::Concat(string str0, string str1, string str2)
         // ldstr "favgift"
         matcher.Start();
         matcher.MatchStartForward(
-            new CodeMatch(OpCodes.Ldstr, ">"),
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string), typeof(string)])),
+            new CodeMatch(OpCodes.Ldstr, "<size=14>"),
             new CodeMatch(OpCodes.Ldstr, "favgift")
         );
         // "好物: "の文字列を"♡"に変更する
         matcher.Operand = matcher.Operand + "♡";
-        matcher.Advance(2);
+        matcher.Advance(1);
         matcher.RemoveInstruction();
 
         // callvirt string string::ToLower()
@@ -308,7 +265,7 @@ public static class CharaPatch
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Ldloc_S, 12),
             new CodeInstruction(OpCodes.Ldloc_S, 11),
-            CodeInstruction.Call(() => ModCharaHoverTextBuilder.BuildStatsExtraText(default!, default!)),
+            CodeInstruction.Call(() => BuildStatsExtraText(default!, default!)),
             new CodeInstruction(OpCodes.Stloc_S, 12)
         );
 
@@ -342,20 +299,14 @@ public static class CharaPatch
         return matcher.InstructionEnumeration();
     }
 
+    private static bool IsShadowformEnabled()
+    {
+        return StyleConfig.EnableShadowform;
+    }
+
     private static bool IsMimicryEnabled()
     {
         return StyleConfig.EnableMimicry;
-    }
-
-    private static string ReplaceTagSizeComputed(string text)
-    {
-        return TagSizeRegex.Replace(text, m => ComputeFontSize(int.Parse(m.Value)).ToString());
-    }
-
-    private static int ComputeFontSize(int fontSize)
-    {
-        // ゲーム設定のウィジェットのフォントサイズが "大きめ" の場合を基準にする
-        return ModUIUtil.ComputeFontSize(fontSize - 3);
     }
 
     private static string IntToString(int value)
@@ -363,13 +314,35 @@ public static class CharaPatch
         return value.ToString();
     }
 
+    private static int ComputeFontSize(int size)
+    {
+        // フォントサイズを微調整する
+        return ModUIUtil.ComputeFontSize(size - 1);
+    }
+
+    public static string BuildStatsExtraText(string text4, BaseStats stats)
+    {
+        if (!StyleConfig.DisplayStatsValue)
+        {
+            return text4;
+        }
+        var statsValueText = $"({stats.GetValue()})".TagSize(12);
+        return $"{text4}{statsValueText}";
+    }
+
     private static string BuildHoverText(string text, string text2, string s, Chara chara)
     {
+        text = text.TagResize(ComputeFontSize);
+        text2 = text2.TagResize(ComputeFontSize);
+        s = s.TagResize(ComputeFontSize);
         return ModCharaHoverTextBuilder.BuildHoverText(chara, text, text2, s);
     }
 
     private static string BuildHoverText2(string text, string text2, string text3, Chara chara)
     {
+        text = text.TagResize(ComputeFontSize);
+        text2 = text2.TagResize(ComputeFontSize);
+        text3 = text3.TagResize(ComputeFontSize);
         return ModCharaHoverTextBuilder.BuildHoverText2(chara, text, text2, text3);
     }
 }

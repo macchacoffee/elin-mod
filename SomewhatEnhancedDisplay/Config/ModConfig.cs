@@ -45,7 +45,7 @@ public class ModConfig : ModConfigBase<ModConfig>
 public class ModConfigHoverGuide : ModConfigBase<ModConfigHoverGuide>
 {
     [JsonProperty("zoomScale", DefaultValueHandling = DefaultValueHandling.Include)]
-    public float ZoomScale { get; set; } = 1.2f;
+    public float ZoomScale { get; set; } = 1;
 
     [JsonProperty("horizontalPivot", DefaultValueHandling = DefaultValueHandling.Include)]
     public float HorizontalPivot { get; set; } = 0.5f;
@@ -319,6 +319,9 @@ public class ModConfigHoverGuideStyleChara : ModConfigBase<ModConfigHoverGuideSt
     [JsonProperty("displayStatsValue", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayStatsValue { get; set; } = false;
 
+    [JsonProperty("enableShadowform", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool EnableShadowform { get; set; } = true;
+
     [JsonProperty("enableMimicry", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool EnableMimicry { get; set; } = true;
 
@@ -355,6 +358,7 @@ public class ModConfigHoverGuideStyleChara : ModConfigBase<ModConfigHoverGuideSt
             DisplayResistValue = true,
             DisplayStats = true,
             DisplayStatsValue = true,
+            EnableShadowform = false,
             EnableMimicry = false,
             HealthBar = ModConfigHoverGuideHealthBar.CreateDisplayAll()
         };
@@ -364,7 +368,7 @@ public class ModConfigHoverGuideStyleChara : ModConfigBase<ModConfigHoverGuideSt
 public class ModConfigHoverGuideHealthBar : ModConfigBase<ModConfigHoverGuideHealthBar>
 {
     [JsonProperty("width", DefaultValueHandling = DefaultValueHandling.Include)]
-    public int Width { get; set; } = 300;
+    public int Width { get; set; } = 400;
 
     [JsonProperty("displayValue", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayValue { get; set; } = true;

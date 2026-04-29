@@ -21,10 +21,14 @@ public static class ModCharaHoverTextBuilder
         // text2: レベル差、赤ちゃん、高低差、賞金首、信仰
         // s: ゲスト・家畜、血の風味
         chara = StyleConfig.EnableMimicry ? chara.MimicryOrSelf : chara;
-        return string.Join(" ", new[] {
-            GetHoverTextType(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)),
-            GetHoverTextLv(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)),
-            $"{text}{text2}{s}",
+        var hoverText = string.Join(" ", new[] {
+            GetHoverTextType(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)),
+            GetHoverTextLv(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)),
+            text.TagSize(ModUIUtil.ComputeFontSize(18)),
+        }.Where(t => !string.IsNullOrEmpty(t)));
+        return string.Join(Environment.NewLine, new[] {
+            hoverText,
+            $"{text2}{s}",
         }.Where(t => !string.IsNullOrEmpty(t)));
     }
 
@@ -38,32 +42,20 @@ public static class ModCharaHoverTextBuilder
         text = text.StartsWith(Environment.NewLine) ? text.Substring(Environment.NewLine.Length) : text;
         text2 = text2.StartsWith(Environment.NewLine) ? text2.Substring(Environment.NewLine.Length) : text2;
         text3 = text3.StartsWith(Environment.NewLine) ? text3.Substring(Environment.NewLine.Length) : text3;
+        var profileText = string.Join(" ", new[] {
+            GetHoverTextProfile1(chara, text2)?.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor),
+            GetHoverTextProfile2(chara, text)?.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor),
+        }.Where(t => !string.IsNullOrEmpty(t)));
         return string.Join(Environment.NewLine, new[] {
-            GetHoverTextProfile1(chara, text2)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(ColorConfig.SubTextColor),
-            GetHoverTextProfile2(chara, text)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(ColorConfig.SubTextColor),
-            GetHoverStatusAttribute(chara, realChara)?.TagSize(ModUIUtil.ComputeFontSize(13)),
-            GetHoverStatus(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)),
-            GetHoverTextPrimaryAttribute(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(ColorConfig.SubTextColor),
-            GetHoverTextFeat(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)).TagColorNullable(ColorConfig.SubTextColor),
-            GetHoverTextAct(chara)?.TagSize(ModUIUtil.ComputeFontSize(11)),
+            profileText,
+            GetHoverStatusAttribute(chara, realChara)?.TagSize(ModUIUtil.ComputeFontSize(16)),
+            GetHoverStatus(chara)?.TagSize(ModUIUtil.ComputeFontSize(16)),
+            GetHoverTextPrimaryAttribute(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor),
+            GetHoverTextFeat(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor),
+            GetHoverTextAct(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)),
             GetHoverTextResist(chara),
             StyleConfig.DisplayStats ? text3 : null,
         }.Where(t => !string.IsNullOrEmpty(t)));
-    }
-
-    public static string BuildStatsExtraText(string text4, BaseStats stats)
-    {
-        if (!StyleConfig.DisplayStatsValue)
-        {
-            return text4;
-        }
-        var statsValueText = $"({stats.GetValue()})".TagSize(ModUIUtil.ComputeFontSize(9));
-        return $"{text4}{statsValueText}";
-    }
-
-    public static string BuildOtherCardsText(string hoverText, string otherCardsText)
-    {
-        return $"{hoverText}{otherCardsText.TagSize(ModUIUtil.ComputeFontSize(11))}";
     }
 
     private static string? GetHoverTextType(Chara chara)
@@ -193,7 +185,7 @@ public static class ModCharaHoverTextBuilder
 
     private static string GetAffinityText(Chara chara)
     {
-        return $"{chara.affinity.Name}{$"({chara._affinity})".TagSize(ModUIUtil.ComputeFontSize(9))}";
+        return $"{chara.affinity.Name}{$"({chara._affinity})".TagSize(ModUIUtil.ComputeFontSize(13))}";
     }
 
     private static string GetHPText(Chara chara, Chara realChara)
@@ -202,7 +194,7 @@ public static class ModCharaHoverTextBuilder
         var ratio = (float)realChara.hp / realChara.MaxHP;
         var hp = chara == realChara ? chara.hp : (int)(chara.MaxHP * ratio);
         var hpValueColor = Math.Ceiling(ratio * 100) > LowValueThreshold ? ColorConfig.HPValueColor : ColorConfig.HPValueColor.Darken(0.2f);
-        var hpText = "HP:".TagColor(ColorConfig.HPLabelColor).TagSize(ModUIUtil.ComputeFontSize(11));
+        var hpText = "HP:".TagColor(ColorConfig.HPLabelColor).TagSize(ModUIUtil.ComputeFontSize(13));
         var hpValueText = $"{hp}/{chara.MaxHP}".TagColor(hpValueColor);
         return $"{hpText}{hpValueText}";
     }
@@ -213,7 +205,7 @@ public static class ModCharaHoverTextBuilder
         var ratio = (float)realChara.mana.value / realChara.mana.max;
         var mana = chara == realChara ? chara.mana.value : (int)(chara.mana.max * ratio);
         var manaValueColor = Math.Ceiling(ratio * 100) > LowValueThreshold ? ColorConfig.ManaValueColor : ColorConfig.ManaValueColor.Darken(0.2f);
-        var manaText = "MP:".TagColor(ColorConfig.ManaLabelColor).TagSize(ModUIUtil.ComputeFontSize(11));
+        var manaText = "MP:".TagColor(ColorConfig.ManaLabelColor).TagSize(ModUIUtil.ComputeFontSize(13));
         var manaValueText = $"{mana}/{chara.mana.max}".TagColor(manaValueColor);
         return $"{manaText}{manaValueText}";
     }
@@ -224,21 +216,21 @@ public static class ModCharaHoverTextBuilder
         var ratio = (float)realChara.stamina.value / realChara.stamina.max;
         var stamina = chara == realChara ? chara.stamina.value : (int)(chara.stamina.max * ratio);
         var staminaValueColor = Math.Ceiling(ratio * 100) > LowValueThreshold ? ColorConfig.StaminaValueColor : ColorConfig.StaminaValueColor.Darken(0.2f);
-        var staminaText = "SP:".TagColor(ColorConfig.StaminaLabelColor).TagSize(ModUIUtil.ComputeFontSize(11));
+        var staminaText = "SP:".TagColor(ColorConfig.StaminaLabelColor).TagSize(ModUIUtil.ComputeFontSize(13));
         var staminaValuetext = $"{stamina}/{chara.stamina.max}".TagColor(staminaValueColor);
         return $"{staminaText}{staminaValuetext}";
     }
 
     private static string GetDVText(Chara chara)
     {
-        var dvText = "DV:".TagSize(ModUIUtil.ComputeFontSize(11));
+        var dvText = "DV:".TagSize(ModUIUtil.ComputeFontSize(13));
         var dvValueTest = $"{chara.DV}";
         return $"{dvText}{dvValueTest}";
     }
 
     private static string GetPVText(Chara chara)
     {
-        var pvText = "PV:".TagSize(ModUIUtil.ComputeFontSize(11));
+        var pvText = "PV:".TagSize(ModUIUtil.ComputeFontSize(13));
         var pvValueTest = $"{chara.PV}";
         return $"{pvText}{pvValueTest}";
     }
@@ -246,14 +238,14 @@ public static class ModCharaHoverTextBuilder
     private static string GetSkillSpdText(Chara chara)
     {
         var spd = chara.elements.GetElement(SKILL.SPD);
-        var spdText = $"{spd.Name}:".TagSize(ModUIUtil.ComputeFontSize(11));
+        var spdText = $"{spd.Name}:".TagSize(ModUIUtil.ComputeFontSize(13));
         var spdValueTest = $"{spd.Value}";
         return $"{spdText}{spdValueTest}";
     }
 
     private static string GetExpText(Chara chara)
     {
-        var expText = "EXP:".TagSize(ModUIUtil.ComputeFontSize(11));
+        var expText = "EXP:".TagSize(ModUIUtil.ComputeFontSize(13));
         var expValueText = $"{chara.exp}/{chara.ExpToNext}";
         return $"{expText}{expValueText}";
     }
@@ -270,7 +262,7 @@ public static class ModCharaHoverTextBuilder
         {
             mainElementText = mainElementText.TagColor(color);
         }
-        return mainElementText.TagSize(ModUIUtil.ComputeFontSize(11));
+        return mainElementText.TagSize(ModUIUtil.ComputeFontSize(13));
     }
 
     private static string GetSkillStrText(Chara chara)
@@ -330,7 +322,7 @@ public static class ModCharaHoverTextBuilder
         bool includesValue = StyleConfig.DisplayFeatValue;
         return string.Join(
             ", ",
-            feats.Select(f => $"{f.Name}{(includesValue && f.Value > 1 ? $"({f.Value})".TagSize(ModUIUtil.ComputeFontSize(9)) : "")}")
+            feats.Select(f => $"{f.Name}{(includesValue && f.Value > 1 ? $"({f.Value})".TagSize(ModUIUtil.ComputeFontSize(11)) : "")}")
         );
     }
 
@@ -344,7 +336,7 @@ public static class ModCharaHoverTextBuilder
         bool includesParty = StyleConfig.DisplayActParty;
         return string.Join(
             ", ",
-            chara.ability.list.items.Select(a => $"{a.act.Name}{(includesParty && a.pt ? "(pt)".TagSize(ModUIUtil.ComputeFontSize(9)) : "")}")
+            chara.ability.list.items.Select(a => $"{a.act.Name}{(includesParty && a.pt ? "(pt)".TagSize(ModUIUtil.ComputeFontSize(11)) : "")}")
         );
     }
 
@@ -363,7 +355,7 @@ public static class ModCharaHoverTextBuilder
                 .GroupBy(r => Element.GetResistLv(r.Value))
                 .Where(g => g.Key != (int)Resist.None)
                 .OrderByDescending(g => g.Key)
-                .Select(g => GetResistListLineText(g, includesValue)?.TagSize(ModUIUtil.ComputeFontSize(11)))
+                .Select(g => GetResistListLineText(g, includesValue)?.TagSize(ModUIUtil.ComputeFontSize(13)))
         );
     }
 
@@ -443,7 +435,7 @@ public static class ModCharaHoverTextBuilder
             return null;
         }
 
-        var resistText = $"{resImmunePlusText}{element.GetName()}{resImmunePlusText}{(includesValue ? $"({resist.Value})".TagSize(ModUIUtil.ComputeFontSize(9)) : "")}";
+        var resistText = $"{resImmunePlusText}{element.GetName()}{resImmunePlusText}{(includesValue ? $"({resist.Value})".TagSize(ModUIUtil.ComputeFontSize(11)) : "")}";
         if (GetElementColor(eleAlias) is Color color)
         {
             resistText = resistText.TagColor(color);

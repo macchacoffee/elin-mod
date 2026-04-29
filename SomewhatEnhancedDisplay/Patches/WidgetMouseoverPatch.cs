@@ -207,7 +207,7 @@ public static class WidgetMouseoverPatch
         // "(他+n)"の文字列を調整し、GetHoverText()の戻り値の末尾に追加されるようにする
         matcher.RemoveInstruction();
         matcher.InsertAndAdvance(
-            CodeInstruction.Call(() => ModCharaHoverTextBuilder.BuildOtherCardsText(default!, default!))
+            CodeInstruction.Call(() => ModCardHoverTextBuilder.BuildOtherCardsText(default!, default!))
         );
 
         // ldloc.3 NULL [Label21, Label22]
@@ -335,7 +335,6 @@ public static class WidgetMouseoverPatch
             Config.LockTarget = false;
     }
 
-
     private static bool ShowHoverGuideForLockedTarget(WidgetMouseover widget)
     {
         if (GetOrUpdateLockedCard() is not Card card)
@@ -349,18 +348,18 @@ public static class WidgetMouseoverPatch
         return true;
     }
 
-    private static void ShowHoverGuide(WidgetMouseover widget, string? text, string? text2, string? text3, string? text4, Card? card1, Card? card2)
+    private static void ShowHoverGuide(WidgetMouseover widget, string? text1, string? text2, string? text3, string? text4, Card? card1, Card? card2)
     {
         var lockedCard = GetOrUpdateLockedCard(card1);
 
-        var target1 = new ModHoverGuideTarget(text, text2, card1);
-        var target2 = new ModHoverGuideTarget(text3, text4, card2);
+        var target1 =  new ModHoverGuideTarget(text1, text2, card1);
+        var target2 =  new ModHoverGuideTarget(text3, text4, card2);
 
         if (lockedCard is not null)
         {
             if (lockedCard != card1)
             {
-                target1 = new ModHoverGuideTarget(lockedCard?.GetHoverText(), lockedCard?.GetHoverText2(), lockedCard);
+                target1 =  new ModHoverGuideTarget(lockedCard.GetHoverText(), lockedCard.GetHoverText2(), lockedCard);
             }
             target2 = null;
         }

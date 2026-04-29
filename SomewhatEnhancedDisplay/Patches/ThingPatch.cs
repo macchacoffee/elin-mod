@@ -26,33 +26,32 @@ public static class ThingPatch
     private static IEnumerable<CodeInstruction> GetHoverText_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
         // // 変更前
-        // string text = "";
+        // text = text + " <size=14>(" + Lang._weight(base.ChildrenAndSelfWeight) + ")</size> ";
         // ...
-        // " <size=14>(""
+        // if (!hoverText.IsEmpty())
+        // {
+        //     text = text + Environment.NewLine + hoverText;
+        // }
         // ...
         // return base.GetHoverText() + text;
         // // 変更後
-        // string text = "";
-        // string? localTraitText;
+        // text = text + " <size=14>(" + Lang._weight(base.ChildrenAndSelfWeight) + ")</size>";
         // ...
-        // $" <size={CharaPatch.ComputeFontSize(14)}>("
+        // if (!hoverText.IsEmpty())
+        // {
+        // }
         // ...
-        // return ModThingHoverTextBuilder.BuildHoverText(base.GetHoverText(), text, localTraitText, this);
+        // return ModThingHoverTextBuilder.BuildHoverText(base.GetHoverText(), text, this);
         var matcher = new CodeMatcher(instructions, generator);
 
-        // ldstr " <size=14>(""
+        // ldstr ")</size> "
         matcher.MatchStartForward(
-            new CodeMatch(OpCodes.Ldstr, " <size=14>(")
+            new CodeMatch(OpCodes.Ldstr, ")</size> ")
         );
-        // フォントサイズのタグを構築する処理をすべて差し替える
+        // 末尾のスペースを削除する
         matcher.RemoveInstruction();
         matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Ldstr, " <size="),
-            new CodeInstruction(OpCodes.Ldc_I4_S, 14),
-            CodeInstruction.Call(() => ComputeFontSize(default)),
-            CodeInstruction.Call(() => IntToString(default)),
-            new CodeInstruction(OpCodes.Ldstr, ">("),
-            CodeInstruction.Call(() => string.Concat(default, default, default))
+            new CodeMatch(OpCodes.Ldstr, ")</size>")
         );
 
         // brtrue Label6
@@ -63,7 +62,7 @@ public static class ThingPatch
             new CodeMatch(OpCodes.Ldloc_0),
             new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(Environment), nameof(Environment.NewLine)))
         );
-        // train.GetHoverText()の戻り値がtextに追加されないようにする
+        // trait.GetHoverText()の戻り値がtextに追加されないようにする
         matcher.Advance(1);
         matcher.RemoveInstructions(5);
 
@@ -83,19 +82,21 @@ public static class ThingPatch
         return matcher.InstructionEnumeration();
     }
 
-    private static int ComputeFontSize(int fontSize)
-    {
-        // ゲーム設定のウィジェットのフォントサイズが "大きめ" の場合を基準にする
-        return ModUIUtil.ComputeFontSize(fontSize - 3);
-    }
-
     private static string IntToString(int value)
     {
         return value.ToString();
     }
 
+    private static int ComputeFontSize(int size)
+    {
+        // フォントサイズを微調整する
+        return ModUIUtil.ComputeFontSize(size - 1);
+    }
+
     private static string BuildHoverText(string cardText, string text, Thing thing)
     {
+        cardText = cardText.TagResize(ComputeFontSize);
+        text = text.TagResize(ComputeFontSize);
         return ModThingHoverTextBuilder.BuildHoverText(thing, cardText, text);
     }
 }

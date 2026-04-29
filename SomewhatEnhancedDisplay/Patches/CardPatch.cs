@@ -31,8 +31,16 @@ public static class CardPatch
         __result = BuildHoverText2(__result, traitText, thing);
     }
 
+    private static int ComputeFontSize(int size)
+    {
+        // フォントサイズを微調整する
+        return ModUIUtil.ComputeFontSize(size - 1);
+    }
+
     private static string BuildHoverText2(string text, string traitText, Thing thing)
     {
+        text = text.TagResize(ComputeFontSize);
+        traitText = traitText.TagResize(ComputeFontSize);
         return ModThingHoverTextBuilder.BuildHoverText2(thing, text, traitText);
     }
 }

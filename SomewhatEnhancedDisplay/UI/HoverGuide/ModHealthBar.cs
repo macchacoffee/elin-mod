@@ -10,9 +10,9 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
 public class ModHealthBar
 {
-    private static readonly float Height = 24;
-    private static readonly float BarHeight = 6;
-    private static readonly int ValueFontSize = 13;
+    private static readonly float Height = 32;
+    private static readonly float BarHeight = 8;
+    private static readonly int ValueFontSize = 16;
     private static readonly float TweenDelay = 0.1f;
     private GameObject LayoutObj { get; }
     public LayoutElement Layout { get; }
@@ -52,7 +52,6 @@ public class ModHealthBar
     {
         Target = new(null);
         var localScale = widget.textName.transform.localScale;
-        var font = widget.textName.font;
 
         LayoutObj = new GameObject(ModConsts.GameObjectName.HealthBar);
         Layout = LayoutObj.AddComponent<LayoutElement>();
@@ -68,7 +67,8 @@ public class ModHealthBar
         ValueText = valueObj.AddComponent<UIText>();
         ValueText.enabled = StyleConfig.HealthBar.DisplayValue;
         ValueText.supportRichText = true;
-        ValueText.font = font;
+        ValueText.font = widget.textName.font;
+        ValueText.fontType = FontType.Widget;
         ValueText.text = string.Empty;
         ValueText.alignment = TextAnchor.MiddleCenter;
         valueObj.transform.SetParent(Layout.transform);

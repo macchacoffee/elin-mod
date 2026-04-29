@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using SomewhatEnhancedDisplay.Config;
 using SomewhatEnhancedDisplay.Extensions;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 using YKF;
 
 namespace SomewhatEnhancedDisplay.UI.HoverGuide;
@@ -118,6 +117,8 @@ public class ModLayerConfigTabStyle : YKLayout<object>
         );
 
         line++;
+
+        line++;
         EditStyleUI.AddToggles(
             layout: styleEditLayout,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
@@ -152,15 +153,7 @@ public class ModLayerConfigTabStyle : YKLayout<object>
                 Init: SelectedStyle.Chara.DisplayHobby,
                 OnChanged: value => SelectedStyle.Chara.DisplayHobby = value,
                 GetConfig: () => SelectedStyle.Chara.DisplayHobby
-            )
-        );
-
-        line++;
-        EditStyleUI.AddToggles(
-            layout: styleEditLayout,
-            headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
-            cellWidth: cellWidth,
-            maxColumn: maxColumn,
+            ),
             new(
                 Label: ModConsts.SourceId.Affinity,
                 Init: SelectedStyle.Chara.DisplayAffinity,
@@ -327,11 +320,17 @@ public class ModLayerConfigTabStyle : YKLayout<object>
             )
         );
 
-        EditStyleUI.AddToggle(
+        EditStyleUI.AddToggles(
             layout: styleEditLayout,
             headerLabel: ModConsts.SourceId.Others,
             cellWidth: cellWidth,
             maxColumn: maxColumn,
+            new(
+                Label: ModConsts.SourceId.EnableShadowform,
+                Init: SelectedStyle.Chara.EnableShadowform,
+                OnChanged: value => SelectedStyle.Chara.EnableShadowform = value,
+                GetConfig: () => SelectedStyle.Chara.EnableShadowform
+            ),
             new(
                 Label: ModConsts.SourceId.EnableMimicry,
                 Init: SelectedStyle.Chara.EnableMimicry,

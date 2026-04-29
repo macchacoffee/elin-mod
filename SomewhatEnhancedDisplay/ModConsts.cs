@@ -62,6 +62,7 @@ public static class ModConsts
         public static readonly string Stats = Prefixed("stats");
         public static readonly string StatsValue = Prefixed("statsValue");
         public static readonly string EnableMimicry = Prefixed("enableMimicry");
+        public static readonly string EnableShadowform = Prefixed("enableShadowform");
         public static readonly string UseRarityColor = Prefixed("useRarityColor");
         public static readonly string Width = Prefixed("width");
         public static readonly string DisplayValue = Prefixed("displayValue");
