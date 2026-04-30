@@ -128,6 +128,11 @@ public static class ModConsts
         public static readonly string StyleName = Prefixed("styleName");
         public static readonly string AddStyle = Prefixed("addStyle");
         public static readonly string DeleteStyle = Prefixed("deleteStyle");
+        public static readonly string SelectStyleTemplate = Prefixed("selectStyleTemplate");
+        public static readonly string AddStyleMinimal = Prefixed("addStyleMinimal");
+        public static readonly string AddStyleDefault = Prefixed("addStyleDefault");
+        public static readonly string AddStyleMaximal = Prefixed("addStyleMaximal");
+        public static readonly string CancelAddStyle = Prefixed("cancelAddStyle");
         public static readonly string PickPreviewChara = Prefixed("pickPreviewChara");
         public static readonly string PickPreviewThing = Prefixed("pickPreviewThing");
         public static readonly string HealthBarRatio = Prefixed("healthBarRatio");

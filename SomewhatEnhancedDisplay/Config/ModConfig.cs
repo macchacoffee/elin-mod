@@ -59,7 +59,6 @@ public class ModConfigHoverGuide : ModConfigBase<ModConfigHoverGuide>
     [JsonProperty("styles", DefaultValueHandling = DefaultValueHandling.Include, ObjectCreationHandling = ObjectCreationHandling.Replace)]
     public List<ModConfigHoverGuideStyle> Styles { get; private set; } = [
         new(),
-        ModConfigHoverGuideStyle.CreateDisplayAll(),
     ];
 
     [JsonProperty("currentStyleIndex", DefaultValueHandling = DefaultValueHandling.Include, ObjectCreationHandling = ObjectCreationHandling.Replace)]
@@ -222,15 +221,6 @@ public class ModConfigHoverGuideStyle : ModConfigBase<ModConfigHoverGuideStyle>
 
     [JsonProperty("thing", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHoverGuideStyleThing Thing { get; set; } = new();
-
-    public static ModConfigHoverGuideStyle CreateDisplayAll()
-    {
-        return new()
-        {
-            Chara = ModConfigHoverGuideStyleChara.CreateDisplayAll(),
-            Thing = ModConfigHoverGuideStyleThing.CreateDisplayAll(),
-        };
-    }
 }
 
 public class ModConfigHoverGuideStyleChara : ModConfigBase<ModConfigHoverGuideStyleChara>
@@ -323,43 +313,7 @@ public class ModConfigHoverGuideStyleChara : ModConfigBase<ModConfigHoverGuideSt
     public bool EnableMimicry { get; set; } = true;
 
     [JsonProperty("healthBar", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModConfigHoverGuideHealthBar HealthBar { get; private set; } = new();
-
-    public static ModConfigHoverGuideStyleChara CreateDisplayAll()
-    {
-        return new()
-        {
-            DisplayType = true,
-            DisplayLv = true,
-            DisplayHealthBar = true,
-            DisplayGender = true,
-            DisplayAge = true,
-            DisplayRace = true,
-            DisplayJobTactics = true,
-            DisplayHobby = true,
-            DisplayAffinity = true,
-            DisplayFavorite = true,
-            DisplayHP = true,
-            DisplayMana = true,
-            DisplayStamina = true,
-            DisplayDVPV = true,
-            DisplaySpeed = true,
-            DisplayExp = true,
-            DisplayMainElement = true,
-            DisplayPrimaryAttributes = true,
-            DisplayFeat = true,
-            DisplayFeatValue = true,
-            DisplayAct = true,
-            DisplayActParty = true,
-            DisplayResist = true,
-            DisplayResistValue = true,
-            DisplayStats = true,
-            DisplayStatsValue = true,
-            EnableShadowform = false,
-            EnableMimicry = false,
-            HealthBar = ModConfigHoverGuideHealthBar.CreateDisplayAll()
-        };
-    }
+    public ModConfigHoverGuideHealthBar HealthBar { get; init; } = new();
 }
 
 public class ModConfigHoverGuideHealthBar : ModConfigBase<ModConfigHoverGuideHealthBar>
@@ -404,18 +358,6 @@ public class ModConfigHoverGuideHealthBar : ModConfigBase<ModConfigHoverGuideHea
         NotInCombat = true,
         InFullHealth = false,
     };
-
-    public static ModConfigHoverGuideHealthBar CreateDisplayAll()
-    {
-        return new()
-        {
-            DisplayValue = true,
-            DisplayForEnemy = ModConfigHealthBarDisplay.CreateDisplayAll(),
-            DisplayForNetural = ModConfigHealthBarDisplay.CreateDisplayAll(),
-            DisplayForFriend = ModConfigHealthBarDisplay.CreateDisplayAll(),
-            DisplayForAlly = ModConfigHealthBarDisplay.CreateDisplayAll(),
-        };
-    }
 }
 
 public class ModConfigHealthBarDisplay : ModConfigBase<ModConfigHealthBarDisplay>
@@ -428,16 +370,6 @@ public class ModConfigHealthBarDisplay : ModConfigBase<ModConfigHealthBarDisplay
 
     [JsonProperty("inFullHealth", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool InFullHealth { get; set; } = false;
-
-    public static ModConfigHealthBarDisplay CreateDisplayAll()
-    {
-        return new()
-        {
-            Target = ModHealthBarDisplayTarget.All,
-            NotInCombat = true,
-            InFullHealth = true,
-        };
-    }
 }
 
 public class ModConfigHoverGuideStyleThing : ModConfigBase<ModConfigHoverGuideStyleThing>
@@ -456,16 +388,4 @@ public class ModConfigHoverGuideStyleThing : ModConfigBase<ModConfigHoverGuideSt
 
     [JsonProperty("useRarityColor", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool UseRarityColor { get; set; } = true;
-
-    public static ModConfigHoverGuideStyleThing CreateDisplayAll()
-    {
-        return new()
-        {
-            DisplayLv = true,
-            DisplayMaterial = true,
-            DisplayFressness = true,
-            DisplayLockLv = true,
-            UseRarityColor = true,
-        };
-    }
 }

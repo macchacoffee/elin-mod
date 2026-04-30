@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using SomewhatEnhancedDisplay.Config;
 using SomewhatEnhancedDisplay.Extensions;
 using UnityEngine.UI;
@@ -7,6 +9,12 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
 public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
 {
+    private static Dictionary<string, Func<ModConfigHoverGuideStyle>> StyleFactories { get; } = new() {
+        {ModConsts.SourceId.AddStyleMinimal, ModConfigHoverGuideStylePresets.Minimum},
+        {ModConsts.SourceId.AddStyleDefault, ModConfigHoverGuideStylePresets.Default},
+        {ModConsts.SourceId.AddStyleMaximal, ModConfigHoverGuideStylePresets.Maximal},
+    };
+
     private ModLayerConfigContext Context => Layer.Data;
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
 
@@ -28,12 +36,20 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
 
         styleLayout.Spacer(0, 40);
 
-        // TODO 追加の選択肢 (全表示、デフォルト表示、表示少なめ) を増やす
         var addStyleButton = styleLayout.AddModButton(
             label: ModConsts.SourceId.AddStyle,
             onClicked: () =>
             {
-                Context.AddStyle(new());
+                var layer = EClass.ui.AddLayer<LayerList>().SetList2(
+                    StyleFactories.Keys,
+                    value => value.lang(),
+                    (value, _) =>
+                    {
+                        Context.AddStyle(StyleFactories[value]());
+                    },
+                    null
+                 ).SetSize();
+                 layer.SetHeader(ModConsts.SourceId.SelectStyleTemplate);
             },
             width: 100
         );
@@ -47,9 +63,10 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
                 {
                     return;
                 }
-                var d = Dialog.YesNo(ModConsts.SourceId.DialogDeleteStyle.lang((Context.SelectedStyleIndex + 1).ToString()), () =>
+                var d = Dialog.YesNo(ModConsts.SourceId.DialogDeleteStyle, () =>
                 {
                     Context.DeleteStyle(Context.SelectedStyleIndex);
+                    SE.Trash();
                 });
             },
             width: 80
@@ -60,7 +77,8 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
             updateStyleDropdown(Context.SelectedStyleIndex, Config.Styles);
             addStyleButton.SetInteractableWithAlpha(Config.Styles.Count < 5);
             deleteStyleButton.SetInteractableWithAlpha(Config.Styles.Count > 1);
-        };
+        }
+        ;
         Context.AddStyleAddedListener(updateStyleButtons);
         Context.AddStyleDeletedListener(updateStyleButtons);
         updateStyleButtons();
