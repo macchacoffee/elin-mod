@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using YKF;
 
-namespace SomewhatEnhancedDisplay.UI.HoverGuide;
+namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
-public class ModLayerConfigTabGenral : YKLayout<object>
+public class ModLayerConfigTabGenral : YKLayout<ModLayerConfigContext>
 {
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
     private static ModConfigHoverGuideColorSet ColorConfig => Config.ColorSet;
@@ -15,7 +15,7 @@ public class ModLayerConfigTabGenral : YKLayout<object>
     public override void OnLayout()
     {
         Header(ModConsts.SourceId.ConfigDisplay);
-        Spacer(36);
+        Spacer(46);
 
         var displayLayout1 = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
         displayLayout1.AddModSlider(
@@ -134,14 +134,14 @@ public class ModLayerConfigTabGenral : YKLayout<object>
                 OnChanged: color => ColorConfig.ResistLabelColor = color
             ),
             new(
-                Label: ModConsts.SourceId.NegativeResistLabelColor,
-                Init: ColorConfig.NegativeResistLabelColor,
-                OnChanged: color => ColorConfig.NegativeResistLabelColor = color
-            ),
-            new(
                 Label: ModConsts.SourceId.NoneResistLabelColor,
                 Init: ColorConfig.NoneResistLabelColor,
                 OnChanged: color => ColorConfig.NoneResistLabelColor = color
+            ),
+            new(
+                Label: ModConsts.SourceId.NegativeResistLabelColor,
+                Init: ColorConfig.NegativeResistLabelColor,
+                OnChanged: color => ColorConfig.NegativeResistLabelColor = color
             )
         );
 
@@ -161,6 +161,11 @@ public class ModLayerConfigTabGenral : YKLayout<object>
                 OnChanged: color => ColorConfig.HealthBarFGColor = color
             ),
             new(
+                Label: ModConsts.SourceId.HealthBarLowValueFGColor,
+                Init: ColorConfig.HealthBarLowValueFGColor,
+                OnChanged: color => ColorConfig.HealthBarLowValueFGColor = color
+            ),
+            new(
                 Label: ModConsts.SourceId.HealthBarFGRestoreColor,
                 Init: ColorConfig.HealthBarFGRestoreColor,
                 OnChanged: color => ColorConfig.HealthBarFGRestoreColor = color
@@ -169,11 +174,6 @@ public class ModLayerConfigTabGenral : YKLayout<object>
                 Label: ModConsts.SourceId.HealthBarFGDamageColor,
                 Init: ColorConfig.HealthBarFGDamageColor,
                 OnChanged: color => ColorConfig.HealthBarFGDamageColor = color
-            ),
-            new(
-                Label: ModConsts.SourceId.HealthBarLowValueFGColor,
-                Init: ColorConfig.HealthBarLowValueFGColor,
-                OnChanged: color => ColorConfig.HealthBarLowValueFGColor = color
             ),
             new(
                 Label: ModConsts.SourceId.HealthBarTextColor,

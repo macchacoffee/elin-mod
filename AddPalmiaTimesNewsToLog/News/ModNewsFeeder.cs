@@ -133,7 +133,6 @@ public class ModNewsFeeder
             return [];
         }
 
-        Plugin.LogInfo(request.downloadHandler.text);
         var chatList = JsonConvert.DeserializeObject<List<ModChatLog>>(request.downloadHandler.text);
         chatList.Reverse();
         foreach (var chat in chatList)

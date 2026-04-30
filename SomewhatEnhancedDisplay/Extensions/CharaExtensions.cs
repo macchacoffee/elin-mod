@@ -6,7 +6,7 @@ public static class CharaExtensions
 {
     extension(Chara chara)
     {
-        public float HealthRatio
+        public double HealthRatio
         {
             get
             {
@@ -18,7 +18,7 @@ public static class CharaExtensions
                     health += Math.Max(chara.mana.value, 0);
                     maxHealth += Math.Max(chara.mana.max, 0);
                 }
-                return (float)health / maxHealth;
+                return (double)health / maxHealth;
             }
         }
 

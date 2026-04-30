@@ -63,7 +63,7 @@ public class ModConfigHoverGuide : ModConfigBase<ModConfigHoverGuide>
     ];
 
     [JsonProperty("currentStyleIndex", DefaultValueHandling = DefaultValueHandling.Include, ObjectCreationHandling = ObjectCreationHandling.Replace)]
-    private int CurrentStyleIndex { get; set; } = 0;
+    public int CurrentStyleIndex { get; set; } = 0;
 
     [JsonIgnore]
     public ModConfigHoverGuideStyle CurrentStyle
@@ -78,9 +78,6 @@ public class ModConfigHoverGuide : ModConfigBase<ModConfigHoverGuide>
             return Styles[CurrentStyleIndex];
         }
     }
-
-    [JsonIgnore]
-    public bool LockTarget { get; set; } = false;
 
     public void AdvanceStyle()
     {

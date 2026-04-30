@@ -18,6 +18,8 @@ public static class ModConsts
         public static readonly string Config = Prefixed("Config");
         public static readonly string ConfigGenaral = Prefixed("ConfigGenaral");
         public static readonly string ConfigStyle = Prefixed("ConfigStyle");
+        public static readonly string ConfigStyleTargetChara = Prefixed("ConfigStyleTargetChara");
+        public static readonly string ConfigStyleTargetThing = Prefixed("ConfigStyleTargetThing");
         public static readonly string ColorPicker = Prefixed("ColorPicker");
     }
     public static class SourceId
@@ -83,12 +85,16 @@ public static class ModConsts
         public static readonly string ConfigHoverGuide = Prefixed("configHoverGuide");
         public static readonly string ConfigGeneral = Prefixed("configGeneral");
         public static readonly string ConfigStyle = Prefixed("configStyle");
+        public static readonly string ConfigStyleTargetChara = Prefixed("configStyleTargetChara");
+        public static readonly string ConfigStyleTargetThing = Prefixed("configStyleTargetThing");
         public static readonly string ConfigDisplay = Prefixed("configDisplay");
         public static readonly string ConfigColors = Prefixed("configColors");
+        public static readonly string ConfigEditStyle = Prefixed("configEditStyle");
         public static readonly string ConfigSelectStyleToEdit = Prefixed("configSelectStyleToEdit");
         public static readonly string ConfigAddStyle = Prefixed("configAddStyle");
         public static readonly string ConfigDeleteStyle = Prefixed("configDeleteStyle");
         public static readonly string ConfigDisplayItems = Prefixed("configDisplayItems");
+        public static readonly string ConfigDisplayTransmutation = Prefixed("configDisplayTransmutation");
         public static readonly string ResetConfig = Prefixed("resetConfig");
         public static readonly string ResetConfigTab = Prefixed("resetConfigTab");
         public static readonly string DialogResetConfig = Prefixed("dialogResetConfig");

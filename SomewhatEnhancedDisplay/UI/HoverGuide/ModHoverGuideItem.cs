@@ -65,7 +65,7 @@ public class ModHoverGuideItem
             if (isLocked)
             {
                 var lines = text1.Split([Environment.NewLine], StringSplitOptions.None);
-                if (lines.Length > 1)
+                if (lines.Length > 0)
                 {
                     lines[0] = $"* {lines[0]} *";
                 }

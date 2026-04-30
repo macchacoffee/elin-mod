@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using ModUtility.Patch;
-using SomewhatEnhancedDisplay.Config;
+using SomewhatEnhancedDisplay.UI;
 using SomewhatEnhancedDisplay.UI.HoverGuide;
 using UnityEngine;
 
@@ -21,16 +21,11 @@ public static class WidgetMouseoverPatch
         return PatchTarget.IsPatchable(original);
     }
 
-    private static ModHoverGuide? HoverGuide { get; set; }
-    private static WeakReference<Card?> LockedCard { get; set; } = new(null);
-
-    private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
-
     [HarmonyPostfix]
     [HarmonyPatch(nameof(WidgetMouseover.OnActivate), [])]
     private static void OnActivate_Postfix(WidgetMouseover __instance)
     {
-        HoverGuide = new(__instance);
+        ModUI.HoverGuide = new(__instance);
     }
 
     [HarmonyTranspiler]
@@ -77,7 +72,7 @@ public static class WidgetMouseoverPatch
         // Card? localTarget2;
         // if (((!flag && mouseTarget.target == null) || (ActionMode.IsAdv && Input.GetMouseButton(0))) && roster == null)
         // {
-        //     if (!WidgetMouseoverPatch.ShowHoverGuideForLockedTarget(this)) {
+        //     if (!WidgetMouseoverPatch.TryShowHoverGuideLockedCard(this)) {
         //         Hide();
         //     }
         //     return;
@@ -131,7 +126,7 @@ public static class WidgetMouseoverPatch
         // 固定ターゲットの表示を試行し、表示する場合はHide()の呼び出しをスキップする処理を追加する
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Ldarg_0),
-            CodeInstruction.Call(() => ShowHoverGuideForLockedTarget(default!)),
+            CodeInstruction.Call(() => TryShowHoverGuideLockedCard(default!)),
             new CodeInstruction(OpCodes.Brtrue, LabelMod1)
         );
 
@@ -299,71 +294,19 @@ public static class WidgetMouseoverPatch
     [HarmonyPatch(nameof(WidgetMouseover.OnManagerActivate), [])]
     private static void OnManagerActivate_Postfix(WidgetMouseover __instance)
     {
-        UnlockLockedCard();
-        HoverGuide!.ShowForManager(__instance);
+        ModUI.HoverGuide!.UnlockCard();
+        ModUI.HoverGuide!.ShowForManager(__instance);
     }
 
-    private static Card? GetOrUpdateLockedCard()
+    private static bool TryShowHoverGuideLockedCard(WidgetMouseover widget)
     {
-        return GetOrUpdateLockedCard(null);
-    }
-
-    private static Card? GetOrUpdateLockedCard(Card? newCard)
-    {
-        Card? lockedCard = null;
-        if (Config.LockTarget && !LockedCard.TryGetTarget(out lockedCard))
-        {
-            if (newCard is Chara chara)
-            {
-                // Cardであれば固定できるが、実用性を考慮してCharaのみ固定可能とする
-                LockedCard.SetTarget(chara);
-                lockedCard = chara;
-            }
-        }
-        else if (!Config.LockTarget || (lockedCard is Card card && !card.ExistsOnMap))
-        {
-            UnlockLockedCard();
-            lockedCard = null;
-        }
-
-        return lockedCard;
-    }
-
-    private static void UnlockLockedCard()
-    {
-            LockedCard.SetTarget(null);
-            Config.LockTarget = false;
-    }
-
-    private static bool ShowHoverGuideForLockedTarget(WidgetMouseover widget)
-    {
-        if (GetOrUpdateLockedCard() is not Card card)
-        {
-            return false;
-        }
-
-        var target = new ModHoverGuideTarget(card.GetHoverText(), card.GetHoverText2(), card);
-        HoverGuide!.Show(widget, target, null, true);
-
-        return true;
+        return ModUI.HoverGuide!.TryShowLockedCard(widget);
     }
 
     private static void ShowHoverGuide(WidgetMouseover widget, string? text1, string? text2, string? text3, string? text4, Card? card1, Card? card2)
     {
-        var lockedCard = GetOrUpdateLockedCard(card1);
-
         var target1 =  new ModHoverGuideTarget(text1, text2, card1);
         var target2 =  new ModHoverGuideTarget(text3, text4, card2);
-
-        if (lockedCard is not null)
-        {
-            if (lockedCard != card1)
-            {
-                target1 =  new ModHoverGuideTarget(lockedCard.GetHoverText(), lockedCard.GetHoverText2(), lockedCard);
-            }
-            target2 = null;
-        }
-
-        HoverGuide!.Show(widget, target1, target2, lockedCard is not null);
+        ModUI.HoverGuide!.Show(widget, target1, target2);
     }
 }

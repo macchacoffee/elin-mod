@@ -1,86 +1,19 @@
-using System;
-using System.Collections.Generic;
-using SomewhatEnhancedDisplay.Config;
-using SomewhatEnhancedDisplay.Extensions;
 using UnityEngine.UI;
-using YKF;
 
-namespace SomewhatEnhancedDisplay.UI.HoverGuide;
+namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
-public class ModLayerConfigTabStyle : YKLayout<object>
+public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
 {
-    private int SelectedStyleIndex
+    protected override void OnLayoutInternal()
     {
-        get;
-        set
-        {
-            field = value;
-            EditStyleUI?.OnStyleChanged();
-        }
-    } = 0;
-
-    private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
-    private ModConfigHoverGuideStyle SelectedStyle => Config.Styles[SelectedStyleIndex];
-
-    private EditStyleUIManager? EditStyleUI { get; set; }
-
-    public override void OnLayout()
-    {
-        Spacer(12);
-
-        var headerLayout = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
-        var (_, updateStyleDropdown) = headerLayout.AddModDropdown(
-            label: ModConsts.SourceId.ConfigSelectStyleToEdit,
-            init: 0,
-            values: Config.Styles,
-            getLabel: (value, index) => $"{ModConsts.SourceId.ConfigStyle.lang()} {index + 1}",
-            onChanged: (index, Value) => SelectedStyleIndex = index,
-            width: 180
-        );
-
-        headerLayout.Spacer(0, 40);
-
-        // TODO 追加の選択肢 (全表示、表示多め、表示少なめなど) を増やす
-        headerLayout.AddModButton(
-            label: ModConsts.SourceId.ConfigAddStyle,
-            onClicked: () =>
-            {
-                Config.Styles.Add(new());
-                SelectedStyleIndex = Config.Styles.Count - 1;
-                updateStyleDropdown(SelectedStyleIndex, Config.Styles);
-            },
-            width: 100
-        );
-
-        headerLayout.Spacer(0, 6);
-        headerLayout.AddModButton(
-            label: ModConsts.SourceId.ConfigDeleteStyle,
-            onClicked: () =>
-            {
-                if (Config.Styles.Count <= 1)
-                {
-                    return;
-                }
-                var d = Dialog.YesNo(ModConsts.SourceId.DialogDeleteStyle, () =>
-                {
-                    Config.Styles.RemoveAt(SelectedStyleIndex);
-                    SelectedStyleIndex = Math.Max(0, SelectedStyleIndex - 1);
-                    updateStyleDropdown(SelectedStyleIndex, Config.Styles);
-                });
-            },
-            width: 80
-        );
-
         var styleEditLayout = Vertical();
         styleEditLayout.Fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-        EditStyleUI = new();
         var cellWidth = 200;
         var maxColumn = 3;
         var line = 0;
 
-        styleEditLayout.Spacer(20);
-        styleEditLayout.Header(ModConsts.SourceId.ConfigDisplayItems.lang(ModConsts.SourceId.Chara.lang()));
+        styleEditLayout.Header(ModConsts.SourceId.ConfigDisplayItems);
 
         line++;
         EditStyleUI.AddToggles(
@@ -103,6 +36,8 @@ public class ModLayerConfigTabStyle : YKLayout<object>
         );
 
         line++;
+
+        line++;
         EditStyleUI.AddToggle(
             layout: styleEditLayout,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
@@ -115,8 +50,6 @@ public class ModLayerConfigTabStyle : YKLayout<object>
                 GetConfig: () => SelectedStyle.Chara.DisplayHealthBar
             )
         );
-
-        line++;
 
         line++;
         EditStyleUI.AddToggles(
@@ -328,9 +261,12 @@ public class ModLayerConfigTabStyle : YKLayout<object>
             )
         );
 
+        styleEditLayout.Spacer(20);
+        styleEditLayout.Header(ModConsts.SourceId.ConfigDisplayTransmutation);
+
         EditStyleUI.AddToggles(
             layout: styleEditLayout,
-            headerLabel: ModConsts.SourceId.Others,
+            headerLabel: null,
             cellWidth: cellWidth,
             maxColumn: maxColumn,
             new(
@@ -348,7 +284,7 @@ public class ModLayerConfigTabStyle : YKLayout<object>
         );
 
         styleEditLayout.Spacer(20);
-        styleEditLayout.Header(ModConsts.SourceId.HealthBar.lang());
+        styleEditLayout.Header(ModConsts.SourceId.HealthBar);
 
         EditStyleUI.AddToggles(
             layout: styleEditLayout,
@@ -368,96 +304,5 @@ public class ModLayerConfigTabStyle : YKLayout<object>
                 GetConfig: () => SelectedStyle.Chara.HealthBar.UseAnimation
             )
         );
-
-        line = 0;
-
-        styleEditLayout.Spacer(20);
-        styleEditLayout.Header(ModConsts.SourceId.ConfigDisplayItems.lang(ModConsts.SourceId.Thing.lang()));
-
-        line++;
-        EditStyleUI.AddToggles(
-            layout: styleEditLayout,
-            headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
-            cellWidth: cellWidth,
-            maxColumn: maxColumn,
-            new(
-                Label: ModConsts.SourceId.Lv,
-                Init: SelectedStyle.Thing.DisplayLv,
-                OnChanged: value => SelectedStyle.Thing.DisplayLv = value,
-                GetConfig: () => SelectedStyle.Thing.DisplayLv
-            ),
-            new(
-                Label: ModConsts.SourceId.UseRarityColor,
-                Init: SelectedStyle.Thing.UseRarityColor,
-                OnChanged: value => SelectedStyle.Thing.UseRarityColor = value,
-                GetConfig: () => SelectedStyle.Thing.UseRarityColor
-            )
-        );
-
-        line++;
-        EditStyleUI.AddToggles(
-            layout: styleEditLayout,
-            headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
-            cellWidth: cellWidth,
-            maxColumn: maxColumn,
-            new(
-                Label: ModConsts.SourceId.Material,
-                Init: SelectedStyle.Thing.DisplayMaterial,
-                OnChanged: value => SelectedStyle.Thing.DisplayMaterial = value,
-                GetConfig: () => SelectedStyle.Thing.DisplayMaterial
-            ),
-            new(
-                Label: ModConsts.SourceId.LockLv,
-                Init: SelectedStyle.Thing.DisplayLockLv,
-                OnChanged: value => SelectedStyle.Thing.DisplayLockLv = value,
-                GetConfig: () => SelectedStyle.Thing.DisplayLockLv
-            ),
-            new(
-                Label: ModConsts.SourceId.Fressness,
-                Init: SelectedStyle.Thing.DisplayFressness,
-                OnChanged: value => SelectedStyle.Thing.DisplayFressness = value,
-                GetConfig: () => SelectedStyle.Thing.DisplayFressness
-            )
-        );
-    }
-
-    private record EditStyleToogleUIItem(string Label, bool Init, Action<bool> OnChanged, Func<bool> GetConfig, string? Tooltip = null);
-
-    private class EditStyleUIManager
-    {
-        private List<Action> StyleChangedFuncs { get; } = [];
-
-        public void OnStyleChanged()
-        {
-            foreach (var func in StyleChangedFuncs)
-            {
-                func();
-            }
-        }
-
-        public void AddToggle(YKLayout layout, string headerLabel, int cellWidth, int maxColumn, EditStyleToogleUIItem item)
-        {
-            AddToggles(layout, headerLabel, cellWidth, maxColumn, [item]);
-        }
-
-        public void AddToggles(YKLayout layout, string? headerLabel, int cellWidth, int maxColumn, params EditStyleToogleUIItem[] items)
-        {
-            if (headerLabel is not null)
-            {
-                var header = layout.HeaderSmall(headerLabel);
-            }
-            var grid = layout.Grid().WithPivot(0, 0.5f).WithCellSize(cellWidth, 50).WithConstraintCount(maxColumn);
-            grid.Layout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            foreach (var item in items)
-            {
-                var toogle = grid.AddModToggle(item.Label, item.Init, item.OnChanged);
-                if (item.Tooltip is string tooltip)
-                {
-                    toogle.SetTooltipLang(tooltip);
-                    toogle.tooltip.icon = true;
-                }
-                StyleChangedFuncs.Add(() => toogle.SetCheck(item.GetConfig()));
-            }
-        }
     }
 }

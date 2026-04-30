@@ -1,3 +1,4 @@
+using System;
 using SomewhatEnhancedDisplay.Config;
 using UnityEngine;
 
@@ -13,6 +14,9 @@ public class ModHoverGuide
 
     private Vector2 OriginalPivot { get; }
     private int BaseFontSize { get; }
+
+    public bool LocksCard { get; set; } = false;
+    private static WeakReference<Card?> LockedCard { get; set; } = new(null);
 
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
 
@@ -33,7 +37,87 @@ public class ModHoverGuide
         Item2.Enabled = false;
     }
 
-    public void Show(WidgetMouseover widget, ModHoverGuideTarget? target1, ModHoverGuideTarget? target2, bool isLocked)
+    private Card? GetOrUpdateLockedCard()
+    {
+        return GetOrUpdateLockedCard(null);
+    }
+
+    private Card? GetOrUpdateLockedCard(Card? newCard)
+    {
+        Card? lockedCard = null;
+        if (LocksCard && !LockedCard.TryGetTarget(out lockedCard))
+        {
+            if (newCard is Card card)
+            {
+                LockedCard.SetTarget(card);
+                lockedCard = card;
+            }
+        }
+        else if (!LocksCard || (lockedCard is Card card && !card.ExistsOnMap))
+        {
+            UnlockCard();
+            lockedCard = null;
+        }
+
+        return lockedCard;
+    }
+
+    private static bool IsWidgetActive(WidgetMouseover widget)
+    {
+        return widget.config.state == Widget.State.Active;
+    }
+
+    public void LockCard(Card card)
+    {
+            LockedCard.SetTarget(card);
+            LocksCard = true;
+    }
+
+    public void UnlockCard()
+    {
+            LockedCard.SetTarget(null);
+            LocksCard = false;
+    }
+
+    public void Show(WidgetMouseover? widget, ModHoverGuideTarget? target1, ModHoverGuideTarget? target2)
+    {
+        if (widget is null || !IsWidgetActive(widget))
+        {
+            return;
+        }
+
+        var card1 = target1?.Card;
+        var lockedCard = GetOrUpdateLockedCard(card1);
+        if (lockedCard is not null)
+        {
+            if (lockedCard != card1)
+            {
+                target1 =  new ModHoverGuideTarget(lockedCard.GetHoverText(), lockedCard.GetHoverText2(), lockedCard);
+            }
+            target2 = null;
+        }
+
+        ShowInternal(widget, target1, target2, lockedCard is not null);
+    }
+
+    public bool TryShowLockedCard(WidgetMouseover? widget)
+    {
+        if (widget is null || !IsWidgetActive(widget))
+        {
+            return false;
+        }
+        if (GetOrUpdateLockedCard() is not Card card)
+        {
+            return false;
+        }
+
+        var target = new ModHoverGuideTarget(card.GetHoverText(), card.GetHoverText2(), card);
+        ShowInternal(widget, target, null, true);
+
+        return true;
+    }
+
+    private void ShowInternal(WidgetMouseover widget, ModHoverGuideTarget? target1, ModHoverGuideTarget? target2, bool isLocked)
     {
         var fontColor = widget.textName.fontColor;
         // 行間を広げるためにフォントサイズを少し大きく設定する
@@ -51,8 +135,13 @@ public class ModHoverGuide
         widget.layout.Rect().pivot = new(Config.HorizontalPivot, Config.VerticalPivot);
     }
 
-    public void ShowForManager(WidgetMouseover widget)
+    public void ShowForManager(WidgetMouseover? widget)
     {
+        if (widget is null || !IsWidgetActive(widget))
+        {
+            return;
+        }
+
         widget.layout.Rect().pivot = OriginalPivot;
         widget.textName.enabled = true;
 

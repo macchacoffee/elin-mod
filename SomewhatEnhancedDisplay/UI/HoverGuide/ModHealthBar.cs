@@ -21,7 +21,7 @@ public class ModHealthBar
     private UIImage FGRestoreImage { get; }
     private UIImage FGImage { get; }
     private UIText ValueText { get; }
-    private float ValueRatio { get; set; }
+    private double ValueRatio { get; set; }
     private WeakReference<Chara?> Target { get; }
     private Tween? FGRestoreTween { get; set; }
     private Tween? FGDamageTween { get; set; }
@@ -107,8 +107,8 @@ public class ModHealthBar
     public void Update(Chara chara)
     {
         var ratio = chara.HealthRatio;
-        var pctColor = Color.Lerp(ColorConfig.HealthBarLowValueTextColor, ColorConfig.HealthBarTextColor, ratio);
-        var barColor = Color.Lerp(ColorConfig.HealthBarLowValueFGColor, ColorConfig.HealthBarFGColor, ratio);
+        var pctColor = Color.Lerp(ColorConfig.HealthBarLowValueTextColor, ColorConfig.HealthBarTextColor, (float)ratio);
+        var barColor = Color.Lerp(ColorConfig.HealthBarLowValueFGColor, ColorConfig.HealthBarFGColor, (float)ratio);
 
         // 設定で有効な場合は体力バーの増減をアニメーションで表現する
         if (!StyleConfig.HealthBar.UseAnimation
@@ -121,9 +121,9 @@ public class ModHealthBar
             FGDamageTween?.Kill(true);
             ValueText.text = GetValueText(ratio).TagColor(pctColor);
             ValueText.color = pctColor;
-            FGDamageImage.fillAmount = ratio;
-            FGRestoreImage.fillAmount = ratio;
-            FGImage.fillAmount = ratio;
+            FGDamageImage.fillAmount = (float)ratio;
+            FGRestoreImage.fillAmount = (float)ratio;
+            FGImage.fillAmount = (float)ratio;
             FGDamageImage.color = ColorConfig.HealthBarBGColor;
             FGRestoreImage.color = ColorConfig.HealthBarBGColor;
             FGImage.color = barColor;
@@ -138,20 +138,25 @@ public class ModHealthBar
         Target.SetTarget(chara);
     }
 
-    private static string GetValueText(float ratio)
+    private static double RoundRatioForValueText(double ratio)
     {
+        // %表記で小数第1位まで表示するため、小数第3位以降を丸める
+        // 現在HPが最大HPよりも1でも低ければ0.999になるようにする
+        return ModMath.Ceiling(ratio < 1 ? Math.Min(ratio, 0.999) : ratio, 3);
+    }
+
+    private static string GetValueText(double ratio)
+    {
+        var pct = RoundRatioForValueText(ratio) * 100;
         // 0%または100%以上の場合は小数点以下なし、それ以外の場合は小数第1位まで表示する
-        // 現在HPが最大HPよりも1でも低ければ100%とは表示しないようにする
-        var pct = ModMath.Ceiling((ratio < 1 ? Math.Min(ratio, 0.999f) : ratio) * 100, 1);
         var pctText = pct == 0 || pct >= 100 ? $"{pct:0}" : $"{pct:0.0}";
         return $"{pctText}%";
     }
 
-    private void UpdateRestore(float valueRatio, Color barColor, Color textColor)
+    private void UpdateRestore(double valueRatio, Color barColor, Color textColor)
     {
-        float ratio1 = Math.Min(1, valueRatio);
-        FGRestoreImage.fillAmount = ratio1;
-
+        var ratio = Math.Min(1, valueRatio);
+        FGRestoreImage.fillAmount = (float)ratio;
         var ratioDelta = valueRatio - FGImage.fillAmount;
         if (ratioDelta == 0)
         {
@@ -165,12 +170,12 @@ public class ModHealthBar
         }
 
         var barRatio = FGImage.fillAmount;
-        var duration = Math.Abs(ratio1 - barRatio) * 1.5f;
+        var duration = Math.Abs((float)ratio - barRatio) * 1.5f;
         FGRestoreTween = DOTween.Sequence()
             .SetLink(LayoutObj)
             .Join(
                 FGImage
-                .DOFillAmount(ratio1, duration)
+                .DOFillAmount((float)ratio, duration)
                 .SetLink(LayoutObj)
                 .SetEase(Ease.Linear))
             .Join(
@@ -180,9 +185,9 @@ public class ModHealthBar
                 .SetEase(Ease.Linear))
             .Join(
                 DOTween.To(
-                    () => barRatio,
+                    () => (double)barRatio,
                     value => ValueText.text = GetValueText(value),
-                    valueRatio,
+                    RoundRatioForValueText(valueRatio),
                     duration)
                 .SetLink(LayoutObj)
                 .SetEase(Ease.Linear))
@@ -197,7 +202,7 @@ public class ModHealthBar
         {
             if (valueRatio > FGDamageImage.fillAmount)
             {
-                FGDamageImage.fillAmount = ratio1;
+                FGDamageImage.fillAmount = (float)ratio;
             }
             FGRestoreImage.color = ColorConfig.HealthBarFGRestoreColor;
         })
@@ -207,9 +212,9 @@ public class ModHealthBar
         });
     }
 
-    private void UpdateDamage(float valueRatio, Color barColor, Color textColor)
+    private void UpdateDamage(double valueRatio, Color barColor, Color textColor)
     {
-        float ratio1 = Math.Min(1, valueRatio);
+        var ratio = Math.Min(1, valueRatio);
         var ratioDelta = valueRatio - FGDamageImage.fillAmount;
         if (ratioDelta == 0)
         {
@@ -223,9 +228,9 @@ public class ModHealthBar
         }
 
         var barRatio = FGDamageImage.fillAmount;
-        var duration = Math.Abs(ratio1 - barRatio) * 3;
+        var duration = Math.Abs((float)ratio - barRatio) * 3;
         FGDamageTween = FGDamageImage
-            .DOFillAmount(ratio1, duration)
+            .DOFillAmount((float)ratio, duration)
             .SetLink(LayoutObj)
             .SetDelay(hasOldTween ? 0 : TweenDelay)
             .SetEase(Ease.Linear)
@@ -233,7 +238,7 @@ public class ModHealthBar
             {
                 if (valueRatio < FGImage.fillAmount)
                 {
-                    FGImage.fillAmount = ratio1;
+                    FGImage.fillAmount = (float)ratio;
                     FGImage.color = barColor;
                     ValueText.text = GetValueText(valueRatio);
                     ValueText.color = textColor;
