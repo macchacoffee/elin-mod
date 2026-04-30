@@ -1,23 +1,18 @@
-using UnityEngine.UI;
-
 namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
 public class ModLayerConfigTabStyleTargetThing : ModLayerConfigTabStyleTarget
 {
     protected override void OnLayoutInternal()
     {
-        var styleEditLayout = Vertical();
-        styleEditLayout.Fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-
         var cellWidth = 200;
         var maxColumn = 3;
         var line = 0;
 
-        styleEditLayout.Header(ModConsts.SourceId.ConfigDisplayItems);
+        Header(ModConsts.SourceId.ConfigDisplayItems);
 
         line++;
         EditStyleUI.AddToggles(
-            layout: styleEditLayout,
+            layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
@@ -37,7 +32,7 @@ public class ModLayerConfigTabStyleTargetThing : ModLayerConfigTabStyleTarget
 
         line++;
         EditStyleUI.AddToggles(
-            layout: styleEditLayout,
+            layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,

@@ -322,7 +322,7 @@ public static class ModCharaHoverTextBuilder
         bool includesValue = StyleConfig.DisplayFeatValue;
         return string.Join(
             ", ",
-            feats.Select(f => $"{f.Name}{(includesValue && f.Value > 1 ? $"({f.Value})".TagSize(ModUIUtil.ComputeFontSize(11)) : "")}")
+            feats.Select(f => $"{f.Name}{(includesValue && f.Value > 1 ? $"({f.Value})".TagSize(ModUIUtil.ComputeFontSize(11)) : string.Empty)}")
         );
     }
 
@@ -336,7 +336,7 @@ public static class ModCharaHoverTextBuilder
         bool includesParty = StyleConfig.DisplayActParty;
         return string.Join(
             ", ",
-            chara.ability.list.items.Select(a => $"{a.act.Name}{(includesParty && a.pt ? "(pt)".TagSize(ModUIUtil.ComputeFontSize(11)) : "")}")
+            chara.ability.list.items.Select(a => $"{a.act.Name}{(includesParty && a.pt ? "(pt)".TagSize(ModUIUtil.ComputeFontSize(11)) : string.Empty)}")
         );
     }
 
@@ -435,7 +435,7 @@ public static class ModCharaHoverTextBuilder
             return null;
         }
 
-        var resistText = $"{resImmunePlusText}{element.GetName()}{resImmunePlusText}{(includesValue ? $"({resist.Value})".TagSize(ModUIUtil.ComputeFontSize(11)) : "")}";
+        var resistText = $"{resImmunePlusText}{element.GetName()}{resImmunePlusText}{(includesValue ? $"({resist.Value})".TagSize(ModUIUtil.ComputeFontSize(11)) : string.Empty)}";
         if (GetElementColor(eleAlias) is Color color)
         {
             resistText = resistText.TagColor(color);

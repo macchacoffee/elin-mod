@@ -88,7 +88,7 @@ public class ModHoverGuideItem
         {
             var enabled = DisplaysHealthBar(chara);
             HealthBar.Enabled = enabled;
-            HealthBar.Update(chara);
+            HealthBar.Update(chara, target.Modifier);
             displays = enabled;
             isPaddingRequired = !enabled;
         }

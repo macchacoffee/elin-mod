@@ -106,7 +106,12 @@ public class ModHealthBar
 
     public void Update(Chara chara)
     {
-        var ratio = chara.HealthRatio;
+        Update(chara, null);
+    }
+
+    public void Update(Chara chara, ModHoverGuideTargetModifier? modifier)
+    {
+        var ratio = modifier?.HealthBarRatio ?? chara.HealthRatio;
         var pctColor = Color.Lerp(ColorConfig.HealthBarLowValueTextColor, ColorConfig.HealthBarTextColor, (float)ratio);
         var barColor = Color.Lerp(ColorConfig.HealthBarLowValueFGColor, ColorConfig.HealthBarFGColor, (float)ratio);
 

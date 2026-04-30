@@ -90,11 +90,9 @@ public static class ModConsts
         public static readonly string ConfigDisplay = Prefixed("configDisplay");
         public static readonly string ConfigColors = Prefixed("configColors");
         public static readonly string ConfigEditStyle = Prefixed("configEditStyle");
-        public static readonly string ConfigSelectStyleToEdit = Prefixed("configSelectStyleToEdit");
-        public static readonly string ConfigAddStyle = Prefixed("configAddStyle");
-        public static readonly string ConfigDeleteStyle = Prefixed("configDeleteStyle");
+        public static readonly string ConfigPreview = Prefixed("configPreview");
         public static readonly string ConfigDisplayItems = Prefixed("configDisplayItems");
-        public static readonly string ConfigDisplayTransmutation = Prefixed("configDisplayTransmutation");
+        public static readonly string ConfigTransmutation = Prefixed("configTransmutation");
         public static readonly string ResetConfig = Prefixed("resetConfig");
         public static readonly string ResetConfigTab = Prefixed("resetConfigTab");
         public static readonly string DialogResetConfig = Prefixed("dialogResetConfig");
@@ -126,5 +124,12 @@ public static class ModConsts
         public static readonly string RarityLegendaryColor = Prefixed("rarityLegendaryColor");
         public static readonly string RarityMythicalColor = Prefixed("rarityMythicalColor");
         public static readonly string RarityArtifactColor = Prefixed("rarityArtifactColor");
-    }
+        public static readonly string SelectStyleToEdit = Prefixed("selectStyleToEdit");
+        public static readonly string StyleName = Prefixed("styleName");
+        public static readonly string AddStyle = Prefixed("addStyle");
+        public static readonly string DeleteStyle = Prefixed("deleteStyle");
+        public static readonly string PickPreviewChara = Prefixed("pickPreviewChara");
+        public static readonly string PickPreviewThing = Prefixed("pickPreviewThing");
+        public static readonly string HealthBarRatio = Prefixed("healthBarRatio");
+     }
 }

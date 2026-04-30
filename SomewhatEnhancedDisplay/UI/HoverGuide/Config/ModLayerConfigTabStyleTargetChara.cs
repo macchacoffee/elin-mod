@@ -1,23 +1,18 @@
-using UnityEngine.UI;
-
 namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
 public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
 {
     protected override void OnLayoutInternal()
     {
-        var styleEditLayout = Vertical();
-        styleEditLayout.Fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-
         var cellWidth = 200;
         var maxColumn = 3;
         var line = 0;
 
-        styleEditLayout.Header(ModConsts.SourceId.ConfigDisplayItems);
+        Header(ModConsts.SourceId.ConfigDisplayItems);
 
         line++;
         EditStyleUI.AddToggles(
-            layout: styleEditLayout,
+            layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
@@ -39,7 +34,7 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
 
         line++;
         EditStyleUI.AddToggle(
-            layout: styleEditLayout,
+            layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
@@ -53,7 +48,7 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
 
         line++;
         EditStyleUI.AddToggles(
-            layout: styleEditLayout,
+            layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
@@ -91,7 +86,7 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
 
         line++;
         EditStyleUI.AddToggles(
-            layout: styleEditLayout,
+            layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
@@ -111,7 +106,7 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
 
         line++;
         EditStyleUI.AddToggles(
-            layout: styleEditLayout,
+            layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
@@ -137,7 +132,7 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
 
         line++;
         EditStyleUI.AddToggles(
-            layout: styleEditLayout,
+            layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
@@ -169,7 +164,7 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
 
         line++;
         EditStyleUI.AddToggle(
-            layout: styleEditLayout,
+            layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
@@ -183,7 +178,7 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
 
         line++;
         EditStyleUI.AddToggles(
-            layout: styleEditLayout,
+            layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
@@ -203,7 +198,7 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
 
         line++;
         EditStyleUI.AddToggles(
-            layout: styleEditLayout,
+            layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
@@ -223,7 +218,7 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
 
         line++;
         EditStyleUI.AddToggles(
-            layout: styleEditLayout,
+            layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
@@ -243,7 +238,7 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
 
         line++;
         EditStyleUI.AddToggles(
-            layout: styleEditLayout,
+            layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
@@ -261,11 +256,11 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
             )
         );
 
-        styleEditLayout.Spacer(20);
-        styleEditLayout.Header(ModConsts.SourceId.ConfigDisplayTransmutation);
+        Spacer(20);
+        Header(ModConsts.SourceId.ConfigTransmutation);
 
         EditStyleUI.AddToggles(
-            layout: styleEditLayout,
+            layout: this,
             headerLabel: null,
             cellWidth: cellWidth,
             maxColumn: maxColumn,
@@ -283,11 +278,11 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
             )
         );
 
-        styleEditLayout.Spacer(20);
-        styleEditLayout.Header(ModConsts.SourceId.HealthBar);
+        Spacer(20);
+        Header(ModConsts.SourceId.HealthBar);
 
         EditStyleUI.AddToggles(
-            layout: styleEditLayout,
+            layout: this,
             headerLabel: null,
             cellWidth: cellWidth,
             maxColumn: maxColumn,

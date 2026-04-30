@@ -16,7 +16,8 @@ public class ModHoverGuide
     private int BaseFontSize { get; }
 
     public bool LocksCard { get; set; } = false;
-    private static WeakReference<Card?> LockedCard { get; set; } = new(null);
+    private WeakReference<Card?> LockedCard { get; set; } = new(null);
+    private ModHoverGuideTargetModifier? LockedModifier { get; set; }
 
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
 
@@ -69,14 +70,21 @@ public class ModHoverGuide
 
     public void LockCard(Card card)
     {
-            LockedCard.SetTarget(card);
-            LocksCard = true;
+        LockCard(card, null);
+    }
+
+    public void LockCard(Card card, ModHoverGuideTargetModifier? modifier)
+    {
+        LockedCard.SetTarget(card);
+        LockedModifier = modifier;
+        LocksCard = true;
     }
 
     public void UnlockCard()
     {
-            LockedCard.SetTarget(null);
-            LocksCard = false;
+        LockedCard.SetTarget(null);
+        LockedModifier = null;
+        LocksCard = false;
     }
 
     public void Show(WidgetMouseover? widget, ModHoverGuideTarget? target1, ModHoverGuideTarget? target2)
@@ -92,7 +100,7 @@ public class ModHoverGuide
         {
             if (lockedCard != card1)
             {
-                target1 =  new ModHoverGuideTarget(lockedCard.GetHoverText(), lockedCard.GetHoverText2(), lockedCard);
+                target1 = new ModHoverGuideTarget(lockedCard.GetHoverText(), lockedCard.GetHoverText2(), lockedCard, LockedModifier);
             }
             target2 = null;
         }
@@ -111,7 +119,7 @@ public class ModHoverGuide
             return false;
         }
 
-        var target = new ModHoverGuideTarget(card.GetHoverText(), card.GetHoverText2(), card);
+        var target = new ModHoverGuideTarget(card.GetHoverText(), card.GetHoverText2(), card, LockedModifier);
         ShowInternal(widget, target, null, true);
 
         return true;

@@ -15,9 +15,10 @@ public class ModLayerConfigTabGenral : YKLayout<ModLayerConfigContext>
     public override void OnLayout()
     {
         Header(ModConsts.SourceId.ConfigDisplay);
-        Spacer(46);
 
+        Spacer(46);
         var displayLayout1 = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
+
         displayLayout1.AddModSlider(
             getLabel: value => $"{ModConsts.SourceId.ZoomScale.lang()}({value * 100}%)",
             init: Config.ZoomScale,
@@ -28,8 +29,8 @@ public class ModLayerConfigTabGenral : YKLayout<ModLayerConfigContext>
         );
 
         Spacer(36);
-
         var displayLayout2 = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
+
         displayLayout2.AddModSlider(
             getLabel: value => $"{ModConsts.SourceId.HorizontalPivot.lang()}({value})",
             init: Config.HorizontalPivot,

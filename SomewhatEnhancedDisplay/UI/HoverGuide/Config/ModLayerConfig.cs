@@ -11,14 +11,19 @@ public class ModLayerConfig : YKLayer<ModLayerConfigContext>
 
     private UIButton? ButtonReset { get; set; }
 
-    private int SelectedIndex { get; }
-
     private ModLayerConfigContext Context => Data;
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
 
     public override string GetTextHeader(Window window)
     {
-        return $"{ModConsts.SourceId.ConfigHoverGuide.lang()} {ModConsts.SourceId.ConfigOf.lang(base.GetTextHeader(window))}";
+        var prefix = string.Empty;
+        var idLang = Window.CurrentTab.idLang;
+        if (idLang == ModConsts.SourceId.ConfigStyleTargetChara
+            || idLang == ModConsts.SourceId.ConfigStyleTargetThing)
+        {
+            prefix = $"[{ModConsts.SourceId.StyleName.lang((Context.SelectedStyleIndex + 1).ToString())}] ";
+        }
+        return $"{prefix}{ModConsts.SourceId.ConfigOf.lang(base.GetTextHeader(window))}";
     }
 
     public override void OnLayout()
@@ -99,8 +104,7 @@ public class ModLayerConfig : YKLayer<ModLayerConfigContext>
 
     private void UpdateHoverGuideSample(Card card)
     {
-        ModUI.HoverGuide?.LockCard(card);
-        ModUI.HoverGuide?.TryShowLockedCard(WidgetMouseover.Instance);
+        ModUI.HoverGuide?.LockCard(card, Context.SampleModifier);
     }
 
     private Window.Setting.Tab GetTab(string name)
