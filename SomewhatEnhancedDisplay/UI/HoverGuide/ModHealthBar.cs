@@ -119,7 +119,7 @@ public class ModHealthBar
             // 体力バーのアニメーションを行わないようにする
             FGRestoreTween?.Kill(true);
             FGDamageTween?.Kill(true);
-            ValueText.text = GetValueText(ratio).TagColor(pctColor);
+            ValueText.text = GetValueText(ratio);
             ValueText.color = pctColor;
             FGDamageImage.fillAmount = (float)ratio;
             FGRestoreImage.fillAmount = (float)ratio;
@@ -132,6 +132,13 @@ public class ModHealthBar
         {
             UpdateRestore(ratio, barColor, pctColor);
             UpdateDamage(ratio, barColor, pctColor);
+        }
+        else if (!(FGRestoreTween?.IsPlaying() ?? false))
+        {
+            // 色の設定変更が即座に反映されるようにするため、
+            // 回復アニメーションが再生されていない場合は文字とバー画像の色を変更する
+            ValueText.color = pctColor;
+            FGImage.color = barColor;
         }
         ValueRatio = ratio;
 
