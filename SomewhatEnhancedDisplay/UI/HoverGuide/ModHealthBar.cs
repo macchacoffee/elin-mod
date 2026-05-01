@@ -35,11 +35,6 @@ public class ModHealthBar
         set
         {
             Layout.enabled = value;
-            BGImage.enabled = value;
-            FGImage.enabled = value;
-            FGDamageImage.enabled = value;
-            FGRestoreImage.enabled = value;
-            ValueText.enabled = value && StyleConfig.HealthBar.DisplayValue;
             UpdateSize(value);
         }
     }
@@ -111,6 +106,9 @@ public class ModHealthBar
 
     public void Update(Chara chara, ModHoverGuideTargetModifier? modifier)
     {
+        Enabled = Displays(chara, modifier);
+        ValueText.enabled = StyleConfig.HealthBar.DisplayValue;
+
         var ratio = modifier?.HealthBarRatio ?? chara.HealthRatio;
         var pctColor = Color.Lerp(ColorConfig.HealthBarLowValueTextColor, ColorConfig.HealthBarTextColor, (float)ratio);
         var barColor = Color.Lerp(ColorConfig.HealthBarLowValueFGColor, ColorConfig.HealthBarFGColor, (float)ratio);
@@ -285,5 +283,34 @@ public class ModHealthBar
         UpdateTransformSize(FGDamageImage, width, barHeight);
         UpdateTransformSize(FGRestoreImage, width, barHeight);
         UpdateTransformSize(ValueText, width, height);
+    }
+
+    private bool Displays(Chara chara, ModHoverGuideTargetModifier? modifier)
+    {
+        var config = StyleConfig.HealthBar.GetDisplayForChara(chara);
+        if (config is null)
+        {
+            return false;
+        }
+
+        var displays = config.Target switch
+        {
+            ModHealthBarDisplayTarget.None => false,
+            ModHealthBarDisplayTarget.Boss => chara.IsBoss,
+            ModHealthBarDisplayTarget.Elite => chara.IsElite,
+            ModHealthBarDisplayTarget.All => true,
+            _ => false,
+        };
+        if (!displays)
+        {
+            return false;
+        }
+        
+        if (!config.NotInCombat && !chara.IsInCombat)
+        {
+            return false;
+        }
+
+        return config.InFullHealth || FGImage.fillAmount < 1 || !chara.IsInFullHealth || modifier?.HealthBarRatio < 1;
     }
 }

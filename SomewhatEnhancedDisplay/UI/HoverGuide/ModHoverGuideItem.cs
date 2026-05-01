@@ -86,11 +86,9 @@ public class ModHoverGuideItem
         }
         if (target?.Card is Chara chara && (!StyleConfig.EnableMimicry || !chara.HasMimicryThing))
         {
-            var enabled = DisplaysHealthBar(chara);
-            HealthBar.Enabled = enabled;
             HealthBar.Update(chara, target.Modifier);
-            displays = enabled;
-            isPaddingRequired = !enabled;
+            displays = HealthBar.Enabled;
+            isPaddingRequired = !displays;
         }
         else
         {
@@ -123,51 +121,5 @@ public class ModHoverGuideItem
         TextName1.enabled = false;
         HealthBar.Enabled = false;
         TextName2.enabled = false;
-    }
-
-    private bool DisplaysHealthBar(Chara chara)
-    {
-        if (!StyleConfig.DisplayHealthBar)
-        {
-            return false;
-        }
-
-        var config = StyleConfig.HealthBar;
-        switch (chara.hostility)
-        {
-            case Hostility.Enemy:
-                return DisplaysHealthBar(chara, config.DisplayForEnemy);
-            case Hostility.Neutral:
-                return DisplaysHealthBar(chara, config.DisplayForNetural);
-            case Hostility.Friend:
-                return DisplaysHealthBar(chara, config.DisplayForFriend);
-            case Hostility.Ally:
-                return DisplaysHealthBar(chara, config.DisplayForAlly);
-            default:
-                return false;
-        }
-    }
-
-    private bool DisplaysHealthBar(Chara chara, ModConfigHealthBarDisplay config)
-    {
-        var displays = config.Target switch
-        {
-            ModHealthBarDisplayTarget.None => false,
-            ModHealthBarDisplayTarget.Boss => chara.IsBoss,
-            ModHealthBarDisplayTarget.Elite => chara.IsElite,
-            ModHealthBarDisplayTarget.All => true,
-            _ => false,
-        };
-        if (!displays)
-        {
-            return false;
-        }
-
-        if (!config.NotInCombat && !chara.IsInCombat)
-        {
-            return false;
-        }
-
-        return config.InFullHealth || !chara.IsInFullHealth;
     }
 }

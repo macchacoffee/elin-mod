@@ -332,13 +332,13 @@ public class ModConfigHoverGuideHealthBar : ModConfigBase<ModConfigHoverGuideHea
     {
         Target = ModHealthBarDisplayTarget.All,
         NotInCombat = true,
-        InFullHealth = false,
+        InFullHealth = true,
     };
 
     [JsonProperty("displayForNetural", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHealthBarDisplay DisplayForNetural { get; set; } = new()
     {
-        Target = ModHealthBarDisplayTarget.None,
+        Target = ModHealthBarDisplayTarget.All,
         NotInCombat = true,
         InFullHealth = false,
     };
@@ -346,7 +346,7 @@ public class ModConfigHoverGuideHealthBar : ModConfigBase<ModConfigHoverGuideHea
     [JsonProperty("displayForFriend", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHealthBarDisplay DisplayForFriend { get; set; } = new()
     {
-        Target = ModHealthBarDisplayTarget.None,
+        Target = ModHealthBarDisplayTarget.All,
         NotInCombat = true,
         InFullHealth = false,
     };
@@ -354,10 +354,22 @@ public class ModConfigHoverGuideHealthBar : ModConfigBase<ModConfigHoverGuideHea
     [JsonProperty("displayForAlly", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHealthBarDisplay DisplayForAlly { get; set; } = new()
     {
-        Target = ModHealthBarDisplayTarget.None,
+        Target = ModHealthBarDisplayTarget.All,
         NotInCombat = true,
         InFullHealth = false,
     };
+
+    public ModConfigHealthBarDisplay? GetDisplayForChara(Chara chara)
+    {
+        return chara.hostility switch
+        {
+            Hostility.Enemy => DisplayForEnemy,
+            Hostility.Neutral => DisplayForNetural,
+            Hostility.Friend => DisplayForFriend,
+            Hostility.Ally => DisplayForAlly,
+            _ => null,
+        };
+    }
 }
 
 public class ModConfigHealthBarDisplay : ModConfigBase<ModConfigHealthBarDisplay>

@@ -18,7 +18,7 @@ public static class ModConfigHoverGuideStylePresets
                 DisplayHobby = false,
                 DisplayAffinity = false,
                 DisplayFavorite = false,
-                DisplayHP = false,
+                DisplayHP = false,  
                 DisplayMana = false,
                 DisplayStamina = false,
                 DisplayDVPV = false,
@@ -43,23 +43,23 @@ public static class ModConfigHoverGuideStylePresets
                     {
                         Target = ModHealthBarDisplayTarget.All,
                         NotInCombat = true,
-                        InFullHealth = false,
+                        InFullHealth = true,
                     },
                     DisplayForNetural = new()
                     {
-                        Target = ModHealthBarDisplayTarget.None,
+                        Target = ModHealthBarDisplayTarget.All,
                         NotInCombat = true,
                         InFullHealth = false,
                     },
                     DisplayForFriend = new()
                     {
-                        Target = ModHealthBarDisplayTarget.None,
+                        Target = ModHealthBarDisplayTarget.All,
                         NotInCombat = true,
                         InFullHealth = false,
                     },
                     DisplayForAlly = new()
                     {
-                        Target = ModHealthBarDisplayTarget.None,
+                        Target = ModHealthBarDisplayTarget.All,
                         NotInCombat = true,
                         InFullHealth = false,
                     },

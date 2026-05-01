@@ -117,12 +117,12 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
         var previewLayout2 = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
 
         previewLayout2.AddModSlider(
-            getLabel: value => $"{ModConsts.SourceId.HealthBarRatio.lang()}({value * 100:0}%)",
-            init: (float)Context.SampleModifier.HealthBarRatio!,
-            min: 0.0f,
-            max: 1,
-            step: 0.01f,
-            onChanged: value => Context.SampleModifier.HealthBarRatio = value
+            getLabel: value => $"{ModConsts.SourceId.HealthBarRatio.lang()}({value}%)",
+            init: (float)Context.SampleModifier.HealthBarRatio! * 100,
+            min: 0,
+            max: 100,
+            step: 1,
+            onChanged: value => Context.SampleModifier.HealthBarRatio = value / 100
         );
     }
 }
