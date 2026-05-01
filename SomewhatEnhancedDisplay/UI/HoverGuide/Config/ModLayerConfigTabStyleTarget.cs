@@ -23,7 +23,51 @@ public abstract class ModLayerConfigTabStyleTarget : YKLayout<ModLayerConfigCont
 
     protected abstract void OnLayoutInternal();
 
-    protected record EditStyleToogleUIItem(string Label, bool Init, Action<bool> OnChanged, Func<bool> GetConfig, string? Tooltip = null);
+    protected interface IEditStyleUIItem
+    {
+        public UIListenerSet AddUI(YKLayout layout);
+    };
+
+    protected record EditStyleToogleUIItem(
+        string Label,
+        bool Init,
+        Action<bool> OnChanged,
+        Func<bool> GetConfig,
+        string? Tooltip = null) : IEditStyleUIItem
+    {
+        public UIListenerSet AddUI(YKLayout layout)
+        {
+            var toogle = layout.AddModToggle(Label, Init, OnChanged);
+            if (Tooltip is string tooltip)
+            {
+                toogle.SetTooltipLang(tooltip);
+                toogle.tooltip.icon = true;
+            }
+            return new(OnSelectedStyleChanged: () => toogle.SetCheck(GetConfig()));
+        }
+    }
+
+    protected record EditStyleSliderUIItem(
+        Func<float, string> GetLabel,
+        float Init,
+        float Min,
+        float Max,
+        float Step,
+        Action<float> OnChanged,
+        Func<float> GetConfig) : IEditStyleUIItem
+    {
+        public UIListenerSet AddUI(YKLayout layout)
+        {
+            var layout2 = layout.Horizontal();
+            layout2.Layout.childAlignment = UnityEngine.TextAnchor.LowerLeft;
+            layout2.Fitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+            layout2.Spacer(0, 20);
+            var slider = layout2.AddModSlider(GetLabel, Init, Min, Max, Step, OnChanged);
+            return new(OnSelectedStyleChanged: () => slider.value = GetConfig());
+        }
+    }
+
+    protected record UIListenerSet(Action? OnSelectedStyleChanged = null);
 
     protected class EditStyleUIManager
     {
@@ -37,28 +81,21 @@ public abstract class ModLayerConfigTabStyleTarget : YKLayout<ModLayerConfigCont
             }
         }
 
-        public void AddToggle(YKLayout layout, string headerLabel, int cellWidth, int maxColumn, EditStyleToogleUIItem item)
-        {
-            AddToggles(layout, headerLabel, cellWidth, maxColumn, [item]);
-        }
-
-        public void AddToggles(YKLayout layout, string? headerLabel, int cellWidth, int maxColumn, params EditStyleToogleUIItem[] items)
+        public void Add(YKLayout layout, string? headerLabel, int cellWidth, int maxColumn, params IEditStyleUIItem[] items)
         {
             if (headerLabel is not null)
             {
-                var header = layout.HeaderSmall(headerLabel);
+                layout.HeaderSmall(headerLabel);
             }
             var grid = layout.Grid().WithPivot(0, 0.5f).WithCellSize(cellWidth, 50).WithConstraintCount(maxColumn);
             grid.Layout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             foreach (var item in items)
             {
-                var toogle = grid.AddModToggle(item.Label, item.Init, item.OnChanged);
-                if (item.Tooltip is string tooltip)
+                var listenerSet = item.AddUI(grid);
+                if (listenerSet.OnSelectedStyleChanged is not null)
                 {
-                    toogle.SetTooltipLang(tooltip);
-                    toogle.tooltip.icon = true;
+                     SelectedStyleChangedListeners.Add(listenerSet.OnSelectedStyleChanged);
                 }
-                SelectedStyleChangedListeners.Add(() => toogle.SetCheck(item.GetConfig()));
             }
         }
     }

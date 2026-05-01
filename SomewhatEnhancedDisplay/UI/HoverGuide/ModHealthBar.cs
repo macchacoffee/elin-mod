@@ -287,6 +287,11 @@ public class ModHealthBar
 
     private bool Displays(Chara chara, ModHoverGuideTargetModifier? modifier)
     {
+        if (!StyleConfig.DisplayHealthBar)
+        {
+            return false;
+        }
+
         var config = StyleConfig.HealthBar.GetDisplayForChara(chara);
         if (config is null)
         {

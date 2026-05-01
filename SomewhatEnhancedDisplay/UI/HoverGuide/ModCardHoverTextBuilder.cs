@@ -9,7 +9,7 @@ public static class ModCardHoverTextBuilder
 
     public static string BuildOtherCardsText(string hoverText, string otherCardsText)
     {
-        return $"{hoverText}{otherCardsText.TagSize(ModUIUtil.ComputeFontSize(13))}";
+        return $"{hoverText}{GetHoverTextOtherCards(otherCardsText)}";
     }
 
     public static string BuildHoverTextSection(params string?[] lines)
@@ -22,5 +22,10 @@ public static class ModCardHoverTextBuilder
         return string.Join(
             $"{Environment.NewLine}{Environment.NewLine.TagSize(ModUIUtil.ComputeFontSize(PaddingHeight))}",
             sections.Where(t => !string.IsNullOrEmpty(t)));
+    }
+
+    private static string? GetHoverTextOtherCards(string otherCards)
+    {
+         return !string.IsNullOrEmpty(otherCards) ? otherCards.TagSize(ModUIUtil.ComputeFontSize(13)) : null;
     }
 }

@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Empyrean.Utils;
 using UnityEngine;
+using ModUtility.Extensions;
 using SomewhatEnhancedDisplay.Extensions;
 using SomewhatEnhancedDisplay.Config;
 
@@ -22,9 +24,9 @@ public static class ModCharaHoverTextBuilder
         // s: ゲスト・家畜、血の風味
         chara = StyleConfig.EnableMimicry ? chara.MimicryOrSelf : chara;
         var hoverText = string.Join(" ", new[] {
-            GetHoverTextType(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)),
-            GetHoverTextLv(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)),
-            text.TagSize(ModUIUtil.ComputeFontSize(18)),
+            GetHoverTextType(chara),
+            GetHoverTextLv(chara),
+            GetHoverTextName(text),
         }.Where(t => !string.IsNullOrEmpty(t)));
         return ModCardHoverTextBuilder.BuildHoverTextSection(hoverText, $"{text2}{s}");
     }
@@ -41,31 +43,50 @@ public static class ModCharaHoverTextBuilder
         text3 = text3.StartsWith(Environment.NewLine) ? text3.Substring(Environment.NewLine.Length) : text3;
         return ModCardHoverTextBuilder.BuildHoverText(
             ModCardHoverTextBuilder.BuildHoverTextSection(
-                GetHoverTextProfile1(chara, text2)?.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor),
-                GetHoverTextProfile2(chara, text)?.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor)
+                GetHoverTextProfile1(chara, text2),
+                GetHoverTextProfile2(chara, text)
             ),
             ModCardHoverTextBuilder.BuildHoverTextSection(
-                GetHoverStatusAttribute(chara, realChara)?.TagSize(ModUIUtil.ComputeFontSize(16)),
-                GetHoverStatus(chara)?.TagSize(ModUIUtil.ComputeFontSize(16))
+                GetHoverStatusAttribute(chara, realChara),
+                GetHoverStatus(chara)
             ),
             ModCardHoverTextBuilder.BuildHoverTextSection(
-                GetHoverTextPrimaryAttribute(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor),
-                GetHoverTextFeat(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor)
+                GetHoverTextPrimaryAttribute(chara),
+                GetHoverTextFeat(chara)
             ),
-            GetHoverTextAct(chara)?.TagSize(ModUIUtil.ComputeFontSize(13)),
+            GetHoverTextAct(chara),
             GetHoverTextResist(chara),
-            StyleConfig.DisplayStats ? text3 : null
+            GetHoverTextStats(text3)
         );
     }
 
     private static string? GetHoverTextType(Chara chara)
     {
-        return StyleConfig.DisplayType ? GetTypeText(chara) : null;
+        if (!StyleConfig.DisplayType)
+        {
+            return null;
+        }
+
+        var bossText = chara.IsBoss ? "[BOSS]" : null;
+        var rankText = chara.IsUnique ? "★" : (chara.IsElite ? "☆" : null);
+        var text = $"{bossText}{rankText}";
+        return !string.IsNullOrEmpty(text) ? text.TagSize(ModUIUtil.ComputeFontSize(13)) : null;
     }
 
     private static string? GetHoverTextLv(Chara chara)
     {
-        return StyleConfig.DisplayLv ? GetLvText(chara) : null;
+        if (!StyleConfig.DisplayLv)
+        {
+            return null;
+        }
+
+        var text = $"Lv.{chara.LV}";
+        return !string.IsNullOrEmpty(text) ? text.TagSize(ModUIUtil.ComputeFontSize(13)) : null;
+    }
+
+    private static string? GetHoverTextName(string name)
+    {
+        return !string.IsNullOrEmpty(name) ? name.TagSize(ModUIUtil.ComputeFontSize(18)) : null;
     }
 
     private static string? GetHoverTextProfile1(Chara chara, string hobby)
@@ -77,7 +98,7 @@ public static class ModCharaHoverTextBuilder
             StyleConfig.DisplayJobTactics ? $"{GetJobText(chara)}/{GetTacticsText(chara)}" : null,
             StyleConfig.DisplayHobby ? hobby : null,
         }.Where(t => !string.IsNullOrEmpty(t)));
-        return !string.IsNullOrEmpty(text) ? text : null;
+        return !string.IsNullOrEmpty(text) ? text.TagSize(ModUIUtil.ComputeFontSize(13)).TagColor(ColorConfig.SubTextColor) : null;
     }
 
     private static string? GetHoverTextProfile2(Chara chara, string fav)
@@ -86,7 +107,7 @@ public static class ModCharaHoverTextBuilder
             StyleConfig.DisplayAffinity ? GetAffinityText(chara) : null,
             StyleConfig.DisplayFavorite ? fav: null,
         }.Where(t => !string.IsNullOrEmpty(t)));
-        return !string.IsNullOrEmpty(text) ? text : null;
+        return !string.IsNullOrEmpty(text) ? text.TagSize(ModUIUtil.ComputeFontSize(13)).TagColor(ColorConfig.SubTextColor) : null;
     }
 
     private static string? GetHoverStatusAttribute(Chara chara, Chara realChara)
@@ -96,7 +117,7 @@ public static class ModCharaHoverTextBuilder
             StyleConfig.DisplayMana ? GetManaText(chara, realChara) : null,
             StyleConfig.DisplayStamina ? GetStaminaText(chara, realChara) : null,
         }.Where(t => !string.IsNullOrEmpty(t)));
-        return !string.IsNullOrEmpty(text) ? text : null;
+        return !string.IsNullOrEmpty(text) ? text.TagSize(ModUIUtil.ComputeFontSize(16)) : null;
     }
 
     private static string? GetHoverStatus(Chara chara)
@@ -108,7 +129,7 @@ public static class ModCharaHoverTextBuilder
             StyleConfig.DisplayExp ? GetExpText(chara) : null,
             StyleConfig.DisplayMainElement ? GetMainElementText(chara) : null,
         }.Where(t => !string.IsNullOrEmpty(t)));
-        return !string.IsNullOrEmpty(text) ? text : null;
+        return !string.IsNullOrEmpty(text) ? text.TagSize(ModUIUtil.ComputeFontSize(16)) : null;
     }
 
     private static string? GetHoverTextPrimaryAttribute(Chara chara)
@@ -117,6 +138,7 @@ public static class ModCharaHoverTextBuilder
         {
             return null;
         }
+
         var text = string.Join(" ", new[] {
             GetSkillStrText(chara),
             GetSkillEndText(chara),
@@ -127,35 +149,87 @@ public static class ModCharaHoverTextBuilder
             GetSkillMagText(chara),
             GetSkillChaText(chara),
         }.Where(t => !string.IsNullOrEmpty(t)));
-        return !string.IsNullOrEmpty(text) ? text : null;
+        return !string.IsNullOrEmpty(text) ? text.TagSize(ModUIUtil.ComputeFontSize(13)).TagColor(ColorConfig.SubTextColor) : null;
     }
 
     private static string? GetHoverTextFeat(Chara chara)
     {
-        return StyleConfig.DisplayFeat ? GetFeatListText(chara) : null;
+        if (!StyleConfig.DisplayFeat)
+        {
+            return null;
+        }
+
+        var feats = chara.elements.ListElements(e => e.source.category == "feat" && e.Value > 0);
+        if (!feats.Any())
+        {
+            return null;
+        }
+
+        var itemsPerLine = StyleConfig.FeatLineWrapping.GetItemsPerLine(feats.Count);
+        var text = string.Join(
+            Environment.NewLine,
+            feats.Select(f => $"{f.Name}{(StyleConfig.DisplayFeatValue && f.Value > 1 ? $"({f.Value})".TagSize(ModUIUtil.ComputeFontSize(11)) : string.Empty)}")
+                .Chunk(itemsPerLine)
+                .Select(chuck => string.Join(", ", chuck).TagSize(ModUIUtil.ComputeFontSize(13)))
+        );
+        return !string.IsNullOrEmpty(text) ? text.TagColor(ColorConfig.SubTextColor) : null;
     }
 
     private static string? GetHoverTextAct(Chara chara)
     {
-        return StyleConfig.DisplayAct ? GetActListText(chara) : null;
+        if (!StyleConfig.DisplayAct)
+        {
+            return null;
+        }
+
+        if (!chara.ability.list.items.Any())
+        {
+            return null;
+        }
+
+        var acts = chara.ability.list.items;
+        var itemsPerLine = StyleConfig.ActLineWrapping.GetItemsPerLine(acts.Count);
+        var text = string.Join(
+            Environment.NewLine,
+            acts.Select(a => $"{a.act.Name}{(StyleConfig.DisplayActParty && a.pt ? "(pt)".TagSize(ModUIUtil.ComputeFontSize(11)) : string.Empty)}")
+                .Chunk(itemsPerLine)
+                .Select(chuck => string.Join(", ", chuck).TagSize(ModUIUtil.ComputeFontSize(13)))
+        );
+        return !string.IsNullOrEmpty(text) ? text : null;
     }
 
     private static string? GetHoverTextResist(Chara chara)
     {
-        return StyleConfig.DisplayResist ? GetResistListText(chara) : null;
+        if (!StyleConfig.DisplayResist)
+        {
+            return null;
+        }
+
+        var resists = chara.elements.ListElements(e => e.source.category == "resist" && e.Value != 0);
+        if (!resists.Any())
+        {
+            return null;
+        }
+
+        if (StyleConfig.GroupResistByLavel)
+        {
+            return string.Join(
+                Environment.NewLine,
+                resists.GroupBy(r => Element.GetResistLv(r.Value))
+                    .Where(g => g.Key != (int)Resist.None || StyleConfig.DisplayNoneResistLevel)
+                    .OrderByDescending(g => g.Key)
+                    .Select(g => GetResistListLineByLevelText(g))
+            );
+        }
+        else
+        {
+            return GetResistListLineText(resists);
+        }
     }
 
-    private static string? GetTypeText(Chara chara)
+    private static string? GetHoverTextStats(string stats)
     {
-        var bossText = chara.IsBoss ? "[BOSS]" : null;
-        var rankText = chara.IsUnique ? "★" : (chara.IsElite ? "☆" : null);
-        var typeText = $"{bossText}{rankText}";
-        return !string.IsNullOrEmpty(typeText) ? typeText : null;
-    }
-
-    private static string GetLvText(Chara chara)
-    {
-        return $"Lv.{chara.LV}";
+        return StyleConfig.DisplayStats ? stats : null;
     }
 
     private static string GetGenderText(Chara chara)
@@ -311,66 +385,37 @@ public static class ModCharaHoverTextBuilder
         return $"{attr.Name}:{attr.Value}";
     }
 
-    private static string? GetFeatListText(Chara chara)
+    private static string? GetResistListLineText(IEnumerable<Element> resists)
     {
-        var feats = chara.elements.ListElements(e => e.source.category == "feat" && e.Value > 0);
-        if (!feats.Any())
-        {
-            return null;
-        }
-
-        bool includesValue = StyleConfig.DisplayFeatValue;
-        return string.Join(
-            ", ",
-            feats.Select(f => $"{f.Name}{(includesValue && f.Value > 1 ? $"({f.Value})".TagSize(ModUIUtil.ComputeFontSize(11)) : string.Empty)}")
-        );
-    }
-
-    private static string? GetActListText(Chara chara)
-    {
-        if (!chara.ability.list.items.Any())
-        {
-            return null;
-        }
-
-        bool includesParty = StyleConfig.DisplayActParty;
-        return string.Join(
-            ", ",
-            chara.ability.list.items.Select(a => $"{a.act.Name}{(includesParty && a.pt ? "(pt)".TagSize(ModUIUtil.ComputeFontSize(11)) : string.Empty)}")
-        );
-    }
-
-    private static string? GetResistListText(Chara chara)
-    {
-        var resists = chara.elements.ListElements(e => e.source.category == "resist" && e.Value != 0);
-        if (!resists.Any())
-        {
-            return null;
-        }
-
-        bool includesValue = StyleConfig.DisplayResistValue;
-        return string.Join(
+        var itemsPerLine = StyleConfig.ResistLineWrapping.GetItemsPerLine(resists.Count());
+        var text = string.Join(
             Environment.NewLine,
-            resists
-                .GroupBy(r => Element.GetResistLv(r.Value))
-                .Where(g => g.Key != (int)Resist.None)
-                .OrderByDescending(g => g.Key)
-                .Select(g => GetResistListLineText(g, includesValue)?.TagSize(ModUIUtil.ComputeFontSize(13)))
-        );
+            resists.OrderByDescending(r => r.Value)
+                .ThenBy(r => r.id)
+                .Select(GetResistText)
+                .Chunk(itemsPerLine)
+                .Select(chuck => string.Join(", ", chuck).TagSize(ModUIUtil.ComputeFontSize(13)))
+            );
+        return !string.IsNullOrEmpty(text) ? text : null;
     }
 
-    private static string? GetResistListLineText(IGrouping<int, Element> group, bool includesValue)
+    private static string? GetResistListLineByLevelText(IGrouping<int, Element> group)
     {
         var resistLevelText = GetResistLevelText(group.Key);
         if (!string.IsNullOrEmpty(resistLevelText))
         {
             resistLevelText = $"{resistLevelText}:".TagColor(GetResistColor(group.Key));
         }
-        var resistListText = string.Join(", ", group
-            .OrderBy(r => r.id)
-            .Select(r => GetResistText(r, includesValue))
-            .Where(t => !string.IsNullOrEmpty(t)));
-        return !string.IsNullOrEmpty(resistLevelText) && !string.IsNullOrEmpty(resistListText) ? $"{resistLevelText} {resistListText}" : null;
+
+        var itemsPerLine = StyleConfig.ResistLineWrapping.GetItemsPerLine(group.Count());
+        var resistListText = string.Join(Environment.NewLine,
+            group.OrderBy(r => r.id)
+                .Select(GetResistText)
+                .Where(t => !string.IsNullOrEmpty(t))
+                .Chunk(itemsPerLine)
+                .Select(chuck => string.Join(", ", chuck).TagSize(ModUIUtil.ComputeFontSize(13)))
+        );
+        return !string.IsNullOrEmpty(resistLevelText) && !string.IsNullOrEmpty(resistListText) ? $"{resistLevelText.TagSize(ModUIUtil.ComputeFontSize(13))} {resistListText}" : null;
     }
 
     private static Color? GetElementColor(string alias)
@@ -401,27 +446,27 @@ public static class ModCharaHoverTextBuilder
     private static string? GetResistLevelText(int resistLevel)
     {
         var level = Math.Max(Mathf.Min(resistLevel, (int)Resist.Immune + 1), (int)Resist.CriticalWeakness);
-        switch (StyleConfig.ResistLevelLabelType)
+        if (StyleConfig.UseShortResistLavelLabel)
         {
-            case ModHoverGuideResistLevelLabelType.LangText:
-                return level <= 0 ? Lang.GetList("resistNeg")[-level] : Lang.GetList("resist")[level];
-            case ModHoverGuideResistLevelLabelType.Value:
-                return (Resist)level switch
-                {
-                    Resist.Immune => "+20",
-                    Resist.Great => "+15",
-                    Resist.Strong => "+10",
-                    Resist.Normal => "+5",
-                    Resist.None => "0",
-                    Resist.Weakness => "-5",
-                    Resist.CriticalWeakness => "-10",
-                    _ => level == (int)Resist.Immune + 1 ? "+25" : null,
-                };
+            return (Resist)level switch
+            {
+                Resist.Immune => "+20",
+                Resist.Great => "+15",
+                Resist.Strong => "+10",
+                Resist.Normal => "+5",
+                Resist.None => "0",
+                Resist.Weakness => "-5",
+                Resist.CriticalWeakness => "-10",
+                _ => level == (int)Resist.Immune + 1 ? "+25" : null,
+            };
         }
-        return null;
+        else
+        {
+            return level <= 0 ? Lang.GetList("resistNeg")[-level] : Lang.GetList("resist")[level];
+        }
     }
 
-    private static string? GetResistText(Element resist, bool includesValue)
+    private static string? GetResistText(Element resist)
     {
         var eleAlias = resist.source.aliasParent;
         if (eleAlias is null || !eleAlias.StartsWith("ele"))
@@ -435,7 +480,7 @@ public static class ModCharaHoverTextBuilder
             return null;
         }
 
-        var resistText = $"{resImmunePlusText}{element.GetName()}{resImmunePlusText}{(includesValue ? $"({resist.Value})".TagSize(ModUIUtil.ComputeFontSize(11)) : string.Empty)}";
+        var resistText = $"{resImmunePlusText}{element.GetName()}{resImmunePlusText}{(StyleConfig.DisplayResistValue ? $"({resist.Value})".TagSize(ModUIUtil.ComputeFontSize(11)) : string.Empty)}";
         if (GetElementColor(eleAlias) is Color color)
         {
             resistText = resistText.TagColor(color);

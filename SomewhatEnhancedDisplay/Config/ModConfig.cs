@@ -7,12 +7,6 @@ using UnityEngine;
 
 namespace SomewhatEnhancedDisplay.Config;
 
-public enum ModHoverGuideResistLevelLabelType
-{
-    LangText = 0,
-    Value,
-}
-
 public enum ModHealthBarDisplayTarget
 {
     None = 0,
@@ -297,8 +291,14 @@ public class ModConfigHoverGuideStyleChara : ModConfigBase<ModConfigHoverGuideSt
     [JsonProperty("displayResistValue", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayResistValue { get; set; } = true;
 
-    [JsonProperty("resistLevelLabelType", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModHoverGuideResistLevelLabelType ResistLevelLabelType { get; set; } = ModHoverGuideResistLevelLabelType.LangText;
+    [JsonProperty("groupResistByLavel", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool GroupResistByLavel { get; set; } = true;
+
+    [JsonProperty("useShortResistLavelLabel", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool UseShortResistLavelLabel { get; set; } = false;
+
+    [JsonProperty("displayNoneResistLevel", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool DisplayNoneResistLevel { get; set; } = false;
 
     [JsonProperty("displayStats", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayStats { get; set; } = true;
@@ -312,8 +312,31 @@ public class ModConfigHoverGuideStyleChara : ModConfigBase<ModConfigHoverGuideSt
     [JsonProperty("enableMimicry", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool EnableMimicry { get; set; } = true;
 
+    [JsonProperty("featLineWrapping", DefaultValueHandling = DefaultValueHandling.Include)]
+    public ModConfigHoverGuideLineWrapping FeatLineWrapping { get; set; } = new();
+
+    [JsonProperty("actLineWrapping", DefaultValueHandling = DefaultValueHandling.Include)]
+    public ModConfigHoverGuideLineWrapping ActLineWrapping { get; set; } = new();
+
+    [JsonProperty("resistLineWrapping", DefaultValueHandling = DefaultValueHandling.Include)]
+    public ModConfigHoverGuideLineWrapping ResistLineWrapping { get; set; } = new();
+
     [JsonProperty("healthBar", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHoverGuideHealthBar HealthBar { get; init; } = new();
+}
+
+public class ModConfigHoverGuideLineWrapping : ModConfigBase<ModConfigHoverGuide>
+{
+    [JsonProperty("enable", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool Enable { get; set; } = true;
+
+    [JsonProperty("maxItemsPerLine", DefaultValueHandling = DefaultValueHandling.Include)]
+    public int MaxItemsPerLine { get; set; } = 10;
+
+    public int GetItemsPerLine(int itemCount)
+    {
+        return Enable && MaxItemsPerLine > 0 ? MaxItemsPerLine : itemCount;
+    }
 }
 
 public class ModConfigHoverGuideHealthBar : ModConfigBase<ModConfigHoverGuideHealthBar>

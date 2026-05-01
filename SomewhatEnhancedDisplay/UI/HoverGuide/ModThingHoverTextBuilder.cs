@@ -18,8 +18,8 @@ public static class ModThingHoverTextBuilder
         // text: thingの追加情報
         cardText = StyleConfig.UseRarityColor ? cardText.TagColorIfNotEmptyNullable(GetRarityColor(thing)) : cardText; 
         return string.Join(" ", new[] {
-            GetHoverTextLv(thing)?.TagSize(ModUIUtil.ComputeFontSize(13)),
-            $"{cardText.TagSize(ModUIUtil.ComputeFontSize(18))}{text.TagSizeIfNotEmpty(ModUIUtil.ComputeFontSize(13))}"
+            GetHoverTextLv(thing),
+            $"{GetHoverTextName(cardText)}{GetHoverTextNameExtra(text)}"
         }.Where(t => !string.IsNullOrEmpty(t)));
     }
 
@@ -28,15 +28,36 @@ public static class ModThingHoverTextBuilder
         // text: thing.GetHoverText2()の戻り値 (空文字列)
         // traitText: trait.GetHoverText()の戻り値
         return ModCardHoverTextBuilder.BuildHoverTextSection(
-            text.TagSizeIfNotEmpty(ModUIUtil.ComputeFontSize(13)),
-            GetHoverTextExtra1(thing)?.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor),
-            traitText.TagSizeIfNotEmpty(ModUIUtil.ComputeFontSize(13))
+            GetHoverTextMisc(text),
+            GetHoverTextExtra1(thing),
+            GetHoverTraitText(traitText)
         );
     }
 
     private static string? GetHoverTextLv(Thing thing)
     {
-        return StyleConfig.DisplayLv ? GetLvText(thing) : null;
+        if (!StyleConfig.DisplayLv)
+        {
+            return null;
+        }
+
+        var text = $"Lv.{thing.LV}";
+        return !string.IsNullOrEmpty(text) ? text.TagSize(ModUIUtil.ComputeFontSize(13)) : null;
+    }
+
+    private static string? GetHoverTextName(string name)
+    {
+        return !string.IsNullOrEmpty(name) ? name.TagSize(ModUIUtil.ComputeFontSize(18)) : null;
+    }
+
+    private static string? GetHoverTextNameExtra(string nameExtra)
+    {
+        return !string.IsNullOrEmpty(nameExtra) ? nameExtra.TagSize(ModUIUtil.ComputeFontSize(13)) : null;
+    }
+
+    private static string? GetHoverTextMisc(string note)
+    {
+        return !string.IsNullOrEmpty(note) ? note.TagSize(ModUIUtil.ComputeFontSize(13)) : null;
     }
 
     private static string? GetHoverTextExtra1(Thing thing)
@@ -46,12 +67,11 @@ public static class ModThingHoverTextBuilder
             StyleConfig.DisplayFressness ? GetFressnessText(thing) : null,
             StyleConfig.DisplayLockLv ? GetLockLvText(thing) : null,
         }.Where(t => !string.IsNullOrEmpty(t)));
-        return !string.IsNullOrEmpty(text) ? text : null;
+        return !string.IsNullOrEmpty(text) ? text.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor) : null;
     }
-
-    private static string GetLvText(Thing thing)
+    private static string? GetHoverTraitText(string traitText)
     {
-        return $"Lv.{thing.LV}";
+        return !string.IsNullOrEmpty(traitText) ? traitText.TagSize(ModUIUtil.ComputeFontSize(13)) : null;
     }
 
     private static string? GetMaterialText(Thing thing)

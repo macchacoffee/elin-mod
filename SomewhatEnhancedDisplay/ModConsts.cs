@@ -61,6 +61,9 @@ public static class ModConsts
         public static readonly string Act = Prefixed("act");
         public static readonly string ActParty = Prefixed("actParty");
         public static readonly string ResistValue = Prefixed("resistValue");
+        public static readonly string GroupResistByLavel = Prefixed("groupResistByLavel");
+        public static readonly string UseShortResistLavelLabel = Prefixed("useShortResistLavelLabel");
+        public static readonly string DisplayNoneResistLevel = Prefixed("displayNoneResistLevel");
         public static readonly string Stats = Prefixed("stats");
         public static readonly string StatsValue = Prefixed("statsValue");
         public static readonly string EnableMimicry = Prefixed("enableMimicry");
@@ -101,6 +104,8 @@ public static class ModConsts
         public static readonly string ZoomScale = Prefixed("zoomScale");
         public static readonly string HorizontalPivot = Prefixed("horizontalPivot");
         public static readonly string VerticalPivot = Prefixed("verticalPivot");
+        public static readonly string WrapLine = Prefixed("wrapLine");
+        public static readonly string MaxItemsPerLine = Prefixed("maxItemsPerLine");
         public static readonly string DefaultColor = Prefixed("defaultColor");
         public static readonly string MainTextColor = Prefixed("mainTextColor");
         public static readonly string SubTextColor = Prefixed("subTextColor");
@@ -129,6 +134,7 @@ public static class ModConsts
         public static readonly string AddStyle = Prefixed("addStyle");
         public static readonly string DeleteStyle = Prefixed("deleteStyle");
         public static readonly string SelectStyleTemplate = Prefixed("selectStyleTemplate");
+        public static readonly string AddStyleCopy = Prefixed("addStyleCopy");
         public static readonly string AddStyleMinimal = Prefixed("addStyleMinimal");
         public static readonly string AddStyleDefault = Prefixed("addStyleDefault");
         public static readonly string AddStyleMaximal = Prefixed("addStyleMaximal");

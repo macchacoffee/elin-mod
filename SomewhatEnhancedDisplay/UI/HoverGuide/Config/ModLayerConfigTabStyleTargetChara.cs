@@ -1,7 +1,11 @@
+using SomewhatEnhancedDisplay.Config;
+
 namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
 public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
 {
+    private ModConfigHoverGuideStyleChara Config => SelectedStyle.Chara;
+
     protected override void OnLayoutInternal()
     {
         var cellWidth = 200;
@@ -11,292 +15,367 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
         Header(ModConsts.SourceId.ConfigDisplayItems);
 
         line++;
-        EditStyleUI.AddToggles(
+        EditStyleUI.Add(
             layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Type,
-                Init: SelectedStyle.Chara.DisplayType,
-                OnChanged: value => SelectedStyle.Chara.DisplayType = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayType
+                Init: Config.DisplayType,
+                OnChanged: value => Config.DisplayType = value,
+                GetConfig: () => Config.DisplayType
             ),
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Lv,
-                Init: SelectedStyle.Chara.DisplayLv,
-                OnChanged: value => SelectedStyle.Chara.DisplayLv = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayLv
+                Init: Config.DisplayLv,
+                OnChanged: value => Config.DisplayLv = value,
+                GetConfig: () => Config.DisplayLv
             )
         );
 
         line++;
 
         line++;
-        EditStyleUI.AddToggle(
+        EditStyleUI.Add(
             layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.HealthBar,
-                Init: SelectedStyle.Chara.DisplayHealthBar,
-                OnChanged: value => SelectedStyle.Chara.DisplayHealthBar = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayHealthBar
+                Init: Config.DisplayHealthBar,
+                OnChanged: value => Config.DisplayHealthBar = value,
+                GetConfig: () => Config.DisplayHealthBar
             )
         );
 
         line++;
-        EditStyleUI.AddToggles(
+        EditStyleUI.Add(
             layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Gender,
-                Init: SelectedStyle.Chara.DisplayGender,
-                OnChanged: value => SelectedStyle.Chara.DisplayGender = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayGender
+                Init: Config.DisplayGender,
+                OnChanged: value => Config.DisplayGender = value,
+                GetConfig: () => Config.DisplayGender
             ),
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Age,
-                Init: SelectedStyle.Chara.DisplayAge,
-                OnChanged: value => SelectedStyle.Chara.DisplayAge = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayAge
+                Init: Config.DisplayAge,
+                OnChanged: value => Config.DisplayAge = value,
+                GetConfig: () => Config.DisplayAge
             ),
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Race,
-                Init: SelectedStyle.Chara.DisplayRace,
-                OnChanged: value => SelectedStyle.Chara.DisplayRace = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayRace
+                Init: Config.DisplayRace,
+                OnChanged: value => Config.DisplayRace = value,
+                GetConfig: () => Config.DisplayRace
             ),
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.JobTactics,
-                Init: SelectedStyle.Chara.DisplayJobTactics,
-                OnChanged: value => SelectedStyle.Chara.DisplayJobTactics = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayJobTactics
+                Init: Config.DisplayJobTactics,
+                OnChanged: value => Config.DisplayJobTactics = value,
+                GetConfig: () => Config.DisplayJobTactics
             ),
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Hobby,
-                Init: SelectedStyle.Chara.DisplayHobby,
-                OnChanged: value => SelectedStyle.Chara.DisplayHobby = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayHobby
+                Init: Config.DisplayHobby,
+                OnChanged: value => Config.DisplayHobby = value,
+                GetConfig: () => Config.DisplayHobby
             )
         );
 
         line++;
-        EditStyleUI.AddToggles(
+        EditStyleUI.Add(
             layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Affinity,
-                Init: SelectedStyle.Chara.DisplayAffinity,
-                OnChanged: value => SelectedStyle.Chara.DisplayAffinity = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayAffinity
+                Init: Config.DisplayAffinity,
+                OnChanged: value => Config.DisplayAffinity = value,
+                GetConfig: () => Config.DisplayAffinity
             ),
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Favorite,
-                Init: SelectedStyle.Chara.DisplayFavorite,
-                OnChanged: value => SelectedStyle.Chara.DisplayFavorite = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayFavorite
+                Init: Config.DisplayFavorite,
+                OnChanged: value => Config.DisplayFavorite = value,
+                GetConfig: () => Config.DisplayFavorite
             )
         );
 
         line++;
-        EditStyleUI.AddToggles(
+        EditStyleUI.Add(
             layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.HP,
-                Init: SelectedStyle.Chara.DisplayHP,
-                OnChanged: value => SelectedStyle.Chara.DisplayHP = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayHP
+                Init: Config.DisplayHP,
+                OnChanged: value => Config.DisplayHP = value,
+                GetConfig: () => Config.DisplayHP
             ),
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Mana,
-                Init: SelectedStyle.Chara.DisplayMana,
-                OnChanged: value => SelectedStyle.Chara.DisplayMana = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayMana
+                Init: Config.DisplayMana,
+                OnChanged: value => Config.DisplayMana = value,
+                GetConfig: () => Config.DisplayMana
             ),
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Stamina,
-                Init: SelectedStyle.Chara.DisplayStamina,
-                OnChanged: value => SelectedStyle.Chara.DisplayStamina = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayStamina
+                Init: Config.DisplayStamina,
+                OnChanged: value => Config.DisplayStamina = value,
+                GetConfig: () => Config.DisplayStamina
             )
         );
 
         line++;
-        EditStyleUI.AddToggles(
+        EditStyleUI.Add(
             layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.DVPV,
-                Init: SelectedStyle.Chara.DisplayDVPV,
-                OnChanged: value => SelectedStyle.Chara.DisplayDVPV = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayDVPV
+                Init: Config.DisplayDVPV,
+                OnChanged: value => Config.DisplayDVPV = value,
+                GetConfig: () => Config.DisplayDVPV
             ),
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Speed,
-                Init: SelectedStyle.Chara.DisplaySpeed,
-                OnChanged: value => SelectedStyle.Chara.DisplaySpeed = value,
-                GetConfig: () => SelectedStyle.Chara.DisplaySpeed
+                Init: Config.DisplaySpeed,
+                OnChanged: value => Config.DisplaySpeed = value,
+                GetConfig: () => Config.DisplaySpeed
             ),
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Exp,
-                Init: SelectedStyle.Chara.DisplayExp,
-                OnChanged: value => SelectedStyle.Chara.DisplayExp = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayExp
+                Init: Config.DisplayExp,
+                OnChanged: value => Config.DisplayExp = value,
+                GetConfig: () => Config.DisplayExp
             ),
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.MainElement,
-                Init: SelectedStyle.Chara.DisplayMainElement,
-                OnChanged: value => SelectedStyle.Chara.DisplayMainElement = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayMainElement
+                Init: Config.DisplayMainElement,
+                OnChanged: value => Config.DisplayMainElement = value,
+                GetConfig: () => Config.DisplayMainElement
             )
         );
 
         line++;
-        EditStyleUI.AddToggle(
+        EditStyleUI.Add(
             layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.PrimaryAttributes,
-                Init: SelectedStyle.Chara.DisplayPrimaryAttributes,
-                OnChanged: value => SelectedStyle.Chara.DisplayPrimaryAttributes = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayPrimaryAttributes
+                Init: Config.DisplayPrimaryAttributes,
+                OnChanged: value => Config.DisplayPrimaryAttributes = value,
+                GetConfig: () => Config.DisplayPrimaryAttributes
             )
         );
 
         line++;
-        EditStyleUI.AddToggles(
+        EditStyleUI.Add(
             layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
-            maxColumn: maxColumn,
-            new(
+            maxColumn: 2,
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Feat,
-                Init: SelectedStyle.Chara.DisplayFeat,
-                OnChanged: value => SelectedStyle.Chara.DisplayFeat = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayFeat
+                Init: Config.DisplayFeat,
+                OnChanged: value => Config.DisplayFeat = value,
+                GetConfig: () => Config.DisplayFeat
             ),
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.FeatValue,
-                Init: SelectedStyle.Chara.DisplayFeatValue,
-                OnChanged: value => SelectedStyle.Chara.DisplayFeatValue = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayFeatValue
+                Init: Config.DisplayFeatValue,
+                OnChanged: value => Config.DisplayFeatValue = value,
+                GetConfig: () => Config.DisplayFeatValue
+            ),
+            new EditStyleToogleUIItem(
+                Label: ModConsts.SourceId.WrapLine,
+                Init: Config.FeatLineWrapping.Enable,
+                OnChanged: value => Config.FeatLineWrapping.Enable = value,
+                GetConfig: () => Config.FeatLineWrapping.Enable
+            ),
+            new EditStyleSliderUIItem(
+                GetLabel: value => $"{ModConsts.SourceId.MaxItemsPerLine.lang()}({value})",
+                Init: Config.FeatLineWrapping.MaxItemsPerLine,
+                Min: 1,
+                Max: 20,
+                Step: 1,
+                OnChanged: value => Config.FeatLineWrapping.MaxItemsPerLine = (int)value,
+                GetConfig: () => Config.FeatLineWrapping.MaxItemsPerLine
             )
         );
 
         line++;
-        EditStyleUI.AddToggles(
+        EditStyleUI.Add(
             layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
-            maxColumn: maxColumn,
-            new(
+            maxColumn: 2,
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Act,
-                Init: SelectedStyle.Chara.DisplayAct,
-                OnChanged: value => SelectedStyle.Chara.DisplayAct = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayAct
+                Init: Config.DisplayAct,
+                OnChanged: value => Config.DisplayAct = value,
+                GetConfig: () => Config.DisplayAct
             ),
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.ActParty,
-                Init: SelectedStyle.Chara.DisplayActParty,
-                OnChanged: value => SelectedStyle.Chara.DisplayActParty = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayActParty
+                Init: Config.DisplayActParty,
+                OnChanged: value => Config.DisplayActParty = value,
+                GetConfig: () => Config.DisplayActParty
+            ),
+            new EditStyleToogleUIItem(
+                Label: ModConsts.SourceId.WrapLine,
+                Init: Config.ActLineWrapping.Enable,
+                OnChanged: value => Config.ActLineWrapping.Enable = value,
+                GetConfig: () => Config.ActLineWrapping.Enable
+            ),
+            new EditStyleSliderUIItem(
+                GetLabel: value => $"{ModConsts.SourceId.MaxItemsPerLine.lang()}({value})",
+                Init: Config.ActLineWrapping.MaxItemsPerLine,
+                Min: 1,
+                Max: 20,
+                Step: 1,
+                OnChanged: value => Config.ActLineWrapping.MaxItemsPerLine = (int)value,
+                GetConfig: () => Config.ActLineWrapping.MaxItemsPerLine
             )
         );
 
         line++;
-        EditStyleUI.AddToggles(
+        EditStyleUI.Add(
             layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Resist,
-                Init: SelectedStyle.Chara.DisplayResist,
-                OnChanged: value => SelectedStyle.Chara.DisplayResist = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayResist
+                Init: Config.DisplayResist,
+                OnChanged: value => Config.DisplayResist = value,
+                GetConfig: () => Config.DisplayResist
             ),
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.ResistValue,
-                Init: SelectedStyle.Chara.DisplayResistValue,
-                OnChanged: value => SelectedStyle.Chara.DisplayResistValue = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayResistValue
+                Init: Config.DisplayResistValue,
+                OnChanged: value => Config.DisplayResistValue = value,
+                GetConfig: () => Config.DisplayResistValue
+            )
+        );
+        EditStyleUI.Add(
+            layout: this,
+            headerLabel: null,
+            cellWidth: cellWidth,
+            maxColumn: maxColumn,
+            new EditStyleToogleUIItem(
+                Label: ModConsts.SourceId.GroupResistByLavel,
+                Init: Config.GroupResistByLavel,
+                OnChanged: value => Config.GroupResistByLavel = value,
+                GetConfig: () => Config.GroupResistByLavel
+            ),
+            new EditStyleToogleUIItem(
+                Label: ModConsts.SourceId.UseShortResistLavelLabel,
+                Init: Config.UseShortResistLavelLabel,
+                OnChanged: value => Config.UseShortResistLavelLabel = value,
+                GetConfig: () => Config.UseShortResistLavelLabel
+            ),
+            new EditStyleToogleUIItem(
+                Label: ModConsts.SourceId.DisplayNoneResistLevel,
+                Init: Config.DisplayNoneResistLevel,
+                OnChanged: value => Config.DisplayNoneResistLevel = value,
+                GetConfig: () => Config.DisplayNoneResistLevel
+            )
+        );
+        EditStyleUI.Add(
+            layout: this,
+            headerLabel: null,
+            cellWidth: cellWidth,
+            maxColumn: maxColumn,
+            new EditStyleToogleUIItem(
+                Label: ModConsts.SourceId.WrapLine,
+                Init: Config.ResistLineWrapping.Enable,
+                OnChanged: value => Config.ResistLineWrapping.Enable = value,
+                GetConfig: () => Config.ResistLineWrapping.Enable
+            ),
+            new EditStyleSliderUIItem(
+                GetLabel: value => $"{ModConsts.SourceId.MaxItemsPerLine.lang()}({value})",
+                Init: Config.ResistLineWrapping.MaxItemsPerLine,
+                Min: 1,
+                Max: 20,
+                Step: 1,
+                OnChanged: value => Config.ResistLineWrapping.MaxItemsPerLine = (int)value,
+                GetConfig: () => Config.ResistLineWrapping.MaxItemsPerLine
             )
         );
 
         line++;
-        EditStyleUI.AddToggles(
+        EditStyleUI.Add(
             layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Stats,
-                Init: SelectedStyle.Chara.DisplayStats,
-                OnChanged: value => SelectedStyle.Chara.DisplayStats = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayStats
+                Init: Config.DisplayStats,
+                OnChanged: value => Config.DisplayStats = value,
+                GetConfig: () => Config.DisplayStats
             ),
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.StatsValue,
-                Init: SelectedStyle.Chara.DisplayStatsValue,
-                OnChanged: value => SelectedStyle.Chara.DisplayStatsValue = value,
-                GetConfig: () => SelectedStyle.Chara.DisplayStatsValue
+                Init: Config.DisplayStatsValue,
+                OnChanged: value => Config.DisplayStatsValue = value,
+                GetConfig: () => Config.DisplayStatsValue
             )
         );
 
         Spacer(20);
         Header(ModConsts.SourceId.ConfigTransmutation);
 
-        EditStyleUI.AddToggles(
+        EditStyleUI.Add(
             layout: this,
             headerLabel: null,
             cellWidth: cellWidth,
             maxColumn: maxColumn,
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.EnableShadowform,
-                Init: SelectedStyle.Chara.EnableShadowform,
-                OnChanged: value => SelectedStyle.Chara.EnableShadowform = value,
-                GetConfig: () => SelectedStyle.Chara.EnableShadowform
+                Init: Config.EnableShadowform,
+                OnChanged: value => Config.EnableShadowform = value,
+                GetConfig: () => Config.EnableShadowform
             ),
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.EnableMimicry,
-                Init: SelectedStyle.Chara.EnableMimicry,
-                OnChanged: value => SelectedStyle.Chara.EnableMimicry = value,
-                GetConfig: () => SelectedStyle.Chara.EnableMimicry
+                Init: Config.EnableMimicry,
+                OnChanged: value => Config.EnableMimicry = value,
+                GetConfig: () => Config.EnableMimicry
             )
         );
 
         Spacer(20);
         Header(ModConsts.SourceId.HealthBar);
 
-        EditStyleUI.AddToggles(
+        EditStyleUI.Add(
             layout: this,
             headerLabel: null,
             cellWidth: cellWidth,
             maxColumn: maxColumn,
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.DisplayValue,
-                Init: SelectedStyle.Chara.HealthBar.DisplayValue,
-                OnChanged: value => SelectedStyle.Chara.HealthBar.DisplayValue = value,
-                GetConfig: () => SelectedStyle.Chara.HealthBar.DisplayValue
+                Init: Config.HealthBar.DisplayValue,
+                OnChanged: value => Config.HealthBar.DisplayValue = value,
+                GetConfig: () => Config.HealthBar.DisplayValue
             ),
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.UseAnimation,
-                Init: SelectedStyle.Chara.HealthBar.UseAnimation,
-                OnChanged: value => SelectedStyle.Chara.HealthBar.UseAnimation = value,
-                GetConfig: () => SelectedStyle.Chara.HealthBar.UseAnimation
+                Init: Config.HealthBar.UseAnimation,
+                OnChanged: value => Config.HealthBar.UseAnimation = value,
+                GetConfig: () => Config.HealthBar.UseAnimation
             )
         );
     }

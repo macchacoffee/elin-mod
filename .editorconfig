@@ -1,0 +1,4 @@
+[*.cs]
+
+# IDE0200: 不要なラムダ式の削除
+csharp_style_prefer_method_group_conversion = true

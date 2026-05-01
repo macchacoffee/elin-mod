@@ -11,18 +11,18 @@ public class ModLayerConfigTabStyleTargetThing : ModLayerConfigTabStyleTarget
         Header(ModConsts.SourceId.ConfigDisplayItems);
 
         line++;
-        EditStyleUI.AddToggles(
+        EditStyleUI.Add(
             layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Lv,
                 Init: SelectedStyle.Thing.DisplayLv,
                 OnChanged: value => SelectedStyle.Thing.DisplayLv = value,
                 GetConfig: () => SelectedStyle.Thing.DisplayLv
             ),
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.UseRarityColor,
                 Init: SelectedStyle.Thing.UseRarityColor,
                 OnChanged: value => SelectedStyle.Thing.UseRarityColor = value,
@@ -31,24 +31,24 @@ public class ModLayerConfigTabStyleTargetThing : ModLayerConfigTabStyleTarget
         );
 
         line++;
-        EditStyleUI.AddToggles(
+        EditStyleUI.Add(
             layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
             maxColumn: maxColumn,
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Material,
                 Init: SelectedStyle.Thing.DisplayMaterial,
                 OnChanged: value => SelectedStyle.Thing.DisplayMaterial = value,
                 GetConfig: () => SelectedStyle.Thing.DisplayMaterial
             ),
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.LockLv,
                 Init: SelectedStyle.Thing.DisplayLockLv,
                 OnChanged: value => SelectedStyle.Thing.DisplayLockLv = value,
                 GetConfig: () => SelectedStyle.Thing.DisplayLockLv
             ),
-            new(
+            new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Fressness,
                 Init: SelectedStyle.Thing.DisplayFressness,
                 OnChanged: value => SelectedStyle.Thing.DisplayFressness = value,

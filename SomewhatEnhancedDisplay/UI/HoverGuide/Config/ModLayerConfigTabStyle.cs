@@ -12,14 +12,20 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
     private static readonly int MinStyleCount = 1;
     private static readonly int MaxStyleCount = 5;
 
-    private static Dictionary<string, Func<ModConfigHoverGuideStyle>> StyleFactories { get; } = new() {
-        {ModConsts.SourceId.AddStyleMinimal, ModConfigHoverGuideStylePresets.Minimum},
-        {ModConsts.SourceId.AddStyleDefault, ModConfigHoverGuideStylePresets.Default},
-        {ModConsts.SourceId.AddStyleMaximal, ModConfigHoverGuideStylePresets.Maximal},
-    };
+    private Dictionary<string, Func<ModConfigHoverGuideStyle>> StyleFactories { get; } 
 
     private ModLayerConfigContext Context => Layer.Data;
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
+
+    public ModLayerConfigTabStyle()
+    {
+       StyleFactories = new() {
+            {ModConsts.SourceId.AddStyleCopy, () => Context.SelectedStyle.DeepCopy()},
+            {ModConsts.SourceId.AddStyleMinimal, ModConfigHoverGuideStylePresets.Minimum},
+            {ModConsts.SourceId.AddStyleDefault, ModConfigHoverGuideStylePresets.Default},
+            {ModConsts.SourceId.AddStyleMaximal, ModConfigHoverGuideStylePresets.Maximal},
+        };
+    }
 
     public override void OnLayout()
     {

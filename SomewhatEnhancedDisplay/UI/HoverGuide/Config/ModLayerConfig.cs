@@ -29,7 +29,7 @@ public class ModLayerConfig : YKLayer<ModLayerConfigContext>
     public override void OnLayout()
     {
         // 設定画面での選択中スタイルとホバーガイドの表示スタイルを同期する
-        Config.CurrentStyleIndex = Context.SelectedStyleIndex;
+        Context.SelectedStyleIndex = Config.CurrentStyleIndex;
         Context.AddSelectedStyleChangedListener(index => Config.CurrentStyleIndex = index);
 
         CreateTab<ModLayerConfigTabGenral>(ModConsts.SourceId.ConfigGeneral, ModConsts.GameObjectName.ConfigGenaral);
