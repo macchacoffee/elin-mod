@@ -321,6 +321,10 @@ public class ModConfigHoverGuideStyleChara : ModConfigBase<ModConfigHoverGuideSt
     [JsonProperty("resistLineWrapping", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHoverGuideLineWrapping ResistLineWrapping { get; set; } = new();
 
+    [JsonProperty("statsLineWrapping", DefaultValueHandling = DefaultValueHandling.Include)]
+    public ModConfigHoverGuideLineWrapping StatsLineWrapping { get; set; } = new();
+
+
     [JsonProperty("healthBar", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHoverGuideHealthBar HealthBar { get; init; } = new();
 }

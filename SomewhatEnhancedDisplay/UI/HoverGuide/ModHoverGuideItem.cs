@@ -122,4 +122,9 @@ public class ModHoverGuideItem
         HealthBar.Enabled = false;
         TextName2.enabled = false;
     }
+
+    public void ClearTarget()
+    {
+        HealthBar.ClearTarget();
+    }
 }

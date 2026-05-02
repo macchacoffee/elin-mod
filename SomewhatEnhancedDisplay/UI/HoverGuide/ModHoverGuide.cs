@@ -127,6 +127,13 @@ public class ModHoverGuide
 
     private void ShowInternal(WidgetMouseover widget, ModHoverGuideTarget? target1, ModHoverGuideTarget? target2, bool isLocked)
     {
+        // widgetが非可視になるのはlayoutが非活性になるパターンと透明度が非常に小さい値になるパターンがある
+        // 非可視の場合はホバーガイドのターゲットをクリアする
+        if (!widget.layout.isActiveAndEnabled || widget.cg.alpha < 0.07f)
+        {
+            ClearTarget();
+        }
+
         var fontColor = widget.textName.fontColor;
         // 行間を広げるためにフォントサイズを少し大きく設定する
         var fontSize1 = ModUIUtil.ComputeFontSize(BaseFontSize + 2);
@@ -158,5 +165,11 @@ public class ModHoverGuide
         Item2.ShowForManager();
 
         widget.layout.RebuildLayout();
+    }
+
+    public void ClearTarget()
+    {
+        Item1.ClearTarget();
+        Item2.ClearTarget();
     }
 }

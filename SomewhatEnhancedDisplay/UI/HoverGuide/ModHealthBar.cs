@@ -36,6 +36,10 @@ public class ModHealthBar
         {
             Layout.enabled = value;
             UpdateSize(value);
+            if (!value)
+            {
+                Target.SetTarget(null); 
+            }
         }
     }
 
@@ -55,7 +59,7 @@ public class ModHealthBar
 
         BGImage = AddHealthBarImage(Layout.transform, ModConsts.GameObjectName.HealthBarBG, localScale, ColorConfig.HealthBarBGColor);
         FGDamageImage = AddHealthBarImage(Layout.transform, ModConsts.GameObjectName.HealthBarFGDamage, localScale, ColorConfig.HealthBarBGColor);
-        FGRestoreImage = AddHealthBarImage(Layout.transform, ModConsts.GameObjectName.HealthBarFGRestore, localScale, ColorConfig.HealthBarFGColor);
+        FGRestoreImage = AddHealthBarImage(Layout.transform, ModConsts.GameObjectName.HealthBarFGRestore, localScale, ColorConfig.HealthBarBGColor);
         FGImage = AddHealthBarImage(Layout.transform, ModConsts.GameObjectName.HealthBarFG, localScale, ColorConfig.HealthBarFGColor);
 
         var valueObj = new GameObject(ModConsts.GameObjectName.HealthBarValue);
@@ -115,7 +119,7 @@ public class ModHealthBar
 
         // 設定で有効な場合は体力バーの増減をアニメーションで表現する
         if (!StyleConfig.HealthBar.UseAnimation
-            || !Layout.IsActive()
+            || !Layout.isActiveAndEnabled
             || !Target.TryGetTarget(out var target) || target != chara)
         {
             // 対象が変わった場合も体力の割合が変わりうるため、
@@ -130,6 +134,7 @@ public class ModHealthBar
             FGDamageImage.color = ColorConfig.HealthBarBGColor;
             FGRestoreImage.color = ColorConfig.HealthBarBGColor;
             FGImage.color = barColor;
+            Enabled = Displays(chara, modifier);
         }
         else if (ValueRatio != ratio)
         {
@@ -146,6 +151,11 @@ public class ModHealthBar
         ValueRatio = ratio;
 
         Target.SetTarget(chara);
+    }
+
+    public void ClearTarget()
+    {
+        Target.SetTarget(null);
     }
 
     private static double RoundRatioForValueText(double ratio)
@@ -237,6 +247,15 @@ public class ModHealthBar
             return;
         }
 
+        if (valueRatio < FGImage.fillAmount)
+        {
+            FGImage.fillAmount = (float)ratio;
+            FGImage.color = barColor;
+            ValueText.text = GetValueText(valueRatio);
+            ValueText.color = textColor;
+        }
+        FGDamageImage.color = ColorConfig.HealthBarFGDamageColor;
+
         var barRatio = FGDamageImage.fillAmount;
         var duration = Math.Abs((float)ratio - barRatio) * 3;
         FGDamageTween = FGDamageImage
@@ -244,17 +263,6 @@ public class ModHealthBar
             .SetLink(LayoutObj)
             .SetDelay(hasOldTween ? 0 : TweenDelay)
             .SetEase(Ease.Linear)
-            .OnStart(() =>
-            {
-                if (valueRatio < FGImage.fillAmount)
-                {
-                    FGImage.fillAmount = (float)ratio;
-                    FGImage.color = barColor;
-                    ValueText.text = GetValueText(valueRatio);
-                    ValueText.color = textColor;
-                }
-                FGDamageImage.color = ColorConfig.HealthBarFGDamageColor;
-            })
             .OnComplete(() =>
             {
                 FGDamageImage.color = ColorConfig.HealthBarBGColor;
@@ -310,12 +318,13 @@ public class ModHealthBar
         {
             return false;
         }
-        
+
         if (!config.NotInCombat && !chara.IsInCombat)
         {
             return false;
         }
 
-        return config.InFullHealth || FGImage.fillAmount < 1 || !chara.IsInFullHealth || modifier?.HealthBarRatio < 1;
+        var isInFullHealth = modifier is not null ? modifier.HealthBarRatio >= 1 : chara.IsInFullHealth;
+        return config.InFullHealth || FGImage.fillAmount < 1 || !isInFullHealth;
     }
 }

@@ -262,7 +262,6 @@ public static class WidgetMouseoverPatch
         return matcher.InstructionEnumeration();
     }
 
-
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(WidgetMouseover.Show), [typeof(string)])]
     private static IEnumerable<CodeInstruction> Show_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)

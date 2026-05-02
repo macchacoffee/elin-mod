@@ -320,7 +320,7 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
             layout: this,
             headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
             cellWidth: cellWidth,
-            maxColumn: maxColumn,
+            maxColumn: 2,
             new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Stats,
                 Init: Config.DisplayStats,
@@ -332,6 +332,21 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
                 Init: Config.DisplayStatsValue,
                 OnChanged: value => Config.DisplayStatsValue = value,
                 GetConfig: () => Config.DisplayStatsValue
+            ),
+            new EditStyleToogleUIItem(
+                Label: ModConsts.SourceId.WrapLine,
+                Init: Config.StatsLineWrapping.Enable,
+                OnChanged: value => Config.StatsLineWrapping.Enable = value,
+                GetConfig: () => Config.StatsLineWrapping.Enable
+            ),
+            new EditStyleSliderUIItem(
+                GetLabel: value => $"{ModConsts.SourceId.MaxItemsPerLine.lang()}({value})",
+                Init: Config.StatsLineWrapping.MaxItemsPerLine,
+                Min: 1,
+                Max: 20,
+                Step: 1,
+                OnChanged: value => Config.StatsLineWrapping.MaxItemsPerLine = (int)value,
+                GetConfig: () => Config.StatsLineWrapping.MaxItemsPerLine
             )
         );
 

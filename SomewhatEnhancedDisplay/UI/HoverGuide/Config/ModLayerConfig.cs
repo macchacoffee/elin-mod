@@ -42,6 +42,7 @@ public class ModLayerConfig : YKLayer<ModLayerConfigContext>
         GetTab(ModConsts.GameObjectName.ConfigStyleTargetChara).sprite = GetTabIconSprite(115);
         GetTab(ModConsts.GameObjectName.ConfigStyleTargetThing).sprite = GetTabIconSprite(109);
 
+        ModUI.HoverGuide?.ClearTarget();
         UpdateHoverGuideSample(Context.SampleChara);
 
         Window.AddBottomButton(ModConsts.SourceId.ResetConfig, () =>
@@ -79,6 +80,7 @@ public class ModLayerConfig : YKLayer<ModLayerConfigContext>
     public override void OnKill()
     {
         ModUI.HoverGuide?.UnlockCard();
+        ModUI.HoverGuide?.ClearTarget();
     }
 
     public override void OnSwitchContent(Window window)

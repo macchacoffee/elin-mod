@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -7,6 +8,7 @@ using SomewhatEnhancedDisplay.Config;
 using SomewhatEnhancedDisplay.Extensions;
 using SomewhatEnhancedDisplay.UI;
 using SomewhatEnhancedDisplay.UI.HoverGuide;
+using UnityEngine;
 
 namespace SomewhatEnhancedDisplay.Patches;
 
@@ -170,7 +172,16 @@ public static class CharaPatch
     private static IEnumerable<CodeInstruction> GetHoverText2_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
         // // 変更前
+        // if (mimicry != null && mimicry.IsThing)
+        // {
+        // ...
+        // if (knowFav)
+        // {
+        // ...
         // text = text + "<size=14>" + "favgift".lang(GetFavCat().GetName().ToLower(), GetFavFood().GetName()) + "</size>";
+        // ...
+        // if (EClass.pc.held?.trait is TraitWhipLove && IsPCFaction)
+        // {
         // ...
         // text3 = text3 + text4.TagColor(c) + ", ";
         // ...
@@ -182,14 +193,23 @@ public static class CharaPatch
         // ...
         // return text + text2 + text3;
         // // 変更後
+        // if (CharaPatch.IsMimicryEnabled() && mimicry != null && mimicry.IsThing)
+        // {
+        // ...
+        // if (true)
+        // {
+        // ...
         // text = text + $"<size=14>♡" + GetFavCat().GetName().ToLower() + "/" + GetFavFood().GetName() + "</size>";
         // ...
-        // text4 = BuildStatsExtraText(text4, item3);
-        // text3 = text3 + text4.TagColor(c) + ", ";
+        // if (true || (EClass.pc.held?.trait is TraitWhipLove && IsPCFaction))
+        // {
+        // ...
+        // text4 = CharaPatch.BuildStatsExtraText(text4, item3);
+        // text3 = CharaPatch.ConcatStatsText(text3, text4.TagColor(c), ", ");
         // ...
         // else
         // {
-        //      text3 = text3.TrimEnd(", ".ToCharArray()) + "</size>";
+        //      text3 = CharaPatch.BuildStatsText(text3);
         // }
         // ...
         // return BuildHoverText2(text, text2, text3, this);
@@ -207,6 +227,18 @@ public static class CharaPatch
         matcher.InsertAndAdvance(
             CodeInstruction.Call(() => IsMimicryEnabled()),
             new CodeInstruction(OpCodes.Brfalse, label1)
+        );
+
+        // ldarg.0 NULL
+        // call bool Chara::get_knowFav()
+        matcher.MatchStartForward(
+            new CodeMatch(OpCodes.Ldarg_0),
+            new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(Chara), nameof(Chara.knowFav)))
+        );
+        // 必ず好物を取得するようにする
+        matcher.RemoveInstructions(2);
+        matcher.InsertAndAdvance(
+            new CodeInstruction(OpCodes.Ldc_I4_1)
         );
 
         // ldstr "<size=14>"
@@ -254,6 +286,61 @@ public static class CharaPatch
             new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string), typeof(string)]))
         );
 
+        // call static Chara EClass::get_pc() [Label4]
+        // ldfld Card Chara::held
+        // dup NULL
+        // brtrue Label15
+        // pop NULL
+        // ldnull NULL
+        // br Label16
+        // ldfld Trait Card::trait [Label15]
+        // isinst TraitWhipLove [Label16]
+        // brfalse Label17
+        // ldarg.0 NULL
+        // callvirt virtual bool Card::get_IsPCFaction()
+        // brfalse Label18
+        // ldloc.1 NULL
+        matcher.MatchStartForward(
+            new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(EClass), nameof(EClass.pc))),
+            new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.held))),
+            new CodeMatch(OpCodes.Dup),
+            new CodeMatch(OpCodes.Brtrue),
+            new CodeMatch(OpCodes.Pop),
+            new CodeMatch(OpCodes.Ldnull),
+            new CodeMatch(OpCodes.Br),
+            new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Card), nameof(Card.trait))),
+            new CodeMatch(OpCodes.Isinst, typeof(TraitWhipLove)),
+            new CodeMatch(OpCodes.Brfalse),
+            new CodeMatch(OpCodes.Ldarg_0),
+            new CodeMatch(OpCodes.Callvirt, AccessTools.PropertyGetter(typeof(Card), nameof(Card.IsPCFaction))),
+            new CodeMatch(OpCodes.Brfalse),
+            new CodeMatch(OpCodes.Ldloc_1)
+        );
+        // 趣味・仕事を取得する処理への遷移先となるLabelMod1を生成する
+        matcher.CreateLabelWithOffsets(13, out var labelMod1);
+        // 必ず趣味・仕事を取得するようにする
+        matcher.InsertAndAdvance(
+            new CodeInstruction(OpCodes.Br, labelMod1)
+        );
+        // 前の条件分岐から追加した命令に遷移できるようにするため、ラベルを移動させる
+        var labelList1 = matcher.Labels.Copy();
+        matcher.Labels.Clear();
+        matcher.Advance(-1);
+        matcher.AddLabels(labelList1);
+
+        // ldloc.2 NULL
+        // ldstr "<size=14>"
+        // call static string string::Concat(string str0, string str1)
+        // stloc.2 NULL
+        matcher.MatchStartForward(
+            new CodeMatch(OpCodes.Ldloc_2),
+            new CodeMatch(OpCodes.Ldstr, "<size=14>"),
+            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string)])),
+            new CodeMatch(OpCodes.Stloc_2)
+        );
+        // sizeタグの開始タグを追加する処理を削除する
+        matcher.RemoveInstructions(4);
+
         // add NULL
         // stloc.s 9 (System.Int32)
         matcher.MatchEndForward(
@@ -269,6 +356,21 @@ public static class CharaPatch
             new CodeInstruction(OpCodes.Stloc_S, 12)
         );
 
+        // call static string ClassExtension::TagColor(string s, UnityEngine.Color c)
+        // ldstr ", "
+        // call static string string::Concat(string str0, string str1, string str2)
+        matcher.MatchEndForward(
+            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.TagColor), [typeof(string), typeof(Color)])),
+            new CodeMatch(OpCodes.Ldstr, ", "),
+            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string), typeof(string)]))
+        );
+        // バフ・デバフ・状態・呪いの文字列を行折り返しに対応した内容で結合する
+        matcher.RemoveInstruction();
+        matcher.InsertAndAdvance(
+            new CodeInstruction(OpCodes.Ldloc_S, 9),
+            CodeInstruction.Call(() => ConcatStatsText(default!, default!, default!, default))
+        );
+
         // br Label43
         // ldstr "" [Label42]
         // stloc.0 NULL
@@ -281,6 +383,28 @@ public static class CharaPatch
         matcher.RemoveInstruction();
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Pop)
+        );
+
+        // ldstr ", "
+        // call char[] string::ToCharArray()
+        // callvirt string string::TrimEnd(char[] trimChars)
+        // ldstr "</size>"
+        // call static string string::Concat(string str0, string str1)
+        // stloc.2 NULL
+        // call static CoreDebug EClass::get_debug() [Label27, Label45]
+        matcher.MatchStartForward(
+            new CodeMatch(OpCodes.Ldstr, ", "),
+            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.ToCharArray), [])),
+            new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(string), nameof(string.TrimEnd), [typeof(char[])])),
+            new CodeMatch(OpCodes.Ldstr, "</size>"),
+            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string)])),
+            new CodeMatch(OpCodes.Stloc_2),
+            new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(EClass), nameof(EClass.debug)))
+        );
+        // 末尾の要素から不要な文字列を削除する処理を変更する
+        matcher.RemoveInstructions(5);
+        matcher.InsertAndAdvance(
+            CodeInstruction.Call(() => BuildStatsText(default!))
         );
 
         // call static string string::Concat(string str0, string str1, string str2)
@@ -328,6 +452,29 @@ public static class CharaPatch
         }
         var statsValueText = $"({stats.GetValue()})".TagSize(12);
         return $"{text4}{statsValueText}";
+    }
+
+    public static string ConcatStatsText(string text3, string text4, string separator, int num)
+    {
+        var config = StyleConfig.StatsLineWrapping;
+        var newline = string.Empty;
+        if (config.Enable && config.MaxItemsPerLine > 0 && num >= config.MaxItemsPerLine && num % config.MaxItemsPerLine == 0)
+        {
+            newline = Environment.NewLine;
+            separator = string.Empty;
+        }
+        return $"{text3}{$"{text4}{separator}".TagSize(14)}{newline}";
+    }
+
+    public static string BuildStatsText(string text3)
+    {
+        var textEnd = ", </size>";
+        if (text3.EndsWith(Environment.NewLine))
+        {
+            text3 = text3.Substring(0, text3.Length - Environment.NewLine.Length);
+            textEnd = "</size>";
+        }
+        return $"{text3.Substring(0, text3.LastIndexOf(textEnd))}</size>";
     }
 
     private static string BuildHoverText(string text, string text2, string s, Chara chara)
