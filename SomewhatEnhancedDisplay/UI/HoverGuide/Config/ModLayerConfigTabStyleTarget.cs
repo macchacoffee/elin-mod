@@ -19,7 +19,7 @@ public abstract class ModLayerConfigTabStyleTarget : YKLayout<ModLayerConfigCont
     {
         EditStyleUI = new();
         OnLayoutInternal();
-        Context.AddSelectedStyleChangedListener(_ => EditStyleUI.OnStyleChanged());
+        Context.AddSelectedStyleChangedListener((_, _) => EditStyleUI.OnStyleChanged());
     }
 
     protected abstract void OnLayoutInternal();

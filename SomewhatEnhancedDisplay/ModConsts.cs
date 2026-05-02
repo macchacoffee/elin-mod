@@ -139,8 +139,13 @@ public static class ModConsts
         public static readonly string AddStyleDefault = Prefixed("addStyleDefault");
         public static readonly string AddStyleMaximal = Prefixed("addStyleMaximal");
         public static readonly string CancelAddStyle = Prefixed("cancelAddStyle");
+        public static readonly string RenameStyle = Prefixed("renameStyle");
+        public static readonly string DialogRenameStyle = Prefixed("dialogRenameStyle");
+        public static readonly string StyleOperations = Prefixed("styleOperations");
+        public static readonly string MoveStyleBackward = Prefixed("moveStyleBackward");
+        public static readonly string MoveStyleForward = Prefixed("moveStyleForward");
         public static readonly string PickPreviewChara = Prefixed("pickPreviewChara");
         public static readonly string PickPreviewThing = Prefixed("pickPreviewThing");
-        public static readonly string HealthBarRatio = Prefixed("healthBarRatio");
+        public static readonly string HealthRatio = Prefixed("healthRatio");
      }
 }

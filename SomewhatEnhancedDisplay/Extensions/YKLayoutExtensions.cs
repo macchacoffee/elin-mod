@@ -32,14 +32,17 @@ public static class YKLayoutExtensions
         return toogle;
     }
 
-    public static (UIDropdown, Action<int, IEnumerable<T>>) AddModDropdown<T>(this YKLayout layout, string label, int init, IEnumerable<T> values, Func<int, T, string> getLabel, Action<int, T> onChanged, int? width = null)
+    public static (UIDropdown, Action<int, IEnumerable<T>>) AddModDropdown<T>(this YKLayout layout, string? label, int init, IEnumerable<T> values, Func<int, T, string> getLabel, Action<int, T> onChanged, int? width = null)
     {
         var layout2 = layout.Horizontal();
         layout2.Layout.childAlignment = TextAnchor.MiddleLeft;
         layout2.Fitter.verticalFit = ContentSizeFitter.FitMode.MinSize;
-        var text = layout2.Text(label, FontColor.Header);
-        text.horizontalOverflow = HorizontalWrapMode.Overflow;
-        layout2.Spacer(0, 12);
+        if (label is not null)
+        {
+            var text = layout2.Text(label, FontColor.Header);
+            text.horizontalOverflow = HorizontalWrapMode.Overflow;
+            layout2.Spacer(0, 12);
+        }
         var valueList = values.ToList();
         string getLabel2(T value, int index) => getLabel(index, value);
         var dropdown = layout2.Dropdown([.. valueList.Select(getLabel2)], index => onChanged(index, valueList[index]), init);

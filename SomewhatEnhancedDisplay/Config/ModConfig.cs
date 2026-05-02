@@ -51,9 +51,7 @@ public class ModConfigHoverGuide : ModConfigBase<ModConfigHoverGuide>
     public ModConfigHoverGuideColorSet ColorSet { get; set; } = new();
 
     [JsonProperty("styles", DefaultValueHandling = DefaultValueHandling.Include, ObjectCreationHandling = ObjectCreationHandling.Replace)]
-    public List<ModConfigHoverGuideStyle> Styles { get; private set; } = [
-        new(),
-    ];
+    public List<ModConfigHoverGuideStyle> Styles { get; private set; } = [new()];
 
     [JsonProperty("currentStyleIndex", DefaultValueHandling = DefaultValueHandling.Include, ObjectCreationHandling = ObjectCreationHandling.Replace)]
     public int CurrentStyleIndex { get; set; } = 0;
@@ -72,7 +70,7 @@ public class ModConfigHoverGuide : ModConfigBase<ModConfigHoverGuide>
         }
     }
 
-    public void AdvanceStyle()
+    public void AdvanceCurrentStyle()
     {
         var index = CurrentStyleIndex + 1;
         if (index >= Styles.Count)
@@ -210,6 +208,9 @@ public class ModConfigHoverGuideColorSet : ModConfigBase<ModConfigHoverGuide>
 
 public class ModConfigHoverGuideStyle : ModConfigBase<ModConfigHoverGuideStyle>
 {
+    [JsonProperty("name", DefaultValueHandling = DefaultValueHandling.Include)]
+    public string Name { get; set; } = ModConsts.SourceId.StyleName.lang();
+
     [JsonProperty("chara", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHoverGuideStyleChara Chara { get; set; } = new();
 

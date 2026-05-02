@@ -32,20 +32,17 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
         Header(ModConsts.SourceId.ConfigEditStyle);
 
         Spacer(8);
-        var styleLayout = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
-
-        var (_, updateStyleDropdown) = styleLayout.AddModDropdown(
+        var styleLayout1 = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
+        var (_, updateStyleDropdown) = styleLayout1.AddModDropdown(
             label: ModConsts.SourceId.SelectStyleToEdit,
             init: 0,
             values: Config.Styles,
-            getLabel: (index, _) => ModConsts.SourceId.StyleName.lang((index + 1).ToString()),
+            getLabel: ModLayerConfigContext.GetStyleName,
             onChanged: (index, Value) => Context.SelectedStyleIndex = index,
-            width: 180
+            width: 240
         );
-
-        styleLayout.Spacer(0, 40);
-
-        var addStyleButton = styleLayout.AddModButton(
+        styleLayout1.Spacer(0, 32);
+        var addStyleButton = styleLayout1.AddModButton(
             label: ModConsts.SourceId.AddStyle,
             onClicked: () =>
             {
@@ -54,7 +51,8 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
                     value => value.lang(),
                     (value, _) =>
                     {
-                        Context.AddStyle(StyleFactories[value]());
+                        var style = StyleFactories[value]();
+                        Context.AddStyle(style);
                     },
                     null
                  ).SetSize();
@@ -62,9 +60,8 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
             },
             width: 100
         );
-
-        styleLayout.Spacer(0, 6);
-        var deleteStyleButton = styleLayout.AddModButton(
+        styleLayout1.Spacer(0, 6);
+        var deleteStyleButton = styleLayout1.AddModButton(
             label: ModConsts.SourceId.DeleteStyle,
             onClicked: () =>
             {
@@ -72,7 +69,7 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
                 {
                     return;
                 }
-                var d = Dialog.YesNo(ModConsts.SourceId.DialogDeleteStyle, () =>
+                var d = Dialog.YesNo(ModConsts.SourceId.DialogDeleteStyle.lang(Context.SelectedStyleName), () =>
                 {
                     Context.DeleteStyle(Context.SelectedStyleIndex);
                     SE.Trash();
@@ -81,15 +78,51 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
             width: 80
         );
 
+        HeaderSmall(ModConsts.SourceId.StyleOperations);
+
+        var styleLayout2 = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
+        styleLayout2.AddModButton(
+            label: ModConsts.SourceId.RenameStyle,
+            onClicked: () =>
+            {
+                Dialog.InputName(ModConsts.SourceId.DialogRenameStyle, Context.SelectedStyle.Name, (cancel, text) =>
+                {
+                    if (cancel)
+                    {
+                        return;
+                    }
+                    Context.SelectedStyle.Name = text;
+                    updateStyleDropdown(Context.SelectedStyleIndex, Config.Styles);
+                }, Dialog.InputType.Default);
+            },
+            width: 180
+        );
+
+        var styleLayout3 = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
+
+        var moveStyleBackwardButton = styleLayout3.AddModButton(
+            label: $"▲ {ModConsts.SourceId.MoveStyleBackward.lang()}",
+            onClicked: () => Context.MoveStyleBackward(Context.SelectedStyleIndex),
+            width: 150
+        );
+        styleLayout3.Spacer(0, 6);
+        var moveStyleforwardButton = styleLayout3.AddModButton(
+            label: $"▼ {ModConsts.SourceId.MoveStyleForward.lang()}",
+            onClicked: () => Context.MoveStyleForward(Context.SelectedStyleIndex),
+            width: 150
+        );
+
         void updateStyleButtons()
         {
             updateStyleDropdown(Context.SelectedStyleIndex, Config.Styles);
             addStyleButton.SetInteractableWithAlpha(Config.Styles.Count < MaxStyleCount);
             deleteStyleButton.SetInteractableWithAlpha(Config.Styles.Count > MinStyleCount);
+            moveStyleBackwardButton.SetInteractableWithAlpha(Config.Styles.Count > 1);
+            moveStyleforwardButton.SetInteractableWithAlpha(Config.Styles.Count > 1);
         }
-        ;
-        Context.AddStyleAddedListener(updateStyleButtons);
-        Context.AddStyleDeletedListener(updateStyleButtons);
+        Context.AddStyleAddedListener((_, _) => updateStyleButtons());
+        Context.AddStyleDeletedListener((_, _) => updateStyleButtons());
+        Context.AddStyleMovedListener((_, _) => updateStyleButtons());
         updateStyleButtons();
 
         Spacer(20);
@@ -119,11 +152,13 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
             width: 240
         );
 
+        HeaderSmall(ModConsts.SourceId.HealthBar);
+
         Spacer(36);
         var previewLayout2 = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
 
         previewLayout2.AddModSlider(
-            getLabel: value => $"{ModConsts.SourceId.HealthBarRatio.lang()}({value}%)",
+            getLabel: value => $"{ModConsts.SourceId.HealthRatio.lang()}({value}%)",
             init: (float)Context.SampleModifier.HealthBarRatio! * 100,
             min: 0,
             max: 100,

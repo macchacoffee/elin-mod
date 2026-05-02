@@ -21,7 +21,7 @@ public class ModLayerConfig : YKLayer<ModLayerConfigContext>
         if (idLang == ModConsts.SourceId.ConfigStyleTargetChara
             || idLang == ModConsts.SourceId.ConfigStyleTargetThing)
         {
-            prefix = $"[{ModConsts.SourceId.StyleName.lang((Context.SelectedStyleIndex + 1).ToString())}] ";
+            prefix = $"[{Context.SelectedStyleName}] ";
         }
         return $"{prefix}{ModConsts.SourceId.ConfigOf.lang(base.GetTextHeader(window))}";
     }
@@ -30,7 +30,7 @@ public class ModLayerConfig : YKLayer<ModLayerConfigContext>
     {
         // 設定画面での選択中スタイルとホバーガイドの表示スタイルを同期する
         Context.SelectedStyleIndex = Config.CurrentStyleIndex;
-        Context.AddSelectedStyleChangedListener(index => Config.CurrentStyleIndex = index);
+        Context.AddSelectedStyleChangedListener((index, _) => Config.CurrentStyleIndex = index);
 
         CreateTab<ModLayerConfigTabGenral>(ModConsts.SourceId.ConfigGeneral, ModConsts.GameObjectName.ConfigGenaral);
         CreateTab<ModLayerConfigTabStyle>(ModConsts.SourceId.ConfigStyle, ModConsts.GameObjectName.ConfigStyle);
@@ -63,7 +63,7 @@ public class ModLayerConfig : YKLayer<ModLayerConfigContext>
                 var idLang = Window.CurrentTab.idLang;
                 if (idLang == ModConsts.SourceId.ConfigGeneral)
                 {
-                    Mod.Config.ResetHoverGuideGeneral();    
+                    Mod.Config.ResetHoverGuideGeneral();
                 }
                 else if (
                     idLang == ModConsts.SourceId.ConfigStyle

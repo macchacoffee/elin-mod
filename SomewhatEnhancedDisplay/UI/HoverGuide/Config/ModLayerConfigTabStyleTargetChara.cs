@@ -409,11 +409,7 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
                 Min: 200,
                 Max: 800,
                 Step: 10,
-                OnChanged: value =>
-                {
-                    Plugin.LogInfo($"OnChanged {Config.HealthBar.Width} {value}");
-                    Config.HealthBar.Width = (int)value;
-                },
+                OnChanged: value => Config.HealthBar.Width = (int)value,
                 GetConfig: () => Config.HealthBar.Width
             )
         );
