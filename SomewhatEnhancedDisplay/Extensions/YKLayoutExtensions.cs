@@ -37,7 +37,8 @@ public static class YKLayoutExtensions
         var layout2 = layout.Horizontal();
         layout2.Layout.childAlignment = TextAnchor.MiddleLeft;
         layout2.Fitter.verticalFit = ContentSizeFitter.FitMode.MinSize;
-        layout2.Text($"{label.lang()}:", FontColor.Header);
+        var text = layout2.Text(label, FontColor.Header);
+        text.horizontalOverflow = HorizontalWrapMode.Overflow;
         layout2.Spacer(0, 12);
         var valueList = values.ToList();
         string getLabel2(T value, int index) => getLabel(index, value);
