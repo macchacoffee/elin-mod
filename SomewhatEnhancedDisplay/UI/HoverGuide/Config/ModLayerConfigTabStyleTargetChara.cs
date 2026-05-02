@@ -1,9 +1,20 @@
+using System;
+using System.Collections.Generic;
 using SomewhatEnhancedDisplay.Config;
+using YKF;
 
 namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
 public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
 {
+    private static readonly Dictionary<ModHealthBarDisplayTarget, string> HealthBarDisplayTargetIdLangs = new() {
+        {ModHealthBarDisplayTarget.None, ModConsts.SourceId.TargetNone},
+        {ModHealthBarDisplayTarget.Boss, ModConsts.SourceId.TargetBoss},
+        {ModHealthBarDisplayTarget.Elite, ModConsts.SourceId.TargetElite},
+        {ModHealthBarDisplayTarget.All, ModConsts.SourceId.TargetAll},
+    };
+    private static readonly List<ModHealthBarDisplayTarget> HealthBarDisplayTargets = [.. HealthBarDisplayTargetIdLangs.Keys];
+
     private ModConfigHoverGuideStyleChara Config => SelectedStyle.Chara;
 
     protected override void OnLayoutInternal()
@@ -379,7 +390,7 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
             layout: this,
             headerLabel: null,
             cellWidth: cellWidth,
-            maxColumn: maxColumn,
+            maxColumn: 2,
             new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.DisplayValue,
                 Init: Config.HealthBar.DisplayValue,
@@ -391,6 +402,84 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
                 Init: Config.HealthBar.UseAnimation,
                 OnChanged: value => Config.HealthBar.UseAnimation = value,
                 GetConfig: () => Config.HealthBar.UseAnimation
+            ),
+            new EditStyleSliderUIItem(
+                GetLabel: value => $"{ModConsts.SourceId.Width.lang()}({value})",
+                Init: Config.HealthBar.Width,
+                Min: 200,
+                Max: 800,
+                Step: 10,
+                OnChanged: value =>
+                {
+                    Plugin.LogInfo($"OnChanged {Config.HealthBar.Width} {value}");
+                    Config.HealthBar.Width = (int)value;
+                },
+                GetConfig: () => Config.HealthBar.Width
+            )
+        );
+
+        AddHealthBarDisplay(
+            layout: this,
+            getConfig: () => Config.HealthBar.DisplayForEnemy,
+            headerLabel: ModConsts.SourceId.Enemy,
+            cellWidth: cellWidth,
+            maxColumn: maxColumn
+        );
+        AddHealthBarDisplay(
+            layout: this,
+            getConfig: () => Config.HealthBar.DisplayForNetural,
+            headerLabel: ModConsts.SourceId.Netural,
+            cellWidth: cellWidth,
+            maxColumn: maxColumn
+        );
+        AddHealthBarDisplay(
+            layout: this,
+            getConfig: () =>  Config.HealthBar.DisplayForFriend,
+            headerLabel: ModConsts.SourceId.Friend,
+            cellWidth: cellWidth,
+            maxColumn: maxColumn
+        );
+        AddHealthBarDisplay(
+            layout: this,
+            getConfig: () => Config.HealthBar.DisplayForAlly,
+            headerLabel: ModConsts.SourceId.Ally,
+            cellWidth: cellWidth,
+            maxColumn: maxColumn
+        );
+    }
+
+    private void AddHealthBarDisplay(YKLayout layout, Func<ModConfigHealthBarDisplay> getConfig, string headerLabel, int cellWidth, int maxColumn)
+    {
+        EditStyleUI.Add(
+            layout: layout,
+            headerLabel: headerLabel,
+            cellWidth: (int)(cellWidth * 1.2),
+            maxColumn: 1,
+            new EditStyleDropdownUIItem<ModHealthBarDisplayTarget>(
+                Label: ModConsts.SourceId.Target,
+                Init: HealthBarDisplayTargets.IndexOf(getConfig().Target),
+                Values: HealthBarDisplayTargets,
+                GetLabel: (_, value) => HealthBarDisplayTargetIdLangs[value].lang(),
+                OnChanged: (_, value) => getConfig().Target = value,
+                GetConfig: () => (HealthBarDisplayTargets.IndexOf(getConfig().Target), HealthBarDisplayTargets)
+            )
+        );
+        EditStyleUI.Add(
+            layout: layout,
+            headerLabel: null,
+            cellWidth: cellWidth,
+            maxColumn: maxColumn,
+            new EditStyleToogleUIItem(
+                Label: ModConsts.SourceId.NotInCombat,
+                Init: getConfig().NotInCombat,
+                OnChanged: value => getConfig().NotInCombat = value,
+                GetConfig: () => getConfig().NotInCombat
+            ),
+            new EditStyleToogleUIItem(
+                Label: ModConsts.SourceId.InFullHealth,
+                Init: getConfig().InFullHealth,
+                OnChanged: value => getConfig().InFullHealth = value,
+                GetConfig: () => getConfig().InFullHealth
             )
         );
     }

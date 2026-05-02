@@ -9,26 +9,41 @@ namespace SomewhatEnhancedDisplay.Extensions;
 
 public static class YKLayoutExtensions
 {
-    public static UIButton AddModButton(this YKLayout layout, string label, Action onClicked, int? width = null)
+    public static UIButton AddModButton(this YKLayout layout, string label, Action onClicked, string? tooltip = null, int? width = null)
     {
         var button = layout.Button(label.lang(), onClicked);
         button.WithWidth(width ?? 150);
+        if (tooltip is not null)
+        {
+            button.SetTooltipLang(tooltip);
+            button.tooltip.icon = true;
+        }
         return button;
     }
 
-    public static UIButton AddModToggle(this YKLayout layout, string label, bool init, Action<bool> onChanged)
+    public static UIButton AddModToggle(this YKLayout layout, string label, bool init, Action<bool> onChanged, string? tooltip = null)
     {
-        return layout.Toggle(label, init, onChanged);
+        var toogle = layout.Toggle(label, init, onChanged);
+        if (tooltip is not null)
+        {
+            toogle.SetTooltipLang(tooltip);
+            toogle.tooltip.icon = true;
+        }
+        return toogle;
     }
 
-    public static (UIDropdown, Action<int, IEnumerable<T>>) AddModDropdown<T>(this YKLayout layout, string label, int init, IEnumerable<T> values, Func<T, int, string> getLabel, Action<int, T> onChanged, int? width = null)
+    public static (UIDropdown, Action<int, IEnumerable<T>>) AddModDropdown<T>(this YKLayout layout, string label, int init, IEnumerable<T> values, Func<int, T, string> getLabel, Action<int, T> onChanged, int? width = null)
     {
-        layout.Text($"{label.lang()}:", FontColor.Header);
-        layout.Spacer(0, 12);
+        var layout2 = layout.Horizontal();
+        layout2.Layout.childAlignment = TextAnchor.MiddleLeft;
+        layout2.Fitter.verticalFit = ContentSizeFitter.FitMode.MinSize;
+        layout2.Text($"{label.lang()}:", FontColor.Header);
+        layout2.Spacer(0, 12);
         var valueList = values.ToList();
-        var dropdown = layout.Dropdown([.. valueList.Select(getLabel)], index => onChanged(index, valueList[index]), init);
+        string getLabel2(T value, int index) => getLabel(index, value);
+        var dropdown = layout2.Dropdown([.. valueList.Select(getLabel2)], index => onChanged(index, valueList[index]), init);
         dropdown.WithWidth(width ?? 180);
-        return (dropdown, (index, values) => dropdown.SetList(index, [.. values], getLabel, onChanged));
+        return (dropdown, (index, values) => dropdown.SetList(index, [.. values], getLabel2, onChanged));
     }
 
     public static Slider AddModSlider(this YKLayout layout, Func<float, string> getLabel, float init, float min, float max, float step, Action<float> onChanged, int? width = null)
@@ -46,11 +61,10 @@ public static class YKLayoutExtensions
             value => getLabel(value * step)
         ).WithWidth(width ?? 200);
         slider.wholeNumbers = true;
-
         return slider;
     }
 
-    public static UIButton AddModColorPicker(this YKLayout layout, string label, Color? init, Action<Color> onChanged)
+    public static UIButton AddModColorPicker(this YKLayout layout, string label, Color? init, Action<Color> onChanged, string? tooltip = null)
     {
         var initColor = init ?? Color.clear;
 
@@ -61,7 +75,7 @@ public static class YKLayoutExtensions
         button.SetOnClick(() =>
         {
             var colorPicker = EClass.ui.AddLayer<LayerColorPicker>();
-            colorPicker.SetColor(button.icon.color , button.icon.color, (state, color) =>
+            colorPicker.SetColor(button.icon.color, button.icon.color, (state, color) =>
             {
                 switch (state)
                 {
@@ -76,6 +90,11 @@ public static class YKLayoutExtensions
                 onChanged(color);
             });
         });
+        if (tooltip is not null)
+        {
+            button.SetTooltipLang(tooltip);
+            button.tooltip.icon = true;
+        }
 
         return button;
     }

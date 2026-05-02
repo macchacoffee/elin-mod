@@ -114,17 +114,17 @@ public class ModLayerConfig : YKLayer<ModLayerConfigContext>
         return Window.setting.tabs[Window.GetTab(name)];
     }
 
-    private string CurrentTabLang(string langId)
+    private string CurrentTabLang(string idLang)
     {
-        var idLang = Window.CurrentTab.idLang;
+        var tabIdLang = Window.CurrentTab.idLang;
         if (
-            idLang == ModConsts.SourceId.ConfigStyleTargetChara
-            || idLang == ModConsts.SourceId.ConfigStyleTargetThing)
+            tabIdLang == ModConsts.SourceId.ConfigStyleTargetChara
+            || tabIdLang == ModConsts.SourceId.ConfigStyleTargetThing)
         {
-            // スタイル関連のlangIdはすべてスタイルのlangIdに置き換える
-            idLang = ModConsts.SourceId.ConfigStyle;
+            // スタイル関連のidLangはすべてスタイルのidLangに置き換える
+            tabIdLang = ModConsts.SourceId.ConfigStyle;
         }
-        return langId.lang(idLang.lang());
+        return idLang.lang(tabIdLang.lang());
     }
 
     private static Sprite? GetTabIconSprite(int id)

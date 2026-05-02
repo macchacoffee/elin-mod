@@ -243,7 +243,7 @@ public class ModLayerConfigTabGenral : YKLayout<ModLayerConfigContext>
         );
     }
 
-    private record ColorConfigItem(string Label, Color? Init, Action<Color> OnChanged);
+    private record ColorConfigItem(string Label, Color? Init, Action<Color> OnChanged, string? Tooltip = null);
 
     private void AddColorPickers(YKLayout layout, string headerLabel, int cellWidth, int maxColumn, params ColorConfigItem[] items)
     {
@@ -252,7 +252,7 @@ public class ModLayerConfigTabGenral : YKLayout<ModLayerConfigContext>
         grid.Layout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
         foreach (var item in items)
         {
-            grid.AddModColorPicker(item.Label, item.Init, item.OnChanged);
+            grid.AddModColorPicker(item.Label, item.Init, item.OnChanged, item.Tooltip);
         }
     }
 }

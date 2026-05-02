@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using SomewhatEnhancedDisplay.Config;
 using SomewhatEnhancedDisplay.Extensions;
+using UnityEngine;
 using UnityEngine.UI;
 using YKF;
 
@@ -37,12 +38,7 @@ public abstract class ModLayerConfigTabStyleTarget : YKLayout<ModLayerConfigCont
     {
         public UIListenerSet AddUI(YKLayout layout)
         {
-            var toogle = layout.AddModToggle(Label, Init, OnChanged);
-            if (Tooltip is string tooltip)
-            {
-                toogle.SetTooltipLang(tooltip);
-                toogle.tooltip.icon = true;
-            }
+            var toogle = layout.AddModToggle(Label, Init, OnChanged, Tooltip);
             return new(OnSelectedStyleChanged: () => toogle.SetCheck(GetConfig()));
         }
     }
@@ -59,11 +55,31 @@ public abstract class ModLayerConfigTabStyleTarget : YKLayout<ModLayerConfigCont
         public UIListenerSet AddUI(YKLayout layout)
         {
             var layout2 = layout.Horizontal();
-            layout2.Layout.childAlignment = UnityEngine.TextAnchor.LowerLeft;
+            layout2.Layout.childAlignment = TextAnchor.LowerLeft;
             layout2.Fitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
             layout2.Spacer(0, 20);
             var slider = layout2.AddModSlider(GetLabel, Init, Min, Max, Step, OnChanged);
-            return new(OnSelectedStyleChanged: () => slider.value = GetConfig());
+            return new(OnSelectedStyleChanged: () => slider.value = GetConfig() / Step);
+        }
+    }
+
+
+    protected record EditStyleDropdownUIItem<T>(
+         string Label,
+         int Init,
+         IEnumerable<T> Values,
+         Func<int, T, string> GetLabel,
+         Action<int, T> OnChanged,
+         Func<(int, IEnumerable<T>)> GetConfig) : IEditStyleUIItem
+    {
+        public UIListenerSet AddUI(YKLayout layout)
+        {
+            var (dropdown, updateDropdown) = layout.AddModDropdown(Label, Init, Values, GetLabel, OnChanged);
+            return new(OnSelectedStyleChanged: () =>
+            {
+                var (index, values) = GetConfig();
+                updateDropdown(index, values);
+            });
         }
     }
 
@@ -94,7 +110,7 @@ public abstract class ModLayerConfigTabStyleTarget : YKLayout<ModLayerConfigCont
                 var listenerSet = item.AddUI(grid);
                 if (listenerSet.OnSelectedStyleChanged is not null)
                 {
-                     SelectedStyleChangedListeners.Add(listenerSet.OnSelectedStyleChanged);
+                    SelectedStyleChangedListeners.Add(listenerSet.OnSelectedStyleChanged);
                 }
             }
         }

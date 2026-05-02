@@ -12,14 +12,14 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
     private static readonly int MinStyleCount = 1;
     private static readonly int MaxStyleCount = 5;
 
-    private Dictionary<string, Func<ModConfigHoverGuideStyle>> StyleFactories { get; } 
+    private Dictionary<string, Func<ModConfigHoverGuideStyle>> StyleFactories { get; }
 
     private ModLayerConfigContext Context => Layer.Data;
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
 
     public ModLayerConfigTabStyle()
     {
-       StyleFactories = new() {
+        StyleFactories = new() {
             {ModConsts.SourceId.AddStyleCopy, () => Context.SelectedStyle.DeepCopy()},
             {ModConsts.SourceId.AddStyleMinimal, ModConfigHoverGuideStylePresets.Minimum},
             {ModConsts.SourceId.AddStyleDefault, ModConfigHoverGuideStylePresets.Default},
@@ -38,7 +38,7 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
             label: ModConsts.SourceId.SelectStyleToEdit,
             init: 0,
             values: Config.Styles,
-            getLabel: (value, index) => ModConsts.SourceId.StyleName.lang((index + 1).ToString()),
+            getLabel: (index, _) => ModConsts.SourceId.StyleName.lang((index + 1).ToString()),
             onChanged: (index, Value) => Context.SelectedStyleIndex = index,
             width: 180
         );
@@ -58,7 +58,7 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
                     },
                     null
                  ).SetSize();
-                 layer.SetHeader(ModConsts.SourceId.SelectStyleTemplate);
+                layer.SetHeader(ModConsts.SourceId.SelectStyleTemplate);
             },
             width: 100
         );
