@@ -373,13 +373,15 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
                 Label: ModConsts.SourceId.EnableShadowform,
                 Init: Config.EnableShadowform,
                 OnChanged: value => Config.EnableShadowform = value,
-                GetConfig: () => Config.EnableShadowform
+                GetConfig: () => Config.EnableShadowform,
+                Tooltip: ModConsts.SourceId.TooltipEnableShadowform
             ),
             new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.EnableMimicry,
                 Init: Config.EnableMimicry,
                 OnChanged: value => Config.EnableMimicry = value,
-                GetConfig: () => Config.EnableMimicry
+                GetConfig: () => Config.EnableMimicry,
+                Tooltip: ModConsts.SourceId.TooltipEnableMimicry
             )
         );
 

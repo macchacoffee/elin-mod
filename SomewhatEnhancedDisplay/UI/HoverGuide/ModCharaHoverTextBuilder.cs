@@ -6,6 +6,7 @@ using UnityEngine;
 using ModUtility.Extensions;
 using SomewhatEnhancedDisplay.Extensions;
 using SomewhatEnhancedDisplay.Config;
+using SomewhatEnhancedDisplay.UI.Adapters;
 
 namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
@@ -13,9 +14,19 @@ public static class ModCharaHoverTextBuilder
 {
     private static readonly int LowValueThreshold = 10;
 
+    private static readonly Dictionary<int, IModElement> NoneResistElements;
+
     private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
     private static ModConfigHoverGuideColorSet ColorConfig => Config.ColorSet;
     private static ModConfigHoverGuideStyleChara StyleConfig => Config.CurrentStyle.Chara;
+
+    static ModCharaHoverTextBuilder()
+    {
+        NoneResistElements = EClass.sources.elements.rows
+            .Where(r => r.category == "resist" && r.aliasParent is not null && r.aliasParent.StartsWith("ele"))
+            .Select(r => new ModElementMock(r.id, 0, r) as IModElement)
+            .ToDictionary(e => e.Id);
+    }
 
     public static string BuildHoverText(Chara chara, string text, string text2, string s)
     {
@@ -205,7 +216,12 @@ public static class ModCharaHoverTextBuilder
             return null;
         }
 
-        var resists = chara.elements.ListElements(e => e.source.category == "resist" && e.Value != 0);
+        // var resists = chara.elements.ListElements(e => e.source.category == "resist" && e.Value != 0).Select(r => new ModElementReal(r));
+        var resists = StyleConfig.DisplayNoneResistLevel ? new Dictionary<int, IModElement>(NoneResistElements) : [];
+        foreach (var resist in chara.elements.ListElements(e => e.source.category == "resist").Select(r => new ModElementReal(r)))
+        {
+            resists[resist.Id] = resist;
+        }
         if (!resists.Any())
         {
             return null;
@@ -215,7 +231,7 @@ public static class ModCharaHoverTextBuilder
         {
             return string.Join(
                 Environment.NewLine,
-                resists.GroupBy(r => Element.GetResistLv(r.Value))
+                resists.Values.GroupBy(r => Element.GetResistLv(r.Value))
                     .Where(g => g.Key != (int)Resist.None || StyleConfig.DisplayNoneResistLevel)
                     .OrderByDescending(g => g.Key)
                     .Select(g => GetResistListLineByLevelText(g))
@@ -223,7 +239,7 @@ public static class ModCharaHoverTextBuilder
         }
         else
         {
-            return GetResistListLineText(resists);
+            return GetResistListLineText(resists.Values);
         }
     }
 
@@ -385,13 +401,14 @@ public static class ModCharaHoverTextBuilder
         return $"{attr.Name}:{attr.Value}";
     }
 
-    private static string? GetResistListLineText(IEnumerable<Element> resists)
+    // private static string? GetResistListLineText(IEnumerable<Element> resists)
+    private static string? GetResistListLineText(IEnumerable<IModElement> resists)
     {
         var itemsPerLine = StyleConfig.ResistLineWrapping.GetItemsPerLine(resists.Count());
         var text = string.Join(
             Environment.NewLine,
             resists.OrderByDescending(r => r.Value)
-                .ThenBy(r => r.id)
+                .ThenBy(r => r.Id)
                 .Select(GetResistText)
                 .Chunk(itemsPerLine)
                 .Select(chuck => string.Join(", ", chuck).TagSize(ModUIUtil.ComputeFontSize(13)))
@@ -399,7 +416,8 @@ public static class ModCharaHoverTextBuilder
         return !string.IsNullOrEmpty(text) ? text : null;
     }
 
-    private static string? GetResistListLineByLevelText(IGrouping<int, Element> group)
+    // private static string? GetResistListLineByLevelText(IGrouping<int, Element> group)
+    private static string? GetResistListLineByLevelText(IGrouping<int, IModElement> group)
     {
         var resistLevelText = GetResistLevelText(group.Key);
         if (!string.IsNullOrEmpty(resistLevelText))
@@ -409,7 +427,7 @@ public static class ModCharaHoverTextBuilder
 
         var itemsPerLine = StyleConfig.ResistLineWrapping.GetItemsPerLine(group.Count());
         var resistListText = string.Join(Environment.NewLine,
-            group.OrderBy(r => r.id)
+            group.OrderBy(r => r.Id)
                 .Select(GetResistText)
                 .Where(t => !string.IsNullOrEmpty(t))
                 .Chunk(itemsPerLine)
@@ -466,15 +484,16 @@ public static class ModCharaHoverTextBuilder
         }
     }
 
-    private static string? GetResistText(Element resist)
+    // private static string? GetResistText(Element resist)
+    private static string? GetResistText(IModElement resist)
     {
-        var eleAlias = resist.source.aliasParent;
+        var eleAlias = resist.Source.aliasParent;
         if (eleAlias is null || !eleAlias.StartsWith("ele"))
         {
             return null;
         }
         // エーテル耐性が25以上の場合はエーテル病が進行しないことを示すため、"*"を追加する
-        var resImmunePlusText = resist.id == SKILL.resEther && resist.Value >= 25 ? "*" : string.Empty;
+        var resImmunePlusText = resist.Id == SKILL.resEther && resist.Value >= 25 ? "*" : string.Empty;
         if (!EClass.sources.elements.alias.TryGetValue(eleAlias, out var element))
         {
             return null;

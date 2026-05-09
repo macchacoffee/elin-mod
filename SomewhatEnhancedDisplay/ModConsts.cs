@@ -147,5 +147,7 @@ public static class ModConsts
         public static readonly string PickPreviewChara = Prefixed("pickPreviewChara");
         public static readonly string PickPreviewThing = Prefixed("pickPreviewThing");
         public static readonly string HealthRatio = Prefixed("healthRatio");
+        public static readonly string TooltipEnableShadowform = Prefixed("tooltipEnableShadowform");
+        public static readonly string TooltipEnableMimicry = Prefixed("tooltipEnableMimicry");
      }
 }
