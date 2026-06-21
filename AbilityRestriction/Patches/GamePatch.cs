@@ -19,8 +19,7 @@ public static class GamePatch
     [HarmonyPatch(nameof(Game.Load), [typeof(string), typeof(bool)])]
     private static void Load_Postfix(string id, bool cloud)
     {
-        var root = cloud ? CorePath.RootSaveCloud : CorePath.RootSave + id;
+        var root = (cloud ? CorePath.RootSaveCloud : CorePath.RootSave) + id;
         Mod.LoadConfig(root);
     }
 }
-    
