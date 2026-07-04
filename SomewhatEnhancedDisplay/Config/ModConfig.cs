@@ -244,11 +244,17 @@ public class ModConfigHoverGuideStyleChara : ModConfigBase<ModConfigHoverGuideSt
     [JsonProperty("displayHobby", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayHobby { get; set; } = true;
 
+    [JsonProperty("displayHobbyAlways", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool DisplayHobbyAlways { get; set; } = false;
+
     [JsonProperty("displayAffinity", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayAffinity { get; set; } = false;
 
     [JsonProperty("displayFavorite", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayFavorite { get; set; } = true;
+
+    [JsonProperty("displayFavoriteAlways", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool DisplayFavoriteAlways { get; set; } = false;
 
     [JsonProperty("displayHP", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayHP { get; set; } = true;
@@ -307,11 +313,11 @@ public class ModConfigHoverGuideStyleChara : ModConfigBase<ModConfigHoverGuideSt
     [JsonProperty("displayStatsValue", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayStatsValue { get; set; } = false;
 
-    [JsonProperty("enableShadowform", DefaultValueHandling = DefaultValueHandling.Include)]
-    public bool EnableShadowform { get; set; } = true;
+    [JsonProperty("disableShadowform", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool DisableShadowform { get; set; } = false;
 
-    [JsonProperty("enableMimicry", DefaultValueHandling = DefaultValueHandling.Include)]
-    public bool EnableMimicry { get; set; } = true;
+    [JsonProperty("disableMimicry", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool DisableMimicry { get; set; } = false;
 
     [JsonProperty("featLineWrapping", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHoverGuideLineWrapping FeatLineWrapping { get; set; } = new();

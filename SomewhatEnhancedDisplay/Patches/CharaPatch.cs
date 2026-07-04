@@ -81,6 +81,92 @@ public static class CharaPatch
         return default!;
     }
 
+    // [HarmonyTranspiler]
+    // [HarmonyPatch(nameof(Chara.GetHoverText), [])]
+    // private static IEnumerable<CodeInstruction> GetHoverText_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    // {
+    //     // // 変更前
+    //     // if (mimicry != null && mimicry.IsThing)
+    //     // {
+    //     // ...
+    //     // string text = ((mimicry != null) ? mimicry.GetName(NameStyle.Full) : base.Name);
+    //     // ...
+    //     // return text + text2 + s;
+    //     // // 変更後
+    //     // if (CharaPatch.IsMimicryEnabled() && mimicry != null && mimicry.IsThing)
+    //     // {
+    //     // ...
+    //     // string text = ((mimicry != null && CharaPatch.IsMimicryEnabled()) ? mimicry.GetName(NameStyle.Full) : CharaPatch.CharaGetNameForHoverText(this, NameStyle.Full));
+    //     // ...
+    //     // return CharaPatch.BuildHoverText(text, text2, s, this);
+    //     var matcher = new CodeMatcher(instructions, generator);
+
+    //     // ldfld ConBaseTransmuteMimic Chara::mimicry
+    //     // brfalse Label1
+    //     matcher.MatchEndForward(
+    //         new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.mimicry))),
+    //         new CodeMatch(OpCodes.Brfalse)
+    //     );
+    //     // Modの設定で擬態が無効になっている場合は擬態先のホバーテキストを取得しないようにする
+    //     var label1 = matcher.Operand;
+    //     matcher.Advance(-2);
+    //     matcher.InsertAndAdvance(
+    //         CodeInstruction.Call(() => IsMimicryEnabled()),
+    //         new CodeInstruction(OpCodes.Brfalse, label1)
+    //     );
+
+    //     // ret NULL
+    //     // ldarg.0 NULL [Label1, Label2]
+    //     // ldfld ConBaseTransmuteMimic Chara::mimicry
+    //     // brtrue Label3
+    //     matcher.MatchEndForward(
+    //         new CodeMatch(OpCodes.Ret),
+    //         new CodeMatch(OpCodes.Ldarg_0),
+    //         new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.mimicry))),
+    //         new CodeMatch(OpCodes.Brtrue)
+    //     );
+    //     // 後で生成するラベルへ遷移する処理を挿入する場所を保存する
+    //     var start = matcher.Pos;
+
+    //     // ldarg.0 NULL
+    //     // call string Card::get_Name()
+    //     matcher.MatchStartForward(
+    //         new CodeMatch(OpCodes.Ldarg_0),
+    //         new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(Card), nameof(Card.Name)))
+    //     );
+    //     // Modの設定で擬態が無効になっている場合の遷移先となるLabelMod1を生成する
+    //     matcher.CreateLabel(out var LabelMod1);
+    //     // Nameプロパティの呼び出しをCharaGetNameForHoverText(this, NameStyle.Full, -1)に置き換える
+    //     matcher.Advance(1);
+    //     matcher.RemoveInstruction();
+    //     matcher.InsertAndAdvance(
+    //         new CodeInstruction(OpCodes.Ldc_I4_1),
+    //         new CodeInstruction(OpCodes.Ldc_I4_M1),
+    //         CodeInstruction.Call(() => CharaGetNameForHoverText(default!, default, default))
+    //     );
+    //     // Modの設定で擬態が無効になっている場合は常に正体のキャラの名前を取得するようにする
+    //     matcher.Advance(start - matcher.Pos);
+    //     matcher.InsertAndAdvance(
+    //         new CodeInstruction(OpCodes.Brfalse, LabelMod1),
+    //         CodeInstruction.Call(() => IsMimicryEnabled())
+    //     );
+
+    //     // call static string string::Concat(string str0, string str1, string str2)
+    //     // ret NULL
+    //     matcher.MatchStartForward(
+    //         new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string), typeof(string)])),
+    //         new CodeMatch(OpCodes.Ret)
+    //     );
+    //     // 表示内容の文字列を組み立てる処理を差し替える
+    //     matcher.RemoveInstruction();
+    //     matcher.InsertAndAdvance(
+    //         new CodeInstruction(OpCodes.Ldarg_0),
+    //         CodeInstruction.Call(() => BuildHoverText(default!, default!, default!, default!))
+    //     );
+
+    //     return matcher.InstructionEnumeration();
+    // }
+
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(Chara.GetHoverText), [])]
     private static IEnumerable<CodeInstruction> GetHoverText_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
@@ -89,14 +175,14 @@ public static class CharaPatch
         // if (mimicry != null && mimicry.IsThing)
         // {
         // ...
-        // string text = ((mimicry != null) ? mimicry.GetName(NameStyle.Full) : base.Name);
+        // string text = ((mimicry != null && mimicry.Card != this) ? mimicry.GetName(NameStyle.Full) : base.Name);
         // ...
         // return text + text2 + s;
         // // 変更後
         // if (CharaPatch.IsMimicryEnabled() && mimicry != null && mimicry.IsThing)
         // {
         // ...
-        // string text = ((mimicry != null && CharaPatch.IsMimicryEnabled()) ? mimicry.GetName(NameStyle.Full) : CharaPatch.CharaGetNameForHoverText(this, NameStyle.Full));
+        // string text = ((mimicry != null && mimicry.Card != this && CharaPatch.IsMimicryEnabled()) ? mimicry.GetName(NameStyle.Full) : CharaPatch.CharaGetNameForHoverText(this, NameStyle.Full));
         // ...
         // return CharaPatch.BuildHoverText(text, text2, s, this);
         var matcher = new CodeMatcher(instructions, generator);
@@ -115,15 +201,17 @@ public static class CharaPatch
             new CodeInstruction(OpCodes.Brfalse, label1)
         );
 
-        // ret NULL
-        // ldarg.0 NULL [Label1, Label2]
+        // ldarg.0 NULL
         // ldfld ConBaseTransmuteMimic Chara::mimicry
-        // brtrue Label3
+        // callvirt virtual Card ConBaseTransmuteMimic::get_Card()
+        // ldarg.0 NULL
+        // bne.un Label4
         matcher.MatchEndForward(
-            new CodeMatch(OpCodes.Ret),
             new CodeMatch(OpCodes.Ldarg_0),
             new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.mimicry))),
-            new CodeMatch(OpCodes.Brtrue)
+            new CodeMatch(OpCodes.Callvirt, AccessTools.PropertyGetter(typeof(ConBaseTransmuteMimic), nameof(ConBaseTransmuteMimic.Card))),
+            new CodeMatch(OpCodes.Ldarg_0),
+            new CodeMatch(OpCodes.Bne_Un)
         );
         // 後で生成するラベルへ遷移する処理を挿入する場所を保存する
         var start = matcher.Pos;
@@ -147,9 +235,10 @@ public static class CharaPatch
         // Modの設定で擬態が無効になっている場合は常に正体のキャラの名前を取得するようにする
         matcher.Advance(start - matcher.Pos);
         matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Brfalse, LabelMod1),
+            new CodeInstruction(OpCodes.Beq, LabelMod1),
             CodeInstruction.Call(() => IsMimicryEnabled())
         );
+        matcher.Opcode = OpCodes.Brtrue;
 
         // call static string string::Concat(string str0, string str1, string str2)
         // ret NULL
@@ -196,12 +285,12 @@ public static class CharaPatch
         // if (CharaPatch.IsMimicryEnabled() && mimicry != null && mimicry.IsThing)
         // {
         // ...
-        // if (true)
+        // if (CharaPatch.DisplayFavoriteAlways() || knowFav)
         // {
         // ...
         // text = text + $"<size=14>♡" + GetFavCat().GetName().ToLower() + "/" + GetFavFood().GetName() + "</size>";
         // ...
-        // if (true || (EClass.pc.held?.trait is TraitWhipLove && IsPCFaction))
+        // if (CharaPatch.DisplayHobbyAlways() || (EClass.pc.held?.trait is TraitWhipLove && IsPCFaction))
         // {
         // ...
         // text4 = CharaPatch.BuildStatsExtraText(text4, item3);
@@ -235,10 +324,23 @@ public static class CharaPatch
             new CodeMatch(OpCodes.Ldarg_0),
             new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(Chara), nameof(Chara.knowFav)))
         );
-        // 必ず好物を取得するようにする
-        matcher.RemoveInstructions(2);
+        // 後で生成するラベルへ遷移する処理を挿入する場所を保存する
+        var start = matcher.Pos;
+
+        // ldloc.0 NULL
+        // call static string Environment::get_NewLine()
+        matcher.MatchStartForward(
+            new CodeMatch(OpCodes.Ldloc_0),
+            new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(Environment), nameof(Environment.NewLine)))
+        );
+        // Modの設定で好物を常に表示する場合の遷移先となるLabelMod1を生成する
+        matcher.CreateLabel(out var LabelMod1);
+
+        //Modの設定で好物を常に表示する場合は常に好物を取得するようにする
+        matcher.Advance(start - matcher.Pos);
         matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Ldc_I4_1)
+            CodeInstruction.Call(() => DisplaysFavoriteAlways()),
+            new CodeInstruction(OpCodes.Brtrue, LabelMod1)
         );
 
         // ldstr "<size=14>"
@@ -316,16 +418,17 @@ public static class CharaPatch
             new CodeMatch(OpCodes.Brfalse),
             new CodeMatch(OpCodes.Ldloc_1)
         );
-        // 趣味・仕事を取得する処理への遷移先となるLabelMod1を生成する
-        matcher.CreateLabelWithOffsets(13, out var labelMod1);
-        // 必ず趣味・仕事を取得するようにする
+        // 趣味・仕事を取得する処理への遷移先となるLabelMod2を生成する
+        matcher.CreateLabelWithOffsets(13, out var labelMod2);
+        // Modの設定で擬態が無効になっている場合は常に趣味・仕事を取得するようにする
         matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Br, labelMod1)
+            CodeInstruction.Call(() => DisplaysHobbyAlways()),
+            new CodeInstruction(OpCodes.Brtrue, labelMod2)
         );
         // 前の条件分岐から追加した命令に遷移できるようにするため、ラベルを移動させる
         var labelList1 = matcher.Labels.Copy();
         matcher.Labels.Clear();
-        matcher.Advance(-1);
+        matcher.Advance(-2);
         matcher.AddLabels(labelList1);
 
         // ldloc.2 NULL
@@ -420,17 +523,31 @@ public static class CharaPatch
              CodeInstruction.Call(() => BuildHoverText2(default!, default!, default!, default!))
         );
 
-        return matcher.InstructionEnumeration();
+        // instructions.Do(Plugin.LogInfo);
+        var insts = matcher.InstructionEnumeration();
+        insts.Do(Plugin.LogInfo);
+        return insts;
+        // return matcher.InstructionEnumeration();
     }
 
     private static bool IsShadowformEnabled()
     {
-        return StyleConfig.EnableShadowform;
+        return !StyleConfig.DisableShadowform;
     }
 
     private static bool IsMimicryEnabled()
     {
-        return StyleConfig.EnableMimicry;
+        return !StyleConfig.DisableMimicry;
+    }
+
+    private static bool DisplaysFavoriteAlways()
+    {
+        return StyleConfig.DisplayFavoriteAlways;
+    }
+
+    private static bool DisplaysHobbyAlways()
+    {
+        return StyleConfig.DisplayHobbyAlways;
     }
 
     private static string IntToString(int value)

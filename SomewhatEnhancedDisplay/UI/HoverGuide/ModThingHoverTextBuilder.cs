@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using SomewhatEnhancedDisplay.Config;
 using SomewhatEnhancedDisplay.Extensions;
@@ -30,7 +31,7 @@ public static class ModThingHoverTextBuilder
         return ModCardHoverTextBuilder.BuildHoverTextSection(
             GetHoverTextMisc(text),
             GetHoverTextExtra1(thing),
-            GetHoverTraitText(traitText)
+            GetHoverTextTrait(traitText)
         );
     }
 
@@ -69,10 +70,35 @@ public static class ModThingHoverTextBuilder
         }.Where(t => !string.IsNullOrEmpty(t)));
         return !string.IsNullOrEmpty(text) ? text.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor) : null;
     }
-    private static string? GetHoverTraitText(string traitText)
+    private static string? GetHoverTextTrait(string traitText)
     {
         return !string.IsNullOrEmpty(traitText) ? traitText.TagSize(ModUIUtil.ComputeFontSize(13)) : null;
     }
+
+    // private static string? GetHoverTextEnchant(Thing thing)
+    // {
+    //     var showsAsEquipment = thing.IsEquipmentOrRangedOrAmmo || thing.IsThrownWeapon || thing.trait is TraitToolMusic;
+    //     var showsTrait = !showsAsEquipment || thing.ShowFoodEnc;
+    //     var validTraits = thing.ListValidTraits(false, false);
+    //     foreach (var element in thing.elements.dict.Values.OrderBy(e => e.SortVal()))
+    //     {
+    //         if (!showsAsEquipment && !element.HasTag("itemEnc"))
+    //         {
+    //             Plugin.LogInfo($"element1 {element} {element.Name} {element.Value}");
+    //             continue;
+    //         }
+    //         if (element.IsTrait || (showsTrait && validTraits.Contains(element)))
+    //         {
+    //             Plugin.LogInfo($"element2 {element} {element.Name} {element.Value}");
+    //             continue;
+    //         }
+
+    //         Plugin.LogInfo($"{element} {element.Name} {element.Value}");
+    //     }
+    //     Plugin.LogInfo("");
+
+    //     return null;
+    // }
 
     private static string? GetMaterialText(Thing thing)
     {

@@ -84,7 +84,7 @@ public class ModHoverGuideItem
             TextName1.text = string.Empty;
             TextName1.enabled = false;
         }
-        if (target?.Card is Chara chara && (!StyleConfig.EnableMimicry || !chara.HasMimicryThing))
+        if (target?.Card is Chara chara && (StyleConfig.DisableMimicry || !chara.HasMimicryThing))
         {
             HealthBar.Update(chara, target.Modifier);
             displays = HealthBar.Enabled;

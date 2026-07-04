@@ -49,8 +49,10 @@ public static class ModConsts
         public static readonly string Race = Prefixed("race");
         public static readonly string JobTactics = Prefixed("jobTactics");
         public static readonly string Hobby = Prefixed("hobby");
+        public static readonly string DisplayHobbyAlways = Prefixed("displayHobbyAlways");
         public static readonly string Affinity = Prefixed("affinity");
         public static readonly string Favorite = Prefixed("favorite");
+        public static readonly string DisplayFavoriteAlways = Prefixed("displayFavoriteAlways");
         public static readonly string DVPV = Prefixed("dvPV");
         public static readonly string Speed = Prefixed("speed");
         public static readonly string Exp = Prefixed("exp");
@@ -66,8 +68,8 @@ public static class ModConsts
         public static readonly string DisplayNoneResistLevel = Prefixed("displayNoneResistLevel");
         public static readonly string Stats = Prefixed("stats");
         public static readonly string StatsValue = Prefixed("statsValue");
-        public static readonly string EnableMimicry = Prefixed("enableMimicry");
-        public static readonly string EnableShadowform = Prefixed("enableShadowform");
+        public static readonly string DisableShadowform = Prefixed("disableShadowform");
+        public static readonly string DisableMimicry = Prefixed("disableMimicry");
         public static readonly string UseRarityColor = Prefixed("useRarityColor");
         public static readonly string Width = Prefixed("width");
         public static readonly string DisplayValue = Prefixed("displayValue");
@@ -147,7 +149,7 @@ public static class ModConsts
         public static readonly string PickPreviewChara = Prefixed("pickPreviewChara");
         public static readonly string PickPreviewThing = Prefixed("pickPreviewThing");
         public static readonly string HealthRatio = Prefixed("healthRatio");
-        public static readonly string TooltipEnableShadowform = Prefixed("tooltipEnableShadowform");
-        public static readonly string TooltipEnableMimicry = Prefixed("tooltipEnableMimicry");
+        public static readonly string TooltipDisableShadowform = Prefixed("tooltipDisableShadowform");
+        public static readonly string TooltipDisableMimicry = Prefixed("tooltipDisableMimicry");
      }
 }

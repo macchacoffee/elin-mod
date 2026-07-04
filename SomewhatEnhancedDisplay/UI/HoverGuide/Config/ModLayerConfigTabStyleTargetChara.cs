@@ -90,12 +90,24 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
                 Init: Config.DisplayJobTactics,
                 OnChanged: value => Config.DisplayJobTactics = value,
                 GetConfig: () => Config.DisplayJobTactics
-            ),
+            )
+        );
+        EditStyleUI.Add(
+            layout: this,
+            headerLabel: null,
+            cellWidth: cellWidth,
+            maxColumn: maxColumn,
             new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Hobby,
                 Init: Config.DisplayHobby,
                 OnChanged: value => Config.DisplayHobby = value,
                 GetConfig: () => Config.DisplayHobby
+            ),
+            new EditStyleToogleUIItem(
+                Label: ModConsts.SourceId.DisplayHobbyAlways,
+                Init: Config.DisplayHobbyAlways,
+                OnChanged: value => Config.DisplayHobbyAlways = value,
+                GetConfig: () => Config.DisplayHobbyAlways
             )
         );
 
@@ -110,12 +122,24 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
                 Init: Config.DisplayAffinity,
                 OnChanged: value => Config.DisplayAffinity = value,
                 GetConfig: () => Config.DisplayAffinity
-            ),
+            )
+        );
+        EditStyleUI.Add(
+            layout: this,
+            headerLabel: null,
+            cellWidth: cellWidth,
+            maxColumn: maxColumn,
             new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Favorite,
                 Init: Config.DisplayFavorite,
                 OnChanged: value => Config.DisplayFavorite = value,
                 GetConfig: () => Config.DisplayFavorite
+            ),
+            new EditStyleToogleUIItem(
+                Label: ModConsts.SourceId.DisplayFavoriteAlways,
+                Init: Config.DisplayFavoriteAlways,
+                OnChanged: value => Config.DisplayFavoriteAlways = value,
+                GetConfig: () => Config.DisplayFavoriteAlways
             )
         );
 
@@ -370,18 +394,18 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
             cellWidth: cellWidth,
             maxColumn: maxColumn,
             new EditStyleToogleUIItem(
-                Label: ModConsts.SourceId.EnableShadowform,
-                Init: Config.EnableShadowform,
-                OnChanged: value => Config.EnableShadowform = value,
-                GetConfig: () => Config.EnableShadowform,
-                Tooltip: ModConsts.SourceId.TooltipEnableShadowform
+                Label: ModConsts.SourceId.DisableShadowform,
+                Init: Config.DisableShadowform,
+                OnChanged: value => Config.DisableShadowform = value,
+                GetConfig: () => Config.DisableShadowform,
+                Tooltip: ModConsts.SourceId.TooltipDisableShadowform
             ),
             new EditStyleToogleUIItem(
-                Label: ModConsts.SourceId.EnableMimicry,
-                Init: Config.EnableMimicry,
-                OnChanged: value => Config.EnableMimicry = value,
-                GetConfig: () => Config.EnableMimicry,
-                Tooltip: ModConsts.SourceId.TooltipEnableMimicry
+                Label: ModConsts.SourceId.DisableMimicry,
+                Init: Config.DisableMimicry,
+                OnChanged: value => Config.DisableMimicry = value,
+                GetConfig: () => Config.DisableMimicry,
+                Tooltip: ModConsts.SourceId.TooltipDisableMimicry
             )
         );
 

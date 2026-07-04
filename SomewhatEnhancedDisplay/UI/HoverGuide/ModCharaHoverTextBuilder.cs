@@ -33,7 +33,7 @@ public static class ModCharaHoverTextBuilder
         // text: 名前
         // text2: レベル差、赤ちゃん、高低差、賞金首、信仰
         // s: ゲスト・家畜、血の風味
-        chara = StyleConfig.EnableMimicry ? chara.MimicryOrSelf : chara;
+        chara = StyleConfig.DisableMimicry ? chara : chara.MimicryOrSelf;
         var hoverText = string.Join(" ", new[] {
             GetHoverTextType(chara),
             GetHoverTextLv(chara),
@@ -48,7 +48,7 @@ public static class ModCharaHoverTextBuilder
         // text2: 趣味・仕事
         // text3: バフ・デバフ・状態・呪い
         var realChara = chara;
-        chara = StyleConfig.EnableMimicry ? chara.MimicryOrSelf : chara;
+        chara = StyleConfig.DisableMimicry ? chara : chara.MimicryOrSelf;
         text = text.StartsWith(Environment.NewLine) ? text.Substring(Environment.NewLine.Length) : text;
         text2 = text2.StartsWith(Environment.NewLine) ? text2.Substring(Environment.NewLine.Length) : text2;
         text3 = text3.StartsWith(Environment.NewLine) ? text3.Substring(Environment.NewLine.Length) : text3;

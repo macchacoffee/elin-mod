@@ -16,8 +16,10 @@ public static class ModConfigHoverGuideStylePresets
                 DisplayRace = false,
                 DisplayJobTactics = false,
                 DisplayHobby = false,
+                DisplayHobbyAlways = false,
                 DisplayAffinity = false,
                 DisplayFavorite = false,
+                DisplayFavoriteAlways = false,
                 DisplayHP = false,  
                 DisplayMana = false,
                 DisplayStamina = false,
@@ -34,8 +36,8 @@ public static class ModConfigHoverGuideStylePresets
                 DisplayResistValue = false,
                 DisplayStats = true,
                 DisplayStatsValue = false,
-                EnableShadowform = true,
-                EnableMimicry = true,
+                DisableShadowform = false,
+                DisableMimicry = false,
                 HealthBar = new()
                 {
                     DisplayValue = true,
@@ -95,8 +97,10 @@ public static class ModConfigHoverGuideStylePresets
                 DisplayRace = true,
                 DisplayJobTactics = true,
                 DisplayHobby = true,
+                DisplayHobbyAlways = true,
                 DisplayAffinity = true,
                 DisplayFavorite = true,
+                DisplayFavoriteAlways = true,
                 DisplayHP = true,
                 DisplayMana = true,
                 DisplayStamina = true,
@@ -113,8 +117,8 @@ public static class ModConfigHoverGuideStylePresets
                 DisplayResistValue = true,
                 DisplayStats = true,
                 DisplayStatsValue = true,
-                EnableShadowform = false,
-                EnableMimicry = false,
+                DisableShadowform = true,
+                DisableMimicry = true,
                 HealthBar = new()
                 {
                     DisplayValue = true,
