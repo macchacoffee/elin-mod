@@ -9,7 +9,7 @@ public static class PluginInfo
 {
     public const string Guid = "maccha-coffee.ability-restriction";
     public const string Name = "Ability Restriction";
-    public const string Version = "1.1.1";
+    public const string Version = "1.1.2";
 }
 
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]
