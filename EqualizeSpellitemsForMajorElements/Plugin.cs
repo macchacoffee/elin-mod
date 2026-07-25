@@ -3,12 +3,12 @@ using System.Runtime.CompilerServices;
 using BepInEx;
 using HarmonyLib;
 
-namespace MoreSpellbooksForMajorElements;
+namespace EqualizeSpellitemsForMajorElements;
 
 public static class PluginInfo
 {
-    public const string Guid = "maccha-coffee.more-spellbooks-for-major-elements";
-    public const string Name = "More Spellbooks for Major Elements";
+    public const string Guid = "maccha-coffee.equalize-spellitems-for-major-elements";
+    public const string Name = "Equalize Spellitems for Major Elements";
     public const string Version = "1.0.0";
 }
 

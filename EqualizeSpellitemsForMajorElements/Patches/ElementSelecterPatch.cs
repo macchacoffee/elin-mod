@@ -6,7 +6,7 @@ using System.Reflection.Emit;
 using HarmonyLib;
 using ModUtility.Patch;
 
-namespace MoreSpellbooksForMajorElements.Patches;
+namespace EqualizeSpellitemsForMajorElements.Patches;
 
 [HarmonyPatch(typeof(ElementSelecter))]
 public static class ElementSelecterPatch
