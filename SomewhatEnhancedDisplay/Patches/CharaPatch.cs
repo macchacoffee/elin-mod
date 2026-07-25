@@ -81,92 +81,6 @@ public static class CharaPatch
         return default!;
     }
 
-    // [HarmonyTranspiler]
-    // [HarmonyPatch(nameof(Chara.GetHoverText), [])]
-    // private static IEnumerable<CodeInstruction> GetHoverText_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
-    // {
-    //     // // 変更前
-    //     // if (mimicry != null && mimicry.IsThing)
-    //     // {
-    //     // ...
-    //     // string text = ((mimicry != null) ? mimicry.GetName(NameStyle.Full) : base.Name);
-    //     // ...
-    //     // return text + text2 + s;
-    //     // // 変更後
-    //     // if (CharaPatch.IsMimicryEnabled() && mimicry != null && mimicry.IsThing)
-    //     // {
-    //     // ...
-    //     // string text = ((mimicry != null && CharaPatch.IsMimicryEnabled()) ? mimicry.GetName(NameStyle.Full) : CharaPatch.CharaGetNameForHoverText(this, NameStyle.Full));
-    //     // ...
-    //     // return CharaPatch.BuildHoverText(text, text2, s, this);
-    //     var matcher = new CodeMatcher(instructions, generator);
-
-    //     // ldfld ConBaseTransmuteMimic Chara::mimicry
-    //     // brfalse Label1
-    //     matcher.MatchEndForward(
-    //         new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.mimicry))),
-    //         new CodeMatch(OpCodes.Brfalse)
-    //     );
-    //     // Modの設定で擬態が無効になっている場合は擬態先のホバーテキストを取得しないようにする
-    //     var label1 = matcher.Operand;
-    //     matcher.Advance(-2);
-    //     matcher.InsertAndAdvance(
-    //         CodeInstruction.Call(() => IsMimicryEnabled()),
-    //         new CodeInstruction(OpCodes.Brfalse, label1)
-    //     );
-
-    //     // ret NULL
-    //     // ldarg.0 NULL [Label1, Label2]
-    //     // ldfld ConBaseTransmuteMimic Chara::mimicry
-    //     // brtrue Label3
-    //     matcher.MatchEndForward(
-    //         new CodeMatch(OpCodes.Ret),
-    //         new CodeMatch(OpCodes.Ldarg_0),
-    //         new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.mimicry))),
-    //         new CodeMatch(OpCodes.Brtrue)
-    //     );
-    //     // 後で生成するラベルへ遷移する処理を挿入する場所を保存する
-    //     var start = matcher.Pos;
-
-    //     // ldarg.0 NULL
-    //     // call string Card::get_Name()
-    //     matcher.MatchStartForward(
-    //         new CodeMatch(OpCodes.Ldarg_0),
-    //         new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(Card), nameof(Card.Name)))
-    //     );
-    //     // Modの設定で擬態が無効になっている場合の遷移先となるLabelMod1を生成する
-    //     matcher.CreateLabel(out var LabelMod1);
-    //     // Nameプロパティの呼び出しをCharaGetNameForHoverText(this, NameStyle.Full, -1)に置き換える
-    //     matcher.Advance(1);
-    //     matcher.RemoveInstruction();
-    //     matcher.InsertAndAdvance(
-    //         new CodeInstruction(OpCodes.Ldc_I4_1),
-    //         new CodeInstruction(OpCodes.Ldc_I4_M1),
-    //         CodeInstruction.Call(() => CharaGetNameForHoverText(default!, default, default))
-    //     );
-    //     // Modの設定で擬態が無効になっている場合は常に正体のキャラの名前を取得するようにする
-    //     matcher.Advance(start - matcher.Pos);
-    //     matcher.InsertAndAdvance(
-    //         new CodeInstruction(OpCodes.Brfalse, LabelMod1),
-    //         CodeInstruction.Call(() => IsMimicryEnabled())
-    //     );
-
-    //     // call static string string::Concat(string str0, string str1, string str2)
-    //     // ret NULL
-    //     matcher.MatchStartForward(
-    //         new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string), typeof(string)])),
-    //         new CodeMatch(OpCodes.Ret)
-    //     );
-    //     // 表示内容の文字列を組み立てる処理を差し替える
-    //     matcher.RemoveInstruction();
-    //     matcher.InsertAndAdvance(
-    //         new CodeInstruction(OpCodes.Ldarg_0),
-    //         CodeInstruction.Call(() => BuildHoverText(default!, default!, default!, default!))
-    //     );
-
-    //     return matcher.InstructionEnumeration();
-    // }
-
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(Chara.GetHoverText), [])]
     private static IEnumerable<CodeInstruction> GetHoverText_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
@@ -523,11 +437,7 @@ public static class CharaPatch
              CodeInstruction.Call(() => BuildHoverText2(default!, default!, default!, default!))
         );
 
-        // instructions.Do(Plugin.LogInfo);
-        var insts = matcher.InstructionEnumeration();
-        insts.Do(Plugin.LogInfo);
-        return insts;
-        // return matcher.InstructionEnumeration();
+        return matcher.InstructionEnumeration();
     }
 
     private static bool IsShadowformEnabled()
