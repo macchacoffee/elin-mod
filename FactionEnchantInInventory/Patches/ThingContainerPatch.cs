@@ -3,7 +3,7 @@ using HarmonyLib;
 using ModUtility.Patch;
 using SomewhatEnhancedDisplay.Extensions;
 
-namespace FactionEffectInInventory.Patches;
+namespace FactionEnchantInInventory.Patches;
 
 [HarmonyPatch(typeof(ThingContainer))]
 public static class ThingContainerPatch

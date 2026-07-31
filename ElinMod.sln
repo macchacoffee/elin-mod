@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnableDiningSpotSignInTent"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EqualizeSpellitemsForMajorElements", "EqualizeSpellitemsForMajorElements\EqualizeSpellitemsForMajorElements.csproj", "{C9A0D1B5-4E3F-7D8A-6B2C-9F3A1D2E4B5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FactionEffectInInventory", "FactionEffectInInventory\FactionEffectInInventory.csproj", "{7B1A2D3E-4F5C-6A7B-8D9E-0F1A2B3C4D5E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FactionEnchantInInventory", "FactionEnchantInInventory\FactionEnchantInInventory.csproj", "{7B1A2D3E-4F5C-6A7B-8D9E-0F1A2B3C4D5E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SomewhatEnhancedDisplay", "SomewhatEnhancedDisplay\SomewhatEnhancedDisplay.csproj", "{DD3DCE8C-DCFD-C1F8-08F1-8C179909DBE4}"
 EndProject

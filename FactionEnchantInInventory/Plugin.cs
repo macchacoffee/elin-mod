@@ -3,12 +3,12 @@ using System.Runtime.CompilerServices;
 using BepInEx;
 using HarmonyLib;
 
-namespace FactionEffectInInventory;
+namespace FactionEnchantInInventory;
 
 public static class PluginInfo
 {
-    public const string Guid = "maccha-coffee.faction-effect-in-inventory";
-    public const string Name = "Faction Effect in Inventory";
+    public const string Guid = "maccha-coffee.faction-enchant-in-inventory";
+    public const string Name = "Faction Enchant in Inventory";
     public const string Version = "1.0.0";
 }
 

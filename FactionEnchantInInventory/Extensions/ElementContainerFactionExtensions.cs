@@ -1,5 +1,5 @@
 using System;
-using FactionEffectInInventory;
+using FactionEnchantInInventory;
 
 namespace SomewhatEnhancedDisplay.Extensions;
 

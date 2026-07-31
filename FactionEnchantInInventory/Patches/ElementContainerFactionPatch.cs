@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -7,7 +6,7 @@ using HarmonyLib;
 using ModUtility.Patch;
 using SomewhatEnhancedDisplay.Extensions;
 
-namespace FactionEffectInInventory.Patches;
+namespace FactionEnchantInInventory.Patches;
 
 [HarmonyPatch(typeof(ElementContainerFaction))]
 public static class ElementContainerFactionPatch
