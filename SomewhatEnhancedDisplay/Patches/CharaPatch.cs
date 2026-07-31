@@ -30,7 +30,7 @@ public static class CharaPatch
     [HarmonyPatch(nameof(Chara.GetName), [typeof(NameStyle), typeof(int)])]
     private static string CharaGetNameForHoverText(Chara insrance, NameStyle nameStyle, int num = -1)
     {
-        // Chara.GetName()をコードを複製し、ホバーテキスト取得処理向けに変更したスタブを作成する
+        // Chara.GetName()のコードを複製し、ホバーテキスト取得処理向けに変更したスタブを作成する
         static IEnumerable<CodeInstruction> transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
         {
             // // 変更前
