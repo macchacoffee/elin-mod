@@ -74,7 +74,7 @@ public static class ThingPatch
             new CodeMatch(OpCodes.Stloc_S),
             new CodeMatch(OpCodes.Ldloc_S)
         );
-       matcher.Advance(-1);
+        matcher.Advance(-1);
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(LuckDice), nameof(LuckDice.UpdateResult), [typeof(int)])),
             new CodeInstruction(OpCodes.Ldloc_S, localRoll),
