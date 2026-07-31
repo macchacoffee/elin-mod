@@ -3,16 +3,30 @@ using System;
 
 namespace MoreEffectiveLuck.Utils;
 
-public static class LuckDice
+public class LuckDice
 {
-    public static int RollCount()
+    public int RollCount { get; }
+    public bool IsPositive { get; }
+    public int? Result { get; private set; }
+
+    public LuckDice() : this(EClass.pc) {}
+
+    public LuckDice(Chara chara)
     {
-        return RollCount(EClass.pc);
+        var luck = chara.Evalue(SKILL.LUC);
+        RollCount = Math.Min(1 + Math.Abs(luck / 100) + (Math.Abs(luck % 100) > EClass.rnd(100) ? 1 : 0), 20);
+        IsPositive = luck >= 0;
     }
 
-    public static int RollCount(Chara chara)
+    public void UpdateResult(int result)
     {
-        var luck = Math.Max(chara.Evalue(SKILL.LUC), 0);
-        return Math.Min(1 + luck / 100 + ((luck % 100) > EClass.rnd(100) ? 1 : 0), 20);
+        if (Result is int prev)
+        {
+            Result = IsPositive ? Math.Max(prev, result) : Math.Min(prev, result);
+        }
+        else
+        {
+            Result = result;
+        }
     }
 }

@@ -26,24 +26,19 @@ public static class ThingPatch
         // // 変更前
         // int num6 = (item.mtp + EClass.rnd(item.mtp + (int)num5)) / item.mtp * ((!(flag && neg)) ? 1 : (-1));
         // // 変更後
-        // var localValueMax = int.MinValue;
-        // var localRollCount = LuckDice.RollCount();
+        // var localDice = new();
         // var localRoll = 0;
-        // while (localRoll < localRollCount)
+        // while (localRoll < localDice.RollCount)
         // {
-        //     var localValue = (item.mtp + EClass.rnd(item.mtp + (int)num5)) / item.mtp * ((!(flag && neg)) ? 1 : (-1));
-        //     localValueMax = Math.Max(localValueMax, localValue);
+        //     localDice.UpdateResult((item.mtp + EClass.rnd(item.mtp + (int)num5)) / item.mtp * ((!(flag && neg)) ? 1 : (-1)));
         //     localRoll += 1;
         // }
-        // int num6 = localValueMax;
+        // int num6 = localDice.Result;
         var matcher = new CodeMatcher(instructions, generator);
 
-        // エンチャント値計算における最大のロール回数、現在のロール回数を保持する変数、
-        // 全ロールを通して最大のエンチャント値を保持するための変数を定義する
-        var localRollCount = generator.DeclareLocal(typeof(int));
+        // エンチャント値計算のダイスと現在のロール回数を保持する変数を定義する
+        var localDice = generator.DeclareLocal(typeof(LuckDice));
         var localRoll = generator.DeclareLocal(typeof(int));
-        var localValue = generator.DeclareLocal(typeof(int));
-        var localValueMax = generator.DeclareLocal(typeof(int));
 
         // ldloc.s 7 (SourceElement+Row)
         // ldfld int SourceElement+Row::mtp
@@ -59,18 +54,18 @@ public static class ThingPatch
         );
        // エンチャント値の計算を複数回ロールするループ制御を追加する
         matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Ldc_I4, int.MinValue),
-            new CodeInstruction(OpCodes.Stloc_S, localValueMax),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(LuckDice), nameof(LuckDice.RollCount), [])),
-            new CodeInstruction(OpCodes.Stloc_S, localRollCount),
+            new CodeInstruction(OpCodes.Newobj, AccessTools.Constructor(typeof(LuckDice), [])),
+            new CodeInstruction(OpCodes.Stloc_S, localDice),
             new CodeInstruction(OpCodes.Ldc_I4_0),
             new CodeInstruction(OpCodes.Stloc_S, localRoll),
             new CodeInstruction(OpCodes.Ldloc_S, localRoll),
-            new CodeInstruction(OpCodes.Ldloc_S, localRollCount),
-            new CodeInstruction(OpCodes.Bge)
+            new CodeInstruction(OpCodes.Ldloc_S, localDice),
+            new CodeInstruction(OpCodes.Call, AccessTools.PropertyGetter(typeof(LuckDice), nameof(LuckDice.RollCount))),
+            new CodeInstruction(OpCodes.Bge),
+            new CodeInstruction(OpCodes.Ldloc_S, localDice)
         );
-        matcher.CreateLabelWithOffsets(-3, out var labelMod1);
-        var pos1 = matcher.Pos - 1;
+        matcher.CreateLabelWithOffsets(-5, out var labelMod1);
+        var pos1 = matcher.Pos - 2;
         // mul NULL [Label15]
         // stloc.s 11 (System.Int32)
         // ldloc.s 7 (SourceElement+Row)
@@ -81,19 +76,16 @@ public static class ThingPatch
         );
        matcher.Advance(-1);
         matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Stloc_S, localValue),
-            new CodeInstruction(OpCodes.Ldloc_S, localValueMax),
-            new CodeInstruction(OpCodes.Ldloc_S, localValue),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Math), nameof(Math.Max), [typeof(int), typeof(int)])),
-            new CodeInstruction(OpCodes.Stloc_S, localValueMax),
+            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(LuckDice), nameof(LuckDice.UpdateResult), [typeof(int)])),
             new CodeInstruction(OpCodes.Ldloc_S, localRoll),
             new CodeInstruction(OpCodes.Ldc_I4_1),
             new CodeInstruction(OpCodes.Add),
             new CodeInstruction(OpCodes.Stloc_S, localRoll),
             new CodeInstruction(OpCodes.Br, labelMod1),
-            new CodeInstruction(OpCodes.Ldloc_S, localValueMax)
+            new CodeInstruction(OpCodes.Ldloc_S, localDice),
+            new CodeInstruction(OpCodes.Call, AccessTools.PropertyGetter(typeof(LuckDice), nameof(LuckDice.Result)))
         );
-        matcher.CreateLabelWithOffsets(-1, out var labelMod2);
+        matcher.CreateLabelWithOffsets(-2, out var labelMod2);
         matcher.Advance(pos1 - matcher.Pos);
         matcher.Operand = labelMod2;
  
