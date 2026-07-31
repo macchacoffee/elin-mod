@@ -1,7 +1,7 @@
 using System.Reflection;
 using HarmonyLib;
 using ModUtility.Patch;
-using SomewhatEnhancedDisplay.Extensions;
+using FactionEnchantInInventory.Extensions;
 
 namespace FactionEnchantInInventory.Patches;
 

@@ -1,7 +1,6 @@
 using System;
-using FactionEnchantInInventory;
 
-namespace SomewhatEnhancedDisplay.Extensions;
+namespace FactionEnchantInInventory.Extensions;
 
 public static class ElementContainerFactionExtensions
 {

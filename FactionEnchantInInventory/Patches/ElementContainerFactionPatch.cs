@@ -4,7 +4,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using HarmonyLib;
 using ModUtility.Patch;
-using SomewhatEnhancedDisplay.Extensions;
+using FactionEnchantInInventory.Extensions;
 
 namespace FactionEnchantInInventory.Patches;
 
