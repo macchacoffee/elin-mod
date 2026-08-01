@@ -3,11 +3,12 @@ using System;
 
 namespace MoreEffectiveLuck.Utils;
 
-public class LuckDice<T>(Func<T> resultFunc, Func<T, T, bool> resultCompareFunc, int luck)
+public class LuckDice<T>
 {
-    public Func<T> ResultFunc { get; } = resultFunc;
-    public Func<T, T, bool> ResultCompareFunc { get; } = resultCompareFunc;
-    private int ExtraRollCount { get; } = Math.Min(Math.Abs(luck / 100) + (Math.Abs(luck % 100) > EClass.rnd(100) ? 1 : 0), 19);
+    public Func<T> ResultFunc { get; }
+    public Func<T, T, bool> ResultCompareFunc { get; }
+    public bool IsPositive;
+    private int ExtraRollCount { get; }
     public int RollCount
     {
         get
@@ -15,16 +16,23 @@ public class LuckDice<T>(Func<T> resultFunc, Func<T, T, bool> resultCompareFunc,
             return 1 + ExtraRollCount;
         }
     }
-    public bool IsPositive { get; } = luck >= 0;
 
-    public static LuckDice<R> Create<R>(Func<R> resultFunc, Func<R, R, bool> resultCompareFunc, Card card)
+    private LuckDice(Func<T> resultFunc, Func<T, T, bool> resultCompareFunc, int luck, int rollCountPerLuck, int maxRollCount)
     {
-        return Create(resultFunc, resultCompareFunc, card.Evalue(SKILL.LUC));
+        ResultFunc = resultFunc;
+        ResultCompareFunc = resultCompareFunc;
+        IsPositive = luck >= 0;
+        ExtraRollCount = Math.Min(Math.Abs(luck / rollCountPerLuck) + (Math.Abs(luck % rollCountPerLuck) > EClass.rnd(rollCountPerLuck) ? 1 : 0), maxRollCount);
     }
 
-    public static LuckDice<R> Create<R>(Func<R> resultFunc, Func<R, R, bool> resultCompareFunc, int luck)
+    public static LuckDice<R> Create<R>(Func<R> resultFunc, Func<R, R, bool> resultCompareFunc, Card card, int? rollCountPerLuck = null, int? maxRollCount = null)
     {
-        return new(resultFunc, resultCompareFunc, luck);
+        return Create(resultFunc, resultCompareFunc, card.LUC, rollCountPerLuck, maxRollCount);
+    }
+
+    public static LuckDice<R> Create<R>(Func<R> resultFunc, Func<R, R, bool> resultCompareFunc, int luck, int? rollCountPerLuck = null, int? maxRollCount = null)
+    {
+        return new(resultFunc, resultCompareFunc, luck, rollCountPerLuck ??= 100, maxRollCount ??= 20);
     }
 
     public LuckDiceResult<T> Roll()
@@ -41,7 +49,10 @@ public class LuckDice<T>(Func<T> resultFunc, Func<T, T, bool> resultCompareFunc,
 
     public LuckDiceResult<T> RollOnce()
     {
-        return new LuckDiceResult<T>(ResultFunc());
+        var result = new LuckDiceResult<T>(ResultFunc());
+        Plugin.LogInfo($"RollOnce {result.Value}");
+        return result;
+        // return new LuckDiceResult<T>(ResultFunc());
     }
 }
 

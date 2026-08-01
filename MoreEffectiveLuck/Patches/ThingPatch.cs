@@ -55,7 +55,7 @@ public static class ThingPatch
 
             matcher = new CodeMatcher(matcher.InstructionsInRange(start, end), generator);
 
-            // エンチャント強度の計算でこの関数の引数を参照するようにする
+            // エンチャント強度の計算でこの関数の引数を参照するように調整する
             // ldarg.2 NULL
             matcher.MatchStartForward(new CodeMatch(OpCodes.Ldarg_2));
             matcher.Repeat(matchAction: m =>
@@ -102,16 +102,10 @@ public static class ThingPatch
         // // 変更前
         // int num6 = (item.mtp + EClass.rnd(item.mtp + (int)num5)) / item.mtp * ((!(flag && neg)) ? 1 : (-1));
         // // 変更後
-        // var localDice = new();
-        // var localRoll = 0;
-        // while (localRoll < localDice.RollCount)
-        // {
-        //     localDice.UpdateResult((item.mtp + EClass.rnd(item.mtp + (int)num5)) / item.mtp * ((!(flag && neg)) ? 1 : (-1)));
-        //     localRoll += 1;
-        // }
-        // int num6 = localDice.Result;
+        // int num6 = ThingPatch.CalculateNum6ForGetEnchant(item, num5, flag, neg);
         var matcher = new CodeMatcher(instructions, generator);
 
+        // エンチャント強度をダイスロールして決定する処理に差し替える
         // ldloc.s 7 (SourceElement+Row)
         // ldfld int SourceElement+Row::mtp
         // ldloc.s 7 (SourceElement+Row)
@@ -134,7 +128,6 @@ public static class ThingPatch
             new CodeMatch(OpCodes.Ldloc_S)
         );
         var end = matcher.Pos;
-        // エンチャント強度を複数回ロールする処理に差し替える
         matcher.Advance(start - matcher.Pos);
         matcher.RemoveInstructionsInRange(start, end);
         matcher.InsertAndAdvance(
