@@ -28,7 +28,7 @@ public static class CharaPatch
 
     [HarmonyReversePatch(HarmonyReversePatchType.Original)]
     [HarmonyPatch(nameof(Chara.GetName), [typeof(NameStyle), typeof(int)])]
-    private static string CharaGetNameForHoverText(Chara insrance, NameStyle nameStyle, int num = -1)
+    private static string CharaGetNameForHoverText(Chara instance, NameStyle nameStyle, int num = -1)
     {
         // Chara.GetName()のコードを複製し、ホバーテキスト取得処理向けに変更したスタブを作成する
         static IEnumerable<CodeInstruction> transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
@@ -75,7 +75,7 @@ public static class CharaPatch
             );
 
             return matcher.InstructionEnumeration();
-        };
+        }
 
         _ = transpiler(null!, null!);
         return default!;

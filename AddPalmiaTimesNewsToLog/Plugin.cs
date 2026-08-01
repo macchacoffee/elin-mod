@@ -1,6 +1,5 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using AddPalmiaTimesNewsToLog.Config;
 using BepInEx;
 using HarmonyLib;
 
