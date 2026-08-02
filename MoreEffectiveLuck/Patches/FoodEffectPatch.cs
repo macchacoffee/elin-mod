@@ -26,17 +26,25 @@ public static class FoodEffectPatch
     private static IEnumerable<CodeInstruction> Proc_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
         // // 変更前
-        //
+        // if (c.HasCondition<ConAnorexia>())
+        // {
+        //     c.Vomit();
+        // }
         // // 変更後
-        //
+        // FoodEffectPatch.ProcLuckyFood(c, food);
+        // if (c.HasCondition<ConAnorexia>())
+        // {
+        //     c.Vomit();
+        // }
         var matcher = new CodeMatcher(instructions, generator);
 
+        // めでたい食べ物を食べた時に幸運バフが付ける処理を追加する
         matcher.End();
         // callvirt void Chara::Vomit()
         matcher.MatchStartBackwards(
             new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Chara), nameof(Chara.Vomit), []))
         );
-        // lpop NULL
+        // pop NULL
         // ldloc.0 NULL [Label82, Label83]
         // ldfld Chara FoodEffect+<>c__DisplayClass1_0::c
         matcher.MatchStartBackwards(
@@ -61,35 +69,8 @@ public static class FoodEffectPatch
         return matcher.InstructionEnumeration();
     }
 
-    private readonly static Dictionary<string, Func<Chara, Thing, int>> LuckyFoodPower = new() {
-        ["kagamimochi"] = (_, _) => 30,
-        ["churyu"]  = (_, _) => 22,
-        ["wedding_cake1"] = (_, _) => 20,
-        ["bushdenoel"] = (_, _) => 10,
-        ["crimale2"] = (_, _) => 11,
-        ["65_gold"] = (_, _) => 177,    // 金のコイ
-        ["86"] = (_, _) => 11,          // マダイ
-        ["71"] = (_, _) => 11,          // シロアマダイ
-        ["_poop"] = (_, f) =>{
-            return f.material.alias switch
-            {
-                "gold" => 77,
-                "silver" => 7,
-                _ => 0
-            };
-        }
-    };
-
     private static void ProcLuckyFood(Chara chara, Thing food)
     {
-        if (!LuckyFoodPower.TryGetValue(food.source.id, out var getPower))
-        {
-            return;
-        }
-        var power = getPower(chara, food);
-        if (power > 0)
-        {
-            chara.AddCondition<ConMCMELFortunate>(power);
-        }
+        LuckyFood.ProcFoodEffect(chara, food);
     }
 }

@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using ModUtility.Patch;
-using MoreEffectiveLuck.Utils;
+using MoreEffectiveLuck.Game;
 
 namespace MoreEffectiveLuck.Patches;
 
@@ -17,6 +17,67 @@ public static class ThingPatch
     private static bool Prepare(MethodBase? original)
     {
         return PatchTarget.IsPatchable(original);
+    }
+
+    [HarmonyTranspiler]
+    [HarmonyPatch(nameof(Thing.WriteNote), [typeof(UINote), typeof(Action<UINote>), typeof(IInspect.NoteMode), typeof(Recipe)])]
+    private static IEnumerable<CodeInstruction> WriteNote_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    {
+        // // 変更前
+        // if (FoodEffect.IsLeftoverable(this))
+        // {
+        //     AddText("isLeftoverable", FontColor.Default);
+        // }
+        // // 変更後
+        // if (FoodEffect.IsLeftoverable(this))
+        // {
+        //     AddText("isLeftoverable", FontColor.Default);
+        // }
+        // if (ThingPatch.IsLuckyFood(this))
+        // {
+        //     AddText(ModConsts.SourceId.IsLuckyFood, FontColor.Default);
+        // }
+        var matcher = new CodeMatcher(instructions, generator);
+
+        // brfalse Label174
+        // ldloc.0 NULL
+        // ldstr "isLeftoverable"
+        // ldc.i4.1 NULL
+        // callvirt void Thing+<>c__DisplayClass36_0::<WriteNote>g__AddText|1(string text, FontColor col)
+        // ldarg.0 NULL [Label174]
+        matcher.MatchEndForward(
+            new CodeMatch(OpCodes.Brfalse),
+            new CodeMatch(OpCodes.Ldloc_0),
+            new CodeMatch(OpCodes.Ldstr, "isLeftoverable"),
+            new CodeMatch(OpCodes.Ldc_I4_1),
+            new CodeMatch(OpCodes.Callvirt),
+            new CodeMatch(OpCodes.Ldarg_0)
+        );
+        matcher.Advance(-1);
+        var addTextOperand = matcher.Operand;
+        matcher.Advance(1);
+        var labelList1 = matcher.Labels.Copy();
+        matcher.Labels.Clear();
+        matcher.Insert(
+            new CodeInstruction(OpCodes.Ldarg_0)
+        );
+        matcher.AddLabels(labelList1);
+        matcher.Advance(1);
+        matcher.InsertAndAdvance(
+            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ThingPatch), nameof(IsLuckyFood), [typeof(Thing)]))
+        );
+        matcher.InsertBranchAndAdvance(OpCodes.Brfalse, matcher.Pos);
+        matcher.InsertAndAdvance(
+            new CodeInstruction(OpCodes.Ldloc_0),
+            new CodeInstruction(OpCodes.Ldstr, ModConsts.SourceId.IsLuckyFood),
+            new CodeInstruction(OpCodes.Ldc_I4_1),
+            new CodeInstruction(OpCodes.Callvirt, addTextOperand)
+        );
+
+        var insts = matcher.InstructionEnumeration();
+        insts.Do(Plugin.LogInfo);
+        return insts;
+        // return matcher.InstructionEnumeration();
     }
 
     [HarmonyReversePatch(HarmonyReversePatchType.Original)]
@@ -139,6 +200,11 @@ public static class ThingPatch
         );
 
         return matcher.InstructionEnumeration();
+    }
+
+    private static bool IsLuckyFood(Thing thing)
+    {
+        return LuckyFood.IsLuckyFood(thing);
     }
 
     private static int CalculateNum6ForGetEnchant(SourceElement.Row row, float num5, bool flag, bool neg)

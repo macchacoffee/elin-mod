@@ -216,7 +216,6 @@ public static class ModCharaHoverTextBuilder
             return null;
         }
 
-        // var resists = chara.elements.ListElements(e => e.source.category == "resist" && e.Value != 0).Select(r => new ModElementReal(r));
         var resists = StyleConfig.DisplayNoneResistLevel ? new Dictionary<int, IModElement>(NoneResistElements) : [];
         foreach (var resist in chara.elements.ListElements(e => e.source.category == "resist").Select(r => new ModElementReal(r)))
         {

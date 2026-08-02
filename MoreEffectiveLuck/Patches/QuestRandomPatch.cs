@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using ModUtility.Patch;
-using MoreEffectiveLuck.Utils;
+using MoreEffectiveLuck.Game;
 
 namespace MoreEffectiveLuck.Patches;
 

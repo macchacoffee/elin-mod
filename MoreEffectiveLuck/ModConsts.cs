@@ -8,5 +8,6 @@ public static class ModConsts
         private static string Prefixed(string id) => $"{PREFIX}{id}";
 
         public static readonly string DaBane = Prefixed("daBane");
+        public static readonly string IsLuckyFood = Prefixed("isLuckyFood");
      }
 }
