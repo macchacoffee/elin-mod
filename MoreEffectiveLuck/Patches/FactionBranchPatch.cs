@@ -24,25 +24,27 @@ public static class FactionBranchPatch
     private static IEnumerable<CodeInstruction> OnSimulateDay_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
         // // 変更前
-        // 
+        // if (luckyMonth)
+        // {
+        //     Log("lucky_month", EClass._zone.Name);
+        //     Msg.Say("lucky_month", EClass._zone.Name);
+        //     Msg.Say("umi");
+        //     SE.Play("godbless");
+        //     EClass.world.SendPackage(ThingGen.Create("book_kumiromi"));
+        //     luckyMonthDone = true;
+        // }
         // // 変更後
-        // 
+        // if (luckyMonth)
+        // {
+        //     Log("lucky_month", EClass._zone.Name);
+        //     Msg.Say("lucky_month", EClass._zone.Name);
+        //     Msg.Say("umi");
+        //     SE.Play("godbless");
+        //     EClass.world.SendPackage(ThingGen.Create("book_kumiromi"));
+        //     FactionBranchPatch.ApplyLuckyMonthCondition();
+        //     luckyMonthDone = true;
+        // }
         var matcher = new CodeMatcher(instructions, generator);
-
-        // ---
-        // brfalse Label23
-        // ldarg.0 NULL
-        // ldstr "lucky_month"
-        matcher.MatchStartForward(
-            new CodeMatch(OpCodes.Brfalse),
-            new CodeMatch(OpCodes.Ldarg_0),
-            new CodeMatch(OpCodes.Ldstr, "lucky_month")
-        );
-        matcher.RemoveInstruction();
-        matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Pop)
-        );
-        // ---
 
         // ldarg.0 NULL
         // ldc.i4.1 NULL
@@ -61,6 +63,8 @@ public static class FactionBranchPatch
 
     private static void ApplyLuckyMonthCondition()
     {
+        var chara = EClass.pc;
+        chara.PlayEffect("aura_heaven");
         EClass.pc.AddCondition<ConMCMELLuckyMonth>(222);
     }
 }

@@ -100,7 +100,6 @@ public static class ThingPatch
                 new CodeMatch(OpCodes.Ldloc_S)
             );
             var start = matcher.Pos;
-
             // mul NULL [Label15]
             // stloc.s 11 (System.Int32)
             // ldloc.s 7 (SourceElement+Row)
@@ -110,8 +109,11 @@ public static class ThingPatch
                 new CodeMatch(OpCodes.Ldloc_S)
             );
             var end = matcher.Pos;
-
-            matcher = new CodeMatcher(matcher.InstructionsInRange(start, end), generator);
+            // 末尾にreturnを追加する
+            matcher = new CodeMatcher([
+                ..matcher.InstructionsInRange(start, end),
+                new CodeInstruction(OpCodes.Ret)
+            ], generator);
 
             // エンチャント強度の計算でこの関数の引数を参照するように調整する
             // ldarg.2 NULL
@@ -142,11 +144,7 @@ public static class ThingPatch
                 }
             });
 
-            // returnを追加する
-            return [
-                ..matcher.InstructionEnumeration(),
-                new CodeInstruction(OpCodes.Ret)
-            ];
+            return matcher.InstructionEnumeration();
         }
 
         _ = transpiler(null!, null!);
