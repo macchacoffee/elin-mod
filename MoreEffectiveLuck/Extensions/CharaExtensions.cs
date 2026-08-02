@@ -1,5 +1,3 @@
-using System;
-
 namespace MoreEffectiveLuck.Extensions;
 
 public static class CharaExtensions

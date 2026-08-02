@@ -74,10 +74,7 @@ public static class ThingPatch
             new CodeInstruction(OpCodes.Callvirt, addTextOperand)
         );
 
-        var insts = matcher.InstructionEnumeration();
-        insts.Do(Plugin.LogInfo);
-        return insts;
-        // return matcher.InstructionEnumeration();
+        return matcher.InstructionEnumeration();
     }
 
     [HarmonyReversePatch(HarmonyReversePatchType.Original)]

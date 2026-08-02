@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using ModUtility.Patch;
 using MoreEffectiveLuck.Game;
-using NPOI.SS.Formula.Functions;
 
 namespace MoreEffectiveLuck.Patches;
 
@@ -26,15 +24,15 @@ public static class FoodEffectPatch
     private static IEnumerable<CodeInstruction> Proc_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
         // // 変更前
-        // if (c.HasCondition<ConAnorexia>())
+        // if (!c.isDead)
         // {
-        //     c.Vomit();
+        //     food.trait.OnDrink(c);
         // }
         // // 変更後
-        // FoodEffectPatch.ProcLuckyFood(c, food);
-        // if (c.HasCondition<ConAnorexia>())
+        // if (!c.isDead)
         // {
-        //     c.Vomit();
+        //     FoodEffectPatch.ProcLuckyFood(c, food);
+        //     food.trait.OnDrink(c);
         // }
         var matcher = new CodeMatcher(instructions, generator);
 
@@ -65,6 +63,43 @@ public static class FoodEffectPatch
             new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(FoodEffectPatch), nameof(ProcLuckyFood), [typeof(Chara), typeof(Thing)]))
         );
         matcher.AddLabels(labelList1);
+
+        return matcher.InstructionEnumeration();
+    }
+
+    [HarmonyTranspiler]
+    [HarmonyPatch(nameof(FoodEffect.ProcDrink), [typeof(Chara), typeof(Thing)])]
+    private static IEnumerable<CodeInstruction> ProcDrink_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    {
+        // // 変更前
+        // if (c.HasCondition<ConAnorexia>())
+        // {
+        //     c.Vomit();
+        // }
+        // // 変更後
+        // FoodEffectPatch.ProcLuckyFood(c, food);
+        // if (c.HasCondition<ConAnorexia>())
+        // {
+        //     c.Vomit();
+        // }
+        var matcher = new CodeMatcher(instructions, generator);
+
+        // めでたい飲み物を飲んだ時に幸運バフが付ける処理を追加する
+        // ldarg.1 NULL
+        // ldfld Trait Card::trait
+        // ldarg.0 NULL
+        // callvirt virtual void Trait::OnDrink(Chara c)
+        matcher.MatchStartForward(
+            new CodeMatch(OpCodes.Ldarg_1),
+            new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Card), nameof(Card.trait))),
+            new CodeMatch(OpCodes.Ldarg_0),
+            new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Trait), nameof(Trait.OnDrink), [typeof(Chara)]))
+        );
+        matcher.InsertAndAdvance(
+            new CodeInstruction(OpCodes.Ldarg_0),
+            new CodeInstruction(OpCodes.Ldarg_1),
+            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(FoodEffectPatch), nameof(ProcLuckyFood), [typeof(Chara), typeof(Thing)]))
+        );
 
         return matcher.InstructionEnumeration();
     }

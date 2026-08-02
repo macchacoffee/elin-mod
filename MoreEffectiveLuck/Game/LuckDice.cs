@@ -49,10 +49,7 @@ public class LuckDice<T>
 
     public LuckDiceResult<T> RollOnce()
     {
-        var result = new LuckDiceResult<T>(ResultFunc());
-        Plugin.LogInfo($"RollOnce {result.Value}");
-        return result;
-        // return new LuckDiceResult<T>(ResultFunc());
+        return new LuckDiceResult<T>(ResultFunc());
     }
 }
 

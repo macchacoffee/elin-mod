@@ -7,12 +7,12 @@ public class LuckyFood
 {
     private readonly static Dictionary<string, LuckyFood> IdToFood = new()
     {
-        ["kagamimochi"] = new(power: 30),
+        ["kagamimochi"] = new(power: 10),
         ["churyu"] = new(power: 22),
         ["wedding_cake1"] = new(power: 20),
         ["bushdenoel"] = new(power: 10),
         ["crimale2"] = new(power: 11),
-        ["65_gold"] = new(power: 177),   // 金のコイ
+        ["65_gold"] = new(power: 77),   // 金のコイ
         ["86"] = new(power: 5),         // マダイ
         ["71"] = new(power: 5),         // シロアマダイ
         ["_poop"] = new(getPower: f => f.material.alias switch
@@ -40,9 +40,25 @@ public class LuckyFood
     public static void ProcFoodEffect(Chara chara, Thing thing)
     {
         var power = GetLuckyPower(thing);
+        if (thing.IsBlessed)
+        {
+            var rnd = EClass.rnd(100);
+            if (rnd == 0)
+            {
+                 power += 50;
+            }
+            else if (rnd < 0 && rnd <= 5)
+            {
+                power += 20;
+            }
+            else if (rnd < 5 && rnd <= 15)
+            {
+                power += 10;
+            }
+        }
         if (power > 0)
         {
-            chara.AddCondition<ConMCMELFortunate>(power);
+            chara.AddCondition<ConMCMELLucky>(power);
         }
     }
 
