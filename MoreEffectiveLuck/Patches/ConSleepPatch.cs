@@ -44,6 +44,10 @@ public static class ConSleepPatch
 
     private static void ApplyLuckyDayCondition()
     {
+        if (!Mod.Config.EnableLuckyDay)
+        {
+            return;
+        }
         var chara = EClass.pc;
         if (EClass.rnd(chara.faith == EClass.game.religions.Luck ? 200 : 400) == 0)
         {

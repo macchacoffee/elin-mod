@@ -207,12 +207,17 @@ public static class CardPatch
 
     private static Rarity CalculateRarityForCreate(Rarity rarity)
     {
-        var dice = LuckDice<int?>.Create(
-            resultFunc: () => RollRarityForCreate(rarity),
+        Rarity resultFunc() => RollRarityForCreate(rarity);
+        if (!Mod.Config.EnableEquipmentRarity)
+        {
+            return resultFunc();
+        }
+        var dice = LuckDice<Rarity>.Create(
+            resultFunc: resultFunc,
             resultCompareFunc: (result, prev) => result > prev,
             card: EClass.pc,
-            luckPerRollCount: 150,
-            maxRollCount: 15
+            luckPerRoll: Mod.Config.EquipmentRarityLuckPerRoll,
+            maxRoll: Mod.Config.EquipmentRarityMaxRoll
         );
         return dice.Roll().Value;
     }

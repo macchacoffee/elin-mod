@@ -63,6 +63,10 @@ public static class FactionBranchPatch
 
     private static void ApplyLuckyMonthCondition()
     {
+        if (!Mod.Config.EnableLuckyMonth)
+        {
+            return;
+        }
         var chara = EClass.pc;
         chara.PlayEffect("aura_heaven");
         EClass.pc.AddCondition<ConMCMELLuckyMonth>(222);

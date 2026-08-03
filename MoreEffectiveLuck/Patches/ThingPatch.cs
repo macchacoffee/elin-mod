@@ -105,6 +105,7 @@ public static class ThingPatch
             // ldloc.s 7 (SourceElement+Row)
             matcher.MatchStartForward(
                 new CodeMatch(OpCodes.Mul),
+                
                 new CodeMatch(OpCodes.Stloc_S),
                 new CodeMatch(OpCodes.Ldloc_S)
             );
@@ -204,10 +205,17 @@ public static class ThingPatch
 
     private static int CalculateNum6ForGetEnchant(SourceElement.Row row, float num5, bool flag, bool neg)
     {
-        var dice = LuckDice<int?>.Create(
-            resultFunc: () => RollNum6ForGetEnchant(row, num5, flag, neg),
+        int resultFunc() => RollNum6ForGetEnchant(row, num5, flag, neg);
+        if (!Mod.Config.EnableEnchantPower)
+        {
+            return resultFunc();
+        }
+        var dice = LuckDice<int>.Create(
+            resultFunc: resultFunc,
             resultCompareFunc: (result, prev) => result > prev,
-            card: EClass.pc
+            card: EClass.pc,
+            luckPerRoll: Mod.Config.EnchantPowerLuckPerRoll,
+            maxRoll: Mod.Config.EnchantPowerMaxRoll
         );
         return dice.Roll().Value;
     }

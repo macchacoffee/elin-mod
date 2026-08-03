@@ -43,8 +43,13 @@ public static class QuestRandomPatch
 
     private static int GetRewardPlatForGetEnchant(Quest quest, int money)
     {
-        var dice = LuckDice<int?>.Create(
-            resultFunc: () => quest.GetRewardPlat(money),
+        int resultFunc() => quest.GetRewardPlat(money);
+        if (!Mod.Config.EnableReuqestReward)
+        {
+            return resultFunc();
+        }
+        var dice = LuckDice<int>.Create(
+            resultFunc: resultFunc,
             resultCompareFunc: (result, prev) => result > prev,
             card: EClass.pc
         );

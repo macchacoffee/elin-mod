@@ -106,6 +106,10 @@ public static class FoodEffectPatch
 
     private static void ProcLuckyFood(Chara chara, Thing food)
     {
+        if (!Mod.Config.EnableLuckyFood)
+        {
+            return;
+        }
         LuckyFood.ProcFoodEffect(chara, food);
     }
 }

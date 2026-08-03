@@ -1,7 +1,10 @@
+using System;
+using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using BepInEx;
+using BepInEx.Configuration;
 using HarmonyLib;
+using MoreEffectiveLuck.Config;
 
 namespace MoreEffectiveLuck;
 
@@ -17,18 +20,34 @@ internal class Plugin : BaseUnityPlugin
 {
     internal static Plugin? Instance { get; private set; }
     internal static Harmony? Harmony { get; private set; }
+    private ConfigFile? ConfigFile { get; set; }
 
     private void Awake()
     {
         Instance = this;
+        ConfigFile = Mod.BindConfig();
         Harmony = new Harmony(PluginInfo.Guid);
-        Harmony.PatchAll(Assembly.GetExecutingAssembly());
-        // Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), PluginInfo.Guid);
+        try
+        {
+            Harmony.PatchAll(Assembly.GetExecutingAssembly());
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError($"Failed to apply harmony patch: {ex}");
+        }
     }
 
-    internal static void LogDebug(object message, [CallerMemberName] string caller = "")
+    private void Start()
     {
-        Instance?.Logger.LogDebug($"[{caller}] {message}");
+        if (AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == "ModConfigGUI") is not null)
+        {
+            ModConfigGUISupport.ResisterConfig(ConfigFile!);
+        }
+    }
+
+    internal static void LogDebug(object message)
+    {
+        Instance?.Logger.LogDebug(message);
     }
 
     internal static void LogInfo(object message)

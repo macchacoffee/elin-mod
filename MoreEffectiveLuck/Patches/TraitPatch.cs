@@ -131,12 +131,17 @@ public static class TraitPatch
 
     private static Rarity CalculateRarityForCreateStock(int num2)
     {
-        var dice = LuckDice<int?>.Create(
-            resultFunc: () => RollRarityForCreateStock(num2),
+        Rarity resultFunc() => RollRarityForCreateStock(num2);
+        if (!Mod.Config.EnableSpecialMerchantRarity)
+        {
+            return resultFunc();
+        }
+        var dice = LuckDice<Rarity>.Create(
+            resultFunc: resultFunc,
             resultCompareFunc: (result, prev) => result > prev,
             card: EClass.pc,
-            luckPerRollCount: 200,
-            maxRollCount: 10
+            luckPerRoll: Mod.Config.SpecialMerchantRarityLuckPerRoll,
+            maxRoll: Mod.Config.SpecialMerchantRarityMaxRoll
         );
         return dice.Roll().Value;
     }
