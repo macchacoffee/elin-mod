@@ -211,7 +211,8 @@ public static class CardPatch
             resultFunc: () => RollRarityForCreate(rarity),
             resultCompareFunc: (result, prev) => result > prev,
             card: EClass.pc,
-            rollCountPerLuck: 200
+            luckPerRollCount: 150,
+            maxRollCount: 15
         );
         return dice.Roll().Value;
     }

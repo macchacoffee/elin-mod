@@ -135,7 +135,8 @@ public static class TraitPatch
             resultFunc: () => RollRarityForCreateStock(num2),
             resultCompareFunc: (result, prev) => result > prev,
             card: EClass.pc,
-            rollCountPerLuck: 200
+            luckPerRollCount: 200,
+            maxRollCount: 10
         );
         return dice.Roll().Value;
     }
