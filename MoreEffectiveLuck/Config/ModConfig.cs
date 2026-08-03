@@ -53,7 +53,7 @@ public class ModConfig
             "依頼の報酬 / ロール数の上限\nRequest reward / Maximum roll count"
         ));
         public ConfigEntry<bool> EnableLuckyFood = configFile.Bind(LuckChanger, "EnableLuckyFood", true, new ConfigDescription(
-            "運気の向上する食べ物を有効にする。\nEnable lucky food."
+            "運気が向上する食べ物を有効にする。\nEnable lucky food."
         ));
         public ConfigEntry<bool> EnableLuckyDay = configFile.Bind(LuckChanger, "EnableLuckyDay", true, new ConfigDescription(
             "幸運の日を有効にする。\nEnable lucky day."
