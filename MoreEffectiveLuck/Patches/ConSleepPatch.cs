@@ -44,7 +44,7 @@ public static class ConSleepPatch
 
     private static void ApplyLuckyDayCondition()
     {
-        if (!Mod.Config.EnableLuckyDay)
+        if (!Mod.Config.EnableLuckyDay.Value)
         {
             return;
         }

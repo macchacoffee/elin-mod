@@ -63,7 +63,7 @@ public static class FactionBranchPatch
 
     private static void ApplyLuckyMonthCondition()
     {
-        if (!Mod.Config.EnableLuckyMonth)
+        if (!Mod.Config.EnableLuckyMonth.Value)
         {
             return;
         }

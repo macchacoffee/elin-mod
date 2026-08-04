@@ -15,7 +15,7 @@ public enum ModHealthBarDisplayTarget
     Boss,
 }
 
-public class ModConfig : ModConfigBase<ModConfig>
+public class ModConfig : JsonModConfigBase<ModConfig>
 {
     [JsonProperty("hoverGuide", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHoverGuide HoverGuide { get; set; } = new();
@@ -36,7 +36,7 @@ public class ModConfig : ModConfigBase<ModConfig>
     }
 }
 
-public class ModConfigHoverGuide : ModConfigBase<ModConfigHoverGuide>
+public class ModConfigHoverGuide : JsonModConfigBase<ModConfigHoverGuide>
 {
     [JsonProperty("zoomScale", DefaultValueHandling = DefaultValueHandling.Include)]
     public float ZoomScale { get; set; } = 1;
@@ -99,7 +99,7 @@ public class ModConfigHoverGuide : ModConfigBase<ModConfigHoverGuide>
     }
 }
 
-public class ModConfigHoverGuideColorSet : ModConfigBase<ModConfigHoverGuide>
+public class ModConfigHoverGuideColorSet : JsonModConfigBase<ModConfigHoverGuide>
 {
     [JsonProperty("mainTextColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ModColorConverter))]
@@ -206,7 +206,7 @@ public class ModConfigHoverGuideColorSet : ModConfigBase<ModConfigHoverGuide>
     public Color FressnessLowValueColor { get; set; } = new(0.822f, 0.431f, 0.395f); // #D26E65FF
 }
 
-public class ModConfigHoverGuideStyle : ModConfigBase<ModConfigHoverGuideStyle>
+public class ModConfigHoverGuideStyle : JsonModConfigBase<ModConfigHoverGuideStyle>
 {
     [JsonProperty("name", DefaultValueHandling = DefaultValueHandling.Include)]
     public string Name { get; set; } = ModConsts.SourceId.StyleName.lang();
@@ -218,7 +218,7 @@ public class ModConfigHoverGuideStyle : ModConfigBase<ModConfigHoverGuideStyle>
     public ModConfigHoverGuideStyleThing Thing { get; set; } = new();
 }
 
-public class ModConfigHoverGuideStyleChara : ModConfigBase<ModConfigHoverGuideStyleChara>
+public class ModConfigHoverGuideStyleChara : JsonModConfigBase<ModConfigHoverGuideStyleChara>
 {
     [JsonProperty("displayType", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayType { get; set; } = true;
@@ -336,7 +336,7 @@ public class ModConfigHoverGuideStyleChara : ModConfigBase<ModConfigHoverGuideSt
     public ModConfigHoverGuideHealthBar HealthBar { get; init; } = new();
 }
 
-public class ModConfigHoverGuideLineWrapping : ModConfigBase<ModConfigHoverGuide>
+public class ModConfigHoverGuideLineWrapping : JsonModConfigBase<ModConfigHoverGuide>
 {
     [JsonProperty("enable", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool Enable { get; set; } = true;
@@ -350,7 +350,7 @@ public class ModConfigHoverGuideLineWrapping : ModConfigBase<ModConfigHoverGuide
     }
 }
 
-public class ModConfigHoverGuideHealthBar : ModConfigBase<ModConfigHoverGuideHealthBar>
+public class ModConfigHoverGuideHealthBar : JsonModConfigBase<ModConfigHoverGuideHealthBar>
 {
     [JsonProperty("width", DefaultValueHandling = DefaultValueHandling.Include)]
     public int Width { get; set; } = 400;
@@ -406,7 +406,7 @@ public class ModConfigHoverGuideHealthBar : ModConfigBase<ModConfigHoverGuideHea
     }
 }
 
-public class ModConfigHealthBarDisplay : ModConfigBase<ModConfigHealthBarDisplay>
+public class ModConfigHealthBarDisplay : JsonModConfigBase<ModConfigHealthBarDisplay>
 {
     [JsonProperty("target", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModHealthBarDisplayTarget Target { get; set; } = ModHealthBarDisplayTarget.All;
@@ -418,7 +418,7 @@ public class ModConfigHealthBarDisplay : ModConfigBase<ModConfigHealthBarDisplay
     public bool InFullHealth { get; set; } = false;
 }
 
-public class ModConfigHoverGuideStyleThing : ModConfigBase<ModConfigHoverGuideStyleThing>
+public class ModConfigHoverGuideStyleThing : JsonModConfigBase<ModConfigHoverGuideStyleThing>
 {
     [JsonProperty("displayLv", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayLv { get; set; } = false;

@@ -106,7 +106,7 @@ public static class FoodEffectPatch
 
     private static void ProcLuckyFood(Chara chara, Thing food)
     {
-        if (!Mod.Config.EnableLuckyFood)
+        if (!Mod.Config.EnableLuckyFood.Value)
         {
             return;
         }

@@ -132,7 +132,7 @@ public static class TraitPatch
     private static Rarity CalculateRarityForCreateStock(int num2)
     {
         Rarity resultFunc() => RollRarityForCreateStock(num2);
-        if (!Mod.Config.EnableSpecialMerchantRarity)
+        if (!Mod.Config.EnableSpecialMerchantRarity.Value)
         {
             return resultFunc();
         }
@@ -140,8 +140,8 @@ public static class TraitPatch
             resultFunc: resultFunc,
             resultCompareFunc: (result, prev) => result > prev,
             card: EClass.pc,
-            luckPerRoll: Mod.Config.SpecialMerchantRarityLuckPerRoll,
-            maxRoll: Mod.Config.SpecialMerchantRarityMaxRoll
+            luckPerRoll: Mod.Config.SpecialMerchantRarityLuckPerRoll.Value,
+            maxRoll: Mod.Config.SpecialMerchantRarityMaxRoll.Value
         );
         return dice.Roll().Value;
     }

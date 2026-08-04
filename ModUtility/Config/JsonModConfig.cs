@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ModUtility.Config;
 
-public abstract class ModConfigBase<T> where T : ModConfigBase<T>
+public abstract class JsonModConfigBase<T> where T : JsonModConfigBase<T>
 {
     public string Serialize()
     {

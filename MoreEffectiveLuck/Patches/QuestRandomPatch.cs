@@ -44,7 +44,7 @@ public static class QuestRandomPatch
     private static int GetRewardPlatForGetEnchant(Quest quest, int money)
     {
         int resultFunc() => quest.GetRewardPlat(money);
-        if (!Mod.Config.EnableReuqestReward)
+        if (!Mod.Config.EnableReuqestReward.Value)
         {
             return resultFunc();
         }

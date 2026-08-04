@@ -10,7 +10,7 @@ public enum ModLogTarget
     Feed
 }
 
-public class ModConfig : ModConfigBase<ModConfig>
+public class ModConfig : JsonModConfigBase<ModConfig>
 {
     [JsonProperty("enable", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool Enable { get; set; } = true;
@@ -32,7 +32,7 @@ public class ModConfig : ModConfigBase<ModConfig>
     public ModConfigChat Chat { get; private set; } = new();
 }
 
-public class ModConfigNews : ModConfigBase<ModConfig>
+public class ModConfigNews : JsonModConfigBase<ModConfig>
 {
     [JsonProperty("enable", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool Enable { get; set; } = true;
@@ -41,7 +41,7 @@ public class ModConfigNews : ModConfigBase<ModConfig>
     public int MaxCount { get; set; } = 1;
 }
 
-public class ModConfigChat : ModConfigBase<ModConfig>
+public class ModConfigChat : JsonModConfigBase<ModConfig>
 {
     [JsonProperty("enable", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool Enable { get; set; } = true;

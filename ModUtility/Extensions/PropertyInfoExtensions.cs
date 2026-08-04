@@ -1,0 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Reflection;
+
+namespace ModUtility.Extensions;
+
+public static class PropertyInfoExtensions
+{
+    private readonly static Dictionary<PropertyInfo, object> PropertyGetters = [];
+
+    public static Func<TClass, TValue> GetGetter<TClass, TValue>(this PropertyInfo propInfo)
+    {
+        if (!PropertyGetters.TryGetValue(propInfo, out var getter))
+        {
+            var param = Expression.Parameter(typeof(TClass));
+            var body = Expression.Property(param, propInfo);
+            getter = Expression.Lambda<Func<TClass, TValue>>(body, param).Compile();
+            PropertyGetters[propInfo] = getter;
+        }
+        return (getter as Func<TClass, TValue>)!;
+    }
+}

@@ -208,7 +208,7 @@ public static class CardPatch
     private static Rarity CalculateRarityForCreate(Rarity rarity)
     {
         Rarity resultFunc() => RollRarityForCreate(rarity);
-        if (!Mod.Config.EnableEquipmentRarity)
+        if (!Mod.Config.EnableEquipmentRarity.Value)
         {
             return resultFunc();
         }
@@ -216,8 +216,8 @@ public static class CardPatch
             resultFunc: resultFunc,
             resultCompareFunc: (result, prev) => result > prev,
             card: EClass.pc,
-            luckPerRoll: Mod.Config.EquipmentRarityLuckPerRoll,
-            maxRoll: Mod.Config.EquipmentRarityMaxRoll
+            luckPerRoll: Mod.Config.EquipmentRarityLuckPerRoll.Value,
+            maxRoll: Mod.Config.EquipmentRarityMaxRoll.Value
         );
         return dice.Roll().Value;
     }

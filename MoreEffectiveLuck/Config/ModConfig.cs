@@ -1,88 +1,72 @@
-using System;
-using System.Runtime.CompilerServices;
-using BepInEx.Configuration;
+using ModUtility.Config;
 
 namespace MoreEffectiveLuck.Config;
 
-public class ModConfig
+public class ModConfig : BepInExModConfigBase<ModConfig>
 {
-    private class ConfigBinding(ConfigFile configFile)
-    {
-        private static readonly string EnchantPower = "EnchantPower";
-        private static readonly string EquipmentRarity = "EquipmentRarity";
-        private static readonly string SpecialMerchantRarity = "SpecialMerchantRarity";
-        private static readonly string ReuqestReward = "ReuqestReward";
-        private static readonly string LuckChanger = "LuckChanger";
+    private const string EnchantPower = "EnchantPower";
+    private const string EquipmentRarity = "EquipmentRarity";
+    private const string SpecialMerchantRarity = "SpecialMerchantRarity";
+    private const string ReuqestReward = "ReuqestReward";
+    private const string LuckChanger = "LuckChanger";
 
-        public readonly ConfigFile ConfigFile = configFile;
+    public BepInExModConfigEntry<bool> EnableEnchantPower { get; } = new(
+        EnchantPower, "Enable", true,
+        "ランダムエンチャントの強度に対して有効にする。\nEnable for power of random enchant.");
 
-        public ConfigEntry<bool> EnableEnchantPower = configFile.Bind(EnchantPower, "Enable", true, new ConfigDescription(
-            "ランダムエンチャントの強度に対して有効にする。\nEnable for power of random enchant."
-        ));
-        public ConfigEntry<int> EnchantPowerLuckPerRoll = configFile.Bind(EnchantPower, "LuckPerRoll", 100, new ConfigDescription(
-            "ランダムエンチャントの強度 / 1ロール追加に必要な運の値\nPower of random enchant / Required luck value for an extra roll"
-        ));
-        public ConfigEntry<int> EnchantPowerMaxRoll = configFile.Bind(EnchantPower, "MaxRoll", 20, new ConfigDescription(
-            "ランダムエンチャントの強度 / ロール数の上限\nPower of random enchant / Maximum roll count"
-        ));
-        public ConfigEntry<bool> EnableEquipmentRarity = configFile.Bind(EquipmentRarity, "Enable", true, new ConfigDescription(
-            "ランダム生成装備のレアリティに対して有効にする。\nEnable for rarity of Randomly generated equipment."
-        ));
-        public ConfigEntry<int> EquipmentRarityLuckPerRoll = configFile.Bind(EquipmentRarity, "LuckPerRoll", 150, new ConfigDescription(
-            "ランダム生成装備のレアリティ / 1ロール追加に必要な運の値\nRarity of Randomly generated equipment / Required luck value for an extra roll"
-        ));
-        public ConfigEntry<int> EquipmentRarityMaxRoll = configFile.Bind(EquipmentRarity, "MaxRoll", 15, new ConfigDescription(
-            "ランダム生成装備のレアリティ / ロール数の上限\nRarity of Randomly generated equipment / Maximum roll count"
-        ));
-        public ConfigEntry<bool> EnableSpecialMerchantRarity = configFile.Bind(SpecialMerchantRarity, "Enable", true, new ConfigDescription(
-            "特殊な商人 (ブラックマーケットなど) が販売する装備のレアリティに対して有効にする。\nEnable for rarity of equipment sold by special merchant (e.g., blackmarket)."
-        ));
-        public ConfigEntry<int> SpecialMerchantRarityLuckPerRoll = configFile.Bind(SpecialMerchantRarity, "LuckPerRoll", 200, new ConfigDescription(
-            "特殊な商人が販売する装備のレアリティ / 1ロール追加に必要な運の値\nRarity of equipment sold by special merchant / Required luck value for an extra roll"
-        ));
-        public ConfigEntry<int> SpecialMerchantRarityMaxRoll = configFile.Bind(SpecialMerchantRarity, "MaxRoll", 10, new ConfigDescription(
-            "特殊な商人が販売する装備のレアリティ / ロール数の上限\nRarity of equipment sold by special merchant / Maximum roll count"
-        ));
-        public ConfigEntry<bool> EnableReuqestReward = configFile.Bind(ReuqestReward, "Enable", true, new ConfigDescription(
-            "依頼の報酬に対して有効にする。\nEnable for request reward."
-        ));
-        public ConfigEntry<int> ReuqestRewardLuckPerRoll = configFile.Bind(ReuqestReward, "LuckPerRoll", 100, new ConfigDescription(
-            "依頼の報酬 / 1ロール追加に必要な運の値\nRequest reward / Required luck value for an extra roll"
-        ));
-        public ConfigEntry<int> ReuqestRewardMaxRoll = configFile.Bind(ReuqestReward, "MaxRoll", 20, new ConfigDescription(
-            "依頼の報酬 / ロール数の上限\nRequest reward / Maximum roll count"
-        ));
-        public ConfigEntry<bool> EnableLuckyFood = configFile.Bind(LuckChanger, "EnableLuckyFood", true, new ConfigDescription(
-            "運気が向上する食べ物を有効にする。\nEnable lucky food."
-        ));
-        public ConfigEntry<bool> EnableLuckyDay = configFile.Bind(LuckChanger, "EnableLuckyDay", true, new ConfigDescription(
-            "幸運の日を有効にする。\nEnable lucky day."
-        ));
-        public ConfigEntry<bool> EnableLuckyMonth = configFile.Bind(LuckChanger, "EnableLuckyMonth", true, new ConfigDescription(
-            "幸運の月を有効にする。\nEnable lucky month."
-        ));
-    }
+    public BepInExModConfigEntry<int> EnchantPowerLuckPerRoll { get; } = new(
+        EnchantPower, "LuckPerRoll", 100,
+        "ランダムエンチャントの強度 / 1ロール追加に必要な運の値\nPower of random enchant / Required luck value for an extra roll");
 
-    private ConfigBinding? Binding { get; set; }
+    public BepInExModConfigEntry<int> EnchantPowerMaxRoll { get; } = new(
+        EnchantPower, "MaxRoll", 20,
+        "ランダムエンチャントの強度 / ロール数の上限\nPower of random enchant / Maximum roll count");
 
-    public bool EnableEnchantPower => Binding!.EnableEnchantPower.Value;
-    public int EnchantPowerLuckPerRoll => Binding!.EnchantPowerLuckPerRoll.Value;
-    public int EnchantPowerMaxRoll => Binding!.EnchantPowerMaxRoll.Value;
-    public bool EnableEquipmentRarity => Binding!.EnableEquipmentRarity.Value;
-    public int EquipmentRarityLuckPerRoll => Binding!.EquipmentRarityLuckPerRoll.Value;
-    public int EquipmentRarityMaxRoll => Binding!.EquipmentRarityMaxRoll.Value;
-    public bool EnableSpecialMerchantRarity => Binding!.EnableSpecialMerchantRarity.Value;
-    public int SpecialMerchantRarityLuckPerRoll => Binding!.SpecialMerchantRarityLuckPerRoll.Value;
-    public int SpecialMerchantRarityMaxRoll => Binding!.SpecialMerchantRarityMaxRoll.Value;
-    public bool EnableReuqestReward => Binding!.EnableReuqestReward.Value;
-    public int ReuqestRewardLuckPerRoll => Binding!.ReuqestRewardLuckPerRoll.Value;
-    public int ReuqestRewardMaxRoll => Binding!.ReuqestRewardMaxRoll.Value;
-    public bool EnableLuckyFood => Binding!.EnableLuckyFood.Value;
-    public bool EnableLuckyDay => Binding!.EnableLuckyDay.Value;
-    public bool EnableLuckyMonth => Binding!.EnableLuckyMonth.Value;
+    public BepInExModConfigEntry<bool> EnableEquipmentRarity { get; } = new(
+        EquipmentRarity, "Enable", true,
+        "ランダム生成装備のレアリティに対して有効にする。\nEnable for rarity of Randomly generated equipment.");
 
-    public void Bind(ConfigFile configFile)
-    {
-        Binding = new(configFile);
-    }
+    public BepInExModConfigEntry<int> EquipmentRarityLuckPerRoll { get; } = new(
+        EquipmentRarity, "LuckPerRoll", 150,
+        "ランダム生成装備のレアリティ / 1ロール追加に必要な運の値\nRarity of Randomly generated equipment / Required luck value for an extra roll");
+
+    public BepInExModConfigEntry<int> EquipmentRarityMaxRoll { get; } = new(
+        EquipmentRarity, "MaxRoll", 15,
+        "ランダム生成装備のレアリティ / ロール数の上限\nRarity of Randomly generated equipment / Maximum roll count");
+
+    public BepInExModConfigEntry<bool> EnableSpecialMerchantRarity { get; } = new(
+        SpecialMerchantRarity, "Enable", true,
+        "特殊な商人 (ブラックマーケットなど) が販売する装備のレアリティに対して有効にする。\nEnable for rarity of equipment sold by special merchant (e.g., blackmarket).");
+
+    public BepInExModConfigEntry<int> SpecialMerchantRarityLuckPerRoll { get; } = new(
+        SpecialMerchantRarity, "LuckPerRoll", 200,
+        "特殊な商人が販売する装備のレアリティ / 1ロール追加に必要な運の値\nRarity of equipment sold by special merchant / Required luck value for an extra roll");
+
+    public BepInExModConfigEntry<int> SpecialMerchantRarityMaxRoll { get; } = new(
+        SpecialMerchantRarity, "MaxRoll", 10,
+        "特殊な商人が販売する装備のレアリティ / ロール数の上限\nRarity of equipment sold by special merchant / Maximum roll count");
+
+    public BepInExModConfigEntry<bool> EnableReuqestReward { get; } = new(
+        ReuqestReward, "Enable", true,
+        "依頼の報酬に対して有効にする。\nEnable for request reward.");
+
+    public BepInExModConfigEntry<int> ReuqestRewardLuckPerRoll { get; } = new(
+        ReuqestReward, "LuckPerRoll", 100,
+         "依頼の報酬 / 1ロール追加に必要な運の値\nRequest reward / Required luck value for an extra roll");
+
+    public BepInExModConfigEntry<int> ReuqestRewardMaxRoll { get; } = new(
+        ReuqestReward, "MaxRoll", 20,
+        "依頼の報酬 / ロール数の上限\nRequest reward / Maximum roll count");
+
+    public BepInExModConfigEntry<bool> EnableLuckyFood { get; } = new(
+        LuckChanger, "EnableLuckyFood", true,
+        "運気が向上する食べ物を有効にする。\nEnable lucky food.");
+
+    public BepInExModConfigEntry<bool> EnableLuckyDay { get; } = new(
+        LuckChanger, "EnableLuckyDay", true,
+        "幸運の日を有効にする。\nEnable lucky day.");
+
+    public BepInExModConfigEntry<bool> EnableLuckyMonth { get; } = new(
+        LuckChanger, "EnableLuckyMonth", true,
+        "幸運の月を有効にする。\nEnable lucky month.");
 }

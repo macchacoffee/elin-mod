@@ -206,7 +206,7 @@ public static class ThingPatch
     private static int CalculateNum6ForGetEnchant(SourceElement.Row row, float num5, bool flag, bool neg)
     {
         int resultFunc() => RollNum6ForGetEnchant(row, num5, flag, neg);
-        if (!Mod.Config.EnableEnchantPower)
+        if (!Mod.Config.EnableEnchantPower.Value)
         {
             return resultFunc();
         }
@@ -214,8 +214,8 @@ public static class ThingPatch
             resultFunc: resultFunc,
             resultCompareFunc: (result, prev) => result > prev,
             card: EClass.pc,
-            luckPerRoll: Mod.Config.EnchantPowerLuckPerRoll,
-            maxRoll: Mod.Config.EnchantPowerMaxRoll
+            luckPerRoll: Mod.Config.EnchantPowerLuckPerRoll.Value,
+            maxRoll: Mod.Config.EnchantPowerMaxRoll.Value
         );
         return dice.Roll().Value;
     }
