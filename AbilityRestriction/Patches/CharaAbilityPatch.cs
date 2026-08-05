@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Reflection;
+using AbilityRestriction.Config;
 using HarmonyLib;
 using ModUtility.Patch;
 
@@ -22,18 +23,18 @@ public static class CharaAbilityPatch
     {
         var owner = __instance.owner;
 
-        var deniedAbility = Mod.Config.GetDeniedAbility(owner.uid);
+        var deniedAbility = ModContext.Config.GetDeniedAbility(owner.uid);
         if (deniedAbility is null)
         {
-            Mod.OriginalActStorage.RemoveActs(owner);
+            ModContext.OriginalActStorage.RemoveActs(owner);
             return;
         }
 
         // charaが元々持っているアビリティの情報が必要になるため、保存しておく
-        Mod.OriginalActStorage.SetActs(owner, __instance.list.items);
+        ModContext.OriginalActStorage.SetActs(owner, __instance.list.items);
         // charaが忘れたアビリティを禁止アビリティの設定から削除する
-        deniedAbility.IntersectWith(__instance.list.items.Select(item => new ModDeniedAct(item)));
+        deniedAbility.IntersectWith(__instance.list.items.Select(item => new ModConfigDeniedAct(item)));
         // 禁止されているアビリティをcharaのCharaAbilityから削除する
-        __instance.list.items.RemoveAll(item => deniedAbility.Contains(new ModDeniedAct(item)));
+        __instance.list.items.RemoveAll(item => deniedAbility.Contains(new ModConfigDeniedAct(item)));
     }
 }

@@ -1,6 +1,8 @@
 using System;
 using YKF;
 using ModUtility.Resource;
+using NoPCC.Config;
+using NoPCC.Mod;
 
 namespace NoPCC.UI;
 
@@ -9,15 +11,15 @@ public class ModConfigMainTab : YKLayout<object>
     public override void OnLayout()
     {
         Header(ModNames.GeneralSettings.Text);
-        Toggle(ModNames.EnableMod.Text, Mod.Config.Sprite.DefaultTile.Enable, newValue =>
+        Toggle(ModNames.EnableMod.Text, ModContext.Config.Sprite.DefaultTile.Enable, newValue =>
         {
-            var oldValue = Mod.Config.Sprite.DefaultTile.Enable;
+            var oldValue = ModContext.Config.Sprite.DefaultTile.Enable;
             if (oldValue == newValue)
             {
                 return;
             }
 
-            Mod.Config.Sprite.DefaultTile.Enable = newValue;
+            ModContext.Config.Sprite.DefaultTile.Enable = newValue;
             if (newValue)
             {
                 ModPCRenderer.Initialize();
@@ -33,34 +35,34 @@ public class ModConfigMainTab : YKLayout<object>
         Header(ModNames.SpriteSettings.Text);
         AddDefaultTileGroupLayout();
         Spacer(2);
-        AddTileGroupLayout(Mod.Config.Sprite.SnowTile, ModNames.SnowSprite);
+        AddTileGroupLayout(ModContext.Config.Sprite.SnowTile, ModNames.SnowSprite);
         Spacer(2);
-        AddTileGroupLayout(Mod.Config.Sprite.UndressTile, ModNames.UndressSprite);
+        AddTileGroupLayout(ModContext.Config.Sprite.UndressTile, ModNames.UndressSprite);
         Spacer(20);
-        AddTileGroupLayout(Mod.Config.Sprite.RideTile, ModNames.RideSprite);
+        AddTileGroupLayout(ModContext.Config.Sprite.RideTile, ModNames.RideSprite);
         Spacer(2);
-        AddTileGroupLayout(Mod.Config.Sprite.RideSnowTile, ModNames.RideSnowSprite);
+        AddTileGroupLayout(ModContext.Config.Sprite.RideSnowTile, ModNames.RideSnowSprite);
         Spacer(20);
-        AddTileGroupLayout(Mod.Config.Sprite.CombatTile, ModNames.CombatSprite);
+        AddTileGroupLayout(ModContext.Config.Sprite.CombatTile, ModNames.CombatSprite);
         Spacer(2);
 
-        AddTileGroupLayout(Mod.Config.Sprite.CombatSnowTile, ModNames.CombatSnowSprite);
+        AddTileGroupLayout(ModContext.Config.Sprite.CombatSnowTile, ModNames.CombatSnowSprite);
         Spacer(20);
-        AddTileGroupLayout(Mod.Config.Sprite.RideCombatTile, ModNames.RideCombatSprite);
+        AddTileGroupLayout(ModContext.Config.Sprite.RideCombatTile, ModNames.RideCombatSprite);
         Spacer(2);
-        AddTileGroupLayout(Mod.Config.Sprite.RideCombatSnowTile, ModNames.RideCombatSnowSprite);
+        AddTileGroupLayout(ModContext.Config.Sprite.RideCombatSnowTile, ModNames.RideCombatSnowSprite);
     }
 
     private void AddDefaultTileGroupLayout()
     {
-        var tile = Mod.Config.Sprite.DefaultTile;
+        var tile = ModContext.Config.Sprite.DefaultTile;
         var name = ModNames.DefaultSprite;
         var group = Horizontal().WithFitMode(UnityEngine.UI.ContentSizeFitter.FitMode.PreferredSize).WithPivot(0.5f, 0);
         group.Text(name.Text, FontColor.Header).WithWidth(250);
         group.InputText(tile.Id.ToString(), HandleOnTileIdInputChange(tile)).WithWidth(100);
     }
 
-    private void AddTileGroupLayout(Tile tile, ModName name)
+    private void AddTileGroupLayout(ModConfigTile tile, ModName name)
     {
         var group = Horizontal().WithFitMode(UnityEngine.UI.ContentSizeFitter.FitMode.PreferredSize).WithPivot(0.5f, 0);
         group.Text(name.Text, FontColor.Header).WithWidth(150);
@@ -68,7 +70,7 @@ public class ModConfigMainTab : YKLayout<object>
         group.InputText(tile.Id.ToString(), HandleOnTileIdInputChange(tile)).WithWidth(100);
     }
 
-    private Action<bool> HandleOnTileEnableToggle(Tile tile)
+    private Action<bool> HandleOnTileEnableToggle(ModConfigTile tile)
     {
         return newValue =>
         {
@@ -82,7 +84,7 @@ public class ModConfigMainTab : YKLayout<object>
         };
     }
 
-    private Action<int> HandleOnTileIdInputChange(Tile tile)
+    private Action<int> HandleOnTileIdInputChange(ModConfigTile tile)
     {
         return newValue =>
         {

@@ -1,4 +1,4 @@
-namespace MoreEffectiveLuck.Game;
+namespace MoreEffectiveLuck.Mod;
 
 public class ConMCMELLuckyDay : Condition
 {

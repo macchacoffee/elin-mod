@@ -1,7 +1,8 @@
+using System;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using BepInEx;
 using HarmonyLib;
+using ModUtility.Config;
 
 namespace FoodEffectMultiplier;
 
@@ -9,7 +10,7 @@ public static class PluginInfo
 {
     public const string Guid = "maccha-coffee.food-effect-multiplier";
     public const string Name = "Food Effect Multiplier";
-    public const string Version = "1.0.0";
+    public const string Version = "1.0.1";
 }
 
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]
@@ -20,12 +21,25 @@ internal class Plugin : BaseUnityPlugin
     private void Awake()
     {
         Instance = this;
-        Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), PluginInfo.Guid);
+        try
+        {
+            Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), PluginInfo.Guid);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError($"Failed to apply harmony patch: {ex}");
+        }
     }
 
-    internal static void LogDebug(object message, [CallerMemberName] string caller = "")
+    private void Start()
     {
-        Instance?.Logger.LogDebug($"[{caller}] {message}");
+        var configFile = ModContext.BindConfig();
+        ModConfigGUISupport.ResisterConfig(PluginInfo.Guid, PluginInfo.Name, configFile);
+    }
+
+    internal static void LogDebug(object message)
+    {
+        Instance?.Logger.LogDebug(message);
     }
 
     internal static void LogInfo(object message)

@@ -1,6 +1,7 @@
 using System.Reflection;
 using HarmonyLib;
 using ModUtility.Patch;
+using NoPCC.Mod;
 
 namespace NoPCC.Patches;
 
@@ -20,7 +21,7 @@ public static class GamePatch
     private static void Load_Postfix(string id, bool cloud)
     {
         var root = (cloud ? CorePath.RootSaveCloud : CorePath.RootSave) + id;
-        Mod.LoadConfig(root);
+        ModContext.LoadConfig(root);
 
         // Requires to initialize after every game load.
         ModPCRenderer.Initialize();

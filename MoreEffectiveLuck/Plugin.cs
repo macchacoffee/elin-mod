@@ -1,11 +1,8 @@
 using System;
-using System.Linq;
 using System.Reflection;
 using BepInEx;
-using BepInEx.Configuration;
 using HarmonyLib;
 using ModUtility.Config;
-using MoreEffectiveLuck.Config;
 
 namespace MoreEffectiveLuck;
 
@@ -21,12 +18,10 @@ internal class Plugin : BaseUnityPlugin
 {
     internal static Plugin? Instance { get; private set; }
     internal static Harmony? Harmony { get; private set; }
-    private ConfigFile? ConfigFile { get; set; }
 
     private void Awake()
     {
         Instance = this;
-        ConfigFile = Mod.BindConfig();
         Harmony = new Harmony(PluginInfo.Guid);
         try
         {
@@ -40,7 +35,8 @@ internal class Plugin : BaseUnityPlugin
 
     private void Start()
     {
-        ModConfigGUISupport.ResisterConfig(PluginInfo.Guid, PluginInfo.Name, ConfigFile!);
+        var configFile = ModContext.BindConfig();
+        ModConfigGUISupport.ResisterConfig(PluginInfo.Guid, PluginInfo.Name, configFile);
     }
 
     internal static void LogDebug(object message)

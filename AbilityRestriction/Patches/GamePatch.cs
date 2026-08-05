@@ -20,6 +20,6 @@ public static class GamePatch
     private static void Load_Postfix(string id, bool cloud)
     {
         var root = (cloud ? CorePath.RootSaveCloud : CorePath.RootSave) + id;
-        Mod.LoadConfig(root);
+        ModContext.LoadConfig(root);
     }
 }

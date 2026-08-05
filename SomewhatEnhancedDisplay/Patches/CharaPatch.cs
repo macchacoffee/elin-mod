@@ -23,7 +23,7 @@ public static class CharaPatch
         return PatchTarget.IsPatchable(original);
     }
 
-    private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
+    private static ModConfigHoverGuide Config => ModContext.Config.HoverGuide;
     private static ModConfigHoverGuideStyleChara StyleConfig => Config.CurrentStyle.Chara;
 
     [HarmonyReversePatch(HarmonyReversePatchType.Original)]

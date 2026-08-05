@@ -1,7 +1,7 @@
 
 using System;
 
-namespace MoreEffectiveLuck.Game;
+namespace MoreEffectiveLuck.Mod;
 
 public class LuckDice<T>
 {

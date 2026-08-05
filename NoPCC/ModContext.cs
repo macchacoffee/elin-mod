@@ -1,13 +1,13 @@
 using System.IO;
 using Newtonsoft.Json;
+using NoPCC.Config;
 
-namespace AbilityRestriction;
+namespace NoPCC;
 
-public static class Mod
+public static class ModContext
 {
     private static readonly string ConfigFileName = $"{PluginInfo.Guid}.txt";
 
-    public static ModOriginalActStorage OriginalActStorage { get; } = new();
     public static ModConfig Config { get; private set; } = new();
 
     private static string BuildConfigFilePath(string root)
@@ -21,22 +21,18 @@ public static class Mod
         if (File.Exists(filePath))
         {
             var text = IO.IsCompressed(filePath) ? IO.Decompress(filePath) : File.ReadAllText(filePath);
-            Config = JsonConvert.DeserializeObject<ModConfig>(text, GameIO.jsReadGame);
+            Config = ModConfig.Deserialize(text);
         }
         else
         {
             Config = new();
         }
-
-        Config.CleanUp();
     }
 
     public static void SaveConfig(string root)
     {
-        Config.CleanUp();
-
         var filePath = BuildConfigFilePath(root);
-        var text = JsonConvert.SerializeObject(Config, GameIO.formatting, GameIO.jsWriteGame);
+        var text = Config.Serialize();
         if (GameIO.compressSave)
         {
             IO.Compress(filePath, text);

@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using ModUtility.Patch;
-using MoreEffectiveLuck.Game;
+using MoreEffectiveLuck.Mod;
 
 namespace MoreEffectiveLuck.Patches;
 
@@ -106,7 +106,7 @@ public static class FoodEffectPatch
 
     private static void ProcLuckyFood(Chara chara, Thing food)
     {
-        if (!Mod.Config.EnableLuckyFood.Value)
+        if (!ModContext.Config.EnableLuckyFood.Value)
         {
             return;
         }

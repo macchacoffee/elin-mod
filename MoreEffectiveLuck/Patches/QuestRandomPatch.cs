@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using ModUtility.Patch;
-using MoreEffectiveLuck.Game;
+using MoreEffectiveLuck.Mod;
 
 namespace MoreEffectiveLuck.Patches;
 
@@ -44,7 +44,7 @@ public static class QuestRandomPatch
     private static int GetRewardPlatForGetEnchant(Quest quest, int money)
     {
         int resultFunc() => quest.GetRewardPlat(money);
-        if (!Mod.Config.EnableReuqestReward.Value)
+        if (!ModContext.Config.EnableReuqestReward.Value)
         {
             return resultFunc();
         }

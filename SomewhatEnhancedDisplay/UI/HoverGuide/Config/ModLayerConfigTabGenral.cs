@@ -9,7 +9,7 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
 public class ModLayerConfigTabGenral : YKLayout<ModLayerConfigContext>
 {
-    private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
+    private static ModConfigHoverGuide Config => ModContext.Config.HoverGuide;
     private static ModConfigHoverGuideColorSet ColorConfig => Config.ColorSet;
 
     public override void OnLayout()

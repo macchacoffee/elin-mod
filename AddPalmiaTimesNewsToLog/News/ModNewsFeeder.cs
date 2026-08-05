@@ -30,7 +30,7 @@ public class ModNewsFeeder
     private bool IsNewsReady { get; set; } = false;
     public bool IsRunning => State != RunningState.Stopped;
 
-    private static ModConfig Config => Mod.Config;
+    private static ModConfig Config => ModContext.Config;
 
     public List<string> GetRandomNews()
     {
@@ -57,9 +57,9 @@ public class ModNewsFeeder
     {
         return chat.Cat switch
         {
-            ChatCategory.Dead => Mod.Config.Chat.FetchDead,
-            ChatCategory.Wish => Mod.Config.Chat.FetchWish,
-            ChatCategory.Marriage => Mod.Config.Chat.FetchMarriage,
+            ChatCategory.Dead => ModContext.Config.Chat.FetchDead,
+            ChatCategory.Wish => ModContext.Config.Chat.FetchWish,
+            ChatCategory.Marriage => ModContext.Config.Chat.FetchMarriage,
             _ => false,
         };
     }

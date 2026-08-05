@@ -15,7 +15,7 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
     private Dictionary<string, Func<ModConfigHoverGuideStyle>> StyleFactories { get; }
 
     private ModLayerConfigContext Context => Layer.Data;
-    private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
+    private static ModConfigHoverGuide Config => ModContext.Config.HoverGuide;
 
     public ModLayerConfigTabStyle()
     {

@@ -4,7 +4,7 @@ using AddPalmiaTimesNewsToLog.News;
 
 namespace AddPalmiaTimesNewsToLog;
 
-public static class Mod
+public static class ModContext
 {
     private static readonly string ConfigFileName = $"{PluginInfo.Guid}.txt";
 

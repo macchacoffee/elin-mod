@@ -25,14 +25,14 @@ public static class CharaPatch
             return;
         }
 
-        Mod.NewsFeeder.RequestFetch();
-        var newsList = Mod.NewsFeeder.GetRandomNews();
+        ModContext.NewsFeeder.RequestFetch();
+        var newsList = ModContext.NewsFeeder.GetRandomNews();
         if (newsList.Count == 0)
         {
             return;
         }
 
-        Mod.NewsFeeder.InvalidateNews();
+        ModContext.NewsFeeder.InvalidateNews();
         foreach (var news in newsList)
         {
             LogNews(news);
@@ -41,10 +41,10 @@ public static class CharaPatch
 
     private static void LogNews(string news)
     {
-        switch (Mod.Config.LogTarget)
+        switch (ModContext.Config.LogTarget)
         {
             case ModLogTarget.Log:
-                Msg.Say(news.TagColor(Mod.Config.LogColor));
+                Msg.Say(news.TagColor(ModContext.Config.LogColor));
                 break;
             case ModLogTarget.Feed:
                 // TODO 1件ずつ表示する

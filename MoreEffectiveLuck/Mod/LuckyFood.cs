@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MoreEffectiveLuck.Game;
+namespace MoreEffectiveLuck.Mod;
 
 public class LuckyFood
 {

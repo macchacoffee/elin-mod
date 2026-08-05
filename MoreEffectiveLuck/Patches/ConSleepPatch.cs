@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using ModUtility.Patch;
-using MoreEffectiveLuck.Game;
+using MoreEffectiveLuck.Mod;
 
 namespace MoreEffectiveLuck.Patches;
 
@@ -44,7 +44,7 @@ public static class ConSleepPatch
 
     private static void ApplyLuckyDayCondition()
     {
-        if (!Mod.Config.EnableLuckyDay.Value)
+        if (!ModContext.Config.EnableLuckyDay.Value)
         {
             return;
         }

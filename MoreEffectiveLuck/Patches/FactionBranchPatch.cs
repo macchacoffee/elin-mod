@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using ModUtility.Patch;
-using MoreEffectiveLuck.Game;
+using MoreEffectiveLuck.Mod;
 
 namespace MoreEffectiveLuck.Patches;
 
@@ -63,7 +63,7 @@ public static class FactionBranchPatch
 
     private static void ApplyLuckyMonthCondition()
     {
-        if (!Mod.Config.EnableLuckyMonth.Value)
+        if (!ModContext.Config.EnableLuckyMonth.Value)
         {
             return;
         }

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace AbilityRestriction;
+namespace AbilityRestriction.Mod;
 
 public class ModOriginalActStorage
 {

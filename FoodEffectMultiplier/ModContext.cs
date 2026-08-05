@@ -1,11 +1,11 @@
 using System.IO;
 using BepInEx;
 using BepInEx.Configuration;
-using MoreEffectiveLuck.Config;
+using FoodEffectMultiplier.Config;
 
-namespace MoreEffectiveLuck;
+namespace FoodEffectMultiplier;
 
-public static class Mod
+public static class ModContext
 {
     private static readonly string ConfigFileName = $"{PluginInfo.Guid}.cfg";
 

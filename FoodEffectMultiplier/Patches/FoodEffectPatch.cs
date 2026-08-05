@@ -87,11 +87,11 @@ public static class FoodEffectPatch
 
     private static float GetPCFoodEffectMultiplier(float defaultValue)
     {
-        return Mod.Config.PCMultiplier ?? defaultValue;
+        return ModContext.Config.PCMultiplier.Value >= 0 ? ModContext.Config.PCMultiplier.Value : defaultValue;
     }
 
     private static float GetNPCFoodEffectMultiplier(float defaultValue)
     {
-        return Mod.Config.NPCMultiplier ?? defaultValue;
+        return ModContext.Config.NPCMultiplier.Value >= 0 ? ModContext.Config.NPCMultiplier.Value : defaultValue;
     }
 }

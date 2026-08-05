@@ -1,23 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ModUtility.Config;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace AbilityRestriction;
+namespace AbilityRestriction.Config;
 
 [JsonConverter(typeof(ModConfigConverter))]
-public class ModConfig
+public class ModConfig : JsonModConfigBase<ModConfig>
 {
     [JsonProperty("deniedAbilities")]
-    public ModDeniedAbilities DeniedAbilities { get; init; } = [];
+    public ModConfigDeniedAbilities DeniedAbilities { get; set; } = [];
 
-    public ModDeniedAbility? GetDeniedAbility(int uid)
+    public ModConfigDeniedAbility? GetDeniedAbility(int uid)
     {
         return DeniedAbilities.TryGetValue(uid, out var ability) ? ability : null;
     }
 
-    public void SetDeniedAbility(int uid, ModDeniedAbility deniedAbility)
+    public void SetDeniedAbility(int uid, ModConfigDeniedAbility deniedAbility)
     {
         DeniedAbilities[uid] = deniedAbility;
     }
@@ -43,15 +44,15 @@ public class ModConfig
     }
 }
 
-public class ModDeniedAbilities : Dictionary<int, ModDeniedAbility>;
+public class ModConfigDeniedAbilities : Dictionary<int, ModConfigDeniedAbility>;
 
-public class ModDeniedAbility
+public class ModConfigDeniedAbility
 {
     [JsonProperty("acts")]
-    [JsonConverter(typeof(ModDeniedActConverter))]
-    public HashSet<ModDeniedAct> Acts { get; init; } = [];
+    [JsonConverter(typeof(ModConfigDeniedActConverter))]
+    public HashSet<ModConfigDeniedAct> Acts { get; private set; } = [];
 
-    public bool Contains(ModDeniedAct act)
+    public bool Contains(ModConfigDeniedAct act)
     {
         return Acts.Contains(act);
     }
@@ -66,36 +67,36 @@ public class ModDeniedAbility
         return Acts.Count();
     }
 
-    public bool Add(ModDeniedAct act)
+    public bool Add(ModConfigDeniedAct act)
     {
         return Acts.Add(act);
     }
 
-    public bool Remove(ModDeniedAct act)
+    public bool Remove(ModConfigDeniedAct act)
     {
         return Acts.Remove(act);
     }
 
-    public void IntersectWith(IEnumerable<ModDeniedAct> otherActs)
+    public void IntersectWith(IEnumerable<ModConfigDeniedAct> otherActs)
     {
         Acts.IntersectWith(otherActs);
     }
 }
 
-public record ModDeniedAct
+public record ModConfigDeniedAct
 {
     [JsonProperty("id", DefaultValueHandling = DefaultValueHandling.Include)]
     public int Id { get; init; }
     [JsonProperty("pt", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool Pt { get; init; }
 
-    public ModDeniedAct(int id, bool pt)
+    public ModConfigDeniedAct(int id, bool pt)
     {
         Id = id;
         Pt = pt;
     }
 
-    public ModDeniedAct(ActList.Item act) : this(act.act.id, act.pt) { }
+    public ModConfigDeniedAct(ActList.Item act) : this(act.act.id, act.pt) { }
 }
 
 // Converters for migrating old config data to new one.
@@ -119,7 +120,7 @@ public class ModConfigConverter : JsonConverter<ModConfig>
         }
         else
         {
-            var deniedAbilities = obj.ToObject<ModDeniedAbilities>();
+            var deniedAbilities = obj.ToObject<ModConfigDeniedAbilities>();
             return new()
             {
                 DeniedAbilities = deniedAbilities
@@ -133,11 +134,11 @@ public class ModConfigConverter : JsonConverter<ModConfig>
     }
 }
 
-public class ModDeniedActConverter : JsonConverter<HashSet<ModDeniedAct>>
+public class ModConfigDeniedActConverter : JsonConverter<HashSet<ModConfigDeniedAct>>
 {
     public override bool CanWrite => false;
 
-    public override HashSet<ModDeniedAct> ReadJson(JsonReader reader, Type objectType, HashSet<ModDeniedAct> existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override HashSet<ModConfigDeniedAct> ReadJson(JsonReader reader, Type objectType, HashSet<ModConfigDeniedAct> existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         var token = JToken.Load(reader);
         if (token is not JArray array)
@@ -145,7 +146,7 @@ public class ModDeniedActConverter : JsonConverter<HashSet<ModDeniedAct>>
             throw new JsonSerializationException($"Unexpected JSON format in ModDeniedActConverter: {token}");
         }
 
-        var acts = new HashSet<ModDeniedAct>();
+        var acts = new HashSet<ModConfigDeniedAct>();
         foreach (var element in array)
         {
             if (element.Type == JTokenType.Integer)
@@ -165,7 +166,7 @@ public class ModDeniedActConverter : JsonConverter<HashSet<ModDeniedAct>>
         return acts;
     }
 
-    public override void WriteJson(JsonWriter writer, HashSet<ModDeniedAct> value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, HashSet<ModConfigDeniedAct> value, JsonSerializer serializer)
     {
         throw new NotImplementedException();
     }

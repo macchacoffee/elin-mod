@@ -29,7 +29,7 @@ public class ModHoverGuideItem
         }
     }
 
-    private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
+    private static ModConfigHoverGuide Config => ModContext.Config.HoverGuide;
     private static ModConfigHoverGuideColorSet ColorConfig => Config.ColorSet;
     private static ModConfigHoverGuideStyleChara StyleConfig => Config.CurrentStyle.Chara;
 

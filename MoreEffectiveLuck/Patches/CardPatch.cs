@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using ModUtility.Patch;
-using MoreEffectiveLuck.Game;
+using MoreEffectiveLuck.Mod;
 
 namespace MoreEffectiveLuck.Patches;
 
@@ -208,7 +208,7 @@ public static class CardPatch
     private static Rarity CalculateRarityForCreate(Rarity rarity)
     {
         Rarity resultFunc() => RollRarityForCreate(rarity);
-        if (!Mod.Config.EnableEquipmentRarity.Value)
+        if (!ModContext.Config.EnableEquipmentRarity.Value)
         {
             return resultFunc();
         }
@@ -216,8 +216,8 @@ public static class CardPatch
             resultFunc: resultFunc,
             resultCompareFunc: (result, prev) => result > prev,
             card: EClass.pc,
-            luckPerRoll: Mod.Config.EquipmentRarityLuckPerRoll.Value,
-            maxRoll: Mod.Config.EquipmentRarityMaxRoll.Value
+            luckPerRoll: ModContext.Config.EquipmentRarityLuckPerRoll.Value,
+            maxRoll: ModContext.Config.EquipmentRarityMaxRoll.Value
         );
         return dice.Roll().Value;
     }

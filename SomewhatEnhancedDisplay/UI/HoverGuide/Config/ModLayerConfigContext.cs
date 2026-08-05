@@ -30,7 +30,7 @@ public class ModLayerConfigContext
     public Thing SampleThing { get; set; }
     public ModHoverGuideTargetModifier SampleModifier { get; set; } = new(healthBarRatio: 1);
 
-    private static ModConfigHoverGuide Config => Mod.Config.HoverGuide;
+    private static ModConfigHoverGuide Config => ModContext.Config.HoverGuide;
     public ModConfigHoverGuideStyle SelectedStyle => Config.Styles[SelectedStyleIndex];
     public string SelectedStyleName => GetStyleName(SelectedStyleIndex, SelectedStyle);
 

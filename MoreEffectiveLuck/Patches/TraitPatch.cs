@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using ModUtility.Patch;
-using MoreEffectiveLuck.Game;
+using MoreEffectiveLuck.Mod;
 
 namespace MoreEffectiveLuck.Patches;
 
@@ -132,7 +132,7 @@ public static class TraitPatch
     private static Rarity CalculateRarityForCreateStock(int num2)
     {
         Rarity resultFunc() => RollRarityForCreateStock(num2);
-        if (!Mod.Config.EnableSpecialMerchantRarity.Value)
+        if (!ModContext.Config.EnableSpecialMerchantRarity.Value)
         {
             return resultFunc();
         }
@@ -140,8 +140,8 @@ public static class TraitPatch
             resultFunc: resultFunc,
             resultCompareFunc: (result, prev) => result > prev,
             card: EClass.pc,
-            luckPerRoll: Mod.Config.SpecialMerchantRarityLuckPerRoll.Value,
-            maxRoll: Mod.Config.SpecialMerchantRarityMaxRoll.Value
+            luckPerRoll: ModContext.Config.SpecialMerchantRarityLuckPerRoll.Value,
+            maxRoll: ModContext.Config.SpecialMerchantRarityMaxRoll.Value
         );
         return dice.Roll().Value;
     }

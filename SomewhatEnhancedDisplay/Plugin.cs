@@ -1,5 +1,5 @@
+using System;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using BepInEx;
 using HarmonyLib;
 using SomewhatEnhancedDisplay.UI;
@@ -21,7 +21,14 @@ internal class Plugin : BaseUnityPlugin
     private void Awake()
     {
         Instance = this;
-        Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), PluginInfo.Guid);
+        try
+        {
+            Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), PluginInfo.Guid);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError($"Failed to apply harmony patch: {ex}");
+        }
     }
 
     private void Update()
@@ -29,9 +36,9 @@ internal class Plugin : BaseUnityPlugin
         ModUI.Update();
     }
 
-    internal static void LogDebug(object message, [CallerMemberName] string caller = "")
+    internal static void LogDebug(object message)
     {
-        Instance?.Logger.LogDebug($"[{caller}] {message}");
+        Instance?.Logger.LogDebug(message);
     }
 
     internal static void LogInfo(object message)
