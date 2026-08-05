@@ -13,9 +13,9 @@ public static class PropertyInfoExtensions
     {
         if (!PropertyGetters.TryGetValue(propInfo, out var getter))
         {
-            var param = Expression.Parameter(typeof(TClass));
-            var body = Expression.Property(param, propInfo);
-            getter = Expression.Lambda<Func<TClass, TValue>>(body, param).Compile();
+            var args = Expression.Parameter(typeof(TClass));
+            var body = Expression.Property(args, propInfo);
+            getter = Expression.Lambda<Func<TClass, TValue>>(body, args).Compile();
             PropertyGetters[propInfo] = getter;
         }
         return (getter as Func<TClass, TValue>)!;

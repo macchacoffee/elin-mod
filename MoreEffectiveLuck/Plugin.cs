@@ -4,6 +4,7 @@ using System.Reflection;
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
+using ModUtility.Config;
 using MoreEffectiveLuck.Config;
 
 namespace MoreEffectiveLuck;
@@ -39,10 +40,7 @@ internal class Plugin : BaseUnityPlugin
 
     private void Start()
     {
-        if (AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == "ModConfigGUI") is not null)
-        {
-            ModConfigGUISupport.ResisterConfig(ConfigFile!);
-        }
+        ModConfigGUISupport.ResisterConfig(PluginInfo.Guid, PluginInfo.Name, ConfigFile!);
     }
 
     internal static void LogDebug(object message)
