@@ -9,14 +9,14 @@ namespace EnableDiningSpotSignInTent.Patches;
 [HarmonyPatch(typeof(FoodEffect))]
 public static class FoodEffectPatch
 {
-    private static readonly ModPatchTarget PatchTarget = new(
+    private static readonly ModPatchTarget _patchTarget = new(
         MaxVersion: new Version { minor = 23, batch = 288 }
     );
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
     {
-        return PatchTarget.IsPatchable(original);
+        return _patchTarget.IsPatchable(original);
     }
 
     [HarmonyTranspiler]

@@ -12,36 +12,36 @@ public class ModConfig : JsonModConfigBase<ModConfig>
 public class ModConfigSprite : JsonModConfigBase<ModConfigSprite>
 {
     // お兄ちゃん お兄ちゃん！ お兄ちゃん？ お兄ちゃん！！
-    private static readonly int InitialTileId = 1918;
-    private static readonly int InitialSnowTileId = 1919;
-    private static readonly int InitialEmptyTileId = 0;
+    private static readonly int _initialTileId = 1918;
+    private static readonly int _initialSnowTileId = 1919;
+    private static readonly int _initialEmptyTileId = 0;
 
     [JsonProperty("defaultTile", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModConfigTile DefaultTile { get; private set; } = new() { Enable = true, Id = InitialTileId };
+    public ModConfigTile DefaultTile { get; private set; } = new() { Enable = true, Id = _initialTileId };
 
     [JsonProperty("snowTile", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModConfigTile SnowTile { get; private set; } =  new() { Enable = false, Id = InitialSnowTileId };
+    public ModConfigTile SnowTile { get; private set; } =  new() { Enable = false, Id = _initialSnowTileId };
 
     [JsonProperty("undressTile", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModConfigTile UndressTile { get; private set;} = new() { Enable = false, Id = InitialEmptyTileId };
+    public ModConfigTile UndressTile { get; private set;} = new() { Enable = false, Id = _initialEmptyTileId };
 
     [JsonProperty("rideTile", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModConfigTile RideTile { get; private set; } = new() { Enable = false, Id = InitialEmptyTileId };
+    public ModConfigTile RideTile { get; private set; } = new() { Enable = false, Id = _initialEmptyTileId };
 
     [JsonProperty("rideSnowTile", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModConfigTile RideSnowTile { get; private set; } = new() { Enable = false, Id = InitialEmptyTileId };
+    public ModConfigTile RideSnowTile { get; private set; } = new() { Enable = false, Id = _initialEmptyTileId };
 
     [JsonProperty("combatTile", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModConfigTile CombatTile { get; private set; } = new() { Enable = false, Id = InitialEmptyTileId };
+    public ModConfigTile CombatTile { get; private set; } = new() { Enable = false, Id = _initialEmptyTileId };
 
     [JsonProperty("combatSnowTile", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModConfigTile CombatSnowTile { get; private set; } = new() { Enable = false, Id = InitialEmptyTileId };
+    public ModConfigTile CombatSnowTile { get; private set; } = new() { Enable = false, Id = _initialEmptyTileId };
 
     [JsonProperty("rideCombatTile", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModConfigTile RideCombatTile { get; private set; } = new() { Enable = false, Id = InitialEmptyTileId };
+    public ModConfigTile RideCombatTile { get; private set; } = new() { Enable = false, Id = _initialEmptyTileId };
 
     [JsonProperty("rideCombatSnowTile", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModConfigTile RideCombatSnowTile { get; private set; } = new() { Enable = false, Id = InitialEmptyTileId };
+    public ModConfigTile RideCombatSnowTile { get; private set; } = new() { Enable = false, Id = _initialEmptyTileId };
 }
 
 public class ModConfigTile : JsonModConfigBase<ModConfigTile>

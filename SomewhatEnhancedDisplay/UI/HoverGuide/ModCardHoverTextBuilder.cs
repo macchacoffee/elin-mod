@@ -5,7 +5,7 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
 public static class ModCardHoverTextBuilder
 {
-    private static readonly int PaddingHeight = 1;
+    private static readonly int _paddingHeight = 1;
 
     public static string BuildOtherCardsText(string hoverText, string otherCardsText)
     {
@@ -20,7 +20,7 @@ public static class ModCardHoverTextBuilder
     public static string BuildHoverText(params string?[] sections)
     {
         return string.Join(
-            $"{Environment.NewLine}{Environment.NewLine.TagSize(ModUIUtil.ComputeFontSize(PaddingHeight))}",
+            $"{Environment.NewLine}{Environment.NewLine.TagSize(ModUIUtil.ComputeFontSize(_paddingHeight))}",
             sections.Where(t => !string.IsNullOrEmpty(t)));
     }
 

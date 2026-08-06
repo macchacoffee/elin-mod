@@ -11,12 +11,12 @@ namespace FactionEnchantInInventory.Patches;
 [HarmonyPatch(typeof(ElementContainerFaction))]
 public static class ElementContainerFactionPatch
 {
-    private static readonly ModPatchTarget PatchTarget = new();
+    private static readonly ModPatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
     {
-        return PatchTarget.IsPatchable(original);
+        return _patchTarget.IsPatchable(original);
     }
 
     private class ECFElementExtra
@@ -24,7 +24,7 @@ public static class ElementContainerFactionPatch
         public bool IsApplied { get; set; }
     }
 
-    private static readonly ConditionalWeakTable<Element, ECFElementExtra> ElementExtra = new();
+    private static readonly ConditionalWeakTable<Element, ECFElementExtra> _elementExtra = [];
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(ElementContainerFaction.OnAddMemeber), [typeof(Chara)])]
@@ -122,7 +122,7 @@ public static class ElementContainerFactionPatch
 
     private static bool IsElementApplied(Element element)
     {
-        if (!ElementExtra.TryGetValue(element, out var extra))
+        if (!_elementExtra.TryGetValue(element, out var extra))
         {
             return false;
         }
@@ -141,10 +141,10 @@ public static class ElementContainerFactionPatch
 
     private static void UpdateElementApplied(Element element, bool value)
     {
-        if (!ElementExtra.TryGetValue(element, out var extra))
+        if (!_elementExtra.TryGetValue(element, out var extra))
         {
             extra = new();
-            ElementExtra.Add(element, extra);
+            _elementExtra.Add(element, extra);
         }
         extra.IsApplied = value;
     }

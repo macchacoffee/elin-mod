@@ -6,7 +6,7 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
 public class ModHoverGuide
 {
-    private static readonly float PaddingHeight = 24;
+    private static readonly float _paddingHeight = 24;
 
     private ModHoverGuideItem Item1 { get; }
     private ModHoverGuidePadding Padding1 { get; }
@@ -139,7 +139,7 @@ public class ModHoverGuide
         var fontSize1 = ModUIUtil.ComputeFontSize(BaseFontSize + 2);
         var fontSize2 = ModUIUtil.ComputeFontSize(BaseFontSize + 4);
         var sizeRatio = (float)fontSize2 / BaseFontSize;
-        var paddingHeight = PaddingHeight * sizeRatio;
+        var paddingHeight = _paddingHeight * sizeRatio;
 
         var isItem1Enabled = Item1.Show(fontColor, fontSize1, target1, isLocked);
         var isItem2Enabled = Item2.Show(fontColor, fontSize2, target2, false);

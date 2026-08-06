@@ -9,8 +9,8 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
 public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
 {
-    private static readonly int MinStyleCount = 1;
-    private static readonly int MaxStyleCount = 5;
+    private static readonly int _minStyleCount = 1;
+    private static readonly int _maxStyleCount = 5;
 
     private Dictionary<string, Func<ModConfigHoverGuideStyle>> StyleFactories { get; }
 
@@ -115,8 +115,8 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
         void updateStyleButtons()
         {
             updateStyleDropdown(Context.SelectedStyleIndex, Config.Styles);
-            addStyleButton.SetInteractableWithAlpha(Config.Styles.Count < MaxStyleCount);
-            deleteStyleButton.SetInteractableWithAlpha(Config.Styles.Count > MinStyleCount);
+            addStyleButton.SetInteractableWithAlpha(Config.Styles.Count < _maxStyleCount);
+            deleteStyleButton.SetInteractableWithAlpha(Config.Styles.Count > _minStyleCount);
             moveStyleBackwardButton.SetInteractableWithAlpha(Config.Styles.Count > 1);
             moveStyleforwardButton.SetInteractableWithAlpha(Config.Styles.Count > 1);
         }

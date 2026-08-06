@@ -7,13 +7,13 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
 public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
 {
-    private static readonly Dictionary<ModHealthBarDisplayTarget, string> HealthBarDisplayTargetIdLangs = new() {
+    private static readonly Dictionary<ModHealthBarDisplayTarget, string> _healthBarDisplayTargetIdLangs = new() {
         {ModHealthBarDisplayTarget.None, ModConsts.SourceId.TargetNone},
         {ModHealthBarDisplayTarget.Boss, ModConsts.SourceId.TargetBoss},
         {ModHealthBarDisplayTarget.Elite, ModConsts.SourceId.TargetElite},
         {ModHealthBarDisplayTarget.All, ModConsts.SourceId.TargetAll},
     };
-    private static readonly List<ModHealthBarDisplayTarget> HealthBarDisplayTargets = [.. HealthBarDisplayTargetIdLangs.Keys];
+    private static readonly List<ModHealthBarDisplayTarget> _healthBarDisplayTargets = [.. _healthBarDisplayTargetIdLangs.Keys];
 
     private ModConfigHoverGuideStyleChara Config => SelectedStyle.Chara;
 
@@ -479,11 +479,11 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
             maxColumn: 1,
             new EditStyleDropdownUIItem<ModHealthBarDisplayTarget>(
                 Label: ModConsts.SourceId.Target,
-                Init: HealthBarDisplayTargets.IndexOf(getConfig().Target),
-                Values: HealthBarDisplayTargets,
-                GetLabel: (_, value) => HealthBarDisplayTargetIdLangs[value].lang(),
+                Init: _healthBarDisplayTargets.IndexOf(getConfig().Target),
+                Values: _healthBarDisplayTargets,
+                GetLabel: (_, value) => _healthBarDisplayTargetIdLangs[value].lang(),
                 OnChanged: (_, value) => getConfig().Target = value,
-                GetConfig: () => (HealthBarDisplayTargets.IndexOf(getConfig().Target), HealthBarDisplayTargets)
+                GetConfig: () => (_healthBarDisplayTargets.IndexOf(getConfig().Target), _healthBarDisplayTargets)
             )
         );
         EditStyleUI.Add(

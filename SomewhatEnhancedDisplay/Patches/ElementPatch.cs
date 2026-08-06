@@ -11,15 +11,15 @@ namespace SomewhatEnhancedDisplay.Patches;
 [HarmonyPatch(typeof(Element))]
 public static class ElementPatch
 {
-    private static readonly ModPatchTarget PatchTarget = new();
+    private static readonly ModPatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
     {
-        return PatchTarget.IsPatchable(original);
+        return _patchTarget.IsPatchable(original);
     }
 
-    private static readonly Regex EnchantTextRegex = new(@"(\(-?\d+\)) (\(-?\d+[^\)]*\))", RegexOptions.Compiled);
+    private static readonly Regex _enchantTextRegex = new(@"(\(-?\d+\)) (\(-?\d+[^\)]*\))", RegexOptions.Compiled);
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(Element.AddEncNote), [typeof(UINote), typeof(Card), typeof(ElementContainer.NoteMode), typeof(Func<Element, string, string>), typeof(Action<UINote, Element>)])]
@@ -35,7 +35,7 @@ public static class ElementPatch
         var originalFuncText = funcText;
         funcText = (element, text) =>
         {
-            return EnchantTextRegex.Replace(originalFuncText(element, text), "$2");
+            return _enchantTextRegex.Replace(originalFuncText(element, text), "$2");
         };
     }
 

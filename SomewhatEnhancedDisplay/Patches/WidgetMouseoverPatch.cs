@@ -13,12 +13,12 @@ namespace SomewhatEnhancedDisplay.Patches;
 [HarmonyPatch(typeof(WidgetMouseover))]
 public static class WidgetMouseoverPatch
 {
-    private static readonly ModPatchTarget PatchTarget = new();
+    private static readonly ModPatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
     {
-        return PatchTarget.IsPatchable(original);
+        return _patchTarget.IsPatchable(original);
     }
 
     [HarmonyPostfix]

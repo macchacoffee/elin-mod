@@ -8,12 +8,12 @@ namespace NoPCC.Patches;
 [HarmonyPatch(typeof(Game))]
 public static class GamePatch
 {
-    private static readonly ModPatchTarget PatchTarget = new();
+    private static readonly ModPatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
     {
-        return PatchTarget.IsPatchable(original);
+        return _patchTarget.IsPatchable(original);
     }
 
     [HarmonyPostfix]

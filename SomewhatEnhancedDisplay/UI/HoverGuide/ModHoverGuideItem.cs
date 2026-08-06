@@ -6,7 +6,7 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
 public class ModHoverGuideItem
 {
-    private static readonly int PaddingHeight = 1;
+    private static readonly int _paddingHeight = 1;
 
     private UIText TextName1 { get; }
     private ModHealthBar HealthBar { get; }
@@ -98,7 +98,7 @@ public class ModHoverGuideItem
         {
             if (isPaddingRequired)
             {
-                text2 = $"{Environment.NewLine.TagSize(ModUIUtil.ComputeFontSize(PaddingHeight))}{text2}";
+                text2 = $"{Environment.NewLine.TagSize(ModUIUtil.ComputeFontSize(_paddingHeight))}{text2}";
             }
             text2 = text2.TagColorNullable(ColorConfig.MainTextColor);
             TextName2.fontColor = fontColor;

@@ -11,25 +11,25 @@ namespace EqualizeSpellitemsForMajorElements.Patches;
 [HarmonyPatch(typeof(ElementSelecter))]
 public static class ElementSelecterPatch
 {
-    private static ModPatchTarget PatchTarget = new();
+    private static readonly ModPatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
     {
-        return PatchTarget.IsPatchable(original);
+        return _patchTarget.IsPatchable(original);
     }
 
-    private static readonly List<string> ElementTags;
+    private static readonly List<string> _elementTags;
 
     static ElementSelecterPatch()
     {
         if (EClass.core.version.IsBelow(new Version { minor = 23, batch = 330 }))
         {
-            ElementTags = ["hand", "arrow", "bolt", "ball", "miasma", "funnel", "weapon", "sword"];
+            _elementTags = ["hand", "arrow", "bolt", "ball", "miasma", "funnel", "weapon", "sword"];
         }
         else
         {
-            ElementTags = ["hand", "arrow", "bolt", "ball", "miasma", "funnel", "weapon", "sword", "flare", "comet"];
+            _elementTags = ["hand", "arrow", "bolt", "ball", "miasma", "funnel", "weapon", "sword", "flare", "comet"];
         }
     }
 
@@ -81,7 +81,7 @@ public static class ElementSelecterPatch
         if (row.categorySub == "eleAttack" && row.id != SKILL.eleImpact && row.id != SKILL.eleVoid)
         {
             // 衝撃、無以外の属性の場合は各種魔法をタグに追加する
-            tag = [.. tag.Union(ElementTags)];
+            tag = [.. tag.Union(_elementTags)];
         }
 
         return tag.Contains(alias);

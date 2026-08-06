@@ -7,13 +7,13 @@ namespace FoodEffectMultiplier;
 
 public static class ModContext
 {
-    private static readonly string ConfigFileName = $"{PluginInfo.Guid}.cfg";
+    private static readonly string _configFileName = $"{PluginInfo.Guid}.cfg";
 
     public static ModConfig Config { get; private set; } = new();
 
     public static ConfigFile BindConfig()
     {
-        var configFile = new ConfigFile(Path.Combine(Paths.ConfigPath, ConfigFileName), true);
+        var configFile = new ConfigFile(Path.Combine(Paths.ConfigPath, _configFileName), true);
         Config.Bind(configFile);
         return configFile;
     }

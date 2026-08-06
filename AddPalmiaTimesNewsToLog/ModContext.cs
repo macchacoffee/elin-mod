@@ -6,7 +6,7 @@ namespace AddPalmiaTimesNewsToLog;
 
 public static class ModContext
 {
-    private static readonly string ConfigFileName = $"{PluginInfo.Guid}.txt";
+    private static readonly string _configFileName = $"{PluginInfo.Guid}.txt";
 
     public static ModConfig Config { get; private set; } = new();
 
@@ -14,7 +14,7 @@ public static class ModContext
 
     private static string BuildConfigFilePath(string root)
     {
-        return Path.Combine(root, ConfigFileName);
+        return Path.Combine(root, _configFileName);
     }
 
     public static void LoadConfig(string root)

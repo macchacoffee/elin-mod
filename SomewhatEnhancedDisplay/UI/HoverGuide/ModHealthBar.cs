@@ -10,10 +10,10 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
 public class ModHealthBar
 {
-    private static readonly float Height = 32;
-    private static readonly float BarHeight = 8;
-    private static readonly int ValueFontSize = 16;
-    private static readonly float TweenDelay = 0.1f;
+    private static readonly float _height = 32;
+    private static readonly float _barHeight = 8;
+    private static readonly int _valueFontSize = 16;
+    private static readonly float _tweenDelay = 0.1f;
     private GameObject LayoutObj { get; }
     public LayoutElement Layout { get; }
     private UIImage BGImage { get; }
@@ -217,7 +217,7 @@ public class ModHealthBar
                 .SetLink(LayoutObj)
                 .SetEase(Ease.Linear))
         .SetLink(LayoutObj)
-        .SetDelay(hasOldTween ? 0 : TweenDelay)
+        .SetDelay(hasOldTween ? 0 : _tweenDelay)
         .OnStart(() =>
         {
             if (valueRatio > FGDamageImage.fillAmount)
@@ -261,7 +261,7 @@ public class ModHealthBar
         FGDamageTween = FGDamageImage
             .DOFillAmount((float)ratio, duration)
             .SetLink(LayoutObj)
-            .SetDelay(hasOldTween ? 0 : TweenDelay)
+            .SetDelay(hasOldTween ? 0 : _tweenDelay)
             .SetEase(Ease.Linear)
             .OnComplete(() =>
             {
@@ -272,17 +272,17 @@ public class ModHealthBar
     private void UpdateSize(bool enabled)
 
     {
-        var fontSize = ModUIUtil.ComputeFontSize(ValueFontSize);
+        var fontSize = ModUIUtil.ComputeFontSize(_valueFontSize);
         ValueText.fontSize = fontSize;
         var width = 0f;
         var height = 0f;
         var barHeight = 0f;
         if (enabled)
         {
-            var sizeRatio = (float)fontSize / ValueFontSize;
+            var sizeRatio = (float)fontSize / _valueFontSize;
             width = StyleConfig.HealthBar.Width * sizeRatio;
-            height = Height * sizeRatio;
-            barHeight = BarHeight * sizeRatio;
+            height = _height * sizeRatio;
+            barHeight = _barHeight * sizeRatio;
         }
 
         UpdateTransformSize(Layout, width, height);

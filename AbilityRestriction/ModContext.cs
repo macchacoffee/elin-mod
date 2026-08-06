@@ -7,14 +7,14 @@ namespace AbilityRestriction;
 
 public static class ModContext
 {
-    private static readonly string ConfigFileName = $"{PluginInfo.Guid}.txt";
+    private static readonly string _configFileName = $"{PluginInfo.Guid}.txt";
 
     public static ModOriginalActStorage OriginalActStorage { get; } = new();
     public static ModConfig Config { get; private set; } = new();
 
     private static string BuildConfigFilePath(string root)
     {
-        return Path.Combine(root, ConfigFileName);
+        return Path.Combine(root, _configFileName);
     }
 
     public static void LoadConfig(string root)

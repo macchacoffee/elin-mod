@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using BepInEx;
+using BepInEx.Configuration;
 using HarmonyLib;
 using ModUtility.Config;
 
@@ -18,10 +19,12 @@ internal class Plugin : BaseUnityPlugin
 {
     internal static Plugin? Instance { get; private set; }
     internal static Harmony? Harmony { get; private set; }
+    private static ConfigFile? ConfigFile { get; set; }
 
     private void Awake()
     {
         Instance = this;
+        ConfigFile = ModContext.BindConfig();
         Harmony = new Harmony(PluginInfo.Guid);
         try
         {
@@ -35,8 +38,7 @@ internal class Plugin : BaseUnityPlugin
 
     private void Start()
     {
-        var configFile = ModContext.BindConfig();
-        ModConfigGUISupport.ResisterConfig(PluginInfo.Guid, PluginInfo.Name, configFile);
+        ModConfigGUISupport.ResisterConfig(PluginInfo.Guid, PluginInfo.Name, ConfigFile!);
     }
 
     internal static void LogDebug(object message)
