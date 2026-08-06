@@ -78,7 +78,7 @@ public static class ElementSelecterPatch
     private static bool ContainsTag(SourceElement.Row row, string alias)
     {
         var tag = row.tag;
-        if (row.categorySub == "eleAttack" && row.id != SKILL.eleImpact && row.id != SKILL.eleVoid)
+        if (row.categorySub == "eleAttack" && (ModContext.Config.EnableImpact.Value || row.id != SKILL.eleImpact) && row.id != SKILL.eleVoid)
         {
             // 衝撃、無以外の属性の場合は各種魔法をタグに追加する
             tag = [.. tag.Union(_elementTags)];

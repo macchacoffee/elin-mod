@@ -33,7 +33,7 @@ public static class ElementContainerFactionExtensions
     private static void UpdateRecursive(ElementContainerFaction ecf, Thing thing, Action<ElementContainerFaction, Thing> update)
     {
         // 「それは装備するたびに呪われる」エンチャントが付いているアイテムは対象外とする
-        if (thing.Evalue(ENC.permaCurse) <= 0)
+        if (ModContext.Config.EnablePermaCurse.Value || thing.Evalue(ENC.permaCurse) <= 0)
         {
             update(ecf, thing);
         }
