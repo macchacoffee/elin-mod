@@ -110,6 +110,6 @@ public static class FoodEffectPatch
         {
             return;
         }
-        LuckyFood.ProcFoodEffect(chara, food);
+        ModLuckyFood.ProcFoodEffect(chara, food);
     }
 }

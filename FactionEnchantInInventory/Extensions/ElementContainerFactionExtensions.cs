@@ -6,7 +6,14 @@ public static class ElementContainerFactionExtensions
 {
     public static void OnAdd(this ElementContainerFaction ecf, Thing thing)
     {
-        UpdateRecursive(ecf, thing, (ecf, t) => ecf.OnEquip(t));
+        UpdateRecursive(ecf, thing, (ecf, t) => {
+            // 「それは装備するたびに呪われる」エンチャントが付いているアイテムは対象外とする
+            // 設定で有効な場合は対象外にしない
+            if (ModContext.Config.EnableRecursiveCurse.Value || t.Evalue(ENC.permaCurse) <= 0)
+            {
+                ecf.OnEquip(t);
+            }
+        });
     }
 
     public static void OnAddThings(this ElementContainerFaction ecf, Chara chara)
@@ -32,11 +39,7 @@ public static class ElementContainerFactionExtensions
 
     private static void UpdateRecursive(ElementContainerFaction ecf, Thing thing, Action<ElementContainerFaction, Thing> update)
     {
-        // 「それは装備するたびに呪われる」エンチャントが付いているアイテムは対象外とする
-        if (ModContext.Config.EnablePermaCurse.Value || thing.Evalue(ENC.permaCurse) <= 0)
-        {
-            update(ecf, thing);
-        }
+        update(ecf, thing);
 
         // アイテムが★収納箱以外のコンテナである場合はその内部のアイテムも再帰的に対象とする
         if (!thing.IsContainer || thing.things.IsMagicChest)

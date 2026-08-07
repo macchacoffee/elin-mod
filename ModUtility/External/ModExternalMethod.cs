@@ -1,31 +1,52 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
 namespace ModUtility.External;
 
-public static class ModExternalMethod
+internal sealed class ModExternalMethod
 {
-    public static Lazy<TDelegate?> Create<TDelegate>(Type holderType, string methodName) where TDelegate : Delegate
+     public static ModExternalMethodSet For(Type wrapperType) => new(wrapperType);
+}
+
+public class ModExternalMethodSet(Type wrapperType)
+{
+    private readonly Lazy<Type?> _externalType = new(() =>
     {
-        return new Lazy<TDelegate?>(() => Resolve<TDelegate>(holderType, methodName));
+        var attr = wrapperType.GetCustomAttribute<ModExternalTypeAttribute>() ??
+            throw new InvalidOperationException($"{wrapperType.Name} has no ExternalTypeAttribute attribute");
+        return ModReflection.GetType(attr.AssemblyName, attr.TypeName);
+    });
+    private readonly List<Func<bool>> _requiredMethodChecks = [];
+
+    public bool IsAvailable
+    {
+        get
+        {
+            return _externalType.Value is not null && _requiredMethodChecks.All(check => check());
+        }
     }
 
-    private static TDelegate? Resolve<TDelegate>(Type holderType, string methodName) where TDelegate : Delegate
+    public Lazy<TDelegate?> Create<TDelegate>(string methodName, bool required = true) where TDelegate : Delegate
     {
-        var typeAttr = holderType.GetCustomAttribute<ModExternalTypeAttribute>() ??
-            throw new InvalidOperationException($"{holderType.Name} has no ExternalTypeAttribute attribute");
-        var delegateParams = typeof(TDelegate).GetMethod("Invoke")!.GetParameters();
-        var delegateParamTypes = delegateParams.Select(p => p.ParameterType).ToArray();
+        var method = new Lazy<TDelegate?>(() => Resolve<TDelegate>(methodName));
+        if (required)
+        {
+            _requiredMethodChecks.Add(() => method.Value is not null);
+        }
+        return method;
+    }
 
-        if (ModReflection.GetAssembly(typeAttr.AssemblyName) is not Assembly assembly)
+    private TDelegate? Resolve<TDelegate>(string methodName) where TDelegate : Delegate
+    {
+        if (_externalType.Value is not Type type)
         {
             return null;
         }
-        if (ModReflection.GetType(assembly, typeAttr.TypeName) is not Type type)
-        {
-            return null;
-        }
+
+        var delegateParams = typeof(TDelegate).GetMethod("Invoke").GetParameters();
+        var delegateParamTypes = delegateParams.Select(p => p.ParameterType).ToArray();
 
         var method = ModReflection.GetMethod(type, methodName, delegateParamTypes);
         if (method is { IsStatic: true })

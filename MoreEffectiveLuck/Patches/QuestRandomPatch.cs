@@ -48,7 +48,7 @@ public static class QuestRandomPatch
         {
             return resultFunc();
         }
-        var dice = LuckDice<int>.Create(
+        var dice = ModLuckDice<int>.Create(
             resultFunc: resultFunc,
             resultCompareFunc: (result, prev) => result > prev,
             card: EClass.pc

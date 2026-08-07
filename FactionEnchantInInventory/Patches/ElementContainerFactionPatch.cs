@@ -21,7 +21,24 @@ public static class ElementContainerFactionPatch
 
     private class ECFElementExtra
     {
-        public bool IsApplied { get; set; }
+        public int AppliedCount { get; private set; } = 0;
+        public bool IsApplied => AppliedCount > 0;
+
+        public bool AddApplied()
+        {
+            AppliedCount += 1;
+            return true;
+        }
+
+        public bool RemoveApplied()
+        {
+            if (AppliedCount <= 0)
+            {
+                return false;
+            }
+            AppliedCount -= 1;
+            return true;
+        }
     }
 
     private static readonly ConditionalWeakTable<Element, ECFElementExtra> _elementExtra = [];
@@ -51,11 +68,14 @@ public static class ElementContainerFactionPatch
         //     isDirty = true;
         // }
         // // 変更後
-        // if (value.IsGlobalElement && !ElementContainerFactionPatch.IsElementApplied(value))
+        // if (value.IsGlobalElement)
         // {
-        //     ElementContainerFactionPatch.SetElementApplied(value);
-        //     ModBase(value.id, value.Value).vExp = value.vExp;
-        //     isDirty = true;
+        //     if (!ElementContainerFactionPatch.IsElementApplied(value))
+        //     {
+        //         ModBase(value.id, value.Value).vExp = value.vExp;
+        //         isDirty = true;
+        //     }
+        //     ElementContainerFactionPatch.AddElementApplied(value);
         // }
         // ...
         var matcher = new CodeMatcher(instructions, generator);
@@ -67,15 +87,26 @@ public static class ElementContainerFactionPatch
             new CodeMatch(OpCodes.Brfalse)
         );
         // エンチャントの適用フラグを有効にする処理を追加する
-        var label1 = matcher.Operand;
         matcher.Advance(1);
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Ldloc_1),
             new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ElementContainerFactionPatch), nameof(IsElementApplied), [typeof(Element)])),
-            new CodeInstruction(OpCodes.Brtrue, label1),
-            new CodeInstruction(OpCodes.Ldloc_1),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ElementContainerFactionPatch), nameof(SetElementApplied), [typeof(Element)]))
+            new CodeInstruction(OpCodes.Brtrue, null)
         );
+        var pos1 = matcher.Pos - 1;
+        // stfld bool ElementContainerFaction::isDirty
+        matcher.MatchEndForward(
+            new CodeMatch(OpCodes.Stfld, AccessTools.Field(typeof(ElementContainerFaction), nameof(ElementContainerFaction.isDirty)))
+        );
+        matcher.Advance(1);
+        matcher.Insert(
+            new CodeInstruction(OpCodes.Ldloc_1),
+            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ElementContainerFactionPatch), nameof(AddElementApplied), [typeof(Element)])),
+            new CodeInstruction(OpCodes.Pop)
+        );
+        matcher.CreateLabel(out var labelMod1);
+        matcher.Advance(pos1 - matcher.Pos);
+        matcher.Operand = labelMod1;
 
         return matcher.InstructionEnumeration();
     }
@@ -92,11 +123,13 @@ public static class ElementContainerFactionPatch
         //     isDirty = true;
         // }
         // // 変更後
-        // if (value.IsGlobalElement || ElementContainerFactionPatch.IsElementApplied(value))
+        // if (value.IsGlobalElement)
         // {
-        //     ElementContainerFactionPatch.UnsetEffectApplied(value);
-        //     ModBase(value.id, -value.Value);
-        //     isDirty = true;
+        //     if (ElementContainerFactionPatch.RemoveElementApplied(value) && !ElementContainerFactionPatch.IsElementApplied(value)) 
+        //     {
+        //         ModBase(value.id, -value.Value);
+        //         isDirty = true;
+        //     }
         // }
         var matcher = new CodeMatcher(instructions, generator);
 
@@ -111,10 +144,11 @@ public static class ElementContainerFactionPatch
         matcher.Advance(1);
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Ldloc_1),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ElementContainerFactionPatch), nameof(IsElementApplied), [typeof(Element)])),
+            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ElementContainerFactionPatch), nameof(RemoveElementApplied), [typeof(Element)])),
             new CodeInstruction(OpCodes.Brfalse, label1),
             new CodeInstruction(OpCodes.Ldloc_1),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ElementContainerFactionPatch), nameof(UnsetElementApplied), [typeof(Element)]))
+            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ElementContainerFactionPatch), nameof(IsElementApplied), [typeof(Element)])),
+            new CodeInstruction(OpCodes.Brtrue, label1)
         );
 
         return matcher.InstructionEnumeration();
@@ -129,23 +163,23 @@ public static class ElementContainerFactionPatch
         return extra.IsApplied;
     }
 
-    private static void SetElementApplied(Element element)
+    private static bool AddElementApplied(Element element)
     {
-        UpdateElementApplied(element, true);
+        return GetOrAddElementExtra(element).AddApplied();
     }
 
-    private static void UnsetElementApplied(Element element)
+    private static bool RemoveElementApplied(Element element)
     {
-        UpdateElementApplied(element, false);
+        return GetOrAddElementExtra(element).RemoveApplied();
     }
 
-    private static void UpdateElementApplied(Element element, bool value)
+    private static ECFElementExtra GetOrAddElementExtra(Element element)
     {
         if (!_elementExtra.TryGetValue(element, out var extra))
         {
             extra = new();
             _elementExtra.Add(element, extra);
         }
-        extra.IsApplied = value;
+        return extra;
     }
 }

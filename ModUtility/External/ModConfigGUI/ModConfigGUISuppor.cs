@@ -1,8 +1,7 @@
 using BepInEx.Configuration;
 using ModUtility.External.ModConfigGUI.UI;
-using ModUtility.Util;
 
-namespace ModUtility.Config;
+namespace ModUtility.External.ModConfigGUI;
 
 public static class ModConfigGUISupport
 {

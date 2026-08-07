@@ -80,7 +80,8 @@ public static class ElementSelecterPatch
         var tag = row.tag;
         if (row.categorySub == "eleAttack" && (ModContext.Config.EnableImpact.Value || row.id != SKILL.eleImpact) && row.id != SKILL.eleVoid)
         {
-            // 衝撃、無以外の属性の場合は各種魔法をタグに追加する
+            // 衝撃、無以外の属性であれば各種魔法をタグに追加する
+            // 設定で有効な場合は衝撃属性も対象にする
             tag = [.. tag.Union(_elementTags)];
         }
 

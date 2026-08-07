@@ -8,5 +8,5 @@ public class ModConfig : BepInExModConfigBase<ModConfig>
 
     public BepInExModConfigEntry<bool> EnableImpact { get; } = new(
         _general, "EnableImpact", false,
-        "衝撃属性を有効にする。\nEnable for impact element.");
+        "衝撃属性に対しても有効にする。\nEnable for impact element.");
 }

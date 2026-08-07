@@ -3,7 +3,7 @@ using System.Reflection;
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
-using ModUtility.Config;
+using ModUtility.External.ModConfigGUI;
 
 namespace FoodEffectMultiplier;
 

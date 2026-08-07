@@ -3,7 +3,7 @@ using System;
 
 namespace MoreEffectiveLuck.Mod;
 
-public class LuckDice<T>
+public class ModLuckDice<T>
 {
     public Func<T> ResultFunc { get; }
     public Func<T, T, bool> ResultCompareFunc { get; }
@@ -17,7 +17,7 @@ public class LuckDice<T>
         }
     }
 
-    private LuckDice(Func<T> resultFunc, Func<T, T, bool> resultCompareFunc, int luck, int luckPerRoll, int maxRoll)
+    private ModLuckDice(Func<T> resultFunc, Func<T, T, bool> resultCompareFunc, int luck, int luckPerRoll, int maxRoll)
     {
         ResultFunc = resultFunc;
         ResultCompareFunc = resultCompareFunc;
@@ -25,12 +25,12 @@ public class LuckDice<T>
         ExtraRollCount = Math.Min(Math.Abs(luck / luckPerRoll) + (Math.Abs(luck % luckPerRoll) > EClass.rnd(luckPerRoll) ? 1 : 0), maxRoll);
     }
 
-    public static LuckDice<T> Create(Func<T> resultFunc, Func<T, T, bool> resultCompareFunc, Card card, int? luckPerRoll = null, int? maxRoll = null)
+    public static ModLuckDice<T> Create(Func<T> resultFunc, Func<T, T, bool> resultCompareFunc, Card card, int? luckPerRoll = null, int? maxRoll = null)
     {
         return Create(resultFunc, resultCompareFunc, card.LUC, luckPerRoll, maxRoll);
     }
 
-    public static LuckDice<T> Create(Func<T> resultFunc, Func<T, T, bool> resultCompareFunc, int luck, int? luckPerRoll = null, int? maxRoll = null)
+    public static ModLuckDice<T> Create(Func<T> resultFunc, Func<T, T, bool> resultCompareFunc, int luck, int? luckPerRoll = null, int? maxRoll = null)
     {
         return new(resultFunc, resultCompareFunc, luck, luckPerRoll ??= 100, maxRoll ??= 20);
     }

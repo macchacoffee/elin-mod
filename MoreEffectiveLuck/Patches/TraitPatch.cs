@@ -136,7 +136,7 @@ public static class TraitPatch
         {
             return resultFunc();
         }
-        var dice = LuckDice<Rarity>.Create(
+        var dice = ModLuckDice<Rarity>.Create(
             resultFunc: resultFunc,
             resultCompareFunc: (result, prev) => result > prev,
             card: EClass.pc,

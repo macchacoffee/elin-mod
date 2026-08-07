@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace MoreEffectiveLuck.Mod;
 
-public class LuckyFood
+public class ModLuckyFood
 {
-    private readonly static Dictionary<string, LuckyFood> IdToFood = new()
+    private readonly static Dictionary<string, ModLuckyFood> IdToFood = new()
     {
         ["kagamimochi"] = new(power: 10),
         ["churyu"] = new(power: 22),
@@ -25,9 +25,9 @@ public class LuckyFood
 
     private Func<Thing, int> GetPower { get; }
 
-    private LuckyFood(int power) : this(_ => power) { }
+    private ModLuckyFood(int power) : this(_ => power) { }
 
-    private LuckyFood(Func<Thing, int> getPower)
+    private ModLuckyFood(Func<Thing, int> getPower)
     {
         GetPower = getPower;
     }
