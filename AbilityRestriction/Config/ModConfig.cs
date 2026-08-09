@@ -1,173 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using ModUtility.Config;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using UnityEngine;
 
 namespace AbilityRestriction.Config;
 
-[JsonConverter(typeof(ModConfigConverter))]
-public class ModConfig : JsonModConfigBase<ModConfig>
+public class ModConfig : BepInExModConfigBase<ModConfig>
 {
-    [JsonProperty("deniedAbilities")]
-    public ModConfigDeniedAbilities DeniedAbilities { get; set; } = [];
+    private static readonly string _general = "General";
+    private static readonly string _cheats  = "Cheats";
 
-    public ModConfigDeniedAbility? GetDeniedAbility(int uid)
-    {
-        return DeniedAbilities.TryGetValue(uid, out var ability) ? ability : null;
-    }
+    public BepInExModConfigEntry<bool> EnableViaResidentBoard { get; } = new(
+        _general, "EnableViaResidentBoard", true,
+        "住民掲示板からのアビリティ制限を有効にする。\nEnable ability restrictions via the resident board.");
 
-    public void SetDeniedAbility(int uid, ModConfigDeniedAbility deniedAbility)
-    {
-        DeniedAbilities[uid] = deniedAbility;
-    }
+    public BepInExModConfigEntry<bool> EnableViaConversation { get; } = new(
+        _general, "EnableViaConversation", false,
+        "会話からのアビリティ制限を有効にする。\nEnable ability restrictions via conversation.");
 
-    public bool RemoveDeniedAbility(int uid)
-    {
-        return DeniedAbilities.Remove(uid);
-    }
+    public BepInExModConfigEntry<bool> EnableViaInteraction { get; } = new(
+        _general, "EnableViaInteraction", false,
+        "インタラクションからのアビリティ制限を有効にする。\nEnable ability restrictions via interaction.");
 
-    public void CleanUp()
-    {
-        foreach (var pair in DeniedAbilities.ToArray())
-        {
-            var uid = pair.Key;
-            var ability = pair.Value;
-            if (ability.IsEmpty() || !EClass.game.cards.globalCharas.ContainsKey(uid))
-            {
-                // 所有者のアビリティが禁止されていない、またはその所有者がゲームから消滅している場合、
-                // その所有者の禁止アビリティ設定は不要であるため削除する
-                DeniedAbilities.Remove(uid);
-            }
-        }
-    }
-}
-
-public class ModConfigDeniedAbilities : Dictionary<int, ModConfigDeniedAbility>;
-
-public class ModConfigDeniedAbility
-{
-    [JsonProperty("acts")]
-    [JsonConverter(typeof(ModConfigDeniedActConverter))]
-    public HashSet<ModConfigDeniedAct> Acts { get; private set; } = [];
-
-    public bool Contains(ModConfigDeniedAct act)
-    {
-        return Acts.Contains(act);
-    }
-
-    public bool IsEmpty()
-    {
-        return Acts.Count() == 0;
-    }
-
-    public int Count()
-    {
-        return Acts.Count();
-    }
-
-    public bool Add(ModConfigDeniedAct act)
-    {
-        return Acts.Add(act);
-    }
-
-    public bool Remove(ModConfigDeniedAct act)
-    {
-        return Acts.Remove(act);
-    }
-
-    public void IntersectWith(IEnumerable<ModConfigDeniedAct> otherActs)
-    {
-        Acts.IntersectWith(otherActs);
-    }
-}
-
-public record ModConfigDeniedAct
-{
-    [JsonProperty("id", DefaultValueHandling = DefaultValueHandling.Include)]
-    public int Id { get; init; }
-    [JsonProperty("pt", DefaultValueHandling = DefaultValueHandling.Include)]
-    public bool Pt { get; init; }
-
-    public ModConfigDeniedAct(int id, bool pt)
-    {
-        Id = id;
-        Pt = pt;
-    }
-
-    public ModConfigDeniedAct(ActList.Item act) : this(act.act.id, act.pt) { }
-}
-
-// 旧形式の設定を新形式にマイグレーションするコンバータ
-public class ModConfigConverter : JsonConverter<ModConfig>
-{
-    public override bool CanWrite => false;
-
-    public override ModConfig ReadJson(JsonReader reader, Type objectType, ModConfig existingValue, bool hasExistingValue, JsonSerializer serializer)
-    {
-        var token = JToken.Load(reader);
-        if (token is not JObject obj)
-        {
-            throw new JsonSerializationException($"Unexpected JSON format in ModConfigConverter: {token}");
-        }
-
-        if (obj.ContainsKey("deniedAbilities"))
-        {
-            var config = new ModConfig();
-            serializer.Populate(obj.CreateReader(), config);
-            return config;
-        }
-        else
-        {
-            var deniedAbilities = obj.ToObject<ModConfigDeniedAbilities>();
-            return new()
-            {
-                DeniedAbilities = deniedAbilities
-            };
-        }
-    }
-
-    public override void WriteJson(JsonWriter writer, ModConfig value, JsonSerializer serializer)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-public class ModConfigDeniedActConverter : JsonConverter<HashSet<ModConfigDeniedAct>>
-{
-    public override bool CanWrite => false;
-
-    public override HashSet<ModConfigDeniedAct> ReadJson(JsonReader reader, Type objectType, HashSet<ModConfigDeniedAct> existingValue, bool hasExistingValue, JsonSerializer serializer)
-    {
-        var token = JToken.Load(reader);
-        if (token is not JArray array)
-        {
-            throw new JsonSerializationException($"Unexpected JSON format in ModDeniedActConverter: {token}");
-        }
-
-        var acts = new HashSet<ModConfigDeniedAct>();
-        foreach (var element in array)
-        {
-            if (element.Type == JTokenType.Integer)
-            {
-                var id = element.ToObject<int>();
-                acts.Add(new(id, false));
-                acts.Add(new(id, true));
-            }
-            else
-            {
-                var id = element["id"].ToObject<int>();
-                bool pt = element["pt"].ToObject<bool>();
-                acts.Add(new(id, pt));
-            }
-        }
-
-        return acts;
-    }
-
-    public override void WriteJson(JsonWriter writer, HashSet<ModConfigDeniedAct> value, JsonSerializer serializer)
-    {
-        throw new NotImplementedException();
-    }
+    public BepInExModConfigEntry<bool> EnableForAllNPC { get; } = new(
+        _cheats, "EnableForAllNPC", false,
+        // "すべてのNPCに対してアビリティ制限を有効にする。\n*注意* ゲームバランスが壊れたり予期しない事象を引き起こしたりする可能性があります。\nEnable ability restrictions for all NPC.\n*Warning* This may disrupt game balance or cause unexpected behavior.");
+        $"すべてのNPCに対してアビリティ制限を有効にする。\n{"*注意*".TagColor(Color.red)} ゲームバランスが壊れたり予期しない事象を引き起こしたりする可能性があります。\nEnable ability restrictions for all NPC.\n{"*Warning*".TagColor(Color.red)} This may disrupt game balance or cause unexpected behavior.");
 }

@@ -1,7 +1,9 @@
 using System;
 using System.Reflection;
 using BepInEx;
+using BepInEx.Configuration;
 using HarmonyLib;
+using ModUtility.External.ModConfigGUI;
 
 namespace AbilityRestriction;
 
@@ -9,17 +11,19 @@ public static class PluginInfo
 {
     public const string Guid = "maccha-coffee.ability-restriction";
     public const string Name = "Ability Restriction";
-    public const string Version = "1.1.3";
+    public const string Version = "1.2.0";
 }
 
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]
 internal class Plugin : BaseUnityPlugin
 {
     internal static Plugin? Instance { get; private set; }
+    private static ConfigFile? ConfigFile { get; set; }
 
     private void Awake()
     {
         Instance = this;
+        ConfigFile = ModContext.BindConfig();
         try
         {
             Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), PluginInfo.Guid);
@@ -28,6 +32,11 @@ internal class Plugin : BaseUnityPlugin
         {
             Logger.LogError($"Failed to apply harmony patch: {ex}");
         }
+    }
+
+    private void Start()
+    {
+        ModConfigGUISupport.ResisterConfig(PluginInfo.Guid, PluginInfo.Name, ConfigFile!);
     }
 
     internal static void LogDebug(object message)

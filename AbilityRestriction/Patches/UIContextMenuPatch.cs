@@ -1,9 +1,8 @@
 using System;
 using System.Reflection;
 using HarmonyLib;
-using UnityEngine;
 using ModUtility.Patch;
-using AbilityRestriction.Config;
+using AbilityRestriction.Mod;
 
 namespace AbilityRestriction.Patches;
 
@@ -26,56 +25,27 @@ public static class UIContextMenuPatch
         {
             return;
         }
-
         var chara = BaseListPeoplePatch.TargetChara;
         BaseListPeoplePatch.TargetChara = null;
+        __instance.AddButton(ModConsts.SourceId.RestrictAbilities, ModAbilityRestriction.BuildSettingLayer(chara));
+    }
 
-        var originalActs = ModContext.OriginalActStorage.GetActs(chara);
-        var deniedAbility = ModContext.Config.GetDeniedAbility(chara.uid);
-        if (deniedAbility is null)
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(UIContextMenu.Show), [])]
+    private static void AddButton_Postfix(UIContextMenu __instance)
+    {
+        if (!ModContext.Config.EnableViaInteraction.Value)
         {
-            deniedAbility = new ModConfigDeniedAbility();
+            return;
         }
-
-        __instance.AddButton(ModNames.RestrictAbilities.Text, () =>
+        if (EClass.scene.mouseTarget.card is not Chara chara || __instance.name != "ContextInteraction(Clone)")
         {
-            EClass.ui.AddLayer<LayerList>()
-               .SetListCheck(originalActs,
-               (item) => item.act.Name + (item.pt ? $" ({ModNames.Party.Text})" : ""),
-               (item, _) =>
-               {
-                   var act = new ModConfigDeniedAct(item);
-                   if (deniedAbility.Contains(act))
-                   {
-                       deniedAbility.Remove(act);
-                   }
-                   else
-                   {
-                       deniedAbility.Add(act);
-                   }
-
-                   if (deniedAbility.IsEmpty())
-                   {
-                       ModContext.Config.RemoveDeniedAbility(chara.uid);
-                   }
-                   else
-                   {
-                       ModContext.Config.SetDeniedAbility(chara.uid, deniedAbility);
-                   }
-                   chara.ability.Refresh();
-               }, (buttonPairList) =>
-               {
-                   foreach (var buttonPair in buttonPairList)
-                   {
-                       var button = (buttonPair.component as ItemGeneral)!.button1;
-                       var item = buttonPair.obj as ActList.Item;
-                       var act = new ModConfigDeniedAct(item!);
-                       button.SetCheck(!deniedAbility.Contains(act));
-                       button.GetComponent<CanvasGroup>().enabled = false;
-                   }
-               })
-            .SetHeader(ModNames.RestrictAbilities.Text)
-           .SetSize();
-        });  
+            return;
+        }
+        if (!ModAbilityRestriction.CanRestrictAbility(chara))
+        {
+            return;
+        }
+        __instance.AddButton(ModConsts.SourceId.RestrictAbilities, ModAbilityRestriction.BuildSettingLayer(chara));
     }
 }

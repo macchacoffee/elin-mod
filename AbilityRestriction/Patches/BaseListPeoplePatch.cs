@@ -1,4 +1,5 @@
 using System.Reflection;
+using AbilityRestriction.Mod;
 using HarmonyLib;
 using ModUtility.Patch;
 
@@ -26,11 +27,14 @@ public static class BaseListPeoplePatch
         {
             return;
         }
-        if (c.IsPC || !c.IsHomeMember())
+        if (!ModContext.Config.EnableViaResidentBoard.Value)
         {
             return;
         }
-
+        if (!ModAbilityRestriction.CanRestrictAbility(c))
+        {
+            return;
+        }
         TargetChara = c;
     }
 }

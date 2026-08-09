@@ -19,6 +19,6 @@ public static class GameIOPatch
     [HarmonyPatch(nameof(GameIO.SaveGame), [])]
     private static void SaveGame_Prefix()
     {
-        ModContext.SaveConfig(GameIO.pathCurrentSave);
+        ModContext.SaveWorldConfig(GameIO.pathCurrentSave);
     }
 }

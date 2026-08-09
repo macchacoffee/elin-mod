@@ -22,6 +22,7 @@ public static class ModConsts
         public static readonly string ConfigStyleTargetThing = Prefixed("ConfigStyleTargetThing");
         public static readonly string ColorPicker = Prefixed("ColorPicker");
     }
+
     public static class SourceId
     {
         private const string Prefix = "mc_sed_";
@@ -40,13 +41,13 @@ public static class ModConsts
         public static readonly string Material = Prefixed("material");
         public static readonly string Fressness = Prefixed("fressness");
         public static readonly string LockLv = Prefixed("lockLv");
-        public static readonly string CharaName = Prefixed("chara_name");
+        public static readonly string CharaName = Prefixed("charaName");
         public static readonly string Profile = Prefixed("profile");
-        public static readonly string AffinityFavorite = Prefixed("affinity_favorite");
-        public static readonly string StatusAttributes1 = Prefixed("status_attributes1");
-        public static readonly string StatusAttributes2Others = Prefixed("status_attributes2_others");
-        public static readonly string ThingName = Prefixed("thing_name");
-        public static readonly string ThingExtraInformation = Prefixed("thing_extra_information");
+        public static readonly string AffinityFavorite = Prefixed("affinityFavorite");
+        public static readonly string StatusAttributes1 = Prefixed("statusAttributes1");
+        public static readonly string StatusAttributes2Others = Prefixed("statusAttributes2Others");
+        public static readonly string ThingName = Prefixed("thingName");
+        public static readonly string ThingExtraInformation = Prefixed("thingExtraInformation");
         public static readonly string Others = Prefixed("others");
         public static readonly string Type = Prefixed("type");
         public static readonly string Lv = Prefixed("lv");

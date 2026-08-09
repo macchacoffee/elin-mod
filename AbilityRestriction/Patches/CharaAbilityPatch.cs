@@ -23,7 +23,7 @@ public static class CharaAbilityPatch
     {
         var owner = __instance.owner;
 
-        var deniedAbility = ModContext.Config.GetDeniedAbility(owner.uid);
+        var deniedAbility = ModContext.WorldConfig.GetDeniedAbility(owner.uid);
         if (deniedAbility is null)
         {
             ModContext.OriginalActStorage.RemoveActs(owner);
