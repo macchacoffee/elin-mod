@@ -99,7 +99,7 @@ public record ModConfigDeniedAct
     public ModConfigDeniedAct(ActList.Item act) : this(act.act.id, act.pt) { }
 }
 
-// Converters for migrating old config data to new one.
+// 旧形式の設定を新形式にマイグレーションするコンバータ
 public class ModConfigConverter : JsonConverter<ModConfig>
 {
     public override bool CanWrite => false;
