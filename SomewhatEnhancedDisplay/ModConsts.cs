@@ -4,8 +4,8 @@ public static class ModConsts
 {
     public static class GameObjectName
     {
-        private const string PREFIX = "MCSED";
-        private static string Prefixed(string id) => $"{PREFIX}{id}";
+        private const string Prefix = "MCSED";
+        private static string Prefixed(string id) => $"{Prefix}{id}";
 
         public static readonly string HoverGuideText = Prefixed("HoverGuideText");
         public static readonly string HoverGuidePadding = Prefixed("HoverGuidePadding");
@@ -24,8 +24,8 @@ public static class ModConsts
     }
     public static class SourceId
     {
-        private const string PREFIX = "mc_sed_";
-        private static string Prefixed(string id) => $"{PREFIX}{id}";
+        private const string Prefix = "mc_sed_";
+        private static string Prefixed(string id) => $"{Prefix}{id}";
 
         public static readonly string ModName = Prefixed("modName");
         public static readonly string Chara = Prefixed("chara");
@@ -40,7 +40,13 @@ public static class ModConsts
         public static readonly string Material = Prefixed("material");
         public static readonly string Fressness = Prefixed("fressness");
         public static readonly string LockLv = Prefixed("lockLv");
-        public static readonly string Line = Prefixed("line");
+        public static readonly string CharaName = Prefixed("chara_name");
+        public static readonly string Profile = Prefixed("profile");
+        public static readonly string AffinityFavorite = Prefixed("affinity_favorite");
+        public static readonly string StatusAttributes1 = Prefixed("status_attributes1");
+        public static readonly string StatusAttributes2Others = Prefixed("status_attributes2_others");
+        public static readonly string ThingName = Prefixed("thing_name");
+        public static readonly string ThingExtraInformation = Prefixed("thing_extra_information");
         public static readonly string Others = Prefixed("others");
         public static readonly string Type = Prefixed("type");
         public static readonly string Lv = Prefixed("lv");
@@ -55,8 +61,10 @@ public static class ModConsts
         public static readonly string DisplayFavoriteAlways = Prefixed("displayFavoriteAlways");
         public static readonly string DVPV = Prefixed("dvPV");
         public static readonly string Speed = Prefixed("speed");
+        public static readonly string Luck = Prefixed("luck");
         public static readonly string Exp = Prefixed("exp");
         public static readonly string MainElement = Prefixed("mainElement");
+        public static readonly string DisplayExpForOnlyAlly = Prefixed("displayExpForOnlyAlly");
         public static readonly string PrimaryAttributes = Prefixed("primaryAttributes");
         public static readonly string Feat = Prefixed("feat");
         public static readonly string FeatValue = Prefixed("featValue");

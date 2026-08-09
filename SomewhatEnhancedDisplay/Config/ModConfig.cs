@@ -271,11 +271,17 @@ public class ModConfigHoverGuideStyleChara : JsonModConfigBase<ModConfigHoverGui
     [JsonProperty("displaySpeed", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplaySpeed { get; set; } = true;
 
+    [JsonProperty("displayLuck", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool DisplayLuck { get; set; } = false;
+
     [JsonProperty("displayExp", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayExp { get; set; } = false;
 
     [JsonProperty("displayMainElement", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayMainElement { get; set; } = false;
+
+    [JsonProperty("displayExpForOnlyAlly", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool DisplayExpForOnlyAlly { get; set; } = false;
 
     [JsonProperty("displayPrimaryAttributes", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayPrimaryAttributes { get; set; } = false;

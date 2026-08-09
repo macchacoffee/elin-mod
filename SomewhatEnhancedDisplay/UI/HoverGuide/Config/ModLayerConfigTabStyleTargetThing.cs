@@ -6,14 +6,12 @@ public class ModLayerConfigTabStyleTargetThing : ModLayerConfigTabStyleTarget
     {
         var cellWidth = 200;
         var maxColumn = 3;
-        var line = 0;
 
         Header(ModConsts.SourceId.ConfigDisplayItems);
 
-        line++;
         EditStyleUI.Add(
             layout: this,
-            headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
+            headerLabel: ModConsts.SourceId.ThingName,
             cellWidth: cellWidth,
             maxColumn: maxColumn,
             new EditStyleToogleUIItem(
@@ -30,10 +28,9 @@ public class ModLayerConfigTabStyleTargetThing : ModLayerConfigTabStyleTarget
             )
         );
 
-        line++;
         EditStyleUI.Add(
             layout: this,
-            headerLabel: ModConsts.SourceId.Line.lang(line.ToString()),
+            headerLabel: ModConsts.SourceId.ThingExtraInformation,
             cellWidth: cellWidth,
             maxColumn: maxColumn,
             new EditStyleToogleUIItem(

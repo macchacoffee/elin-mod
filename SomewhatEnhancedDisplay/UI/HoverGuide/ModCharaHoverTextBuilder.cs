@@ -133,11 +133,13 @@ public static class ModCharaHoverTextBuilder
 
     private static string? GetHoverStatus(Chara chara)
     {
+        var displayExp = StyleConfig.DisplayExp && (!StyleConfig.DisplayExpForOnlyAlly || chara.hostility == Hostility.Ally);
         var text = string.Join(" ", new[] {
             StyleConfig.DisplayDVPV ? GetDVText(chara) : null,
             StyleConfig.DisplayDVPV ? GetPVText(chara) : null,
             StyleConfig.DisplaySpeed ? GetSkillSpdText(chara) : null,
-            StyleConfig.DisplayExp ? GetExpText(chara) : null,
+            StyleConfig.DisplayLuck ? GetSkillLucText(chara) : null,
+            displayExp ? GetExpText(chara) : null,
             StyleConfig.DisplayMainElement ? GetMainElementText(chara) : null,
         }.Where(t => !string.IsNullOrEmpty(t)));
         return !string.IsNullOrEmpty(text) ? text.TagSize(ModUIUtil.ComputeFontSize(16)) : null;
@@ -313,23 +315,29 @@ public static class ModCharaHoverTextBuilder
     private static string GetDVText(Chara chara)
     {
         var dvText = "DV:".TagSize(ModUIUtil.ComputeFontSize(13));
-        var dvValueTest = $"{chara.DV}";
-        return $"{dvText}{dvValueTest}";
+        var dvValueText = $"{chara.DV}";
+        return $"{dvText}{dvValueText}";
     }
 
     private static string GetPVText(Chara chara)
     {
         var pvText = "PV:".TagSize(ModUIUtil.ComputeFontSize(13));
-        var pvValueTest = $"{chara.PV}";
-        return $"{pvText}{pvValueTest}";
+        var pvValueText = $"{chara.PV}";
+        return $"{pvText}{pvValueText}";
     }
 
     private static string GetSkillSpdText(Chara chara)
     {
-        var spd = chara.elements.GetElement(SKILL.SPD);
-        var spdText = $"{spd.Name}:".TagSize(ModUIUtil.ComputeFontSize(13));
-        var spdValueTest = $"{spd.Value}";
-        return $"{spdText}{spdValueTest}";
+        var spdText = $"{EClass.sources.elements.map[SKILL.SPD].GetName()}:".TagSize(ModUIUtil.ComputeFontSize(13));
+        var spdValueText = $"{chara.elements.Value(SKILL.SPD)}";
+        return $"{spdText}{spdValueText}";
+    }
+
+    private static string GetSkillLucText(Chara chara)
+    {
+        var lucText = $"{EClass.sources.elements.map[SKILL.LUC].GetName()}:".TagSize(ModUIUtil.ComputeFontSize(13));
+        var lucValueText = $"{chara.elements.Value(SKILL.LUC)}";
+        return $"{lucText}{lucValueText}";
     }
 
     private static string GetExpText(Chara chara)
