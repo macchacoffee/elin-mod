@@ -9,7 +9,7 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
 public static class ModThingHoverTextBuilder
 {
-    private static ModConfigHoverGuide Config => ModContext.Config.HoverGuide;
+    private static ModConfigHoverGuide Config => ModContext.WorldConfig.HoverGuide;
     private static ModConfigHoverGuideColorSet ColorConfig => Config.ColorSet;
     private static ModConfigHoverGuideStyleThing StyleConfig => Config.CurrentStyle.Thing;
 

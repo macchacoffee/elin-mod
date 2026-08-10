@@ -15,7 +15,7 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
     private Dictionary<string, Func<ModConfigHoverGuideStyle>> StyleFactories { get; }
 
     private ModLayerConfigContext Context => Layer.Data;
-    private static ModConfigHoverGuide Config => ModContext.Config.HoverGuide;
+    private static ModConfigHoverGuide Config => ModContext.WorldConfig.HoverGuide;
 
     public ModLayerConfigTabStyle()
     {
@@ -31,17 +31,22 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
     {
         Header(ModConsts.SourceId.ConfigEditStyle);
 
-        Spacer(8);
+        Spacer(6);
+        var styleHeaderLayout = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
+        styleHeaderLayout.Text(ModConsts.SourceId.TextConfigEditStyle.lang("[テスト]"));
+
+        HeaderSmall(ModConsts.SourceId.SelectStyleToEdit);
+
         var styleLayout1 = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
         var (_, updateStyleDropdown) = styleLayout1.AddModDropdown(
-            label: ModConsts.SourceId.SelectStyleToEdit,
+            label: null,
             init: 0,
             values: Config.Styles,
             getLabel: ModLayerConfigContext.GetStyleName,
             onChanged: (index, Value) => Context.SelectedStyleIndex = index,
             width: 240
         );
-        styleLayout1.Spacer(0, 32);
+        styleLayout1.Spacer(0, 6);
         var addStyleButton = styleLayout1.AddModButton(
             label: ModConsts.SourceId.AddStyle,
             onClicked: () =>
@@ -58,9 +63,9 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
                  ).SetSize();
                 layer.SetHeader(ModConsts.SourceId.SelectStyleTemplate);
             },
-            width: 100
+            width: 100,
+            tooltip: ModConsts.SourceId.TooltipAddStyle.lang($"{_maxStyleCount}")
         );
-        styleLayout1.Spacer(0, 6);
         var deleteStyleButton = styleLayout1.AddModButton(
             label: ModConsts.SourceId.DeleteStyle,
             onClicked: () =>
@@ -75,10 +80,11 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
                     SE.Trash();
                 });
             },
-            width: 80
+            width: 80,
+            tooltip: ModConsts.SourceId.TooltipDeleteStyle.lang($"{_minStyleCount}")
         );
 
-        HeaderSmall(ModConsts.SourceId.StyleOperations);
+        HeaderSmall(ModConsts.SourceId.OperationsOnSelectedStyle);
 
         var styleLayout2 = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
         styleLayout2.AddModButton(
@@ -99,7 +105,6 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
         );
 
         var styleLayout3 = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
-
         var moveStyleBackwardButton = styleLayout3.AddModButton(
             label: $"▲ {ModConsts.SourceId.MoveStyleBackward.lang()}",
             onClicked: () => Context.MoveStyleBackward(Context.SelectedStyleIndex),
@@ -128,7 +133,8 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
         Spacer(20);
         Header(ModConsts.SourceId.ConfigPreview);
 
-        Spacer(8);
+        HeaderSmall(ModConsts.SourceId.PreviewTarget);
+
         var previewLayout1 = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
 
         previewLayout1.AddModButton(
@@ -138,7 +144,8 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
                 Context.UpdateSampleCharaRandom();
                 ModUI.HoverGuide?.LockCard(Context.SampleChara, Context.SampleModifier);
             },
-            width: 170
+            width: 170,
+            tooltip: ModConsts.SourceId.TooltipPickPreviewChara
         );
 
         previewLayout1.Spacer(0, 6);
@@ -149,7 +156,8 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
                 Context.UpdateSampleThingRandom();
                 ModUI.HoverGuide?.LockCard(Context.SampleThing, Context.SampleModifier);
             },
-            width: 240
+            width: 240,
+            tooltip: ModConsts.SourceId.TooltipPickPreviewThing
         );
 
         HeaderSmall(ModConsts.SourceId.HealthBar);

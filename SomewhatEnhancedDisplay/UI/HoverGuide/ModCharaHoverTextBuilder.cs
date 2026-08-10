@@ -16,7 +16,7 @@ public static class ModCharaHoverTextBuilder
 
     private static readonly Dictionary<int, IModElement> _noneResistElements;
 
-    private static ModConfigHoverGuide Config => ModContext.Config.HoverGuide;
+    private static ModConfigHoverGuide Config => ModContext.WorldConfig.HoverGuide;
     private static ModConfigHoverGuideColorSet ColorConfig => Config.ColorSet;
     private static ModConfigHoverGuideStyleChara StyleConfig => Config.CurrentStyle.Chara;
 
@@ -49,9 +49,9 @@ public static class ModCharaHoverTextBuilder
         // text3: バフ・デバフ・状態・呪い
         var realChara = chara;
         chara = StyleConfig.DisableMimicry ? chara : chara.MimicryOrSelf;
-        text = text.StartsWith(Environment.NewLine) ? text.Substring(Environment.NewLine.Length) : text;
-        text2 = text2.StartsWith(Environment.NewLine) ? text2.Substring(Environment.NewLine.Length) : text2;
-        text3 = text3.StartsWith(Environment.NewLine) ? text3.Substring(Environment.NewLine.Length) : text3;
+        text = text.StartsWith(Environment.NewLine) ? text[Environment.NewLine.Length..] : text;
+        text2 = text2.StartsWith(Environment.NewLine) ? text2[Environment.NewLine.Length..] : text2;
+        text3 = text3.StartsWith(Environment.NewLine) ? text3[Environment.NewLine.Length..] : text3;
         return ModCardHoverTextBuilder.BuildHoverText(
             ModCardHoverTextBuilder.BuildHoverTextSection(
                 GetHoverTextProfile1(chara, text2),
@@ -107,7 +107,7 @@ public static class ModCharaHoverTextBuilder
             StyleConfig.DisplayAge ? GetAgeText(chara) : null,
             StyleConfig.DisplayRace ? GetRaceText(chara) : null,
             StyleConfig.DisplayJobTactics ? $"{GetJobText(chara)}/{GetTacticsText(chara)}" : null,
-            StyleConfig.DisplayHobby ? hobby : null,
+            hobby,
         }.Where(t => !string.IsNullOrEmpty(t)));
         return !string.IsNullOrEmpty(text) ? text.TagSize(ModUIUtil.ComputeFontSize(13)).TagColor(ColorConfig.SubTextColor) : null;
     }
@@ -116,7 +116,7 @@ public static class ModCharaHoverTextBuilder
     {
         var text = string.Join(" ", new[] {
             StyleConfig.DisplayAffinity ? GetAffinityText(chara) : null,
-            StyleConfig.DisplayFavorite ? fav: null,
+            fav,
         }.Where(t => !string.IsNullOrEmpty(t)));
         return !string.IsNullOrEmpty(text) ? text.TagSize(ModUIUtil.ComputeFontSize(13)).TagColor(ColorConfig.SubTextColor) : null;
     }

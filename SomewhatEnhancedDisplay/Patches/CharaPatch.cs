@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
+using UnityEngine;
 using HarmonyLib;
 using ModUtility.Patch;
 using SomewhatEnhancedDisplay.Config;
 using SomewhatEnhancedDisplay.Extensions;
 using SomewhatEnhancedDisplay.UI;
 using SomewhatEnhancedDisplay.UI.HoverGuide;
-using UnityEngine;
 
 namespace SomewhatEnhancedDisplay.Patches;
 
@@ -23,7 +23,7 @@ public static class CharaPatch
         return _patchTarget.IsPatchable(original);
     }
 
-    private static ModConfigHoverGuide Config => ModContext.Config.HoverGuide;
+    private static ModConfigHoverGuide Config => ModContext.WorldConfig.HoverGuide;
     private static ModConfigHoverGuideStyleChara StyleConfig => Config.CurrentStyle.Chara;
 
     [HarmonyReversePatch(HarmonyReversePatchType.Original)]
@@ -91,10 +91,30 @@ public static class CharaPatch
         // ...
         // string text = ((mimicry != null && mimicry.Card != this) ? mimicry.GetName(NameStyle.Full) : base.Name);
         // ...
+        // if (EClass.pc.HasElement(481))
+        // {
+        //     text2 += ("(" + faith.Name + ")").TagSize(14);
+        // }
+        // ...
+        // if (EClass.pc.HasElement(6607))
+        // {
+        //     s += CraftUtil.GetBloodText(this).TagSize(14).TagColor(EClass.Colors.colorBlood);
+        // }
+        // ...
         // return text + text2 + s;
         // // 変更後
         // if (CharaPatch.IsMimicryEnabled() && mimicry != null && mimicry.IsThing)
         // {
+        // ...
+        // if ((EClass.pc.HasElement(481) && CharaPatch.DisplaysFaith()) || CharaPatch.DisplaysAlwaysFaith())
+        // {
+        //     text2 += ("(" + faith.Name + ")").TagSize(14);
+        // }
+        // ...
+        // if (EClass.pc.HasElement(6607) && CharaPatch.DisplaysBloodTaste()) || CharaPatch.DisplaysAlwaysBloodTaste())
+        // {
+        //     s += CraftUtilPatch.CraftUtilGetBloodTextForCharaHoverText(this).TagSize(14).TagColor(EClass.Colors.colorBlood);
+        // }
         // ...
         // string text = ((mimicry != null && mimicry.Card != this && CharaPatch.IsMimicryEnabled()) ? mimicry.GetName(NameStyle.Full) : CharaPatch.CharaGetNameForHoverText(this, NameStyle.Full));
         // ...
@@ -154,6 +174,68 @@ public static class CharaPatch
         );
         matcher.Opcode = OpCodes.Brtrue;
 
+        // call static Chara EClass::get_pc() [Label28, Label29]
+        // ldc.i4 481
+        // ldc.i4.0 NULL
+        // callvirt bool Card::HasElement(int ele, bool includeNagative)
+        matcher.MatchEndForward(
+            new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(EClass), nameof(EClass.pc))),
+            new CodeMatch(OpCodes.Ldc_I4, 481),
+            new CodeMatch(OpCodes.Ldc_I4_0),
+            new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Card), nameof(Card.HasElement), [typeof(int), typeof(bool)]))
+        );
+        // 信仰の文字列を追加する条件でModの設定を参照するように変更する
+        matcher.Advance(1);
+        var pos1 = matcher.Pos;
+        var label2 = matcher.Operand;
+        matcher.Advance(1);
+        matcher.CreateLabel(out var labelMod1);
+        matcher.InsertAndAdvance(
+            CodeInstruction.Call(() => DisplaysFaith()),
+            new CodeInstruction(OpCodes.Brtrue, labelMod1),
+            CodeInstruction.Call(() => DisplaysAlwaysFaith()),
+            new CodeInstruction(OpCodes.Brfalse, label2)
+        );
+        matcher.CreateLabelWithOffsets(-2, out var labelMod2);
+        matcher.Advance(pos1 - matcher.Pos);
+        matcher.Operand = labelMod2;
+
+        // call static Chara EClass::get_pc() [Label30]
+        // ldc.i4 6607
+        // ldc.i4.0 NULL
+        // callvirt bool Card::HasElement(int ele, bool includeNagative)
+        matcher.MatchEndForward(
+            new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(EClass), nameof(EClass.pc))),
+            new CodeMatch(OpCodes.Ldc_I4, 6607),
+            new CodeMatch(OpCodes.Ldc_I4_0),
+            new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Card), nameof(Card.HasElement), [typeof(int), typeof(bool)]))
+        );
+        // 血の味の文字列を追加する条件でModの設定を参照するように変更する
+        matcher.Advance(1);
+        var pos2 = matcher.Pos;
+        var label3 = matcher.Operand;
+        matcher.Advance(1);
+        matcher.CreateLabel(out var labelMod3);
+        matcher.InsertAndAdvance(
+            CodeInstruction.Call(() => DisplaysBloodTaste()),
+            new CodeInstruction(OpCodes.Brtrue, labelMod3),
+            CodeInstruction.Call(() => DisplaysAlwaysBloodTaste()),
+            new CodeInstruction(OpCodes.Brfalse, label3)
+        );
+        matcher.CreateLabelWithOffsets(-2, out var labelMod4);
+        matcher.Advance(pos2 - matcher.Pos);
+        matcher.Operand = labelMod4;
+
+        // call static string CraftUtil::GetBloodText(Chara c)
+        // 血の味の文字列を取得する処理をModの設定を参照するものに差し替える
+        matcher.MatchStartForward(
+            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(CraftUtil), nameof(CraftUtil.GetBloodText), [typeof(Chara)]))
+        );
+        matcher.RemoveInstruction();
+        matcher.InsertAndAdvance(
+            CodeInstruction.Call(() => CraftUtilPatch.CraftUtilGetBloodTextForCharaHoverText(default!))
+        );
+
         // call static string string::Concat(string str0, string str1, string str2)
         // ret NULL
         matcher.MatchStartForward(
@@ -199,12 +281,12 @@ public static class CharaPatch
         // if (CharaPatch.IsMimicryEnabled() && mimicry != null && mimicry.IsThing)
         // {
         // ...
-        // if (CharaPatch.DisplayFavoriteAlways() || knowFav)
+        // if ((knowFav && CharaPatch.DisplayFavorite()) || CharaPatch.DisplayAlwaysFavorite() || )
         // {
         // ...
         // text = text + $"<size=14>♡" + GetFavCat().GetName().ToLower() + "/" + GetFavFood().GetName() + "</size>";
         // ...
-        // if (CharaPatch.DisplayHobbyAlways() || (EClass.pc.held?.trait is TraitWhipLove && IsPCFaction))
+        // if ((EClass.pc.held?.trait is TraitWhipLove && IsPCFaction && CharaPatch.DisplayHobby()) || CharaPatch.DisplayAlwaysHobby())
         // {
         // ...
         // text4 = CharaPatch.BuildStatsExtraText(text4, item3);
@@ -234,32 +316,28 @@ public static class CharaPatch
 
         // ldarg.0 NULL
         // call bool Chara::get_knowFav()
-        matcher.MatchStartForward(
+        matcher.MatchEndForward(
             new CodeMatch(OpCodes.Ldarg_0),
             new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(Chara), nameof(Chara.knowFav)))
         );
-        // 後で生成するラベルへ遷移する処理を挿入する場所を保存する
-        var start = matcher.Pos;
-
-        // ldloc.0 NULL
-        // call static string Environment::get_NewLine()
-        matcher.MatchStartForward(
-            new CodeMatch(OpCodes.Ldloc_0),
-            new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(Environment), nameof(Environment.NewLine)))
-        );
-        // Modの設定で好物を常に表示する場合の遷移先となるLabelMod1を生成する
-        matcher.CreateLabel(out var LabelMod1);
-
-        //Modの設定で好物を常に表示する場合は常に好物を取得するようにする
-        matcher.Advance(start - matcher.Pos);
+        // 好物の文字列を追加する条件でModの設定を参照するように変更する
+        matcher.Advance(1);
+        var pos1 = matcher.Pos;
+        var label2 = matcher.Operand;
+        matcher.Advance(1);
+        matcher.CreateLabel(out var labelMod1);
         matcher.InsertAndAdvance(
-            CodeInstruction.Call(() => DisplaysFavoriteAlways()),
-            new CodeInstruction(OpCodes.Brtrue, LabelMod1)
+            CodeInstruction.Call(() => DisplaysFavorite()),
+            new CodeInstruction(OpCodes.Brtrue, labelMod1),
+            CodeInstruction.Call(() => DisplaysAlwaysFavorite()),
+            new CodeInstruction(OpCodes.Brfalse, label2)
         );
+        matcher.CreateLabelWithOffsets(-2, out var labelMod2);
+        matcher.Advance(pos1 - matcher.Pos);
+        matcher.Operand = labelMod2;
 
         // ldstr "<size=14>"
         // ldstr "favgift"
-        matcher.Start();
         matcher.MatchStartForward(
             new CodeMatch(OpCodes.Ldstr, "<size=14>"),
             new CodeMatch(OpCodes.Ldstr, "favgift")
@@ -268,7 +346,6 @@ public static class CharaPatch
         matcher.Operand = matcher.Operand + "♡";
         matcher.Advance(1);
         matcher.RemoveInstruction();
-
         // callvirt string string::ToLower()
         // ldarg.0 NULL
         // call SourceThing+Row Chara::GetFavFood()
@@ -282,7 +359,6 @@ public static class CharaPatch
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Ldstr, "/")
         );
-
         // callvirt virtual string SourceData+BaseRow::GetName()
         // ldnull NULL
         // ldnull NULL
@@ -302,48 +378,25 @@ public static class CharaPatch
             new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string), typeof(string)]))
         );
 
-        // call static Chara EClass::get_pc() [Label4]
-        // ldfld Card Chara::held
-        // dup NULL
-        // brtrue Label15
-        // pop NULL
-        // ldnull NULL
-        // br Label16
-        // ldfld Trait Card::trait [Label15]
         // isinst TraitWhipLove [Label16]
-        // brfalse Label17
-        // ldarg.0 NULL
-        // callvirt virtual bool Card::get_IsPCFaction()
-        // brfalse Label18
-        // ldloc.1 NULL
-        matcher.MatchStartForward(
-            new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(EClass), nameof(EClass.pc))),
-            new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.held))),
-            new CodeMatch(OpCodes.Dup),
-            new CodeMatch(OpCodes.Brtrue),
-            new CodeMatch(OpCodes.Pop),
-            new CodeMatch(OpCodes.Ldnull),
-            new CodeMatch(OpCodes.Br),
-            new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Card), nameof(Card.trait))),
-            new CodeMatch(OpCodes.Isinst, typeof(TraitWhipLove)),
-            new CodeMatch(OpCodes.Brfalse),
-            new CodeMatch(OpCodes.Ldarg_0),
-            new CodeMatch(OpCodes.Callvirt, AccessTools.PropertyGetter(typeof(Card), nameof(Card.IsPCFaction))),
-            new CodeMatch(OpCodes.Brfalse),
-            new CodeMatch(OpCodes.Ldloc_1)
+        matcher.MatchEndForward(
+            new CodeMatch(OpCodes.Isinst, typeof(TraitWhipLove))
         );
-        // 趣味・仕事を取得する処理への遷移先となるLabelMod2を生成する
-        matcher.CreateLabelWithOffsets(13, out var labelMod2);
-        // Modの設定で擬態が無効になっている場合は常に趣味・仕事を取得するようにする
+        // 趣味・仕事の文字列を追加する条件でModの設定を参照するように変更する
+        matcher.Advance(1);
+        var pos2 = matcher.Pos;
+        var label3 = matcher.Operand;
+        matcher.Advance(1);
+        matcher.CreateLabel(out var labelMod3);
         matcher.InsertAndAdvance(
-            CodeInstruction.Call(() => DisplaysHobbyAlways()),
-            new CodeInstruction(OpCodes.Brtrue, labelMod2)
+            CodeInstruction.Call(() => DisplaysHobby()),
+            new CodeInstruction(OpCodes.Brtrue, labelMod3),
+            CodeInstruction.Call(() => DisplaysAlwaysHobby()),
+            new CodeInstruction(OpCodes.Brfalse, label3)
         );
-        // 前の条件分岐から追加した命令に遷移できるようにするため、ラベルを移動させる
-        var labelList1 = matcher.Labels.Copy();
-        matcher.Labels.Clear();
-        matcher.Advance(-2);
-        matcher.AddLabels(labelList1);
+        matcher.CreateLabelWithOffsets(-2, out var labelMod4);
+        matcher.Advance(pos2 - matcher.Pos);
+        matcher.Operand = labelMod4;
 
         // ldloc.2 NULL
         // ldstr "<size=14>"
@@ -357,7 +410,6 @@ public static class CharaPatch
         );
         // sizeタグの開始タグを追加する処理を削除する
         matcher.RemoveInstructions(4);
-
         // add NULL
         // stloc.s 9 (System.Int32)
         matcher.MatchEndForward(
@@ -372,7 +424,6 @@ public static class CharaPatch
             CodeInstruction.Call(() => BuildStatsExtraText(default!, default!)),
             new CodeInstruction(OpCodes.Stloc_S, 12)
         );
-
         // call static string ClassExtension::TagColor(string s, UnityEngine.Color c)
         // ldstr ", "
         // call static string string::Concat(string str0, string str1, string str2)
@@ -387,7 +438,6 @@ public static class CharaPatch
             new CodeInstruction(OpCodes.Ldloc_S, 9),
             CodeInstruction.Call(() => ConcatStatsText(default!, default!, default!, default))
         );
-
         // br Label43
         // ldstr "" [Label42]
         // stloc.0 NULL
@@ -401,7 +451,6 @@ public static class CharaPatch
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Pop)
         );
-
         // ldstr ", "
         // call char[] string::ToCharArray()
         // callvirt string string::TrimEnd(char[] trimChars)
@@ -450,14 +499,44 @@ public static class CharaPatch
         return !StyleConfig.DisableMimicry;
     }
 
-    private static bool DisplaysFavoriteAlways()
+    private static bool DisplaysFaith()
     {
-        return StyleConfig.DisplayFavoriteAlways;
+        return StyleConfig.DisplayFaith == ModItemDisplayMode.Show;
     }
 
-    private static bool DisplaysHobbyAlways()
+    private static bool DisplaysAlwaysFaith()
     {
-        return StyleConfig.DisplayHobbyAlways;
+        return StyleConfig.DisplayFaith == ModItemDisplayMode.AlwaysShow;
+    }
+
+    private static bool DisplaysBloodTaste()
+    {
+        return StyleConfig.DisplayBloodTaste == ModItemDisplayMode.Show;
+    }
+
+    private static bool DisplaysAlwaysBloodTaste()
+    {
+        return StyleConfig.DisplayBloodTaste == ModItemDisplayMode.AlwaysShow;
+    }
+
+    private static bool DisplaysFavorite()
+    {
+        return StyleConfig.DisplayFavorite == ModItemDisplayMode.Show;
+    }
+
+    private static bool DisplaysAlwaysFavorite()
+    {
+        return StyleConfig.DisplayFavorite == ModItemDisplayMode.AlwaysShow;
+    }
+
+    private static bool DisplaysHobby()
+    {
+        return StyleConfig.DisplayHobby == ModItemDisplayMode.Show;
+    }
+
+    private static bool DisplaysAlwaysHobby()
+    {
+        return StyleConfig.DisplayHobby == ModItemDisplayMode.AlwaysShow;
     }
 
     private static string IntToString(int value)
@@ -498,10 +577,10 @@ public static class CharaPatch
         var textEnd = ", </size>";
         if (text3.EndsWith(Environment.NewLine))
         {
-            text3 = text3.Substring(0, text3.Length - Environment.NewLine.Length);
+            text3 = text3[..^Environment.NewLine.Length];
             textEnd = "</size>";
         }
-        return $"{text3.Substring(0, text3.LastIndexOf(textEnd))}</size>";
+        return $"{text3[..text3.LastIndexOf(textEnd)]}</size>";
     }
 
     private static string BuildHoverText(string text, string text2, string s, Chara chara)
@@ -518,5 +597,57 @@ public static class CharaPatch
         text2 = text2.TagResize(ComputeFontSize);
         text3 = text3.TagResize(ComputeFontSize);
         return ModCharaHoverTextBuilder.BuildHoverText2(chara, text, text2, text3);
+    }
+
+    [HarmonyPatch(typeof(CraftUtil))]
+    public static class CraftUtilPatch
+    {
+        private static readonly ModPatchTarget _patchTarget = new();
+
+        [HarmonyPrepare]
+        private static bool Prepare(MethodBase? original)
+        {
+            return _patchTarget.IsPatchable(original);
+        }
+
+        private static ModConfigHoverGuide Config => ModContext.WorldConfig.HoverGuide;
+        private static ModConfigHoverGuideStyleChara StyleConfig => Config.CurrentStyle.Chara;
+
+        [HarmonyReversePatch(HarmonyReversePatchType.Original)]
+        [HarmonyPatch(nameof(CraftUtil.GetBloodText), [typeof(Chara)])]
+        public static string CraftUtilGetBloodTextForCharaHoverText(Chara c)
+        {
+            // CraftUtil.GetBloodText()のコードを複製し、ホバーテキスト取得処理向けに変更したスタブを作成する
+            static IEnumerable<CodeInstruction> transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+            {
+                // // 変更前
+                // int num = Mathf.Min(list.Count(), 3, EClass.debug.godMode ? 3 : (1 + EClass.pc.Evalue(6607) / 15));
+                // // 変更後
+                // int num = Mathf.Min(list.Count(), 3, EClass.debug.godMode || CraftUtilPatch.DisplaysAlwaysBloodTaste() ? 3 : (1 + EClass.pc.Evalue(6607) / 15));
+                var matcher = new CodeMatcher(instructions, generator);
+                
+                // ldfld bool CoreDebug::godMode
+                matcher.MatchStartForward(
+                    new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(CoreDebug), nameof(CoreDebug.godMode)))
+                );
+                matcher.Advance(1);
+                var label1 = matcher.Operand;
+                matcher.Advance(1);
+                matcher.InsertAndAdvance(
+                    CodeInstruction.Call(() => DisplaysAlwaysBloodTaste()),
+                    new CodeInstruction(OpCodes.Brtrue, label1)
+                );
+
+                return matcher.InstructionEnumeration();
+            }
+
+            _ = transpiler(null!, null!);
+            return default!;
+        }
+
+        private static bool DisplaysAlwaysBloodTaste()
+        {
+            return StyleConfig.DisplayBloodTaste == ModItemDisplayMode.AlwaysShow;
+        }
     }
 }

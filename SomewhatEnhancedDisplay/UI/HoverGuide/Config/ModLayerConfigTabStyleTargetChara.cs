@@ -36,13 +36,36 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
                 Label: ModConsts.SourceId.Type,
                 Init: Config.DisplayType,
                 OnChanged: value => Config.DisplayType = value,
-                GetConfig: () => Config.DisplayType
+                GetConfig: () => Config.DisplayType,
+                Tooltip: ModConsts.SourceId.TooltipCharaType
             ),
             new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Lv,
                 Init: Config.DisplayLv,
                 OnChanged: value => Config.DisplayLv = value,
                 GetConfig: () => Config.DisplayLv
+            )
+        );
+
+        EditStyleUI.Add(
+            layout: this,
+            headerLabel: ModConsts.SourceId.Faith,
+            cellWidth: cellWidth2,
+            maxColumn: maxColumn2,
+            CreateItemDisplayModeDropdownUIItem(
+                onChanged: value => Config.DisplayFaith = value,
+                getConfig: () => Config.DisplayFaith
+            )
+        );
+
+        EditStyleUI.Add(
+            layout: this,
+            headerLabel: ModConsts.SourceId.BloodTaste,
+            cellWidth: cellWidth2,
+            maxColumn: maxColumn2,
+            CreateItemDisplayModeDropdownUIItem(
+                onChanged: value => Config.DisplayBloodTaste = value,
+                getConfig: () => Config.DisplayBloodTaste
             )
         );
 
@@ -56,8 +79,71 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
                 Init: Config.DisplayHealthBar,
                 OnChanged: value => Config.DisplayHealthBar = value,
                 GetConfig: () => Config.DisplayHealthBar
+            ),
+            new EditStyleToogleUIItem(
+                Label: ModConsts.SourceId.HealthBarValue,
+                Init: Config.HealthBar.DisplayValue,
+                OnChanged: value => Config.HealthBar.DisplayValue = value,
+                GetConfig: () => Config.HealthBar.DisplayValue
             )
         );
+        EditStyleUI.Add(
+            layout: this,
+            headerLabel: null,
+            cellWidth: cellWidth1,
+            maxColumn: maxColumn1,
+            new EditStyleToogleUIItem(
+                Label: ModConsts.SourceId.UseAnimation,
+                Init: Config.HealthBar.UseAnimation,
+                OnChanged: value => Config.HealthBar.UseAnimation = value,
+                GetConfig: () => Config.HealthBar.UseAnimation,
+                Tooltip: ModConsts.SourceId.TooltipUseAnimation
+            )
+        );
+        EditStyleUI.Add(
+            layout: this,
+            headerLabel: null,
+            cellWidth: cellWidth1,
+            maxColumn: maxColumn1,
+            new EditStyleSliderUIItem(
+                GetLabel: value => $"{ModConsts.SourceId.HealthBarWidth.lang()}({value})",
+                Init: Config.HealthBar.Width,
+                Min: 200,
+                Max: 800,
+                Step: 10,
+                OnChanged: value => Config.HealthBar.Width = (int)value,
+                GetConfig: () => Config.HealthBar.Width
+            )
+        );
+        AddHealthBarDisplay(
+            layout: this,
+            getConfig: () => Config.HealthBar.DisplayForEnemy,
+            headerLabel: ModConsts.SourceId.Enemy,
+            cellWidth: cellWidth1,
+            maxColumn: maxColumn1
+        );
+        AddHealthBarDisplay(
+            layout: this,
+            getConfig: () => Config.HealthBar.DisplayForNetural,
+            headerLabel: ModConsts.SourceId.Netural,
+            cellWidth: cellWidth1,
+            maxColumn: maxColumn1
+        );
+        AddHealthBarDisplay(
+            layout: this,
+            getConfig: () => Config.HealthBar.DisplayForFriend,
+            headerLabel: ModConsts.SourceId.Friend,
+            cellWidth: cellWidth1,
+            maxColumn: maxColumn1
+        );
+        AddHealthBarDisplay(
+            layout: this,
+            getConfig: () => Config.HealthBar.DisplayForAlly,
+            headerLabel: ModConsts.SourceId.Ally,
+            cellWidth: cellWidth1,
+            maxColumn: maxColumn1
+        );
+
 
         EditStyleUI.Add(
             layout: this,
@@ -89,53 +175,32 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
                 GetConfig: () => Config.DisplayJobTactics
             ),
             new EditStyleToogleUIItem(
-                Label: ModConsts.SourceId.Hobby,
-                Init: Config.DisplayHobby,
-                OnChanged: value => Config.DisplayHobby = value,
-                GetConfig: () => Config.DisplayHobby
-            )
-        );
-        EditStyleUI.Add(
-            layout: this,
-            headerLabel: null,
-            cellWidth: cellWidth2,
-            maxColumn: maxColumn2,
-            new EditStyleToogleUIItem(
-                Label: ModConsts.SourceId.DisplayHobbyAlways,
-                Init: Config.DisplayHobbyAlways,
-                OnChanged: value => Config.DisplayHobbyAlways = value,
-                GetConfig: () => Config.DisplayHobbyAlways
+                Label: ModConsts.SourceId.Affinity,
+                Init: Config.DisplayAffinity,
+                OnChanged: value => Config.DisplayAffinity = value,
+                GetConfig: () => Config.DisplayAffinity
             )
         );
 
         EditStyleUI.Add(
             layout: this,
-            headerLabel: ModConsts.SourceId.AffinityFavorite,
-            cellWidth: cellWidth1,
-            maxColumn: maxColumn1,
-            new EditStyleToogleUIItem(
-                Label: ModConsts.SourceId.Affinity,
-                Init: Config.DisplayAffinity,
-                OnChanged: value => Config.DisplayAffinity = value,
-                GetConfig: () => Config.DisplayAffinity
-            ),
-            new EditStyleToogleUIItem(
-                Label: ModConsts.SourceId.Favorite,
-                Init: Config.DisplayFavorite,
-                OnChanged: value => Config.DisplayFavorite = value,
-                GetConfig: () => Config.DisplayFavorite
-            )
-        );
-        EditStyleUI.Add(
-            layout: this,
-            headerLabel: null,
+            headerLabel: ModConsts.SourceId.Hobby,
             cellWidth: cellWidth2,
             maxColumn: maxColumn2,
-            new EditStyleToogleUIItem(
-                Label: ModConsts.SourceId.DisplayFavoriteAlways,
-                Init: Config.DisplayFavoriteAlways,
-                OnChanged: value => Config.DisplayFavoriteAlways = value,
-                GetConfig: () => Config.DisplayFavoriteAlways
+            CreateItemDisplayModeDropdownUIItem(
+                onChanged: value => Config.DisplayHobby = value,
+                getConfig: () => Config.DisplayHobby
+            )
+        );
+
+        EditStyleUI.Add(
+            layout: this,
+            headerLabel: ModConsts.SourceId.Favorite,
+            cellWidth: cellWidth2,
+            maxColumn: maxColumn2,
+            CreateItemDisplayModeDropdownUIItem(
+                onChanged: value => Config.DisplayFavorite = value,
+                getConfig: () => Config.DisplayFavorite
             )
         );
 
@@ -230,7 +295,7 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
             layout: this,
             headerLabel: ModConsts.SourceId.Feat,
             cellWidth: cellWidth1,
-            maxColumn: 2,
+            maxColumn: maxColumn1,
             new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Feat,
                 Init: Config.DisplayFeat,
@@ -242,13 +307,25 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
                 Init: Config.DisplayFeatValue,
                 OnChanged: value => Config.DisplayFeatValue = value,
                 GetConfig: () => Config.DisplayFeatValue
-            ),
+            )
+        );
+        EditStyleUI.Add(
+            layout: this,
+            headerLabel: null,
+            cellWidth: cellWidth1,
+            maxColumn: maxColumn1,
             new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.WrapLine,
                 Init: Config.FeatLineWrapping.Enable,
                 OnChanged: value => Config.FeatLineWrapping.Enable = value,
                 GetConfig: () => Config.FeatLineWrapping.Enable
-            ),
+            )
+        );
+        EditStyleUI.Add(
+            layout: this,
+            headerLabel: null,
+            cellWidth: cellWidth1,
+            maxColumn: maxColumn1,
             new EditStyleSliderUIItem(
                 GetLabel: value => $"{ModConsts.SourceId.MaxItemsPerLine.lang()}({value})",
                 Init: Config.FeatLineWrapping.MaxItemsPerLine,
@@ -264,7 +341,7 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
             layout: this,
             headerLabel: ModConsts.SourceId.Act,
             cellWidth: cellWidth1,
-            maxColumn: 2,
+            maxColumn: maxColumn1,
             new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Act,
                 Init: Config.DisplayAct,
@@ -276,13 +353,25 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
                 Init: Config.DisplayActParty,
                 OnChanged: value => Config.DisplayActParty = value,
                 GetConfig: () => Config.DisplayActParty
-            ),
+            )
+        );
+        EditStyleUI.Add(
+            layout: this,
+            headerLabel: null,
+            cellWidth: cellWidth1,
+            maxColumn: maxColumn1,
             new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.WrapLine,
                 Init: Config.ActLineWrapping.Enable,
                 OnChanged: value => Config.ActLineWrapping.Enable = value,
                 GetConfig: () => Config.ActLineWrapping.Enable
-            ),
+            )
+        );
+        EditStyleUI.Add(
+            layout: this,
+            headerLabel: null,
+            cellWidth: cellWidth1,
+            maxColumn: maxColumn1,
             new EditStyleSliderUIItem(
                 GetLabel: value => $"{ModConsts.SourceId.MaxItemsPerLine.lang()}({value})",
                 Init: Config.ActLineWrapping.MaxItemsPerLine,
@@ -318,22 +407,25 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
             cellWidth: cellWidth1,
             maxColumn: maxColumn1,
             new EditStyleToogleUIItem(
-                Label: ModConsts.SourceId.GroupResistByLavel,
+                Label: ModConsts.SourceId.GroupResistByLevel,
                 Init: Config.GroupResistByLavel,
                 OnChanged: value => Config.GroupResistByLavel = value,
-                GetConfig: () => Config.GroupResistByLavel
+                GetConfig: () => Config.GroupResistByLavel,
+                Tooltip: ModConsts.SourceId.TooltipGroupResistByLevel
             ),
             new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.UseShortResistLavelLabel,
                 Init: Config.UseShortResistLavelLabel,
                 OnChanged: value => Config.UseShortResistLavelLabel = value,
-                GetConfig: () => Config.UseShortResistLavelLabel
+                GetConfig: () => Config.UseShortResistLavelLabel,
+                Tooltip: ModConsts.SourceId.TooltipUseShortResistLavelLabel
             ),
             new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.DisplayNoneResistLevel,
                 Init: Config.DisplayNoneResistLevel,
                 OnChanged: value => Config.DisplayNoneResistLevel = value,
-                GetConfig: () => Config.DisplayNoneResistLevel
+                GetConfig: () => Config.DisplayNoneResistLevel,
+                Tooltip: ModConsts.SourceId.TooltipDisplayNoneResistLevel
             )
         );
         EditStyleUI.Add(
@@ -346,7 +438,13 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
                 Init: Config.ResistLineWrapping.Enable,
                 OnChanged: value => Config.ResistLineWrapping.Enable = value,
                 GetConfig: () => Config.ResistLineWrapping.Enable
-            ),
+            )
+        );
+        EditStyleUI.Add(
+            layout: this,
+            headerLabel: null,
+            cellWidth: cellWidth1,
+            maxColumn: maxColumn1,
             new EditStyleSliderUIItem(
                 GetLabel: value => $"{ModConsts.SourceId.MaxItemsPerLine.lang()}({value})",
                 Init: Config.ResistLineWrapping.MaxItemsPerLine,
@@ -362,7 +460,7 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
             layout: this,
             headerLabel: ModConsts.SourceId.Stats,
             cellWidth: cellWidth1,
-            maxColumn: 2,
+            maxColumn: maxColumn1,
             new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.Stats,
                 Init: Config.DisplayStats,
@@ -374,13 +472,25 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
                 Init: Config.DisplayStatsValue,
                 OnChanged: value => Config.DisplayStatsValue = value,
                 GetConfig: () => Config.DisplayStatsValue
-            ),
+            )
+        );
+        EditStyleUI.Add(
+            layout: this,
+            headerLabel: null,
+            cellWidth: cellWidth1,
+            maxColumn: maxColumn1,
             new EditStyleToogleUIItem(
                 Label: ModConsts.SourceId.WrapLine,
                 Init: Config.StatsLineWrapping.Enable,
                 OnChanged: value => Config.StatsLineWrapping.Enable = value,
                 GetConfig: () => Config.StatsLineWrapping.Enable
-            ),
+            )
+        );
+        EditStyleUI.Add(
+            layout: this,
+            headerLabel: null,
+            cellWidth: cellWidth1,
+            maxColumn: maxColumn1,
             new EditStyleSliderUIItem(
                 GetLabel: value => $"{ModConsts.SourceId.MaxItemsPerLine.lang()}({value})",
                 Init: Config.StatsLineWrapping.MaxItemsPerLine,
@@ -415,77 +525,17 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
                 Tooltip: ModConsts.SourceId.TooltipDisableMimicry
             )
         );
-
-        Spacer(20);
-        Header(ModConsts.SourceId.HealthBar);
-
-        EditStyleUI.Add(
-            layout: this,
-            headerLabel: null,
-            cellWidth: cellWidth1,
-            maxColumn: 2,
-            new EditStyleToogleUIItem(
-                Label: ModConsts.SourceId.DisplayValue,
-                Init: Config.HealthBar.DisplayValue,
-                OnChanged: value => Config.HealthBar.DisplayValue = value,
-                GetConfig: () => Config.HealthBar.DisplayValue
-            ),
-            new EditStyleToogleUIItem(
-                Label: ModConsts.SourceId.UseAnimation,
-                Init: Config.HealthBar.UseAnimation,
-                OnChanged: value => Config.HealthBar.UseAnimation = value,
-                GetConfig: () => Config.HealthBar.UseAnimation
-            ),
-            new EditStyleSliderUIItem(
-                GetLabel: value => $"{ModConsts.SourceId.Width.lang()}({value})",
-                Init: Config.HealthBar.Width,
-                Min: 200,
-                Max: 800,
-                Step: 10,
-                OnChanged: value => Config.HealthBar.Width = (int)value,
-                GetConfig: () => Config.HealthBar.Width
-            )
-        );
-
-        AddHealthBarDisplay(
-            layout: this,
-            getConfig: () => Config.HealthBar.DisplayForEnemy,
-            headerLabel: ModConsts.SourceId.Enemy,
-            cellWidth: cellWidth1,
-            maxColumn: maxColumn1
-        );
-        AddHealthBarDisplay(
-            layout: this,
-            getConfig: () => Config.HealthBar.DisplayForNetural,
-            headerLabel: ModConsts.SourceId.Netural,
-            cellWidth: cellWidth1,
-            maxColumn: maxColumn1
-        );
-        AddHealthBarDisplay(
-            layout: this,
-            getConfig: () =>  Config.HealthBar.DisplayForFriend,
-            headerLabel: ModConsts.SourceId.Friend,
-            cellWidth: cellWidth1,
-            maxColumn: maxColumn1
-        );
-        AddHealthBarDisplay(
-            layout: this,
-            getConfig: () => Config.HealthBar.DisplayForAlly,
-            headerLabel: ModConsts.SourceId.Ally,
-            cellWidth: cellWidth1,
-            maxColumn: maxColumn1
-        );
     }
 
     private void AddHealthBarDisplay(YKLayout layout, Func<ModConfigHealthBarDisplay> getConfig, string headerLabel, int cellWidth, int maxColumn)
     {
         EditStyleUI.Add(
             layout: layout,
-            headerLabel: headerLabel,
+            headerLabel: $"{ModConsts.SourceId.HealthBar.lang()} ({headerLabel.lang()})",
             cellWidth: (int)(cellWidth * 1.2),
             maxColumn: 1,
             new EditStyleDropdownUIItem<ModHealthBarDisplayTarget>(
-                Label: ModConsts.SourceId.Target,
+                Label: null,
                 Init: _healthBarDisplayTargets.IndexOf(getConfig().Target),
                 Values: _healthBarDisplayTargets,
                 GetLabel: (_, value) => _healthBarDisplayTargetIdLangs[value].lang(),

@@ -36,7 +36,7 @@ public static class ConSleepPatch
         );
         matcher.Advance(1);
         matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ConSleepPatch), nameof(ApplyLuckyDayCondition)))
+            CodeInstruction.Call(() => ApplyLuckyDayCondition())
         );
 
         return matcher.InstructionEnumeration();

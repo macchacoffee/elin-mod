@@ -55,7 +55,7 @@ public static class FactionBranchPatch
             new CodeMatch(OpCodes.Stfld, AccessTools.Field(typeof(FactionBranch), nameof(FactionBranch.luckyMonthDone)))
         );
         matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(FactionBranchPatch), nameof(ApplyLuckyMonthCondition)))
+            CodeInstruction.Call(() => ApplyLuckyMonthCondition())
         );
 
         return matcher.InstructionEnumeration();

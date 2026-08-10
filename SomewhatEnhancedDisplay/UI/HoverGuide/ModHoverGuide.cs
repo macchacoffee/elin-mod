@@ -19,7 +19,7 @@ public class ModHoverGuide
     private WeakReference<Card?> LockedCard { get; set; } = new(null);
     private ModHoverGuideTargetModifier? LockedModifier { get; set; }
 
-    private static ModConfigHoverGuide Config => ModContext.Config.HoverGuide;
+    private static ModConfigHoverGuide Config => ModContext.WorldConfig.HoverGuide;
 
     public ModHoverGuide(WidgetMouseover widget)
     {

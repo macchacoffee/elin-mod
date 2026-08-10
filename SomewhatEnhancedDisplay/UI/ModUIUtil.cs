@@ -9,13 +9,13 @@ public static class ModUIUtil
     public static int ComputeFontSize(int baseSize)
     {
         var gameConfigSize = EClass.core.config.font.fontWidget.size;
-        return (int)((baseSize + gameConfigSize) * ModContext.Config.HoverGuide.ZoomScale);
+        return (int)((baseSize + gameConfigSize) * ModContext.WorldConfig.HoverGuide.ZoomScale);
     }
 
     public static float ComputeFontSize(float baseSize)
     {
         var gameConfigSize = EClass.core.config.font.fontWidget.size;
-        return (baseSize + gameConfigSize) * ModContext.Config.HoverGuide.ZoomScale;
+        return (baseSize + gameConfigSize) * ModContext.WorldConfig.HoverGuide.ZoomScale;
     }
 
     public static Sprite Create1x1WhiteSprite()

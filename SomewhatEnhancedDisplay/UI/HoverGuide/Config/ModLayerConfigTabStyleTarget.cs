@@ -10,6 +10,13 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
 public abstract class ModLayerConfigTabStyleTarget : YKLayout<ModLayerConfigContext>
 {
+    private static readonly Dictionary<ModItemDisplayMode, string> _itemDisplayModeIdLangs = new() {
+        {ModItemDisplayMode.Hide, ModConsts.SourceId.ItemDisplayModeHide},
+        {ModItemDisplayMode.Show, ModConsts.SourceId.ItemDisplayModeShow},
+        {ModItemDisplayMode.AlwaysShow, ModConsts.SourceId.ItemDisplayModeAlwaysShow}
+    };
+    private static readonly List<ModItemDisplayMode> _itemDisplayModes = [.. _itemDisplayModeIdLangs.Keys];
+
     protected EditStyleUIManager EditStyleUI { get; private set; } = new();
 
     protected ModLayerConfigContext Context => Layer.Data;
@@ -65,7 +72,7 @@ public abstract class ModLayerConfigTabStyleTarget : YKLayout<ModLayerConfigCont
 
 
     protected record EditStyleDropdownUIItem<T>(
-         string Label,
+         string? Label,
          int Init,
          IEnumerable<T> Values,
          Func<int, T, string> GetLabel,
@@ -81,6 +88,18 @@ public abstract class ModLayerConfigTabStyleTarget : YKLayout<ModLayerConfigCont
                 updateDropdown(index, values);
             });
         }
+    }
+
+    protected EditStyleDropdownUIItem<ModItemDisplayMode> CreateItemDisplayModeDropdownUIItem(Action<ModItemDisplayMode> onChanged, Func<ModItemDisplayMode> getConfig)
+    {
+        return new(
+            Label: null,
+            Init: _itemDisplayModes.IndexOf(getConfig()),
+            Values: _itemDisplayModes,
+            GetLabel: (_, value) => _itemDisplayModeIdLangs[value].lang(),
+            OnChanged: (_, value) => onChanged(value),
+            GetConfig: () => (_itemDisplayModes.IndexOf(getConfig()), _itemDisplayModes)
+        );
     }
 
     protected record UIListenerSet(Action? OnSelectedStyleChanged = null);

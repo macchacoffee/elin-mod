@@ -71,7 +71,6 @@ public static class YKLayoutExtensions
     public static UIButton AddModColorPicker(this YKLayout layout, string label, Color? init, Action<Color> onChanged, string? tooltip = null)
     {
         var initColor = init ?? Color.clear;
-
         var button = Util.Instantiate<ButtonGeneral>($"{CorePath.UI.Button}ButtonColor", layout);
         button.icon.color = initColor;
         button.mainText.text = label.lang();
@@ -99,7 +98,6 @@ public static class YKLayoutExtensions
             button.SetTooltipLang(tooltip);
             button.tooltip.icon = true;
         }
-
         return button;
     }
 }

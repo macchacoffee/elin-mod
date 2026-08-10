@@ -60,7 +60,7 @@ public static class FoodEffectPatch
             new CodeInstruction(OpCodes.Ldloc_0),
             new CodeInstruction(OpCodes.Ldfld, charaOperand),
             new CodeInstruction(OpCodes.Ldarg_1),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(FoodEffectPatch), nameof(ProcLuckyFood), [typeof(Chara), typeof(Thing)]))
+            CodeInstruction.Call(() => ProcLuckyFood(default!, default!))
         );
         matcher.AddLabels(labelList1);
 
@@ -98,7 +98,7 @@ public static class FoodEffectPatch
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Ldarg_0),
             new CodeInstruction(OpCodes.Ldarg_1),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(FoodEffectPatch), nameof(ProcLuckyFood), [typeof(Chara), typeof(Thing)]))
+            CodeInstruction.Call(() => ProcLuckyFood(default!, default!))
         );
 
         return matcher.InstructionEnumeration();

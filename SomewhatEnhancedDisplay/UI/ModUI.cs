@@ -11,9 +11,7 @@ public static class ModUI
 
     public static void Update()
     {
-        // TODO
-        var key = new KeyboardShortcut(KeyCode.H);
-        if (key.IsDown())
+        if (new KeyboardShortcut(ModContext.Config.NextStyleKey.Value).IsDown())
         {
             if (EClass.ui.GetLayer<ModLayerConfig>() is not null)
             {
@@ -21,13 +19,12 @@ public static class ModUI
                 return;
             }
 
-            ModContext.Config.HoverGuide.AdvanceCurrentStyle();
+            ModContext.WorldConfig.HoverGuide.AdvanceCurrentStyle();
             SE.ClickGeneral();
             return;
         }
 
-        key = new KeyboardShortcut(KeyCode.L);
-        if (key.IsDown())
+        if (new KeyboardShortcut(ModContext.Config.LockKey.Value).IsDown())
         {
             if (EClass.ui.GetLayer<ModLayerConfig>() is not null)
             {

@@ -24,7 +24,8 @@ public class ModLayerConfigTabStyleTargetThing : ModLayerConfigTabStyleTarget
                 Label: ModConsts.SourceId.UseRarityColor,
                 Init: SelectedStyle.Thing.UseRarityColor,
                 OnChanged: value => SelectedStyle.Thing.UseRarityColor = value,
-                GetConfig: () => SelectedStyle.Thing.UseRarityColor
+                GetConfig: () => SelectedStyle.Thing.UseRarityColor,
+                Tooltip: ModConsts.SourceId.TooltipUseRarityColor
             )
         );
 
@@ -49,7 +50,8 @@ public class ModLayerConfigTabStyleTargetThing : ModLayerConfigTabStyleTarget
                 Label: ModConsts.SourceId.Fressness,
                 Init: SelectedStyle.Thing.DisplayFressness,
                 OnChanged: value => SelectedStyle.Thing.DisplayFressness = value,
-                GetConfig: () => SelectedStyle.Thing.DisplayFressness
+                GetConfig: () => SelectedStyle.Thing.DisplayFressness,
+                Tooltip: ModConsts.SourceId.TooltipFressness
             )
         );
     }

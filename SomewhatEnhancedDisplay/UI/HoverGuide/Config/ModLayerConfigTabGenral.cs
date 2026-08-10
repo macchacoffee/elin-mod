@@ -9,7 +9,7 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
 public class ModLayerConfigTabGenral : YKLayout<ModLayerConfigContext>
 {
-    private static ModConfigHoverGuide Config => ModContext.Config.HoverGuide;
+    private static ModConfigHoverGuide Config => ModContext.WorldConfig.HoverGuide;
     private static ModConfigHoverGuideColorSet ColorConfig => Config.ColorSet;
 
     public override void OnLayout()
@@ -64,12 +64,14 @@ public class ModLayerConfigTabGenral : YKLayout<ModLayerConfigContext>
             new(
                 Label: ModConsts.SourceId.MainTextColor,
                 Init: ColorConfig.MainTextColor,
-                OnChanged: color => ColorConfig.MainTextColor = color
+                OnChanged: color => ColorConfig.MainTextColor = color,
+                Tooltip: ModConsts.SourceId.TooltipMainColor
             ),
             new(
                 Label: ModConsts.SourceId.SubTextColor,
                 Init: ColorConfig.SubTextColor,
-                OnChanged: color => ColorConfig.SubTextColor = color
+                OnChanged: color => ColorConfig.SubTextColor = color,
+                Tooltip: ModConsts.SourceId.TooltipSubColor
             )
         );
 

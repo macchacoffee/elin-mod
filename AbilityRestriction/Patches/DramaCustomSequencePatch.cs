@@ -108,7 +108,7 @@ public static class DramaCustomSequencePatch
         matcher.Insert(
             new CodeInstruction(OpCodes.Ldloc_0),
             new CodeInstruction(OpCodes.Ldfld, charaOperand),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(DramaCustomSequencePatch), nameof(IsAbilityRestrictionEnabled), [typeof(Chara)])),
+            CodeInstruction.Call(() => IsAbilityRestrictionEnabled(default!)),
             new CodeInstruction(OpCodes.Brfalse, labelMod1),
             new CodeInstruction(OpCodes.Ldarg_0),
             new CodeInstruction(OpCodes.Ldstr, ModConsts.SourceId.DaRestrictAbilities),
@@ -137,7 +137,7 @@ public static class DramaCustomSequencePatch
             new CodeInstruction(OpCodes.Ldarg_0),
             new CodeInstruction(OpCodes.Ldloc_0),
             new CodeInstruction(OpCodes.Ldfld, charaOperand),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(DramaCustomSequencePatch), nameof(HandleAbilityRestriction), [typeof(DramaCustomSequence), typeof(Chara)])),
+            CodeInstruction.Call(() => HandleAbilityRestriction(default!, default!)),
             new CodeInstruction(OpCodes.Ldarg_0),
             new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(DramaCustomSequence), nameof(DramaCustomSequence.End), []))
         );

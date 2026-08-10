@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using ModUtility.Patch;
-using MoreEffectiveLuck.Extensions;
 
 namespace MoreEffectiveLuck.Patches;
 
@@ -118,7 +117,7 @@ public static class DramaCustomSequencePatch
         matcher.Insert(
             new CodeInstruction(OpCodes.Ldloc_0),
             new CodeInstruction(OpCodes.Ldfld, charaOperand),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(CharaExtensions), nameof(CharaExtensions.CanUseBane), [typeof(Chara)])),
+            CodeInstruction.Call(() => CanUseBane(default!)),
             new CodeInstruction(OpCodes.Brfalse, label1),
             new CodeInstruction(OpCodes.Ldarg_0),
             new CodeInstruction(OpCodes.Ldstr, ModConsts.SourceId.DaBane),
@@ -158,13 +157,26 @@ public static class DramaCustomSequencePatch
             new CodeInstruction(OpCodes.Ldarg_0),
             new CodeInstruction(OpCodes.Ldloc_0),
             new CodeInstruction(OpCodes.Ldfld, charaOperand),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(DramaCustomSequencePatch), nameof(AddBaneMethodForBuild), [typeof(DramaCustomSequence), typeof(Chara)])),
+            CodeInstruction.Call(() => AddBaneMethodForBuild(default!, default!)),
             new CodeInstruction(OpCodes.Ldarg_0),
             new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(DramaCustomSequence), nameof(DramaCustomSequence.End), []))
         );
 
         return matcher.InstructionEnumeration();
     }
+
+    private static bool CanUseBane(this Chara chara)
+    {
+        foreach (ActList.Item item in chara.ability.list.items)
+        {
+            if (item.act.id == SPELL.SpBane)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     private static void AddBaneMethodForBuild(DramaCustomSequence dcs, Chara chara)
     {

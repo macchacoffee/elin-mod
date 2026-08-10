@@ -35,7 +35,7 @@ public static class QuestRandomPatch
         );
         matcher.RemoveInstruction();
         matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(QuestRandomPatch), nameof(GetRewardPlatForGetEnchant), [typeof(Quest), typeof(int)]))
+            CodeInstruction.Call(() => GetRewardPlatForGetEnchant(default!, default))
         );
 
         return matcher.InstructionEnumeration();

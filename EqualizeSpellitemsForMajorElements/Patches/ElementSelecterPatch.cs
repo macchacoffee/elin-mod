@@ -69,7 +69,7 @@ public static class ElementSelecterPatch
         // 属性のSourceElement.Rowのタグに指定された文字列が含まれていないかを判定する処理を差し替える
         matcher.RemoveInstruction();
         matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ElementSelecterPatch), nameof(ContainsTag), [typeof(SourceElement.Row), typeof(string)]))
+            CodeInstruction.Call(() => ContainsTag(default!, default!))
         );
 
         return matcher.InstructionEnumeration();

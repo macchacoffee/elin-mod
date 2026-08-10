@@ -12,7 +12,7 @@ public class ModLayerConfig : YKLayer<ModLayerConfigContext>
     private UIButton? ButtonReset { get; set; }
 
     private ModLayerConfigContext Context => Data;
-    private static ModConfigHoverGuide Config => ModContext.Config.HoverGuide;
+    private static ModConfigHoverGuide Config => ModContext.WorldConfig.HoverGuide;
 
     public override string GetTextHeader(Window window)
     {
@@ -50,7 +50,7 @@ public class ModLayerConfig : YKLayer<ModLayerConfigContext>
             Dialog.YesNo(ModConsts.SourceId.DialogResetConfig, () =>
             {
                 Close();
-                ModContext.Config.ResetHoverGuide();
+                ModContext.WorldConfig.ResetHoverGuide();
                 YK.CreateLayer<ModLayerConfig, ModLayerConfigContext>(new(Context.SampleChara, Context.SampleThing));
             });
         });
@@ -63,14 +63,14 @@ public class ModLayerConfig : YKLayer<ModLayerConfigContext>
                 var idLang = Window.CurrentTab.idLang;
                 if (idLang == ModConsts.SourceId.ConfigGeneral)
                 {
-                    ModContext.Config.ResetHoverGuideGeneral();
+                    ModContext.WorldConfig.ResetHoverGuideGeneral();
                 }
                 else if (
                     idLang == ModConsts.SourceId.ConfigStyle
                     || idLang == ModConsts.SourceId.ConfigStyleTargetChara
                     || idLang == ModConsts.SourceId.ConfigStyleTargetThing)
                 {
-                    ModContext.Config.ResetHoverGuideStyle();
+                    ModContext.WorldConfig.ResetHoverGuideStyle();
                 }
                 YK.CreateLayer<ModLayerConfig, ModLayerConfigContext>(new(Context.SampleChara, Context.SampleThing));
             });

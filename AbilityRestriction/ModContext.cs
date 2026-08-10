@@ -1,5 +1,4 @@
 using System.IO;
-using Newtonsoft.Json;
 using AbilityRestriction.Config;
 using AbilityRestriction.Mod;
 using BepInEx.Configuration;

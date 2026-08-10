@@ -64,7 +64,7 @@ public static class ThingPatch
         matcher.AddLabels(labelList1);
         matcher.Advance(1);
         matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ThingPatch), nameof(IsLuckyFood), [typeof(Thing)]))
+            CodeInstruction.Call(() => IsLuckyFood(default!))
         );
         matcher.InsertBranchAndAdvance(OpCodes.Brfalse, matcher.Pos);
         matcher.InsertAndAdvance(
@@ -192,7 +192,7 @@ public static class ThingPatch
             new CodeInstruction(OpCodes.Ldloc_S, 10),
             new CodeInstruction(OpCodes.Ldloc_S, 9),
             new CodeInstruction(OpCodes.Ldarg_2),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ThingPatch), nameof(CalculateNum6ForGetEnchant), [typeof(SourceElement.Row), typeof(float), typeof(bool), typeof(bool)]))
+            CodeInstruction.Call(() => CalculateNum6ForGetEnchant(default!, default, default, default))
         );
 
         return matcher.InstructionEnumeration();

@@ -51,7 +51,7 @@ public static class CardPatch
             // ldc.i4.m1 NULL
             // call void Card::set_rarity(Rarity value)
             matcher.MatchStartForward(
-                new CodeMatch(OpCodes.Ldc_I4_S),
+                new CodeMatch(OpCodes.Ldc_I4_S, (sbyte)10),
                 new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(EClass), nameof(EClass.rnd), [typeof(int)])),
                 new CodeMatch(OpCodes.Brtrue),
                 new CodeMatch(OpCodes.Ldarg_0),
@@ -66,7 +66,7 @@ public static class CardPatch
             // ldc.i4.3 NULL
             // call void Card::set_rarity(Rarity value)
             matcher.MatchEndForward(
-                new CodeMatch(OpCodes.Ldc_I4),
+                new CodeMatch(OpCodes.Ldc_I4, 250),
                 new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(EClass), nameof(EClass.rnd), [typeof(int)])),
                 new CodeMatch(OpCodes.Brtrue),
                 new CodeMatch(OpCodes.Ldarg_0),
@@ -82,7 +82,7 @@ public static class CardPatch
 
             // 決定した品質が関数の戻り値になるように調整する
             // ldc.i4.s 10
-            matcher.MatchStartForward(new CodeMatch(OpCodes.Ldc_I4_S));
+            matcher.MatchStartForward(new CodeMatch(OpCodes.Ldc_I4_S, (sbyte)10));
             matcher.Labels.Clear();
             // ldarg.0 NULL
             matcher.Start();
@@ -166,7 +166,7 @@ public static class CardPatch
         // ldc.i4.m1 NULL
         // call void Card::set_rarity(Rarity value)
         matcher.MatchStartForward(
-            new CodeMatch(OpCodes.Ldc_I4_S),
+            new CodeMatch(OpCodes.Ldc_I4_S, (sbyte)10),
             new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(EClass), nameof(EClass.rnd), [typeof(int)])),
             new CodeMatch(OpCodes.Brtrue),
             new CodeMatch(OpCodes.Ldarg_0),
@@ -183,7 +183,7 @@ public static class CardPatch
         // ldc.i4.3 NULL
         // call void Card::set_rarity(Rarity value)
         matcher.MatchEndForward(
-            new CodeMatch(OpCodes.Ldc_I4),
+            new CodeMatch(OpCodes.Ldc_I4, 250),
             new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(EClass), nameof(EClass.rnd), [typeof(int)])),
             new CodeMatch(OpCodes.Brtrue),
             new CodeMatch(OpCodes.Ldarg_0),
@@ -197,7 +197,7 @@ public static class CardPatch
             new CodeInstruction(OpCodes.Ldarg_0),
             new CodeInstruction(OpCodes.Ldarg_0),
             new CodeInstruction(OpCodes.Call, AccessTools.PropertyGetter(typeof(Card), nameof(Card.rarity))),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(CardPatch), nameof(CalculateRarityForCreate), [typeof(Rarity)])),
+            CodeInstruction.Call(() => CalculateRarityForCreate(default)),
             new CodeInstruction(OpCodes.Call, AccessTools.PropertySetter(typeof(Card), nameof(Card.rarity)))
         );
         matcher.AddLabels(labelList1);

@@ -90,7 +90,7 @@ public static class ElementContainerFactionPatch
         matcher.Advance(1);
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Ldloc_1),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ElementContainerFactionPatch), nameof(IsElementApplied), [typeof(Element)])),
+            CodeInstruction.Call(() => IsElementApplied(default!)),
             new CodeInstruction(OpCodes.Brtrue, null)
         );
         var pos1 = matcher.Pos - 1;
@@ -101,7 +101,7 @@ public static class ElementContainerFactionPatch
         matcher.Advance(1);
         matcher.Insert(
             new CodeInstruction(OpCodes.Ldloc_1),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ElementContainerFactionPatch), nameof(AddElementApplied), [typeof(Element)])),
+            CodeInstruction.Call(() => AddElementApplied(default!)),
             new CodeInstruction(OpCodes.Pop)
         );
         matcher.CreateLabel(out var labelMod1);
@@ -144,10 +144,10 @@ public static class ElementContainerFactionPatch
         matcher.Advance(1);
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Ldloc_1),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ElementContainerFactionPatch), nameof(RemoveElementApplied), [typeof(Element)])),
+            CodeInstruction.Call(() => RemoveElementApplied(default!)),
             new CodeInstruction(OpCodes.Brfalse, label1),
             new CodeInstruction(OpCodes.Ldloc_1),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ElementContainerFactionPatch), nameof(IsElementApplied), [typeof(Element)])),
+            CodeInstruction.Call(() => IsElementApplied(default!)),
             new CodeInstruction(OpCodes.Brtrue, label1)
         );
 

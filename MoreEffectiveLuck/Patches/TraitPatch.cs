@@ -122,7 +122,7 @@ public static class TraitPatch
         matcher.RemoveInstructionsInRange(start, end);
         matcher.Insert(
             new CodeInstruction(OpCodes.Ldloc_0),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(TraitPatch), nameof(CalculateRarityForCreateStock), [typeof(int)]))
+            CodeInstruction.Call(() => CalculateRarityForCreateStock(default))
         );
         matcher.AddLabels(labelList1);
 

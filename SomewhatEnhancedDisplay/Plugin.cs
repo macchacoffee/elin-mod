@@ -1,7 +1,9 @@
 using System;
 using System.Reflection;
 using BepInEx;
+using BepInEx.Configuration;
 using HarmonyLib;
+using ModUtility.External.ModConfigGUI;
 using SomewhatEnhancedDisplay.UI;
 
 namespace SomewhatEnhancedDisplay;
@@ -17,10 +19,12 @@ public static class PluginInfo
 internal class Plugin : BaseUnityPlugin
 {
     internal static Plugin? Instance { get; private set; }
+    private static ConfigFile? ConfigFile { get; set; }
 
     private void Awake()
     {
         Instance = this;
+        ConfigFile = ModContext.BindConfig();
         try
         {
             Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), PluginInfo.Guid);
@@ -29,6 +33,11 @@ internal class Plugin : BaseUnityPlugin
         {
             Logger.LogError($"Failed to apply harmony patch: {ex}");
         }
+    }
+
+    private void Start()
+    {
+        ModConfigGUISupport.ResisterConfig(PluginInfo.Guid, PluginInfo.Name, ConfigFile!);
     }
 
     private void Update()
