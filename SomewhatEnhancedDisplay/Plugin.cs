@@ -4,6 +4,7 @@ using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
 using ModUtility.External.ModConfigGUI;
+using SomewhatEnhancedDisplay.Patches;
 using SomewhatEnhancedDisplay.UI;
 
 namespace SomewhatEnhancedDisplay;
@@ -27,7 +28,30 @@ internal class Plugin : BaseUnityPlugin
         ConfigFile = ModContext.BindConfig();
         try
         {
-            Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), PluginInfo.Guid);
+            Harmony.CreateAndPatchAll(typeof(GameIOPatch), PluginInfo.Guid);
+            Harmony.CreateAndPatchAll(typeof(GamePatch), PluginInfo.Guid);
+            if (ModContext.Config.EnableHoverGuide.Value)
+            {
+                Harmony.CreateAndPatchAll(typeof(CardPatch), PluginInfo.Guid);
+                Harmony.CreateAndPatchAll(typeof(CharaPatch), PluginInfo.Guid);
+                Harmony.CreateAndPatchAll(typeof(HotItemContextPatch), PluginInfo.Guid);
+                Harmony.CreateAndPatchAll(typeof(ThingPatch), PluginInfo.Guid);
+                Harmony.CreateAndPatchAll(typeof(WidgetMouseoverPatch), PluginInfo.Guid);
+            }
+            if (ModContext.Config.EnableDNA.Value)
+            {
+                Harmony.CreateAndPatchAll(typeof(DNAPatch), PluginInfo.Guid);
+            }
+            if (ModContext.Config.EnableEnchant.Value)
+            {
+                Harmony.CreateAndPatchAll(typeof(ElementPatch), PluginInfo.Guid);
+            }
+            if (ModContext.Config.EnableStatusNotification.Value)
+            {
+                Harmony.CreateAndPatchAll(typeof(NotificationBuffPatch), PluginInfo.Guid);
+                Harmony.CreateAndPatchAll(typeof(NotificationConditionPatch), PluginInfo.Guid);
+                Harmony.CreateAndPatchAll(typeof(NotificationStatsPatch), PluginInfo.Guid);
+            }
         }
         catch (Exception ex)
         {
