@@ -33,7 +33,7 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
 
         Spacer(6);
         var styleHeaderLayout = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
-        styleHeaderLayout.Text(ModConsts.SourceId.TextConfigEditStyle.lang("[テスト]"));
+        styleHeaderLayout.Text(ModConsts.SourceId.TextConfigEditStyle.lang($"{ModContext.Config.NextStyleKey.Value}"));
 
         HeaderSmall(ModConsts.SourceId.SelectStyleToEdit);
 

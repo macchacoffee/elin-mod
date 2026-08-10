@@ -172,6 +172,8 @@ public static class ModConsts
         public static readonly string TooltipPickPreviewChara = Prefixed("tooltipPickPreviewChara");
         public static readonly string TooltipPickPreviewThing = Prefixed("tooltipPickPreviewThing");
         public static readonly string TooltipCharaType = Prefixed("tooltipCharaType");
+        public static readonly string TooltipFeatValue = Prefixed("tooltipFeatValue");
+        public static readonly string TooltipActParty = Prefixed("tooltipActParty");
         public static readonly string TooltipUseAnimation = Prefixed("tooltipUseAnimation");
         public static readonly string TooltipGroupResistByLevel = Prefixed("tooltipGroupResistByLevel");
         public static readonly string TooltipUseShortResistLavelLabel = Prefixed("tooltipUseShortResistLavelLabel");

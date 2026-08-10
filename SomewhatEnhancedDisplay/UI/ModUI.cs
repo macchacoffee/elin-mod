@@ -1,7 +1,6 @@
 using BepInEx.Configuration;
 using SomewhatEnhancedDisplay.UI.HoverGuide;
 using SomewhatEnhancedDisplay.UI.HoverGuide.Config;
-using UnityEngine;
 
 namespace SomewhatEnhancedDisplay.UI;
 
@@ -19,8 +18,11 @@ public static class ModUI
                 return;
             }
 
-            ModContext.WorldConfig.HoverGuide.AdvanceCurrentStyle();
-            SE.ClickGeneral();
+            if ( ModContext.WorldConfig.HoverGuide.Styles.Count > 1)
+            {
+                ModContext.WorldConfig.HoverGuide.AdvanceCurrentStyle();
+                SE.ClickGeneral();
+            }
             return;
         }
 

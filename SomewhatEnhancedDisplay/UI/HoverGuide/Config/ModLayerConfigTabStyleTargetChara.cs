@@ -306,7 +306,8 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
                 Label: ModConsts.SourceId.FeatValue,
                 Init: Config.DisplayFeatValue,
                 OnChanged: value => Config.DisplayFeatValue = value,
-                GetConfig: () => Config.DisplayFeatValue
+                GetConfig: () => Config.DisplayFeatValue,
+                Tooltip: ModConsts.SourceId.TooltipFeatValue
             )
         );
         EditStyleUI.Add(
@@ -352,7 +353,8 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
                 Label: ModConsts.SourceId.ActParty,
                 Init: Config.DisplayActParty,
                 OnChanged: value => Config.DisplayActParty = value,
-                GetConfig: () => Config.DisplayActParty
+                GetConfig: () => Config.DisplayActParty,
+                Tooltip: ModConsts.SourceId.TooltipActParty
             )
         );
         EditStyleUI.Add(
