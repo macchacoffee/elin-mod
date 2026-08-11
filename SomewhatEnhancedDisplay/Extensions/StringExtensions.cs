@@ -6,6 +6,7 @@ namespace SomewhatEnhancedDisplay.Extensions;
 
 public static class StringExtensions
 {
+    private static readonly Regex _tagTextRegex = new(@"(?<=>)[^<>]+(?=</[a-zA-Z0-9]+>)", RegexOptions.Compiled);
     private static readonly Regex _tagSizeRegex = new(@"(?<=<size=)(\d+)", RegexOptions.Compiled);
 
     public static string TagColorNullable(this string text, Color? color)
@@ -25,6 +26,11 @@ public static class StringExtensions
 
     public static string TagResize(this string text, Func<int, int> resizer)
     {
-       return !text.IsEmpty() ? _tagSizeRegex.Replace(text, m => resizer(int.Parse(m.Value)).ToString()) : text;
+        return !text.IsEmpty() ? _tagSizeRegex.Replace(text, m => resizer(int.Parse(m.Value)).ToString()) : text;
+    }
+
+    public static string TrimTagTexts(this string text)
+    {
+        return !text.IsEmpty() ? _tagTextRegex.Replace(text, m => m.Value.Trim()) : text;
     }
 }

@@ -18,7 +18,7 @@ public static class WidgetMouseoverPatch
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
     {
-        return _patchTarget.IsPatchable(original);
+        return _patchTarget.IsPatchable(original) && ModContext.Config.EnableHoverGuide.Value;
     }
 
     [HarmonyPostfix]

@@ -49,6 +49,44 @@ public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
 
         EditStyleUI.Add(
             layout: this,
+            headerLabel: ModConsts.SourceId.CharaExtraInformation,
+            cellWidth: cellWidth1,
+            maxColumn: maxColumn1,
+            new EditStyleToogleUIItem(
+                Label: ModConsts.SourceId.LvComparison,
+                Init: Config.DisplayLvComparison,
+                OnChanged: value => Config.DisplayLvComparison = value,
+                GetConfig: () => Config.DisplayLvComparison
+            ),
+            new EditStyleToogleUIItem(
+                Label: ModConsts.SourceId.FactionMemberType,
+                Init: Config.DisplayFactionMemberType,
+                OnChanged: value => Config.DisplayFactionMemberType = value,
+                GetConfig: () => Config.DisplayFactionMemberType,
+                Tooltip: ModConsts.SourceId.TooltipFactionMemberType
+            ),
+            new EditStyleToogleUIItem(
+                Label: ModConsts.SourceId.HeightDifference,
+                Init: Config.DisplayHeightDifference,
+                OnChanged: value => Config.DisplayHeightDifference = value,
+                GetConfig: () => Config.DisplayHeightDifference
+            ),
+            new EditStyleToogleUIItem(
+                Label: ModConsts.SourceId.MilkBaby,
+                Init: Config.DisplayMilkBaby,
+                OnChanged: value => Config.DisplayMilkBaby = value,
+                GetConfig: () => Config.DisplayMilkBaby
+            ),
+            new EditStyleToogleUIItem(
+                Label: ModConsts.SourceId.Bounty,
+                Init: Config.DisplayBounty,
+                OnChanged: value => Config.DisplayBounty = value,
+                GetConfig: () => Config.DisplayBounty
+            )
+        );
+
+        EditStyleUI.Add(
+            layout: this,
             headerLabel: ModConsts.SourceId.Faith,
             cellWidth: cellWidth2,
             maxColumn: maxColumn2,

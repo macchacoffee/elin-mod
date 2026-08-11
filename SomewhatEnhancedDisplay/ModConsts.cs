@@ -42,6 +42,7 @@ public static class ModConsts
         public static readonly string Fressness = Prefixed("fressness");
         public static readonly string LockLv = Prefixed("lockLv");
         public static readonly string CharaName = Prefixed("charaName");
+        public static readonly string CharaExtraInformation = Prefixed("charaExtraInformation");
         public static readonly string Profile = Prefixed("profile");
         public static readonly string StatusAttributes1 = Prefixed("statusAttributes1");
         public static readonly string StatusAttributes2Others = Prefixed("statusAttributes2Others");
@@ -53,6 +54,11 @@ public static class ModConsts
         public static readonly string ItemDisplayModeAlwaysShow = Prefixed("itemDisplayModeAlwaysShow");
         public static readonly string Type = Prefixed("type");
         public static readonly string Lv = Prefixed("lv");
+        public static readonly string LvComparison = Prefixed("lvComparison");
+        public static readonly string FactionMemberType = Prefixed("factionMemberType");
+        public static readonly string HeightDifference = Prefixed("heightDifference");
+        public static readonly string MilkBaby = Prefixed("milkBaby");
+        public static readonly string Bounty = Prefixed("bounty");
         public static readonly string Faith = Prefixed("faith");
         public static readonly string DisplayFaithAlways = Prefixed("displayFaithAlways");
         public static readonly string BloodTaste = Prefixed("bloodTaste");
@@ -175,6 +181,7 @@ public static class ModConsts
         public static readonly string TooltipPickPreviewChara = Prefixed("tooltipPickPreviewChara");
         public static readonly string TooltipPickPreviewThing = Prefixed("tooltipPickPreviewThing");
         public static readonly string TooltipCharaType = Prefixed("tooltipCharaType");
+        public static readonly string TooltipFactionMemberType = Prefixed("tooltipFactionMemberType");
         public static readonly string TooltipFeatValue = Prefixed("tooltipFeatValue");
         public static readonly string TooltipActParty = Prefixed("tooltipActParty");
         public static readonly string TooltipUseAnimation = Prefixed("tooltipUseAnimation");

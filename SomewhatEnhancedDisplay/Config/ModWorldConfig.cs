@@ -233,6 +233,21 @@ public class ModConfigHoverGuideStyleChara : JsonModConfigBase<ModConfigHoverGui
     [JsonProperty("displayLv", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayLv { get; set; } = true;
 
+    [JsonProperty("displayLvComparison", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool DisplayLvComparison { get; set; } = true;
+
+    [JsonProperty("displayFactionMemberType", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool DisplayFactionMemberType { get; set; } = true;
+
+    [JsonProperty("displayHeightDifference", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool DisplayHeightDifference { get; set; } = true;
+
+    [JsonProperty("displayMilkBaby", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool DisplayMilkBaby { get; set; } = true;
+
+    [JsonProperty("displayBounty", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool DisplayBounty { get; set; } = true;
+
     [JsonProperty("displayFaith", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModItemDisplayMode DisplayFaith { get; set; } = ModItemDisplayMode.Show;
 

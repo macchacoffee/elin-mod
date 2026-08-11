@@ -20,7 +20,7 @@ public static class CharaPatch
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
     {
-        return _patchTarget.IsPatchable(original);
+        return _patchTarget.IsPatchable(original) && ModContext.Config.EnableHoverGuide.Value;
     }
 
     private static ModConfigHoverGuide Config => ModContext.WorldConfig.HoverGuide;
@@ -91,10 +91,29 @@ public static class CharaPatch
         // ...
         // string text = ((mimicry != null && mimicry.Card != this) ? mimicry.GetName(NameStyle.Full) : base.Name);
         // ...
+        // string text2 = Lang.GetList("lvComparison")[num];
+        // text2 = (" (" + text2 + ") ").TagSize(14).TagColor(EClass.Colors.gradientLVComparison.Evaluate(0.25f * (float)num));
+        // ...
+        // if (memberType == FactionMemberType.Guest)
+        // {
+        //     s += (" (" + "guest".lang() + ") ").TagSize(14);
+        // }
+        // else if (memberType == FactionMemberType.Livestock)
+        // {
+        //     s += (" (" + "livestock".lang() + ") ").TagSize(14);
+        // }
+        // ...
+        // if (!EClass.pc.IsMoving)
+        // {
+        // ...
+        // if (Evalue(1232) > 0)
+        // {
+        // ...
+        // if (Guild.Fighter.ShowBounty(this) && Guild.Fighter.HasBounty(this))
+        // {
+        // ...
         // if (EClass.pc.HasElement(481))
         // {
-        //     text2 += ("(" + faith.Name + ")").TagSize(14);
-        // }
         // ...
         // if (EClass.pc.HasElement(6607))
         // {
@@ -106,10 +125,41 @@ public static class CharaPatch
         // if (CharaPatch.IsMimicryEnabled() && mimicry != null && mimicry.IsThing)
         // {
         // ...
+        // if (CharaPatch.DisplaysLvComparison())
+        // {
+        //      string text2 = Lang.GetList("lvComparison")[num];
+        //      text2 = ("(" + text2 + ") ").TagSize(14).TagColor(EClass.Colors.gradientLVComparison.Evaluate(0.25f * (float)num));
+        // }
+        // else
+        // {
+        //      text2 = "";
+        // }
+        // ...
+        // string text = ((mimicry != null && mimicry.Card != this && CharaPatch.IsMimicryEnabled()) ? mimicry.GetName(NameStyle.Full) : CharaPatch.CharaGetNameForHoverText(this, NameStyle.Full));
+        // // ...
+        // if (CharaPatch.DisplaysFactionMemberType())
+        // {
+        //     if (memberType == FactionMemberType.Guest)
+        //     {
+        //         s += (" (" + "guest".lang() + ") ").TagSize(14);
+        //     }
+        //     else if (memberType == FactionMemberType.Livestock)
+        //     {
+        //         s += (" (" + "livestock".lang() + ") ").TagSize(14);
+        //     }
+        // }
+        // ...
+        // if (!EClass.pc.IsMoving && CharaPatch.DisplaysHeightDifference())
+        // {
+        // ...
+        // if (Evalue(1232) > 0 && CharaPatch.DisplaysMilkBaby())
+        // {
+        // ...
+        // if (Guild.Fighter.ShowBounty(this) && Guild.Fighter.HasBounty(this) && CharaPatch.DisplaysBounty())
+        // {
+        // ...
         // if ((EClass.pc.HasElement(481) && CharaPatch.DisplaysFaith()) || CharaPatch.DisplaysAlwaysFaith())
         // {
-        //     text2 += ("(" + faith.Name + ")").TagSize(14);
-        // }
         // ...
         // if (EClass.pc.HasElement(6607) && CharaPatch.DisplaysBloodTaste()) || CharaPatch.DisplaysAlwaysBloodTaste())
         // {
@@ -174,6 +224,119 @@ public static class CharaPatch
         );
         matcher.Opcode = OpCodes.Brtrue;
 
+        // ldfld UnityEngine.Gradient ColorProfile::gradientLVComparison
+        matcher.MatchStartForward(
+            new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(ColorProfile), nameof(ColorProfile.gradientLVComparison)))
+        );
+        // callvirt UnityEngine.Color UnityEngine.Gradient::Evaluate(float time)
+        // call static string ClassExtension::TagColor(string s, UnityEngine.Color c)
+        // stloc.3 NULL
+        matcher.MatchEndForward(
+            new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Gradient), nameof(Gradient.Evaluate), [typeof(float)])),
+            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.TagColor), [typeof(string), typeof(Color)])),
+            new CodeMatch(OpCodes.Stloc_3)
+        );
+        // レベル差の文字列を追加する条件でModの設定を参照するように変更する
+        matcher.CreateLabel(out var labelModLvComparison1);
+        matcher.InsertAndAdvance(
+            new CodeInstruction(OpCodes.Br, labelModLvComparison1),
+            new CodeInstruction(OpCodes.Ldstr, "")
+        );
+        matcher.CreateLabelWithOffsets(-1, out var labelModLvComparison2);
+        // ldstr "lvComparison" [Label10, Label12, Label14, Label15]
+        matcher.MatchStartBackwards(
+            new CodeMatch(OpCodes.Ldstr, "lvComparison")
+        );
+        var labelListLvComparison1 = matcher.Labels.Copy();
+        matcher.Labels.Clear();
+        matcher.Insert(
+            CodeInstruction.Call(() => DisplaysLvComparison()),
+            new CodeInstruction(OpCodes.Brfalse, labelModLvComparison2)
+        );
+        matcher.AddLabels(labelListLvComparison1);
+
+        // bne.un Label22
+        // ldloc.s 4 (System.String)
+        // ldstr " ("
+        // ldstr "livestock"
+        matcher.MatchStartForward(
+            new CodeMatch(OpCodes.Bne_Un),
+            new CodeMatch(OpCodes.Ldloc_S),
+            new CodeMatch(OpCodes.Ldstr, " ("),
+            new CodeMatch(OpCodes.Ldstr, "livestock")
+        );
+        // 拠点のメンバータイプの文字列を追加する条件でModの設定を参照するように変更する
+         var labelFactionMemberType1 = matcher.Operand;
+        // ldarg.0 NULL
+        // ldfld FactionMemberType Chara::memberType
+        // ldc.i4.4 NULL
+        // bne.un Label20
+        // ldloc.s 4 (System.String)
+        // ldstr " ("
+        // ldstr "guest"
+        matcher.MatchStartBackwards(
+            new CodeMatch(OpCodes.Ldarg_0),
+            new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.memberType))),
+            new CodeMatch(OpCodes.Ldc_I4_4),
+            new CodeMatch(OpCodes.Bne_Un),
+            new CodeMatch(OpCodes.Ldloc_S),
+            new CodeMatch(OpCodes.Ldstr, " ("),
+            new CodeMatch(OpCodes.Ldstr, "guest")
+        );
+        matcher.InsertAndAdvance(
+            CodeInstruction.Call(() => DisplaysFactionMemberType()),
+            new CodeInstruction(OpCodes.Brfalse, labelFactionMemberType1)
+        );
+
+        // call static Chara EClass::get_pc() [Label21, Label22]
+        // callvirt virtual bool Card::get_IsMoving()
+        matcher.MatchEndForward(
+            new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(EClass), nameof(EClass.pc))),
+            new CodeMatch(OpCodes.Callvirt, AccessTools.PropertyGetter(typeof(Card), nameof(Card.IsMoving)))
+        );
+        // 高低差の文字列を追加する条件でModの設定を参照するように変更する
+        matcher.Advance(1);
+        var labelHeightDifference1 = matcher.Operand;
+        matcher.Advance(1);
+        matcher.InsertAndAdvance(
+            CodeInstruction.Call(() => DisplaysHeightDifference()),
+            new CodeInstruction(OpCodes.Brfalse, labelHeightDifference1)
+        );
+
+        // ldarg.0 NULL [Label23, Label25, Label26]
+        // ldc.i4 1232
+        // call int Card::Evalue(int ele)
+        // ldc.i4.0 NULL
+        matcher.MatchEndForward(
+            new CodeMatch(OpCodes.Ldarg_0),
+            new CodeMatch(OpCodes.Ldc_I4, 1232),
+            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(Card), nameof(Card.Evalue), [typeof(int)])),
+            new CodeMatch(OpCodes.Ldc_I4_0)
+        );
+        // 赤ちゃんの文字列を追加する条件でModの設定を参照するように変更する
+        matcher.Advance(1);
+        var labelMilkBaby1 = matcher.Operand;
+        matcher.Advance(1);
+        matcher.InsertAndAdvance(
+            CodeInstruction.Call(() => DisplaysMilkBaby()),
+            new CodeInstruction(OpCodes.Brfalse, labelMilkBaby1)
+        );
+
+        // ldarg.0 NULL
+        // callvirt bool GuildFighter::HasBounty(Chara c)
+        matcher.MatchEndForward(
+            new CodeMatch(OpCodes.Ldarg_0),
+            new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(GuildFighter), nameof(GuildFighter.HasBounty), [typeof(Chara)]))
+        );
+        // 賞金首の文字列を追加する条件でModの設定を参照するように変更する
+        matcher.Advance(1);
+        var labelBounty1 = matcher.Operand;
+        matcher.Advance(1);
+        matcher.InsertAndAdvance(
+            CodeInstruction.Call(() => DisplaysBounty()),
+            new CodeInstruction(OpCodes.Brfalse, labelBounty1)
+        );
+
         // call static Chara EClass::get_pc() [Label28, Label29]
         // ldc.i4 481
         // ldc.i4.0 NULL
@@ -186,19 +349,19 @@ public static class CharaPatch
         );
         // 信仰の文字列を追加する条件でModの設定を参照するように変更する
         matcher.Advance(1);
-        var pos1 = matcher.Pos;
-        var label2 = matcher.Operand;
+        var posFaith1 = matcher.Pos;
+        var labelFaith1 = matcher.Operand;
         matcher.Advance(1);
-        matcher.CreateLabel(out var labelMod1);
+        matcher.CreateLabel(out var labelModFaith1);
         matcher.InsertAndAdvance(
             CodeInstruction.Call(() => DisplaysFaith()),
-            new CodeInstruction(OpCodes.Brtrue, labelMod1),
+            new CodeInstruction(OpCodes.Brtrue, labelModFaith1),
             CodeInstruction.Call(() => DisplaysAlwaysFaith()),
-            new CodeInstruction(OpCodes.Brfalse, label2)
+            new CodeInstruction(OpCodes.Brfalse, labelFaith1)
         );
-        matcher.CreateLabelWithOffsets(-2, out var labelMod2);
-        matcher.Advance(pos1 - matcher.Pos);
-        matcher.Operand = labelMod2;
+        matcher.CreateLabelWithOffsets(-2, out var labelModFaith2);
+        matcher.Advance(posFaith1 - matcher.Pos);
+        matcher.Operand = labelModFaith2;
 
         // call static Chara EClass::get_pc() [Label30]
         // ldc.i4 6607
@@ -212,19 +375,19 @@ public static class CharaPatch
         );
         // 血の味の文字列を追加する条件でModの設定を参照するように変更する
         matcher.Advance(1);
-        var pos2 = matcher.Pos;
-        var label3 = matcher.Operand;
+        var posBloodTaste1 = matcher.Pos;
+        var labelBloodTast1 = matcher.Operand;
         matcher.Advance(1);
-        matcher.CreateLabel(out var labelMod3);
+        matcher.CreateLabel(out var labelModBloodTaste1);
         matcher.InsertAndAdvance(
             CodeInstruction.Call(() => DisplaysBloodTaste()),
-            new CodeInstruction(OpCodes.Brtrue, labelMod3),
+            new CodeInstruction(OpCodes.Brtrue, labelModBloodTaste1),
             CodeInstruction.Call(() => DisplaysAlwaysBloodTaste()),
-            new CodeInstruction(OpCodes.Brfalse, label3)
+            new CodeInstruction(OpCodes.Brfalse, labelBloodTast1)
         );
-        matcher.CreateLabelWithOffsets(-2, out var labelMod4);
-        matcher.Advance(pos2 - matcher.Pos);
-        matcher.Operand = labelMod4;
+        matcher.CreateLabelWithOffsets(-2, out var labelModBloodTaste2);
+        matcher.Advance(posBloodTaste1 - matcher.Pos);
+        matcher.Operand = labelModBloodTaste2;
 
         // call static string CraftUtil::GetBloodText(Chara c)
         // 血の味の文字列を取得する処理をModの設定を参照するものに差し替える
@@ -499,6 +662,31 @@ public static class CharaPatch
         return !StyleConfig.DisableMimicry;
     }
 
+    private static bool DisplaysLvComparison()
+    {
+        return StyleConfig.DisplayLvComparison;
+    }
+
+    private static bool DisplaysFactionMemberType()
+    {
+        return StyleConfig.DisplayFactionMemberType;
+    }
+
+    private static bool DisplaysHeightDifference()
+    {
+        return StyleConfig.DisplayHeightDifference;
+    }
+
+    private static bool DisplaysMilkBaby()
+    {
+        return StyleConfig.DisplayMilkBaby;
+    }
+
+    private static bool DisplaysBounty()
+    {
+        return StyleConfig.DisplayBounty;
+    }
+
     private static bool DisplaysFaith()
     {
         return StyleConfig.DisplayFaith == ModItemDisplayMode.Show;
@@ -586,8 +774,8 @@ public static class CharaPatch
     private static string BuildHoverText(string text, string text2, string s, Chara chara)
     {
         text = text.TagResize(ComputeFontSize);
-        text2 = text2.TagResize(ComputeFontSize);
-        s = s.TagResize(ComputeFontSize);
+        text2 = text2.TrimTagTexts().TagResize(ComputeFontSize);
+        s = s.TrimTagTexts().TagResize(ComputeFontSize);
         return ModCharaHoverTextBuilder.BuildHoverText(chara, text, text2, s);
     }
 
@@ -607,11 +795,8 @@ public static class CharaPatch
         [HarmonyPrepare]
         private static bool Prepare(MethodBase? original)
         {
-            return _patchTarget.IsPatchable(original);
+            return _patchTarget.IsPatchable(original) && ModContext.Config.EnableHoverGuide.Value;
         }
-
-        private static ModConfigHoverGuide Config => ModContext.WorldConfig.HoverGuide;
-        private static ModConfigHoverGuideStyleChara StyleConfig => Config.CurrentStyle.Chara;
 
         [HarmonyReversePatch(HarmonyReversePatchType.Original)]
         [HarmonyPatch(nameof(CraftUtil.GetBloodText), [typeof(Chara)])]
@@ -623,7 +808,7 @@ public static class CharaPatch
                 // // 変更前
                 // int num = Mathf.Min(list.Count(), 3, EClass.debug.godMode ? 3 : (1 + EClass.pc.Evalue(6607) / 15));
                 // // 変更後
-                // int num = Mathf.Min(list.Count(), 3, EClass.debug.godMode || CraftUtilPatch.DisplaysAlwaysBloodTaste() ? 3 : (1 + EClass.pc.Evalue(6607) / 15));
+                // int num = Mathf.Min(list.Count(), 3, EClass.debug.godMode || CharaPatch.DisplaysAlwaysBloodTaste() ? 3 : (1 + EClass.pc.Evalue(6607) / 15));
                 var matcher = new CodeMatcher(instructions, generator);
                 
                 // ldfld bool CoreDebug::godMode
@@ -643,11 +828,6 @@ public static class CharaPatch
 
             _ = transpiler(null!, null!);
             return default!;
-        }
-
-        private static bool DisplaysAlwaysBloodTaste()
-        {
-            return StyleConfig.DisplayBloodTaste == ModItemDisplayMode.AlwaysShow;
         }
     }
 }

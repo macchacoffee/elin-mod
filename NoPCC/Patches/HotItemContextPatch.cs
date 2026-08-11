@@ -28,7 +28,7 @@ public static class HotItemContextPatch
         }
 
         var uiContextMenu = EClass.ui.contextMenu.currentMenu.AddOrGetChild("tool");
-        uiContextMenu.AddButton(ModNames.NoPCC.Text, () =>
+        uiContextMenu.AddButton(ModConsts.SourceId.ModName, () =>
         {
             YK.CreateLayer<LayerModConfig>();
         });

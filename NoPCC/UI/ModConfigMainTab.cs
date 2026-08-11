@@ -1,6 +1,5 @@
 using System;
 using YKF;
-using ModUtility.Resource;
 using NoPCC.Config;
 using NoPCC.Mod;
 
@@ -10,8 +9,8 @@ public class ModConfigMainTab : YKLayout<object>
 {
     public override void OnLayout()
     {
-        Header(ModNames.GeneralSettings.Text);
-        Toggle(ModNames.EnableMod.Text, ModContext.Config.Sprite.DefaultTile.Enable, newValue =>
+        Header(ModConsts.SourceId.GeneralSettings);
+        Toggle(ModConsts.SourceId.ReplacePCCtoSprite, ModContext.Config.Sprite.DefaultTile.Enable, newValue =>
         {
             var oldValue = ModContext.Config.Sprite.DefaultTile.Enable;
             if (oldValue == newValue)
@@ -32,41 +31,40 @@ public class ModConfigMainTab : YKLayout<object>
         });
         Spacer(10);
 
-        Header(ModNames.SpriteSettings.Text);
+        Header(ModConsts.SourceId.SpriteSettings);
         AddDefaultTileGroupLayout();
         Spacer(2);
-        AddTileGroupLayout(ModContext.Config.Sprite.SnowTile, ModNames.SnowSprite);
+        AddTileGroupLayout(ModContext.Config.Sprite.SnowTile, ModConsts.SourceId.SnowSprite);
         Spacer(2);
-        AddTileGroupLayout(ModContext.Config.Sprite.UndressTile, ModNames.UndressSprite);
+        AddTileGroupLayout(ModContext.Config.Sprite.UndressTile, ModConsts.SourceId.UndressSprite);
         Spacer(20);
-        AddTileGroupLayout(ModContext.Config.Sprite.RideTile, ModNames.RideSprite);
+        AddTileGroupLayout(ModContext.Config.Sprite.RideTile, ModConsts.SourceId.RideSprite);
         Spacer(2);
-        AddTileGroupLayout(ModContext.Config.Sprite.RideSnowTile, ModNames.RideSnowSprite);
+        AddTileGroupLayout(ModContext.Config.Sprite.RideSnowTile, ModConsts.SourceId.RideSnowSprite);
         Spacer(20);
-        AddTileGroupLayout(ModContext.Config.Sprite.CombatTile, ModNames.CombatSprite);
+        AddTileGroupLayout(ModContext.Config.Sprite.CombatTile, ModConsts.SourceId.CombatSprite);
         Spacer(2);
 
-        AddTileGroupLayout(ModContext.Config.Sprite.CombatSnowTile, ModNames.CombatSnowSprite);
+        AddTileGroupLayout(ModContext.Config.Sprite.CombatSnowTile, ModConsts.SourceId.CombatSnowSprite);
         Spacer(20);
-        AddTileGroupLayout(ModContext.Config.Sprite.RideCombatTile, ModNames.RideCombatSprite);
+        AddTileGroupLayout(ModContext.Config.Sprite.RideCombatTile, ModConsts.SourceId.RideCombatSprite);
         Spacer(2);
-        AddTileGroupLayout(ModContext.Config.Sprite.RideCombatSnowTile, ModNames.RideCombatSnowSprite);
+        AddTileGroupLayout(ModContext.Config.Sprite.RideCombatSnowTile, ModConsts.SourceId.RideCombatSnowSprite);
     }
 
     private void AddDefaultTileGroupLayout()
     {
         var tile = ModContext.Config.Sprite.DefaultTile;
-        var name = ModNames.DefaultSprite;
         var group = Horizontal().WithFitMode(UnityEngine.UI.ContentSizeFitter.FitMode.PreferredSize).WithPivot(0.5f, 0);
-        group.Text(name.Text, FontColor.Header).WithWidth(250);
+        group.Text(ModConsts.SourceId.DefaultSprite, FontColor.Header).WithWidth(250);
         group.InputText(tile.Id.ToString(), HandleOnTileIdInputChange(tile)).WithWidth(100);
     }
 
-    private void AddTileGroupLayout(ModConfigTile tile, ModName name)
+    private void AddTileGroupLayout(ModConfigTile tile, string label)
     {
         var group = Horizontal().WithFitMode(UnityEngine.UI.ContentSizeFitter.FitMode.PreferredSize).WithPivot(0.5f, 0);
-        group.Text(name.Text, FontColor.Header).WithWidth(150);
-        group.Toggle(ModNames.Enable.Text, tile.Enable, HandleOnTileEnableToggle(tile)).WithWidth(100);
+        group.Text(label, FontColor.Header).WithWidth(150);
+        group.Toggle(ModConsts.SourceId.Enable, tile.Enable, HandleOnTileEnableToggle(tile)).WithWidth(100);
         group.InputText(tile.Id.ToString(), HandleOnTileIdInputChange(tile)).WithWidth(100);
     }
 

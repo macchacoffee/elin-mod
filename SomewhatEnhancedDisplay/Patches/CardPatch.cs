@@ -15,7 +15,7 @@ public static class CardPatch
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
     {
-        return _patchTarget.IsPatchable(original);
+        return _patchTarget.IsPatchable(original) && ModContext.Config.EnableHoverGuide.Value;
     }
 
     [HarmonyPostfix]

@@ -1,0 +1,16 @@
+{
+  "LangGeneral.mc_np_combatSnowSprite.text": "战斗中 (冬装)",
+  "LangGeneral.mc_np_combatSprite.text": "战斗中",
+  "LangGeneral.mc_np_defaultSprite.text": "默认",
+  "LangGeneral.mc_np_enable.text": "启用",
+  "LangGeneral.mc_np_generalSettings.text": "全局设置",
+  "LangGeneral.mc_np_modName.text": "No PCC",
+  "LangGeneral.mc_np_replacePCCtoSprite.text": "将PCC替换为图片",
+  "LangGeneral.mc_np_rideCombatSnowSprite.text": "骑乘战斗中 (冬装)",
+  "LangGeneral.mc_np_rideCombatSprite.text": "骑乘战斗中",
+  "LangGeneral.mc_np_rideSnowSprite.text": "骑乘中 (冬装)",
+  "LangGeneral.mc_np_rideSprite.text": "骑乘中",
+  "LangGeneral.mc_np_snowSprite.text": "冬装",
+  "LangGeneral.mc_np_spriteSettings.text": "图片设置",
+  "LangGeneral.mc_np_undressSprite.text": "脱衣中"
+}

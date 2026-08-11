@@ -14,7 +14,7 @@ public static class DNAPatch
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
     {
-        return _patchTarget.IsPatchable(original);
+        return _patchTarget.IsPatchable(original) && ModContext.Config.EnableDNA.Value;
     }
 
     [HarmonyTranspiler]

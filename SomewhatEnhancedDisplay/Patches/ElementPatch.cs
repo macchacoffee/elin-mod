@@ -16,7 +16,7 @@ public static class ElementPatch
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
     {
-        return _patchTarget.IsPatchable(original);
+        return _patchTarget.IsPatchable(original) && ModContext.Config.EnableEnchant.Value;
     }
 
     private static readonly Regex _enchantTextRegex = new(@"(\(-?\d+\)) (\(-?\d+[^\)]*\))", RegexOptions.Compiled);
