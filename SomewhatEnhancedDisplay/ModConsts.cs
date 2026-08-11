@@ -169,6 +169,9 @@ public static class ModConsts
         public static readonly string TooltipSubColor = Prefixed("tooltipSubColor");
         public static readonly string TooltipAddStyle = Prefixed("tooltipAddStyle");
         public static readonly string TooltipDeleteStyle = Prefixed("tooltipDeleteStyle");
+        public static readonly string TooltipRenameStyle = Prefixed("tooltipRenameStyle");
+        public static readonly string TooltipMoveStyleBackward = Prefixed("tooltipMoveStyleBackward");
+        public static readonly string TooltipMoveStyleForward = Prefixed("tooltipMoveStyleForward");
         public static readonly string TooltipPickPreviewChara = Prefixed("tooltipPickPreviewChara");
         public static readonly string TooltipPickPreviewThing = Prefixed("tooltipPickPreviewThing");
         public static readonly string TooltipCharaType = Prefixed("tooltipCharaType");

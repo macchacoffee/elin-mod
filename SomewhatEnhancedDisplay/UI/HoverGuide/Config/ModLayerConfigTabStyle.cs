@@ -10,7 +10,7 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
 {
     private static readonly int _minStyleCount = 1;
-    private static readonly int _maxStyleCount = 5;
+    private static readonly int _maxStyleCount = 10;
 
     private Dictionary<string, Func<ModConfigHoverGuideStyle>> StyleFactories { get; }
 
@@ -101,20 +101,23 @@ public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
                     updateStyleDropdown(Context.SelectedStyleIndex, Config.Styles);
                 }, Dialog.InputType.Default);
             },
-            width: 180
+            width: 180,
+            tooltip: ModConsts.SourceId.TooltipRenameStyle
         );
 
         var styleLayout3 = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
         var moveStyleBackwardButton = styleLayout3.AddModButton(
             label: $"▲ {ModConsts.SourceId.MoveStyleBackward.lang()}",
             onClicked: () => Context.MoveStyleBackward(Context.SelectedStyleIndex),
-            width: 150
+            width: 150,
+            tooltip: ModConsts.SourceId.TooltipMoveStyleBackward
         );
         styleLayout3.Spacer(0, 6);
         var moveStyleforwardButton = styleLayout3.AddModButton(
             label: $"▼ {ModConsts.SourceId.MoveStyleForward.lang()}",
             onClicked: () => Context.MoveStyleForward(Context.SelectedStyleIndex),
-            width: 150
+            width: 150,
+            tooltip: ModConsts.SourceId.TooltipMoveStyleForward
         );
 
         void updateStyleButtons()

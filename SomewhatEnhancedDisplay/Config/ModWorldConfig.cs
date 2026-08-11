@@ -70,7 +70,7 @@ public class ModConfigHoverGuide : JsonModConfigBase<ModConfigHoverGuide>
         {
             if (Styles.Count == 0)
             {
-                Styles.Add(new ModConfigHoverGuideStyle());
+                Styles.Add(new());
             }
             CurrentStyleIndex = Math.Min(CurrentStyleIndex, Styles.Count - 1);
             return Styles[CurrentStyleIndex];
@@ -324,7 +324,7 @@ public class ModConfigHoverGuideStyleChara : JsonModConfigBase<ModConfigHoverGui
     public bool DisplayStats { get; set; } = true;
 
     [JsonProperty("displayStatsValue", DefaultValueHandling = DefaultValueHandling.Include)]
-    public bool DisplayStatsValue { get; set; } = false;
+    public bool DisplayStatsValue { get; set; } = true;
 
     [JsonProperty("disableShadowform", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisableShadowform { get; set; } = false;
