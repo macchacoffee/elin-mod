@@ -29,8 +29,11 @@ public static class StringExtensions
         return !text.IsEmpty() ? _tagSizeRegex.Replace(text, m => resizer(int.Parse(m.Value)).ToString()) : text;
     }
 
-    public static string TrimTagTexts(this string text)
+    public static string ReplaceTagTexts(this string text, Func<string, string> replacer, Func<string, string>? firstReplacer = null)
     {
-        return !text.IsEmpty() ? _tagTextRegex.Replace(text, m => m.Value.Trim()) : text;
+        var i = 0;
+        return !text.IsEmpty() ? _tagTextRegex.Replace(text, m => {
+            return i++ == 0 && firstReplacer is not null ? firstReplacer(m.Value) : replacer(m.Value);
+        }) : text;
     }
 }

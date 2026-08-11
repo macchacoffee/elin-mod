@@ -39,7 +39,11 @@ public static class ModCharaHoverTextBuilder
             GetHoverTextLv(chara),
             GetHoverTextName(text),
         }.Where(t => !string.IsNullOrEmpty(t)));
-        return ModCardHoverTextBuilder.BuildHoverTextSection(hoverText, $"{text2}{s}");
+        var hoverText2 = string.Join(" ", new[] {
+            text2,
+            s,
+        }.Where(t => !string.IsNullOrEmpty(t)));
+        return ModCardHoverTextBuilder.BuildHoverTextSection(hoverText, hoverText2);
     }
 
     public static string BuildHoverText2(Chara chara, string text, string text2, string text3)

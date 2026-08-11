@@ -773,9 +773,12 @@ public static class CharaPatch
 
     private static string BuildHoverText(string text, string text2, string s, Chara chara)
     {
+        static string replacer(string t) => $" {t.Trim()}";
+        static string firstReplacer(string t) => $"{t.Trim()}";
+
         text = text.TagResize(ComputeFontSize);
-        text2 = text2.TrimTagTexts().TagResize(ComputeFontSize);
-        s = s.TrimTagTexts().TagResize(ComputeFontSize);
+        text2 = text2.ReplaceTagTexts(replacer, firstReplacer).TagResize(ComputeFontSize);
+        s = s.ReplaceTagTexts(replacer, firstReplacer).TagResize(ComputeFontSize);
         return ModCharaHoverTextBuilder.BuildHoverText(chara, text, text2, s);
     }
 

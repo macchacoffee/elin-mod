@@ -321,7 +321,7 @@ public class ModConfigHoverGuideStyleChara : JsonModConfigBase<ModConfigHoverGui
     public bool DisplayActParty { get; set; } = true;
 
     [JsonProperty("displayResist", DefaultValueHandling = DefaultValueHandling.Include)]
-    public bool DisplayResist { get; set; } = false;
+    public bool DisplayResist { get; set; } = true;
 
     [JsonProperty("displayResistValue", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayResistValue { get; set; } = true;
