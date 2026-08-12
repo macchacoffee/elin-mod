@@ -6,7 +6,6 @@ using HarmonyLib;
 using ModUtility.Patch;
 using SomewhatEnhancedDisplay.UI;
 using SomewhatEnhancedDisplay.UI.HoverGuide;
-using UnityEngine;
 
 namespace SomewhatEnhancedDisplay.Patches;
 
@@ -257,33 +256,6 @@ public static class WidgetMouseoverPatch
             new CodeInstruction(OpCodes.Ldloc_S, localTarget1),
             new CodeInstruction(OpCodes.Ldloc_S, localTarget2),
             CodeInstruction.Call(() => ShowHoverGuide(default!, default!, default!, default!, default!, default!, default!))
-        );
-
-        return matcher.InstructionEnumeration();
-    }
-
-    [HarmonyTranspiler]
-    [HarmonyPatch(nameof(WidgetMouseover.Show), [typeof(string)])]
-    private static IEnumerable<CodeInstruction> Show_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
-    {
-        // // 変更前
-        // switch (this.Rect().GetAnchor())
-        // {
-        // // 変更後
-        // switch (RectPosition.CENTER)
-        // {
-        var matcher = new CodeMatcher(instructions, generator);
-
-        // call static RectPosition ClassExtension::GetAnchor(UnityEngine.RectTransform _rect)
-        matcher.MatchStartForward(
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.GetAnchor), [typeof(RectTransform)]))
-        );
-        // GetAnchor()の戻り値を固定値のRectPosition.CENTERに置き換え、
-        // layout.childAlignmentがTextAnchor.MiddleCenterに設定されるようにする
-        matcher.Advance(1);
-        matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Pop),
-            new CodeInstruction(OpCodes.Ldc_I4_5)
         );
 
         return matcher.InstructionEnumeration();

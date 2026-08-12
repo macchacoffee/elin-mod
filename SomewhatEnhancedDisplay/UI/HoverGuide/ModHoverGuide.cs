@@ -1,6 +1,6 @@
 using System;
-using SomewhatEnhancedDisplay.Config;
 using UnityEngine;
+using SomewhatEnhancedDisplay.Config;
 
 namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
@@ -147,6 +147,7 @@ public class ModHoverGuide
 
         widget.textName.enabled = false;
         widget.Show(string.Empty);
+        widget.layout.childAlignment = TextAnchor.MiddleCenter;
         widget.layout.Rect().pivot = new(Config.HorizontalPivot, Config.VerticalPivot);
     }
 

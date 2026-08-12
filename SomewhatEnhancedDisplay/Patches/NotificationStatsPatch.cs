@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Reflection;
-using System.Reflection.Emit;
 using HarmonyLib;
 using ModUtility.Patch;
 
@@ -17,27 +15,19 @@ public static class NotificationStatsPatch
         return _patchTarget.IsPatchable(original) && ModContext.Config.EnableStatusNotification.Value;
     }
 
-    [HarmonyTranspiler]
+    [HarmonyPostfix]
     [HarmonyPatch(nameof(NotificationStats.OnRefresh), [])]
-    private static IEnumerable<CodeInstruction> OnRefresh_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static void OnRefresh_Postfix(NotificationStats __instance)
     {
-        // // 変更前
-        // text = baseStats.GetText() + ((EClass.debug.showExtra && !baseStats.GetText().IsEmpty()) ? ("(" + baseStats.GetValue() + ")") : "");
-        // // 変更後
-        // text = baseStats.GetText() + ((true && !baseStats.GetText().IsEmpty()) ? ("(" + baseStats.GetValue() + ")") : "");
-        var matcher = new CodeMatcher(instructions, generator);
+        if (EClass.debug.showExtra)
+        {
+            return;
+        }
 
-        // ldfld bool CoreDebug::showExtra
-        matcher.MatchEndForward(
-            new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(CoreDebug), nameof(CoreDebug.showExtra)))
-        );
-        // 状態の値が表示されるようにする
-        matcher.Advance(1);
-        matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Pop),
-            new CodeInstruction(OpCodes.Ldc_I4_1)
-        );
-
-        return matcher.InstructionEnumeration();
+        var stats = __instance.stats();
+        if (!stats.GetText().IsEmpty())
+        {
+            __instance.text += $"({stats.GetValue()})";
+        }
     }
 }
