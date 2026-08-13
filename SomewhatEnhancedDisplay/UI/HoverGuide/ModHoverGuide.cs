@@ -33,9 +33,7 @@ public class ModHoverGuide
 
         // ウィジェットを無効から有効に切り替えた際に表示が乱れないようにするため、
         // 初期状態では追加コンポーネントなどは表示しないようにする
-        Item1.Enabled = false;
         Padding1.Enabled = false;
-        Item2.Enabled = false;
     }
 
     private Card? GetOrUpdateLockedCard()
@@ -54,10 +52,16 @@ public class ModHoverGuide
                 lockedCard = card;
             }
         }
-        else if (!LocksCard || (lockedCard is Card card && !card.ExistsOnMap))
+        else if (!LocksCard)
         {
             UnlockCard();
             lockedCard = null;
+        }
+        else if (lockedCard is Card card && !card.ExistsOnMap)
+        {
+             UnlockCard();
+             ClearTarget();
+             lockedCard = null;
         }
 
         return lockedCard;
@@ -166,6 +170,12 @@ public class ModHoverGuide
         Item2.ShowForManager();
 
         widget.layout.RebuildLayout();
+    }
+
+    public void UpdateHealthBars()
+    {
+        Item1.UpdateHealthBar();
+        Item2.UpdateHealthBar();
     }
 
     public void ClearTarget()

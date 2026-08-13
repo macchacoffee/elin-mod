@@ -5,6 +5,7 @@ namespace SomewhatEnhancedDisplay.UI;
 public static class ModUIUtil
 {
     public static readonly Texture2D White1x1Texture = Create1x1WhiteTexture();
+    public static readonly Sprite White1x1Sprite = Sprite.Create(White1x1Texture, new Rect(0, 0, White1x1Texture.width, White1x1Texture.height), Vector2.zero);
 
     public static int ComputeFontSize(int baseSize)
     {
@@ -16,11 +17,6 @@ public static class ModUIUtil
     {
         var gameConfigSize = EClass.core.config.font.fontWidget.size;
         return (baseSize + gameConfigSize) * ModContext.WorldConfig.HoverGuide.ZoomScale;
-    }
-
-    public static Sprite Create1x1WhiteSprite()
-    {
-        return Sprite.Create(White1x1Texture, new Rect(0, 0, White1x1Texture.width, White1x1Texture.height), Vector2.zero);
     }
 
     public static Texture2D Create1x1WhiteTexture()

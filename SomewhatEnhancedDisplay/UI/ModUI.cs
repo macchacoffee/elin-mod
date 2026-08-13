@@ -10,6 +10,8 @@ public static class ModUI
 
     public static void Update()
     {
+        HoverGuide?.UpdateHealthBars();
+
         if (new KeyboardShortcut(ModContext.Config.NextStyleKey.Value).IsDown())
         {
             if (EClass.ui.GetLayer<ModLayerConfig>() is not null)

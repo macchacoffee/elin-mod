@@ -12,6 +12,20 @@ public static class ModCardHoverTextBuilder
         return $"{hoverText}{GetHoverTextOtherCards(otherCardsText)}";
     }
 
+    public static string BuildHoverTextSection(string? line1, string? line2)
+    {
+        if (string.IsNullOrEmpty(line1))
+        {
+            return line2 ?? string.Empty;
+        }
+        if (string.IsNullOrEmpty(line2))
+        {
+            return line1 ?? string.Empty;
+        }
+
+        return string.Concat(line1, Environment.NewLine, line2);
+    }
+
     public static string BuildHoverTextSection(params string?[] lines)
     {
         return string.Join(Environment.NewLine, lines.Where(l => !string.IsNullOrEmpty(l)));

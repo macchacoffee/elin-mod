@@ -12,22 +12,7 @@ public class ModHoverGuideItem
     private ModHealthBar HealthBar { get; }
     private UIText TextName2 { get; }
 
-    public bool Enabled
-    {
-        get
-        {
-            return
-                TextName1.enabled
-                || HealthBar.Enabled
-                || TextName2.enabled;
-        }
-        set
-        {
-            TextName1.enabled = value;
-            HealthBar.Enabled = value;
-            TextName2.enabled = value;
-        }
-    }
+    public bool Enabled => TextName1.enabled || HealthBar.Enabled || TextName2.enabled;
 
     private static ModConfigHoverGuide Config => ModContext.WorldConfig.HoverGuide;
     private static ModConfigHoverGuideColorSet ColorConfig => Config.ColorSet;
@@ -52,7 +37,7 @@ public class ModHoverGuideItem
         // ウィジェットを無効から有効に切り替えた際に表示が乱れないようにするため、
         // 初期状態では追加コンポーネントなどは表示しないようにする
         TextName1.enabled = false;
-        HealthBar.Enabled = false;
+        HealthBar.Hide();
         TextName2.enabled = false;
     }
 
@@ -64,12 +49,7 @@ public class ModHoverGuideItem
         {
             if (isLocked)
             {
-                var lines = text1.Split([Environment.NewLine], StringSplitOptions.None);
-                if (lines.Length > 0)
-                {
-                    lines[0] = $"* {lines[0]} *";
-                }
-                text1 = string.Join(Environment.NewLine, lines);
+                text1 = AddLockMarker(text1);
             }
             text1 = text1.TagColorNullable(ColorConfig.MainTextColor);
             TextName1.fontColor = fontColor;
@@ -86,13 +66,17 @@ public class ModHoverGuideItem
         }
         if (target?.Card is Chara chara && (StyleConfig.DisableMimicry || !chara.HasMimicryThing))
         {
-            HealthBar.Update(chara, target.Modifier);
+            HealthBar.UpdateTarget(chara, target.Modifier);
             displays = HealthBar.Enabled;
             isPaddingRequired = !displays;
         }
         else
         {
-            HealthBar.Enabled = false;
+            HealthBar.Hide();
+            if (target?.Card is not null)
+            {
+                HealthBar.StopTracking();
+            }
         }
         if (target?.Text2 is string text2 && !text2.IsEmpty())
         {
@@ -119,12 +103,29 @@ public class ModHoverGuideItem
     public void ShowForManager()
     {
         TextName1.enabled = false;
-        HealthBar.Enabled = false;
+        HealthBar.Hide();
+        HealthBar.StopTracking();
         TextName2.enabled = false;
+    }
+
+    public void UpdateHealthBar()
+    {
+        HealthBar.Update();
     }
 
     public void ClearTarget()
     {
-        HealthBar.ClearTarget();
+        HealthBar.StopTracking();
+    }
+
+    private static string AddLockMarker(string text)
+    {
+        var index = text.IndexOf(Environment.NewLine);
+        if (index < 0)
+        {
+            return $"* {text} *";
+        }
+
+        return $"* {text[..index]} *{text[index..]}";
     }
 }

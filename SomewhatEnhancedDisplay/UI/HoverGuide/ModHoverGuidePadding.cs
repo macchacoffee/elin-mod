@@ -7,18 +7,12 @@ public class ModHoverGuidePadding
     private UIImage Image { get; }
 
     private float Height { get; set; }
+    private float _actualHeight = float.NaN;
 
     public bool Enabled
     {
-        get
-        {
-            return Image.enabled;
-        }
-        set
-        {
-            Image.enabled = value;
-            Image.transform.Rect().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, value ? Height : 0);
-        }
+        get => Image.enabled;
+        set => Update(value, Height);
     }
 
     public ModHoverGuidePadding(WidgetMouseover widget)
@@ -40,6 +34,19 @@ public class ModHoverGuidePadding
     public void Update(bool enabled, float height)
     {
         Height = height;
-        Enabled = enabled;
+
+        if (Image.enabled != enabled)
+        {
+             Image.enabled = enabled;
+        }
+
+        var actualHeight = enabled ? height : 0;
+        if (_actualHeight == actualHeight)
+        {
+            return;
+        }
+        _actualHeight = actualHeight;
+
+        Image.transform.Rect().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, actualHeight);
     }
 }
