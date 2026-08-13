@@ -31,18 +31,6 @@ public class ModHealthBar
     private int _lastFontSize = -1;
     private float _lastWidth = float.NaN;
 
-    // public bool Enabled
-    // {
-    //     get => Layout.enabled;
-    //     set
-    //     {
-    //         if (Layout.enabled != value)
-    //         {
-    //             Layout.enabled = value;
-    //         }
-    //         UpdateSize(value);
-    //     }
-    // }
     public bool Enabled => Layout.enabled;
 
     private static ModConfigHoverGuide Config => ModContext.WorldConfig.HoverGuide;
@@ -107,13 +95,6 @@ public class ModHealthBar
 
     public void Update()
     {
-        // if (!Target.TryGetTarget(out var target) || target is null)
-        // {
-        //     return;
-        // }
-
-        // UpdateInternal(target, TargetModifier, false);
-
         if (!Target.TryGetTarget(out var target) || target is null)
         {
             return;
@@ -129,13 +110,6 @@ public class ModHealthBar
 
     public void UpdateTarget(Chara chara, ModHoverGuideTargetModifier? modifier)
     {
-        // var targetChanged = !Target.TryGetTarget(out var target) || target != chara;
-
-        // Target.SetTarget(chara);
-        // TargetModifier = modifier;
-
-        // UpdateInternal(chara, modifier, targetChanged);
-
         var targetChanged = !Target.TryGetTarget(out var target) || target != chara;
 
         Target.SetTarget(chara);
@@ -190,42 +164,6 @@ public class ModHealthBar
             FGImage.color =  GetBarColor(ratio);
         }
     }
-
-    // private void UpdateInternal(Chara chara, ModHoverGuideTargetModifier? modifier, bool targetChanged)
-    // {
-    //     ValueText.enabled = StyleConfig.HealthBar.DisplayValue;
-
-    //     if (TryHandleDeadTarget(chara))
-    //     {
-    //         Enabled = Displays(chara, modifier);
-    //         return;
-    //     }
-
-    //     var ratio = modifier?.HealthBarRatio ?? chara.HealthRatio;
-
-    //     var textColor = GetTextColor(ratio);
-    //     var barColor = GetBarColor(ratio);
-
-    //     if (!StyleConfig.HealthBar.UseAnimation || targetChanged)
-    //     {
-    //         SetValueImmediately(ratio, barColor, textColor);
-    //     }
-    //     else if (ValueRatio != ratio)
-    //     {
-    //         UpdateRestore(ratio, barColor, textColor);
-    //         UpdateDamage(ratio,barColor, textColor);
-    //     }
-    //     else if (!(FGRestoreTween?.IsPlaying() ?? false))
-    //     {
-    //         // 色の設定変更が即座に反映されるようにするため、
-    //         // 回復アニメーションが再生されていない場合は文字とバー画像の色を変更する
-    //         ValueText.color = textColor;
-    //         FGImage.color = barColor;
-    //     }
-
-    //     ValueRatio = ratio;
-    //     Enabled = Displays(chara, modifier);
-    // }
 
     private bool TryHandleDeadTarget(Chara chara)
     {

@@ -416,7 +416,6 @@ public static class ModCharaHoverTextBuilder
         return $"{attr.Name}:{attr.Value}";
     }
 
-    // private static string? GetResistListLineText(IEnumerable<Element> resists)
     private static string? GetResistListLineText(IEnumerable<IModElement> resists)
     {
         var lineFontSize = ModUIUtil.ComputeFontSize(13);
@@ -432,7 +431,6 @@ public static class ModCharaHoverTextBuilder
         return !string.IsNullOrEmpty(text) ? text : null;
     }
 
-    // private static string? GetResistListLineByLevelText(IGrouping<int, Element> group)
     private static string? GetResistListLineByLevelText(IGrouping<int, IModElement> group)
     {
         var resistLevelText = GetResistLevelText(group.Key);
@@ -501,7 +499,6 @@ public static class ModCharaHoverTextBuilder
         }
     }
 
-    // private static string? GetResistText(Element resist)
     private static string? GetResistText(IModElement resist)
     {
         var eleAlias = resist.Source.aliasParent;
@@ -516,8 +513,7 @@ public static class ModCharaHoverTextBuilder
             return null;
         }
 
-        var valueFontSize = ModUIUtil.ComputeFontSize(11);
-        var resistText = $"{resImmunePlusText}{element.GetName()}{resImmunePlusText}{(StyleConfig.DisplayResistValue ? $"({resist.Value})".TagSize(valueFontSize) : string.Empty)}";
+        var resistText = $"{resImmunePlusText}{element.GetName()}{resImmunePlusText}{(StyleConfig.DisplayResistValue ? $"({resist.Value})".TagSize(ModUIUtil.ComputeFontSize(11)) : string.Empty)}";
         if (GetElementColor(eleAlias) is Color color)
         {
             resistText = resistText.TagColor(color);
