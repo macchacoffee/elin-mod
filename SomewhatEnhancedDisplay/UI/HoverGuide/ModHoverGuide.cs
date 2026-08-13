@@ -15,14 +15,20 @@ public class ModHoverGuide
     private Vector2 OriginalPivot { get; }
     private int BaseFontSize { get; }
 
-    public bool LocksCard { get; set; } = false;
+    public bool LocksCard { get; private set; } = false;
     private WeakReference<Card?> LockedCard { get; set; } = new(null);
     private ModHoverGuideTargetModifier? LockedModifier { get; set; }
+    private WeakReference<Card?> LockCandidateCard { get; } = new(null);
+    private ModHoverGuideTargetModifier? LockCandidateModifier { get; set; }
+
+    private WidgetMouseover MouseoverWidget { get; }
 
     private static ModConfigHoverGuide Config => ModContext.WorldConfig.HoverGuide;
 
     public ModHoverGuide(WidgetMouseover widget)
     {
+        MouseoverWidget = widget;
+
         Item1 = new(widget);
         Padding1 = new(widget);
         Item2 = new(widget);
@@ -67,9 +73,15 @@ public class ModHoverGuide
         return lockedCard;
     }
 
-    private static bool IsWidgetActive(WidgetMouseover widget)
+    private bool IsWidgetActive()
     {
-        return widget.config.state == Widget.State.Active;
+        return MouseoverWidget.config.state == Widget.State.Active;
+    }
+
+    private bool IsVisible()
+    {
+        // widgetが非可視になるのはlayoutが非活性になるパターンと透明度が非常に小さい値になるパターンがある
+        return MouseoverWidget.layout.isActiveAndEnabled && MouseoverWidget.cg.alpha >= 0.07f;
     }
 
     public void LockCard(Card card)
@@ -91,9 +103,58 @@ public class ModHoverGuide
         LocksCard = false;
     }
 
-    public void Show(WidgetMouseover? widget, ModHoverGuideTarget? target1, ModHoverGuideTarget? target2)
+    private void ClearLockCandidate()
     {
-        if (widget is null || !IsWidgetActive(widget))
+        LockCandidateCard.SetTarget(null);
+        LockCandidateModifier = null;
+    }
+
+    public bool TryShowLockedCard()
+    {
+        if (!IsWidgetActive())
+        {
+            return false;
+        }
+        if (GetOrUpdateLockedCard() is not Card card)
+        {
+            return false;
+        }
+
+        var target = CreateLockedTarget(card);
+        ShowInternal(target, null, true);
+
+        return true;
+    }
+
+    public bool TryToggleLock()
+    {
+        if (LocksCard)
+        {
+            UnlockCard();
+            return true;
+        }
+
+        if (!IsWidgetActive() || !IsVisible() || !LockCandidateCard.TryGetTarget(out var card) || card is null || !card.ExistsOnMap)
+        {
+            return false;
+        }
+
+        LockCard(card, LockCandidateModifier);
+
+        var target = CreateLockedTarget(card);
+        ShowInternal(target, null, true);
+
+        return true;
+    }
+
+    private ModHoverGuideTarget CreateLockedTarget(Card card)
+    {
+        return new ModHoverGuideTarget(card.GetHoverText(), card.GetHoverText2(), card, LockedModifier);
+    }
+
+    public void Show(ModHoverGuideTarget? target1, ModHoverGuideTarget? target2)
+    {
+        if (!IsWidgetActive())
         {
             return;
         }
@@ -104,41 +165,33 @@ public class ModHoverGuide
         {
             if (lockedCard != card1)
             {
-                target1 = new ModHoverGuideTarget(lockedCard.GetHoverText(), lockedCard.GetHoverText2(), lockedCard, LockedModifier);
+                target1 = CreateLockedTarget(lockedCard);
             }
             target2 = null;
         }
 
-        ShowInternal(widget, target1, target2, lockedCard is not null);
-    }
-
-    public bool TryShowLockedCard(WidgetMouseover? widget)
-    {
-        if (widget is null || !IsWidgetActive(widget))
+        if (card1 is not null)
         {
-            return false;
-        }
-        if (GetOrUpdateLockedCard() is not Card card)
-        {
-            return false;
+            LockCandidateCard.SetTarget(card1);
+            LockCandidateModifier = target1?.Modifier;
         }
 
-        var target = new ModHoverGuideTarget(card.GetHoverText(), card.GetHoverText2(), card, LockedModifier);
-        ShowInternal(widget, target, null, true);
-
-        return true;
+        ShowInternal(target1, target2, lockedCard is not null);
     }
 
-    private void ShowInternal(WidgetMouseover widget, ModHoverGuideTarget? target1, ModHoverGuideTarget? target2, bool isLocked)
+    private void ShowInternal(ModHoverGuideTarget? target1, ModHoverGuideTarget? target2, bool isLocked)
     {
-        // widgetが非可視になるのはlayoutが非活性になるパターンと透明度が非常に小さい値になるパターンがある
         // 非可視の場合はホバーガイドのターゲットをクリアする
-        if (!widget.layout.isActiveAndEnabled || widget.cg.alpha < 0.07f)
+        if (!IsVisible())
         {
             ClearTarget();
+            if (!LocksCard)
+            {
+                ClearLockCandidate();
+            }
         }
 
-        var fontColor = widget.textName.fontColor;
+        var fontColor = MouseoverWidget.textName.fontColor;
         // 行間を広げるためにフォントサイズを少し大きく設定する
         var fontSize1 = ModUIUtil.ComputeFontSize(BaseFontSize + 2);
         var fontSize2 = ModUIUtil.ComputeFontSize(BaseFontSize + 4);
@@ -149,27 +202,29 @@ public class ModHoverGuide
         var isItem2Enabled = Item2.Show(fontColor, fontSize2, target2, false);
         Padding1.Update(isItem1Enabled && isItem2Enabled, paddingHeight);
 
-        widget.textName.enabled = false;
-        widget.Show(string.Empty);
-        widget.layout.childAlignment = TextAnchor.MiddleCenter;
-        widget.layout.Rect().pivot = new(Config.HorizontalPivot, Config.VerticalPivot);
+        MouseoverWidget.textName.enabled = false;
+        MouseoverWidget.Show(string.Empty);
+        MouseoverWidget.layout.childAlignment = TextAnchor.MiddleCenter;
+        MouseoverWidget.layout.Rect().pivot = new(Config.HorizontalPivot, Config.VerticalPivot);
     }
 
-    public void ShowForManager(WidgetMouseover? widget)
+    public void ShowForManager()
     {
-        if (widget is null || !IsWidgetActive(widget))
+        if (!IsWidgetActive())
         {
             return;
         }
 
-        widget.layout.Rect().pivot = OriginalPivot;
-        widget.textName.enabled = true;
+         ClearLockCandidate();
+
+        MouseoverWidget.layout.Rect().pivot = OriginalPivot;
+        MouseoverWidget.textName.enabled = true;
 
         Item1.ShowForManager();
         Padding1.Enabled = false;
         Item2.ShowForManager();
 
-        widget.layout.RebuildLayout();
+        MouseoverWidget.layout.RebuildLayout();
     }
 
     public void UpdateHealthBars()

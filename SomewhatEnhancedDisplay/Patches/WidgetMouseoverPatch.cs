@@ -124,8 +124,7 @@ public static class WidgetMouseoverPatch
         matcher.CreateLabelWithOffsets(3, out var LabelMod1);
         // 固定ターゲットの表示を試行し、表示する場合はHide()の呼び出しをスキップする処理を追加する
         matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Ldarg_0),
-            CodeInstruction.Call(() => TryShowHoverGuideLockedCard(default!)),
+            CodeInstruction.Call(() => TryShowHoverGuideLockedCard()),
             new CodeInstruction(OpCodes.Brtrue, LabelMod1)
         );
 
@@ -243,11 +242,20 @@ public static class WidgetMouseoverPatch
             new CodeInstruction(OpCodes.Stloc_S, localText3)
         );
 
+        // ldarg.0 NULL [Label17, Label19, Label23, Label27, Label28, Label29, Label30]
+        // ldloc.2 NULL
         // call void WidgetMouseover::Show(string s)
         matcher.MatchStartForward(
+            new CodeMatch(OpCodes.Ldarg_0),
+            new CodeMatch(OpCodes.Ldloc_2),
             new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(WidgetMouseover), nameof(WidgetMouseover.Show), [typeof(string)]))
         );
         // Show()を呼び出す代わりにModで追加したUIを更新するメソッドを呼び出す
+        var labelList1 = matcher.Labels.Copy();
+        matcher.Labels.Clear();
+        matcher.RemoveInstruction();
+        matcher.AddLabels(labelList1);
+        matcher.Advance(1);
         matcher.RemoveInstruction();
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Ldloc_S, localText2),
@@ -255,7 +263,7 @@ public static class WidgetMouseoverPatch
             new CodeInstruction(OpCodes.Ldloc_S, localText4),
             new CodeInstruction(OpCodes.Ldloc_S, localTarget1),
             new CodeInstruction(OpCodes.Ldloc_S, localTarget2),
-            CodeInstruction.Call(() => ShowHoverGuide(default!, default!, default!, default!, default!, default!, default!))
+            CodeInstruction.Call(() => ShowHoverGuide(default!, default!, default!, default!, default!, default!))
         );
 
         return matcher.InstructionEnumeration();
@@ -266,18 +274,18 @@ public static class WidgetMouseoverPatch
     private static void OnManagerActivate_Postfix(WidgetMouseover __instance)
     {
         ModUI.HoverGuide!.UnlockCard();
-        ModUI.HoverGuide!.ShowForManager(__instance);
+        ModUI.HoverGuide!.ShowForManager();
     }
 
-    private static bool TryShowHoverGuideLockedCard(WidgetMouseover widget)
+    private static bool TryShowHoverGuideLockedCard()
     {
-        return ModUI.HoverGuide!.TryShowLockedCard(widget);
+        return ModUI.HoverGuide!.TryShowLockedCard();
     }
 
-    private static void ShowHoverGuide(WidgetMouseover widget, string? text1, string? text2, string? text3, string? text4, Card? card1, Card? card2)
+    private static void ShowHoverGuide(string? text1, string? text2, string? text3, string? text4, Card? card1, Card? card2)
     {
         var target1 =  new ModHoverGuideTarget(text1, text2, card1);
         var target2 =  new ModHoverGuideTarget(text3, text4, card2);
-        ModUI.HoverGuide!.Show(widget, target1, target2);
+        ModUI.HoverGuide!.Show(target1, target2);
     }
 }

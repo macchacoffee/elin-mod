@@ -36,8 +36,10 @@ public static class ModUI
                 return;
             }
 
-            HoverGuide?.LocksCard = !HoverGuide?.LocksCard ?? false;
-            SE.SelectHotitem();
+            if (HoverGuide?.TryToggleLock() == true)
+            {
+                SE.SelectHotitem();
+            }
             return;
         }
     }
