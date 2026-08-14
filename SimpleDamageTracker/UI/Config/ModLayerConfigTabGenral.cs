@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using YKF;
 using SimpleDamageTracker.Config;
 using SimpleDamageTracker.Extensions;
-using System.Reflection.Emit;
 
 namespace SimpleDamageTracker.UI.Config;
 
