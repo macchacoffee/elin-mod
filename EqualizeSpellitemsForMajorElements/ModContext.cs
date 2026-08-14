@@ -5,7 +5,7 @@ using EqualizeSpellitemsForMajorElements.Config;
 
 namespace EqualizeSpellitemsForMajorElements;
 
-public static class ModContext
+internal static class ModContext
 {
     private static readonly string _configFileName = $"{PluginInfo.Guid}.cfg";
 

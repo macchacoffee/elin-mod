@@ -5,7 +5,7 @@ using ModUtility.Patch;
 namespace SomewhatEnhancedDisplay.Patches;
 
 [HarmonyPatch(typeof(NotificationBuff))]
-public static class NotificationBuffPatch
+internal static class NotificationBuffPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

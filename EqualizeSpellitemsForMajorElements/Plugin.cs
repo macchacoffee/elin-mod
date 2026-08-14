@@ -7,7 +7,7 @@ using ModUtility.External.ModConfigGUI;
 
 namespace EqualizeSpellitemsForMajorElements;
 
-public static class PluginInfo
+internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.equalize-spellitems-for-major-elements";
     public const string Name = "Equalize Spellitems for Major Elements";

@@ -2,7 +2,7 @@ using ModUtility.Config;
 
 namespace MoreEffectiveLuck.Config;
 
-public class ModConfig : BepInExModConfigBase<ModConfig>
+internal class ModConfig : BepInExModConfigBase<ModConfig>
 {
     private static readonly string _enchantPower = "EnchantPower";
     private static readonly string _equipmentRarity = "EquipmentRarity";

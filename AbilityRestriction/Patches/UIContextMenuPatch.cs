@@ -7,7 +7,7 @@ using AbilityRestriction.Mod;
 namespace AbilityRestriction.Patches;
 
 [HarmonyPatch(typeof(UIContextMenu))]
-public static class UIContextMenuPatch
+internal static class UIContextMenuPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

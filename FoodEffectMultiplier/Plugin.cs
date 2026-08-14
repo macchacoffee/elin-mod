@@ -7,7 +7,7 @@ using ModUtility.External.ModConfigGUI;
 
 namespace FoodEffectMultiplier;
 
-public static class PluginInfo
+internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.food-effect-multiplier";
     public const string Name = "Food Effect Multiplier";

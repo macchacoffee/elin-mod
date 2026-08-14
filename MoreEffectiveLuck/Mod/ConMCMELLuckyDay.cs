@@ -1,6 +1,6 @@
 namespace MoreEffectiveLuck.Mod;
 
-public class ConMCMELLuckyDay : Condition
+internal class ConMCMELLuckyDay : Condition
 {
     public override bool CanManualRemove => true;
 

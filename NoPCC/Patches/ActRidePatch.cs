@@ -6,7 +6,7 @@ using NoPCC.Mod;
 namespace NoPCC.Patches;
 
 [HarmonyPatch(typeof(ActRide))]
-public static class ActRidePatch
+internal static class ActRidePatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

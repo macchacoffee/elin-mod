@@ -5,7 +5,7 @@ using SomewhatEnhancedDisplay.Config;
 
 namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
-public class ModLayerConfigContext
+internal class ModLayerConfigContext
 {
     public int SelectedStyleIndex
     {

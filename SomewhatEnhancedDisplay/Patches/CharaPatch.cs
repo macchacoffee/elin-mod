@@ -13,7 +13,7 @@ using SomewhatEnhancedDisplay.UI.HoverGuide;
 namespace SomewhatEnhancedDisplay.Patches;
 
 [HarmonyPatch(typeof(Chara))]
-public static class CharaPatch
+internal static class CharaPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 
@@ -791,7 +791,7 @@ public static class CharaPatch
     }
 
     [HarmonyPatch(typeof(CraftUtil))]
-    public static class CraftUtilPatch
+    internal static class CraftUtilPatch
     {
         private static readonly ModPatchTarget _patchTarget = new();
 

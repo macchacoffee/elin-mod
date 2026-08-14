@@ -2,7 +2,7 @@ using System;
 
 namespace FactionEnchantInInventory.Extensions;
 
-public static class ElementContainerFactionExtensions
+internal static class ElementContainerFactionExtensions
 {
     public static void OnAdd(this ElementContainerFaction ecf, Thing thing)
     {

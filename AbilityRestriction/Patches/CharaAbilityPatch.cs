@@ -7,7 +7,7 @@ using ModUtility.Patch;
 namespace AbilityRestriction.Patches;
 
 [HarmonyPatch(typeof(CharaAbility))]
-public static class CharaAbilityPatch
+internal static class CharaAbilityPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

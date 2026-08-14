@@ -3,7 +3,7 @@ using System;
 
 namespace MoreEffectiveLuck.Mod;
 
-public class ModLuckDice<T>
+internal class ModLuckDice<T>
 {
     public Func<T> ResultFunc { get; }
     public Func<T, T, bool> ResultCompareFunc { get; }
@@ -53,4 +53,4 @@ public class ModLuckDice<T>
     }
 }
 
-public record LuckDiceResult<T>(T Value);
+internal record LuckDiceResult<T>(T Value);

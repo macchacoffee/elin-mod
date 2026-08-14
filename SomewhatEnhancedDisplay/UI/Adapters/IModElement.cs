@@ -1,6 +1,6 @@
 namespace SomewhatEnhancedDisplay.UI.Adapters;
 
-public interface IModElement
+internal interface IModElement
 {
     public int Id { get; }
     public int Value { get; }

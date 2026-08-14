@@ -4,7 +4,7 @@ using System;
 
 namespace AbilityRestriction.Mod;
 
-public static class ModAbilityRestriction
+internal static class ModAbilityRestriction
 {
     public static bool CanRestrictAbility(Chara chara)
     {

@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace ModUtility.External;
 
-public static class ModDelegate
+internal static class ModDelegate
 {
     public static TDelegate AsDelegate<TDelegate>(MethodInfo method) where TDelegate : Delegate
     {

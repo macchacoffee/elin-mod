@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
-public static class ModThingHoverTextBuilder
+internal static class ModThingHoverTextBuilder
 {
     private static ModConfigHoverGuide Config => ModContext.WorldConfig.HoverGuide;
     private static ModConfigHoverGuideColorSet ColorConfig => Config.ColorSet;

@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace AddPalmiaTimesNewsToLog.Config;
 
-public enum ModLogTarget
+internal enum ModLogTarget
 {
     Log = 1,
     Feed
 }
 
-public class ModConfig : JsonModConfigBase<ModConfig>
+internal class ModConfig : JsonModConfigBase<ModConfig>
 {
     [JsonProperty("enable", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool Enable { get; set; } = true;
@@ -32,7 +32,7 @@ public class ModConfig : JsonModConfigBase<ModConfig>
     public ModConfigChat Chat { get; private set; } = new();
 }
 
-public class ModConfigNews : JsonModConfigBase<ModConfig>
+internal class ModConfigNews : JsonModConfigBase<ModConfig>
 {
     [JsonProperty("enable", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool Enable { get; set; } = true;
@@ -41,7 +41,7 @@ public class ModConfigNews : JsonModConfigBase<ModConfig>
     public int MaxCount { get; set; } = 1;
 }
 
-public class ModConfigChat : JsonModConfigBase<ModConfig>
+internal class ModConfigChat : JsonModConfigBase<ModConfig>
 {
     [JsonProperty("enable", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool Enable { get; set; } = true;

@@ -5,7 +5,7 @@ using FactionEnchantInInventory.Config;
 
 namespace FactionEnchantInInventory;
 
-public static class ModContext
+internal static class ModContext
 {
     private static readonly string _configFileName = $"{PluginInfo.Guid}.cfg";
 

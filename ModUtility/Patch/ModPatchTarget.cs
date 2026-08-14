@@ -2,7 +2,7 @@ using System.Reflection;
 
 namespace ModUtility.Patch;
 
-public record class ModPatchTarget(Version? MinVersion = null, Version? MaxVersion = null)
+internal class ModPatchTarget(Version? MinVersion = null, Version? MaxVersion = null)
 {
     public bool IsPatchable(MethodBase? targetMethod)
     {

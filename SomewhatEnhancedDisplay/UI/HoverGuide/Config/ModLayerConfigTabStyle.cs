@@ -7,7 +7,7 @@ using YKF;
 
 namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
-public class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
+internal class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
 {
     private static readonly int _minStyleCount = 1;
     private static readonly int _maxStyleCount = 10;

@@ -5,7 +5,7 @@ using HarmonyLib;
 
 namespace EnableDiningSpotSignInTent;
 
-public static class PluginInfo
+internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.enable-dining-spot-sign-in-tent";
     public const string Name = "Enable Dining Spot Sign in Tent";

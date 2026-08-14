@@ -1,6 +1,6 @@
 namespace MoreEffectiveLuck.Mod;
 
-public class ConMCMELLucky : BaseBuff
+internal class ConMCMELLucky : BaseBuff
 {
     public override int EvaluateTurn(int p)
     {

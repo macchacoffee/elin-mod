@@ -10,7 +10,7 @@ using SomewhatEnhancedDisplay.UI.HoverGuide;
 namespace SomewhatEnhancedDisplay.Patches;
 
 [HarmonyPatch(typeof(WidgetMouseover))]
-public static class WidgetMouseoverPatch
+internal static class WidgetMouseoverPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

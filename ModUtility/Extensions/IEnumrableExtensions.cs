@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ModUtility.Extensions;
 
-public static class IEnumrableExtensions
+internal static class IEnumrableExtensions
 {
     public static IEnumerable<IEnumerable<TSource>> Chunk<TSource>(this IEnumerable<TSource> source, int size)
     {

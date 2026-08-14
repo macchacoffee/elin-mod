@@ -3,13 +3,13 @@ using Newtonsoft.Json;
 
 namespace NoPCC.Config;
 
-public class ModConfig : JsonModConfigBase<ModConfig>
+internal class ModConfig : JsonModConfigBase<ModConfig>
 {
     [JsonProperty("sprite", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigSprite Sprite { get; private set; } = new();
 }
 
-public class ModConfigSprite : JsonModConfigBase<ModConfigSprite>
+internal class ModConfigSprite : JsonModConfigBase<ModConfigSprite>
 {
     // お兄ちゃん お兄ちゃん！ お兄ちゃん？ お兄ちゃん！！
     private static readonly int _initialTileId = 1918;
@@ -44,7 +44,7 @@ public class ModConfigSprite : JsonModConfigBase<ModConfigSprite>
     public ModConfigTile RideCombatSnowTile { get; private set; } = new() { Enable = false, Id = _initialEmptyTileId };
 }
 
-public class ModConfigTile : JsonModConfigBase<ModConfigTile>
+internal class ModConfigTile : JsonModConfigBase<ModConfigTile>
 {
     [JsonProperty("enable", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool Enable { get; set; }

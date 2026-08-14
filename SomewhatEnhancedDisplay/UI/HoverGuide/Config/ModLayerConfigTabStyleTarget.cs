@@ -8,7 +8,7 @@ using YKF;
 
 namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
-public abstract class ModLayerConfigTabStyleTarget : YKLayout<ModLayerConfigContext>
+internal abstract class ModLayerConfigTabStyleTarget : YKLayout<ModLayerConfigContext>
 {
     private static readonly Dictionary<ModItemDisplayMode, string> _itemDisplayModeIdLangs = new() {
         {ModItemDisplayMode.Hide, ModConsts.SourceId.ItemDisplayModeHide},

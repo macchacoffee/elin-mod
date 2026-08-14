@@ -5,7 +5,7 @@ using HarmonyLib;
 
 namespace NPCGotoBehaviorTweaks;
 
-public static class PluginInfo
+internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.npc-goto-behavior-tweaks";
     public const string Name = "NPC Goto Behavior Tweaks";

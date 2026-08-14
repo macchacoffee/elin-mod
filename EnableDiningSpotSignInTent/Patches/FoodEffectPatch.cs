@@ -7,7 +7,7 @@ using ModUtility.Patch;
 namespace EnableDiningSpotSignInTent.Patches;
 
 [HarmonyPatch(typeof(FoodEffect))]
-public static class FoodEffectPatch
+internal static class FoodEffectPatch
 {
     private static readonly ModPatchTarget _patchTarget = new(
         MaxVersion: new Version { minor = 23, batch = 288 }

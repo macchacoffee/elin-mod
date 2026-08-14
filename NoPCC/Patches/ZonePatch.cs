@@ -6,7 +6,7 @@ using NoPCC.Mod;
 namespace NoPCC.Patches;
 
 [HarmonyPatch(typeof(Zone))]
-public static class ZonePatch
+internal static class ZonePatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

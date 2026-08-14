@@ -2,7 +2,7 @@ using System;
 
 namespace ModUtility.Util;
 
-public static class ModMath
+internal static class ModMath
 {
     public static float Ceiling(float value, int digits)
     {

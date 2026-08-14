@@ -8,7 +8,7 @@ using SomewhatEnhancedDisplay.Config;
 
 namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
-public class ModHealthBar
+internal class ModHealthBar
 {
     private static readonly float _height = 32;
     private static readonly float _barHeight = 8;

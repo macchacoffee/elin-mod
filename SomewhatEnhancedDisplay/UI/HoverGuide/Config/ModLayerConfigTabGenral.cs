@@ -7,7 +7,7 @@ using YKF;
 
 namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
-public class ModLayerConfigTabGenral : YKLayout<ModLayerConfigContext>
+internal class ModLayerConfigTabGenral : YKLayout<ModLayerConfigContext>
 {
     private static ModConfigHoverGuide Config => ModContext.WorldConfig.HoverGuide;
     private static ModConfigHoverGuideColorSet ColorConfig => Config.ColorSet;

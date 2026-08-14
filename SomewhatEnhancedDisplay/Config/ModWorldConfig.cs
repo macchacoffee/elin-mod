@@ -7,14 +7,14 @@ using UnityEngine;
 
 namespace SomewhatEnhancedDisplay.Config;
 
-public enum ModItemDisplayMode
+internal enum ModItemDisplayMode
 {
     Hide = 0,
     AlwaysShow,
     Show,
 }
 
-public enum ModHealthBarDisplayTarget
+internal enum ModHealthBarDisplayTarget
 {
     None = 0,
     All,
@@ -22,7 +22,7 @@ public enum ModHealthBarDisplayTarget
     Boss,
 }
 
-public class ModWorldConfig : JsonModConfigBase<ModWorldConfig>
+internal class ModWorldConfig : JsonModConfigBase<ModWorldConfig>
 {
     [JsonProperty("hoverGuide", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHoverGuide HoverGuide { get; set; } = new();
@@ -43,7 +43,7 @@ public class ModWorldConfig : JsonModConfigBase<ModWorldConfig>
     }
 }
 
-public class ModConfigHoverGuide : JsonModConfigBase<ModConfigHoverGuide>
+internal class ModConfigHoverGuide : JsonModConfigBase<ModConfigHoverGuide>
 {
     [JsonProperty("zoomScale", DefaultValueHandling = DefaultValueHandling.Include)]
     public float ZoomScale { get; set; } = 1;
@@ -106,7 +106,7 @@ public class ModConfigHoverGuide : JsonModConfigBase<ModConfigHoverGuide>
     }
 }
 
-public class ModConfigHoverGuideColorSet : JsonModConfigBase<ModConfigHoverGuide>
+internal class ModConfigHoverGuideColorSet : JsonModConfigBase<ModConfigHoverGuide>
 {
     [JsonProperty("mainTextColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ModColorConverter))]
@@ -213,7 +213,7 @@ public class ModConfigHoverGuideColorSet : JsonModConfigBase<ModConfigHoverGuide
     public Color FressnessLowValueColor { get; set; } = new(0.822f, 0.431f, 0.395f); // #D26E65FF
 }
 
-public class ModConfigHoverGuideStyle : JsonModConfigBase<ModConfigHoverGuideStyle>
+internal class ModConfigHoverGuideStyle : JsonModConfigBase<ModConfigHoverGuideStyle>
 {
     [JsonProperty("name", DefaultValueHandling = DefaultValueHandling.Include)]
     public string Name { get; set; } = ModConsts.SourceId.StyleName.lang();
@@ -225,7 +225,7 @@ public class ModConfigHoverGuideStyle : JsonModConfigBase<ModConfigHoverGuideSty
     public ModConfigHoverGuideStyleThing Thing { get; set; } = new();
 }
 
-public class ModConfigHoverGuideStyleChara : JsonModConfigBase<ModConfigHoverGuideStyleChara>
+internal class ModConfigHoverGuideStyleChara : JsonModConfigBase<ModConfigHoverGuideStyleChara>
 {
     [JsonProperty("displayType", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayType { get; set; } = true;
@@ -364,7 +364,7 @@ public class ModConfigHoverGuideStyleChara : JsonModConfigBase<ModConfigHoverGui
     public ModConfigHoverGuideHealthBar HealthBar { get; init; } = new();
 }
 
-public class ModConfigHoverGuideLineWrapping : JsonModConfigBase<ModConfigHoverGuide>
+internal class ModConfigHoverGuideLineWrapping : JsonModConfigBase<ModConfigHoverGuide>
 {
     [JsonProperty("enable", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool Enable { get; set; } = true;
@@ -378,7 +378,7 @@ public class ModConfigHoverGuideLineWrapping : JsonModConfigBase<ModConfigHoverG
     }
 }
 
-public class ModConfigHoverGuideHealthBar : JsonModConfigBase<ModConfigHoverGuideHealthBar>
+internal class ModConfigHoverGuideHealthBar : JsonModConfigBase<ModConfigHoverGuideHealthBar>
 {
     [JsonProperty("width", DefaultValueHandling = DefaultValueHandling.Include)]
     public int Width { get; set; } = 400;
@@ -434,7 +434,7 @@ public class ModConfigHoverGuideHealthBar : JsonModConfigBase<ModConfigHoverGuid
     }
 }
 
-public class ModConfigHealthBarDisplay : JsonModConfigBase<ModConfigHealthBarDisplay>
+internal class ModConfigHealthBarDisplay : JsonModConfigBase<ModConfigHealthBarDisplay>
 {
     [JsonProperty("target", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModHealthBarDisplayTarget Target { get; set; } = ModHealthBarDisplayTarget.All;
@@ -446,7 +446,7 @@ public class ModConfigHealthBarDisplay : JsonModConfigBase<ModConfigHealthBarDis
     public bool InFullHealth { get; set; } = false;
 }
 
-public class ModConfigHoverGuideStyleThing : JsonModConfigBase<ModConfigHoverGuideStyleThing>
+internal class ModConfigHoverGuideStyleThing : JsonModConfigBase<ModConfigHoverGuideStyleThing>
 {
     [JsonProperty("displayLv", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool DisplayLv { get; set; } = false;

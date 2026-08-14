@@ -9,7 +9,7 @@ namespace MoreEffectiveLuck.Patches;
 
 
 [HarmonyPatch(typeof(FactionBranch))]
-public static class FactionBranchPatch
+internal static class FactionBranchPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

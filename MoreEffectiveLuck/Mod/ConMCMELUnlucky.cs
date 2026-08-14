@@ -1,6 +1,6 @@
 namespace MoreEffectiveLuck.Mod;
 
-public class ConMCMELUnlucky : BaseDebuff
+internal class ConMCMELUnlucky : BaseDebuff
 {
     public override int EvaluateTurn(int p)
     {

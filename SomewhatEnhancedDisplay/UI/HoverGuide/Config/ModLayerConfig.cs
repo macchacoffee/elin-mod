@@ -4,7 +4,7 @@ using YKF;
 
 namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
-public class ModLayerConfig : YKLayer<ModLayerConfigContext>
+internal class ModLayerConfig : YKLayer<ModLayerConfigContext>
 {
     public override string Title { get; } = $"{ModConsts.SourceId.ModName.lang()} {ModConsts.SourceId.ConfigHoverGuide.lang()}";
     public override Rect Bound { get; } = new Rect(0, 0, 720, 540);

@@ -3,7 +3,7 @@ using ModUtility.Extensions;
 
 namespace ModUtility.Config;
 
-public abstract class BepInExModConfigBase<T> where T : BepInExModConfigBase<T>
+internal abstract class BepInExModConfigBase<T> where T : BepInExModConfigBase<T>
 {
     public void Bind(ConfigFile configFile)
     {
@@ -19,12 +19,12 @@ public abstract class BepInExModConfigBase<T> where T : BepInExModConfigBase<T>
     }
 }
 
-public interface IBepInExModConfigEntryBase
+internal interface IBepInExModConfigEntryBase
 {
     public void Bind(ConfigFile configFile);
 }
 
-public class BepInExModConfigEntry<T>(string section, string key, T defaultValue, string? description = null, AcceptableValueBase? acceptableValue = null, params object[] tags) : IBepInExModConfigEntryBase
+internal class BepInExModConfigEntry<T>(string section, string key, T defaultValue, string? description = null, AcceptableValueBase? acceptableValue = null, params object[] tags) : IBepInExModConfigEntryBase
 {
     private string Section { get; } = section;
     private string Key { get; } = key;

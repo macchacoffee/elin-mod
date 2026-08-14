@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
-public static class ModCardHoverTextBuilder
+internal static class ModCardHoverTextBuilder
 {
     private static readonly int _paddingHeight = 1;
 

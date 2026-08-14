@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace ModUtility.External;
 
-public static class ModReflection
+internal static class ModReflection
 {
     public static Assembly? GetAssembly(string assemblyName)
     {

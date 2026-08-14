@@ -4,7 +4,7 @@ using SomewhatEnhancedDisplay.Config;
 
 namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
-public class ModHoverGuide
+internal class ModHoverGuide
 {
     private static readonly float _paddingHeight = 24;
 

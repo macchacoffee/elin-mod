@@ -9,7 +9,7 @@ using ModUtility.Patch;
 namespace SomewhatEnhancedDisplay.Patches;
 
 [HarmonyPatch(typeof(Element))]
-public static class ElementPatch
+internal static class ElementPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

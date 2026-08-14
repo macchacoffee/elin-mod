@@ -5,7 +5,7 @@ using YKF;
 
 namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
-public class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
+internal class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
 {
     private static readonly Dictionary<ModHealthBarDisplayTarget, string> _healthBarDisplayTargetIdLangs = new() {
         {ModHealthBarDisplayTarget.None, ModConsts.SourceId.TargetNone},

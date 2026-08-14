@@ -8,7 +8,7 @@ using MoreEffectiveLuck.Mod;
 namespace MoreEffectiveLuck.Patches;
 
 [HarmonyPatch(typeof(Trait))]
-public static class TraitPatch
+internal static class TraitPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

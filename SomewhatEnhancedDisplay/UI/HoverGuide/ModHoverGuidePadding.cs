@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
-public class ModHoverGuidePadding
+internal class ModHoverGuidePadding
 {
     private UIImage Image { get; }
 

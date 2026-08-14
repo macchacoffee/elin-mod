@@ -9,7 +9,7 @@ using ModUtility.Patch;
 namespace EqualizeSpellitemsForMajorElements.Patches;
 
 [HarmonyPatch(typeof(ElementSelecter))]
-public static class ElementSelecterPatch
+internal static class ElementSelecterPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

@@ -7,7 +7,7 @@ using ModUtility.Patch;
 namespace MoreEffectiveLuck.Patches;
 
 [HarmonyPatch(typeof(DramaCustomSequence))]
-public static class DramaCustomSequencePatch
+internal static class DramaCustomSequencePatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

@@ -10,7 +10,7 @@ using SomewhatEnhancedDisplay.UI.Adapters;
 
 namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
-public static class ModCharaHoverTextBuilder
+internal static class ModCharaHoverTextBuilder
 {
     private static readonly int _lowValueThreshold = 10;
 

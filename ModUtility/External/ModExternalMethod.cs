@@ -10,7 +10,7 @@ internal sealed class ModExternalMethod
      public static ModExternalMethodSet For(Type wrapperType) => new(wrapperType);
 }
 
-public class ModExternalMethodSet(Type wrapperType)
+internal class ModExternalMethodSet(Type wrapperType)
 {
     private readonly Lazy<Type?> _externalType = new(() =>
     {

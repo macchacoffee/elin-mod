@@ -6,7 +6,7 @@ using HarmonyLib;
 
 namespace SimpleDamageTracker;
 
-public static class PluginInfo
+internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.simple-damage-tracker";
     public const string Name = "Simple Damage Tracker";

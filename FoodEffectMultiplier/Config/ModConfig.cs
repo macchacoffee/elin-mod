@@ -3,7 +3,7 @@ using ModUtility.Config;
 
 namespace FoodEffectMultiplier.Config;
 
-public class ModConfig : BepInExModConfigBase<ModConfig>
+internal class ModConfig : BepInExModConfigBase<ModConfig>
 {
     private static readonly string _general = "General";
 

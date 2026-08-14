@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace AbilityRestriction.Mod;
 
-public class ModOriginalActStorage
+internal class ModOriginalActStorage
 {
     private readonly Dictionary<int, List<ActList.Item>> UidToActs = [];
 

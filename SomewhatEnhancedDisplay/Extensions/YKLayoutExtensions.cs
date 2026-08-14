@@ -7,7 +7,7 @@ using YKF;
 
 namespace SomewhatEnhancedDisplay.Extensions;
 
-public static class YKLayoutExtensions
+internal static class YKLayoutExtensions
 {
     public static UIButton AddModButton(this YKLayout layout, string label, Action onClicked, string? tooltip = null, int? width = null)
     {

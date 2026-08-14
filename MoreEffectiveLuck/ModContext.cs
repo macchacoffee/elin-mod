@@ -5,7 +5,7 @@ using MoreEffectiveLuck.Config;
 
 namespace MoreEffectiveLuck;
 
-public static class ModContext
+internal static class ModContext
 {
     private static readonly string _configFileName = $"{PluginInfo.Guid}.cfg";
 

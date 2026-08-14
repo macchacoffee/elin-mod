@@ -7,7 +7,7 @@ using ModUtility.Patch;
 namespace SomewhatEnhancedDisplay.Patches;
 
 [HarmonyPatch(typeof(DNA))]
-public static class DNAPatch
+internal static class DNAPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

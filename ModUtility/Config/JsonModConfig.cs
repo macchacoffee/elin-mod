@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ModUtility.Config;
 
-public abstract class JsonModConfigBase<T> where T : JsonModConfigBase<T>
+internal abstract class JsonModConfigBase<T> where T : JsonModConfigBase<T>
 {
     public string Serialize()
     {
@@ -22,7 +22,7 @@ public abstract class JsonModConfigBase<T> where T : JsonModConfigBase<T>
     }
 } 
 
-public class ModColorConverter : JsonConverter<Color?>
+internal class ModColorConverter : JsonConverter<Color?>
 {
     public override bool CanWrite => true;
 

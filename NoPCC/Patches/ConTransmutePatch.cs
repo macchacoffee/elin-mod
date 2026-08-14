@@ -6,7 +6,7 @@ using NoPCC.Mod;
 namespace NoPCC.Patches;
 
 [HarmonyPatch(typeof(ConTransmute))]
-public static class ConTransmutePatch
+internal static class ConTransmutePatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

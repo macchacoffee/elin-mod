@@ -4,7 +4,7 @@ using SomewhatEnhancedDisplay.Extensions;
 
 namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
-public class ModHoverGuideItem
+internal class ModHoverGuideItem
 {
     private static readonly int _paddingHeight = 1;
 

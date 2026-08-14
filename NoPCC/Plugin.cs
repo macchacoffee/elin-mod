@@ -5,7 +5,7 @@ using HarmonyLib;
 
 namespace NoPCC;
 
-public static class PluginInfo
+internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.no-pcc";
     public const string Name = "No PCC";

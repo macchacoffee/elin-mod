@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace ModUtility.Extensions;
 
-public static class PropertyInfoExtensions
+internal static class PropertyInfoExtensions
 {
     private readonly static Dictionary<PropertyInfo, object> PropertyGetters = [];
 

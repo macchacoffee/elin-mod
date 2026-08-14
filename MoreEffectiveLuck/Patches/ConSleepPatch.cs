@@ -9,7 +9,7 @@ namespace MoreEffectiveLuck.Patches;
 
 
 [HarmonyPatch(typeof(ConSleep))]
-public static class ConSleepPatch
+internal static class ConSleepPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

@@ -9,7 +9,7 @@ using AddPalmiaTimesNewsToLog.Config;
 
 namespace AddPalmiaTimesNewsToLog.News;
 
-public class ModNewsFeeder
+internal class ModNewsFeeder
 {
     private enum RunningState
     {
@@ -153,7 +153,7 @@ public class ModNewsFeeder
         public ChatCategory Cat { get; set; } = ChatCategory.Test;
     }
 
-    public class ModChatCategoryConverter : JsonConverter<ChatCategory>
+    private class ModChatCategoryConverter : JsonConverter<ChatCategory>
     {
         public override bool CanWrite => false;
 

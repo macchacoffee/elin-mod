@@ -5,7 +5,7 @@ using SomewhatEnhancedDisplay.Config;
 
 namespace SomewhatEnhancedDisplay;
 
-public static class ModContext
+internal static class ModContext
 {
     private static readonly string _configFileName = $"{PluginInfo.Guid}.cfg";
     private static readonly string _worldConfigFileName = $"{PluginInfo.Guid}.txt";

@@ -2,7 +2,7 @@ using System;
 
 namespace SomewhatEnhancedDisplay.Extensions;
 
-public static class CharaExtensions
+internal static class CharaExtensions
 {
     extension(Chara chara)
     {

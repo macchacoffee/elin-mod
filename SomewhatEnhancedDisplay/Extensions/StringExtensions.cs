@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SomewhatEnhancedDisplay.Extensions;
 
-public static class StringExtensions
+internal static class StringExtensions
 {
     private static readonly Regex _tagTextRegex = new(@"(?<=>)[^<>]+(?=</[a-zA-Z0-9]+>)", RegexOptions.Compiled);
     private static readonly Regex _tagSizeRegex = new(@"(?<=<size=)(\d+)", RegexOptions.Compiled);

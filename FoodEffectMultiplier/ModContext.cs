@@ -5,7 +5,7 @@ using FoodEffectMultiplier.Config;
 
 namespace FoodEffectMultiplier;
 
-public static class ModContext
+internal static class ModContext
 {
     private static readonly string _configFileName = $"{PluginInfo.Guid}.cfg";
 

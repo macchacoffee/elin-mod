@@ -1,8 +1,8 @@
 namespace NoPCC;
 
-public static class ModConsts
+internal static class ModConsts
 {
-    public static class SourceId
+    internal static class SourceId
     {
         private const string Prefix = "mc_np_";
         private static string Prefixed(string id) => $"{Prefix}{id}";

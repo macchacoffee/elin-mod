@@ -6,9 +6,8 @@ using ModUtility.Patch;
 
 namespace SimpleDamageTracker.Patches;
 
-
 [HarmonyPatch(typeof(Card))]
-public static class CardPatch
+internal static class CardPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 
@@ -80,6 +79,6 @@ public static class CardPatch
 
     private static void OnDamage(Card card, Card origin, long dmg)
     {
-        Plugin.LogInfo($"OnDamage {card.Name} <- {origin.Name} ({dmg})");
+        ModContext.DamageTracker.RecordDamage(card, origin, dmg);
     }
 }

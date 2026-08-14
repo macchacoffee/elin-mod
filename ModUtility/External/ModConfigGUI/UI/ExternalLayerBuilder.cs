@@ -4,7 +4,7 @@ using BepInEx.Configuration;
 namespace ModUtility.External.ModConfigGUI.UI;
 
 [ModExternalType("ModConfigGUI", "ModConfigGUI.UI.LayerBuilder")]
-public static class ExternalLayerBuilder
+internal static class ExternalLayerBuilder
 {
     private static readonly ModExternalMethodSet _ext = ModExternalMethod.For(typeof(ExternalLayerBuilder));
     public static bool IsAvailable => _ext.IsAvailable;

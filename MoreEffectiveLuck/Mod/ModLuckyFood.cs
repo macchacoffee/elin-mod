@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MoreEffectiveLuck.Mod;
 
-public class ModLuckyFood
+internal class ModLuckyFood
 {
     private readonly static Dictionary<string, ModLuckyFood> IdToFood = new()
     {

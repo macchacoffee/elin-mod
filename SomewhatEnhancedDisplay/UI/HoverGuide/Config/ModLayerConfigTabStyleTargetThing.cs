@@ -1,6 +1,6 @@
 namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
-public class ModLayerConfigTabStyleTargetThing : ModLayerConfigTabStyleTarget
+internal class ModLayerConfigTabStyleTargetThing : ModLayerConfigTabStyleTarget
 {
     protected override void OnLayoutInternal()
     {

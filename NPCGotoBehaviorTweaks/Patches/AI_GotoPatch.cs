@@ -7,7 +7,7 @@ using ModUtility.Patch;
 namespace NPCGotoBehaviorTweaks.Patches;
 
 [HarmonyPatch(typeof(AI_Goto))]
-public static class AI_GotoPatch
+internal static class AI_GotoPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

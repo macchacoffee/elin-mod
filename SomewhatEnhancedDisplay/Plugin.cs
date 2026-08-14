@@ -8,7 +8,7 @@ using SomewhatEnhancedDisplay.UI;
 
 namespace SomewhatEnhancedDisplay;
 
-public static class PluginInfo
+internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.somewhat-enhanced-display";
     public const string Name = "Somewhat Enhanced Display";

@@ -7,7 +7,7 @@ using ModUtility.Patch;
 namespace EnableDiningSpotSignInTent.Patches;
 
 [HarmonyPatch(typeof(AI_Eat))]
-public static class AI_EatRunPatch
+internal static class AI_EatRunPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

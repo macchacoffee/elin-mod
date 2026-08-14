@@ -6,7 +6,7 @@ using FactionEnchantInInventory.Extensions;
 namespace FactionEnchantInInventory.Patches;
 
 [HarmonyPatch(typeof(ThingContainer))]
-public static class ThingContainerPatch
+internal static class ThingContainerPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

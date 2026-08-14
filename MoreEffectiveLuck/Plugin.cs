@@ -7,7 +7,7 @@ using ModUtility.External.ModConfigGUI;
 
 namespace MoreEffectiveLuck;
 
-public static class PluginInfo
+internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.more-effective-luck";
     public const string Name = "More Effective Luck";

@@ -5,7 +5,7 @@ using ModUtility.Patch;
 namespace SomewhatEnhancedDisplay.Patches;
 
 [HarmonyPatch(typeof(NotificationStats))]
-public static class NotificationStatsPatch
+internal static class NotificationStatsPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

@@ -5,7 +5,7 @@ using NoPCC.Mod;
 
 namespace NoPCC.UI;
 
-public class ModConfigMainTab : YKLayout<object>
+internal class ModConfigMainTab : YKLayout<object>
 {
     public override void OnLayout()
     {

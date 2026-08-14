@@ -6,7 +6,7 @@ using ModUtility.Patch;
 namespace AddPalmiaTimesNewsToLog.Patches;
 
 [HarmonyPatch(typeof(Chara))]
-public static class CharaPatch
+internal static class CharaPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

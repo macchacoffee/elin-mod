@@ -3,7 +3,7 @@ using ModUtility.External.ModConfigGUI.UI;
 
 namespace ModUtility.External.ModConfigGUI;
 
-public static class ModConfigGUISupport
+internal static class ModConfigGUISupport
 {
     public static void ResisterConfig(string guid, string name, ConfigFile configFile)
     {

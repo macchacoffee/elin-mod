@@ -11,7 +11,7 @@ using SomewhatEnhancedDisplay.UI.HoverGuide;
 namespace SomewhatEnhancedDisplay.Patches;
 
 [HarmonyPatch(typeof(Thing))]
-public static class ThingPatch
+internal static class ThingPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

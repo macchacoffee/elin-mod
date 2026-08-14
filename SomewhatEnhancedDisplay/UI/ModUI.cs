@@ -4,7 +4,7 @@ using SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
 namespace SomewhatEnhancedDisplay.UI;
 
-public static class ModUI
+internal static class ModUI
 {
     public static ModHoverGuide? HoverGuide { get; set; }
 

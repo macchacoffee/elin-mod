@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 namespace AbilityRestriction.Config;
 
 [JsonConverter(typeof(ModConfigConverter))]
-public class ModWorldConfig : JsonModConfigBase<ModWorldConfig>
+internal class ModWorldConfig : JsonModConfigBase<ModWorldConfig>
 {
     [JsonProperty("deniedAbilities")]
     public ModConfigDeniedAbilities DeniedAbilities { get; set; } = [];
@@ -44,9 +44,9 @@ public class ModWorldConfig : JsonModConfigBase<ModWorldConfig>
     }
 }
 
-public class ModConfigDeniedAbilities : Dictionary<int, ModConfigDeniedAbility>;
+internal class ModConfigDeniedAbilities : Dictionary<int, ModConfigDeniedAbility>;
 
-public class ModConfigDeniedAbility
+internal class ModConfigDeniedAbility
 {
     [JsonProperty("acts")]
     [JsonConverter(typeof(ModConfigDeniedActConverter))]
@@ -83,7 +83,7 @@ public class ModConfigDeniedAbility
     }
 }
 
-public record ModConfigDeniedAct
+internal record ModConfigDeniedAct
 {
     [JsonProperty("id", DefaultValueHandling = DefaultValueHandling.Include)]
     public int Id { get; init; }
@@ -100,7 +100,7 @@ public record ModConfigDeniedAct
 }
 
 // 旧形式の設定を新形式にマイグレーションするコンバータ
-public class ModConfigConverter : JsonConverter<ModWorldConfig>
+internal class ModConfigConverter : JsonConverter<ModWorldConfig>
 {
     public override bool CanWrite => false;
 
@@ -134,7 +134,7 @@ public class ModConfigConverter : JsonConverter<ModWorldConfig>
     }
 }
 
-public class ModConfigDeniedActConverter : JsonConverter<HashSet<ModConfigDeniedAct>>
+internal class ModConfigDeniedActConverter : JsonConverter<HashSet<ModConfigDeniedAct>>
 {
     public override bool CanWrite => false;
 

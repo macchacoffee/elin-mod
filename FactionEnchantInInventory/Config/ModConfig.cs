@@ -2,7 +2,7 @@ using ModUtility.Config;
 
 namespace FactionEnchantInInventory.Config;
 
-public class ModConfig : BepInExModConfigBase<ModConfig>
+internal class ModConfig : BepInExModConfigBase<ModConfig>
 {
     private static readonly string _general = "General";
 

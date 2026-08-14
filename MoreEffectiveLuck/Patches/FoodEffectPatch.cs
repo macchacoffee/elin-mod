@@ -9,7 +9,7 @@ namespace MoreEffectiveLuck.Patches;
 
 
 [HarmonyPatch(typeof(FoodEffect))]
-public static class FoodEffectPatch
+internal static class FoodEffectPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

@@ -3,7 +3,7 @@ using NoPCC.Config;
 
 namespace NoPCC;
 
-public static class ModContext
+internal static class ModContext
 {
     private static readonly string _configFileName = $"{PluginInfo.Guid}.txt";
 

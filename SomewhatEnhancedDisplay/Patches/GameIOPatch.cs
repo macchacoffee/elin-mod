@@ -5,7 +5,7 @@ using ModUtility.Patch;
 namespace SomewhatEnhancedDisplay.Patches;
 
 [HarmonyPatch(typeof(GameIO))]
-public static class GameIOPatch
+internal static class GameIOPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

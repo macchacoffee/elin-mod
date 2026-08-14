@@ -1,6 +1,6 @@
 namespace SomewhatEnhancedDisplay.Config;
 
-public static class ModConfigHoverGuideStylePresets
+internal static class ModConfigHoverGuideStylePresets
 {
     public static ModConfigHoverGuideStyle Minimum()
     {
@@ -179,4 +179,3 @@ public static class ModConfigHoverGuideStylePresets
         };
     }
 }
-

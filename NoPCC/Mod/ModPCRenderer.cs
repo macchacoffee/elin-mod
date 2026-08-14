@@ -2,7 +2,7 @@ using NoPCC.Config;
 
 namespace NoPCC.Mod;
 
-public static class ModPCRenderer
+internal static class ModPCRenderer
 {
     private static CharaRenderer? modRenderer;
 

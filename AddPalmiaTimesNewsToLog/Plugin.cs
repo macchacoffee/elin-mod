@@ -5,7 +5,7 @@ using HarmonyLib;
 
 namespace AddPalmiaTimesNewsToLog;
 
-public static class PluginInfo
+internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.add-palmia-times-news-to-log";
     public const string Name = "Add Palmia Times News To Log";

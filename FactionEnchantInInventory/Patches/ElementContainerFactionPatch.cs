@@ -9,7 +9,7 @@ using FactionEnchantInInventory.Extensions;
 namespace FactionEnchantInInventory.Patches;
 
 [HarmonyPatch(typeof(ElementContainerFaction))]
-public static class ElementContainerFactionPatch
+internal static class ElementContainerFactionPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

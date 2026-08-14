@@ -7,7 +7,7 @@ using ModUtility.External.ModConfigGUI;
 
 namespace AbilityRestriction;
 
-public static class PluginInfo
+internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.ability-restriction";
     public const string Name = "Ability Restriction";

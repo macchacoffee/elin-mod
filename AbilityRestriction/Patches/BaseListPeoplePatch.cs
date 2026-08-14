@@ -5,9 +5,8 @@ using ModUtility.Patch;
 
 namespace AbilityRestriction.Patches;
 
-
 [HarmonyPatch(typeof(BaseListPeople))]
-public static class BaseListPeoplePatch
+internal static class BaseListPeoplePatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 

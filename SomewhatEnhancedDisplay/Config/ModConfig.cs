@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace SomewhatEnhancedDisplay.Config;
 
-public class ModConfig : BepInExModConfigBase<ModConfig>
+internal class ModConfig : BepInExModConfigBase<ModConfig>
 {
     private static readonly string _general = "General";
     private static readonly string _hoverGuide = "HoverGuide";

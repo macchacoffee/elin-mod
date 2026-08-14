@@ -8,7 +8,7 @@ using YKF;
 namespace NoPCC.Patches;
 
 [HarmonyPatch(typeof(HotItemContext))]
-public static class HotItemContextPatch
+internal static class HotItemContextPatch
 {
     private static readonly ModPatchTarget _patchTarget = new();
 
