@@ -23,6 +23,7 @@ internal static class ModConsts
         public static readonly string ConfigDamage = Prefixed("configDamage");
         public static readonly string ConfigDamageShare = Prefixed("configDamageShare");
         public static readonly string DisplayNoDamage = Prefixed("displayNoDamage");
+        public static readonly string UseAnimation = Prefixed("useAnimation");
         public static readonly string Display = Prefixed("display");
         public static readonly string PositionX = Prefixed("positionX");
         public static readonly string PositionY = Prefixed("positionY");

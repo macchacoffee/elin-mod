@@ -1,10 +1,13 @@
-using SimpleDamageTracker.Config;
+using DG.Tweening;
 using UnityEngine;
+using SimpleDamageTracker.Config;
 
 namespace SimpleDamageTracker.Mod;
 
 internal sealed class ModDamageDisplay : MonoBehaviour
 {
+    private static readonly float _animationDuration = 0.2f;
+
     private readonly record struct TextAppearance(
         float X,
         float Y,
@@ -15,30 +18,45 @@ internal sealed class ModDamageDisplay : MonoBehaviour
         int BaseFontSize
     );
 
+    private readonly record struct ValueState(
+        long Damage,
+        long TotalDamage,
+        bool DisplayDamage,
+        bool DisplayDamageShare,
+        bool DisplayNoDamage,
+        bool UseAnimation
+    )
+    {
+        public double DamageShare => TotalDamage > 0 ? (double)Damage / TotalDamage * 100.0 : 0.0;
+    }
+
     private UIText? _baseText;
     private UIText? _damageText;
     private UIText? _damageShareText;
 
     private int _uid;
 
-    private long _lastDamage = -1;
-    private long _lastTotalDamage = -1;
-
     private TextAppearance _lastDamageAppearance;
     private TextAppearance _lastDamageShareAppearance;
     private bool _hasAppearance;
-    private bool _lastDisplayDamage;
-    private bool _lastDisplayDamageShare;
-    private bool _lastDisplayNoDamage;
-    private bool _hasValue;
+
+    private ValueState _lastValueState;
+    private bool _hasValueState;
+
+    private long _displayDamage;
+    private double _displayDamageShare;
+
+    private Tween? _damageTween;
+    private Tween? _damageShareTween;
 
     public void Bind(ButtonRoster roster, Chara chara)
     {
+        KillValueTweens();
+
         _uid = chara.uid;
         _baseText = roster.textName;
 
-        _lastDamage = -1;
-        _lastTotalDamage = -1;
+        _hasValueState = false;
 
         CreateTexts(roster);
         RefreshIfNeeded();
@@ -63,18 +81,15 @@ internal sealed class ModDamageDisplay : MonoBehaviour
 
         text.gameObject.name = name;
 
-        // textName由来のローカライズIDを引き継がない
         text.lang = null;
         text.text = string.Empty;
         text.raycastTarget = false;
 
-        // 数値表示なので自動折り返しなどを無効にする
         text.resizeTextForBestFit = false;
         text.horizontalOverflow = HorizontalWrapMode.Overflow;
         text.verticalOverflow = VerticalWrapMode.Overflow;
         text.alignment = TextAnchor.MiddleCenter;
 
-        // 元UIより手前に描画する.
         text.transform.SetAsLastSibling();
 
         return text;
@@ -95,13 +110,24 @@ internal sealed class ModDamageDisplay : MonoBehaviour
         var config = ModContext.WorldConfig.Display;
 
         var damageAppearance = new TextAppearance(
-            config.Damage.X, config.Damage.Y,
-            config.Damage.SizeScale, config.Damage.HorizontalAlignment, config.Damage.Color,
-            _baseText!.size, _baseText!.fontSize);
+            X: config.Damage.X,
+            Y: config.Damage.Y,
+            SizeScale: config.Damage.SizeScale,
+            HorizontalAlignment: config.Damage.HorizontalAlignment,
+            Color: config.Damage.Color,
+            BaseSize: _baseText!.size,
+            BaseFontSize: _baseText!.fontSize
+        );
         var damageShareAppearance = new TextAppearance(
-            config.DamageShare.X, config.DamageShare.Y,
-            config.DamageShare.SizeScale, config.DamageShare.HorizontalAlignment, config.DamageShare.Color,
-            _baseText!.size, _baseText!.fontSize);
+            X: config.DamageShare.X,
+            Y: config.DamageShare.Y,
+            SizeScale: config.DamageShare.SizeScale,
+            HorizontalAlignment: config.DamageShare.HorizontalAlignment,
+            Color: config.DamageShare.Color,
+            BaseSize: _baseText!.size,
+            BaseFontSize: _baseText!.fontSize
+        );
+
         if (!_hasAppearance || damageAppearance != _lastDamageAppearance)
         {
             ApplyAppearance(_damageText!, damageAppearance);
@@ -149,47 +175,145 @@ internal sealed class ModDamageDisplay : MonoBehaviour
 
     private void RefreshValueIfNeeded()
     {
-        var damage = ModContext.DamageTracker.GetDamage(_uid);
-        var totalDamage = ModContext.DamageTracker.TotalDamage;
         var config = ModContext.WorldConfig.Display;
-        var displayDamage = config.Damage.Display;
-        var displayDamageShare = config.DamageShare.Display;
-        var displayNoDamage = config.DisplayNoDamage;
-        if (_hasValue && _lastDamage == damage && _lastTotalDamage == totalDamage && _lastDisplayDamage == displayDamage && _lastDisplayDamageShare == displayDamageShare && _lastDisplayNoDamage == displayNoDamage)
+
+        var state = new ValueState(
+            Damage: ModContext.DamageTracker.GetDamage(_uid),
+            TotalDamage: ModContext.DamageTracker.TotalDamage,
+            DisplayDamage: config.Damage.Display,
+            DisplayDamageShare: config.DamageShare.Display,
+            DisplayNoDamage: config.DisplayNoDamage,
+            UseAnimation: config.UseAnimation
+        );
+
+        if (_hasValueState && state == _lastValueState)
         {
             return;
         }
-        _lastDamage = damage;
-        _lastTotalDamage = totalDamage;
-        _lastDisplayDamage = displayDamage;
-        _lastDisplayDamageShare = displayDamageShare;
-        _lastDisplayNoDamage = displayNoDamage;
-        _hasValue = true;
 
-        if (damage <= 0 && !displayNoDamage)
+        var hasPreviousState = _hasValueState;
+        var previousState = _lastValueState;
+
+         var valueChanged = !hasPreviousState
+            || state.Damage != previousState.Damage
+            || state.TotalDamage != previousState.TotalDamage;
+         var displaySettingChanged = !hasPreviousState
+            || state.DisplayDamage != previousState.DisplayDamage
+            || state.DisplayDamageShare != previousState.DisplayDamageShare
+            || state.DisplayNoDamage != previousState.DisplayNoDamage
+            || state.UseAnimation != previousState.UseAnimation;
+
+        // 通常の計測中はDamage/TotalDamageとも増加しかしない
+        // 減少した場合はリセットとみなしてアニメーションしない
+         var reset = hasPreviousState
+            && (state.Damage < previousState.Damage || state.TotalDamage < previousState.TotalDamage);
+
+        _lastValueState = state;
+        _hasValueState = true;
+
+        var animates = state.UseAnimation
+            && hasPreviousState
+            && valueChanged
+            && !displaySettingChanged
+            && !reset
+            && (state.Damage > 0 || state.DisplayNoDamage);
+
+        if (animates)
+        {
+            AnimateTo(state);
+        }
+        else
+        {
+            SetValueImmediately(state);
+        }
+    }
+
+    private void AnimateTo(ValueState state)
+    {
+        KillValueTweens();
+
+        var damageShare = state.DamageShare;
+        if (state.DisplayDamage && _displayDamage != state.Damage)
+        {
+            _damageTween = DOTween.To(
+                () => _displayDamage,
+                value =>
+                {
+                    _displayDamage = value;
+                    ApplyDamageText();
+                },
+                state.Damage,
+                _animationDuration)
+            .SetEase(Ease.OutQuad)
+            .SetLink(gameObject);
+        }
+        else
+        {
+            _displayDamage = state.Damage;
+            ApplyDamageText();
+        }
+
+        if (state.DisplayDamageShare && _displayDamageShare != damageShare)
+        {
+            _damageShareTween = DOTween.To(
+                () => _displayDamageShare,
+                value =>
+                {
+                    _displayDamageShare = value;
+                    ApplyDamageShareText();
+                },
+                damageShare,
+                _animationDuration)
+            .SetEase(Ease.OutQuad)
+            .SetLink(gameObject);
+        }
+        else
+        {
+            _displayDamageShare = damageShare;
+            ApplyDamageShareText();
+        }
+    }
+    private void SetValueImmediately(ValueState state)
+    {
+        KillValueTweens();
+
+        _displayDamage = state.Damage;
+        _displayDamageShare = state.DamageShare;
+
+        ApplyDamageText();
+        ApplyDamageShareText();
+    }
+
+    private void ApplyDamageText()
+    {
+        if (!_lastValueState.DisplayDamage || !DisplaysCurrentValue())
         {
             _damageText!.text = string.Empty;
+            return;
+        }
+        _damageText!.text = $"{_displayDamage:N0}";
+    }
+
+    private void ApplyDamageShareText()
+    {
+        if (!_lastValueState.DisplayDamageShare || !DisplaysCurrentValue())
+        {
             _damageShareText!.text = string.Empty;
             return;
         }
+        _damageShareText!.text = $"{_displayDamageShare:0.0}%";
+    }
 
-        if (displayDamage)
-        {
-            _damageText!.text = $"{damage:N0}";
-        }
-        else
-        {
-             _damageText!.text = string.Empty;
-        }
+    private bool DisplaysCurrentValue()
+    {
+        return _lastValueState.Damage > 0 || _lastValueState.DisplayNoDamage;
+    }
 
-        if (displayDamageShare)
-        {
-            var percentage = totalDamage > 0 ? (double)damage / totalDamage * 100.0 : 0.0;
-            _damageShareText!.text = $"{percentage:0.0}%";
-        }
-        else
-        {
-             _damageShareText!.text = string.Empty;
-        }
+    private void KillValueTweens()
+    {
+        _damageTween?.Kill();
+        _damageTween = null;
+        _damageShareTween?.Kill();
+        _damageShareTween = null;
     }
 }

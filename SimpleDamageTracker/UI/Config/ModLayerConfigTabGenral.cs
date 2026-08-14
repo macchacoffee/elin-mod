@@ -38,6 +38,11 @@ internal class ModLayerConfigTabGenral : YKLayout<object>
                 Label: ModConsts.SourceId.DisplayNoDamage,
                 Init: Config.DisplayNoDamage,
                 OnChanged: value => Config.DisplayNoDamage = value
+            ),
+            new ToogleUIItem(
+                Label: ModConsts.SourceId.UseAnimation,
+                Init: Config.UseAnimation,
+                OnChanged: value => Config.UseAnimation = value
             )
         );
 
