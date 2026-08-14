@@ -25,14 +25,14 @@ internal class ModWorldConfig : JsonModConfigBase<ModWorldConfig>
 internal class ModConfigDisplay : JsonModConfigBase<ModConfigDisplay>
 {
     [JsonProperty("displayNoDamage", DefaultValueHandling = DefaultValueHandling.Include)]
-    public bool DisplayNoDamage { get; set; } = false;
+    public bool DisplayNoDamage { get; set; } = true;
 
     [JsonProperty("damage", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigDisplayText Damage { get; set; } = new()
     {
         Display = true,
-        X = 0f,
-        Y = -15f,
+        X = -30f,
+        Y = 42f,
         SizeScale = 1f,
         HorizontalAlignment = ModHorizontalTextAlignment.Left,
         Color = new(1f, 1f, 1f), // #FFFFFFFF
@@ -42,8 +42,8 @@ internal class ModConfigDisplay : JsonModConfigBase<ModConfigDisplay>
     public ModConfigDisplayText DamageShare { get; set; } = new()
     {
         Display = true,
-        X = 55f,
-        Y = -15f,
+        X = -30f,
+        Y = 26f,
         SizeScale = 0.9f,
         HorizontalAlignment = ModHorizontalTextAlignment.Left,
         Color = new(1f, 1f, 1f), // #FFFFFFFF

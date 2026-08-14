@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using YKF;
 using SimpleDamageTracker.Config;
 using SimpleDamageTracker.Extensions;
+using System.Reflection.Emit;
 
 namespace SimpleDamageTracker.UI.Config;
 
@@ -41,7 +42,6 @@ internal class ModLayerConfigTabGenral : YKLayout<object>
             )
         );
 
-        Spacer(20);
         Header(ModConsts.SourceId.ConfigDisplayItems);
 
         AddDisplayTextUI(Config.Damage, ModConsts.SourceId.ConfigDamage);
@@ -64,13 +64,12 @@ internal class ModLayerConfigTabGenral : YKLayout<object>
                 Label: ModConsts.SourceId.Color,
                 Init: config.Color,
                 OnChanged: value => config.Color = value
-            )
-        );
-        _ui.Add(
-            layout: this,
-            headerLabel: null,
-            cellWidth: _cellWidth1,
-            maxColumn: _maxColumn1,
+            ),
+            CreateHorizontalTextAlignmentDropdownUIItem(
+                label: ModConsts.SourceId.HorizontalAlignment,
+                init: config.HorizontalAlignment,
+                onChanged: value => config.HorizontalAlignment = value
+            ),
             new SliderUIItem(
                 GetLabel: value => $"{ModConsts.SourceId.PositionX.lang()}({value})",
                 Init: config.X,
@@ -86,31 +85,14 @@ internal class ModLayerConfigTabGenral : YKLayout<object>
                 Max: 100,
                 Step: 1,
                 OnChanged: value => config.Y = value
-            )
-        );
-        _ui.Add(
-            layout: this,
-            headerLabel: null,
-            cellWidth: _cellWidth1,
-            maxColumn: _maxColumn1,
+            ),
             new SliderUIItem(
-                GetLabel: value => $"{ModConsts.SourceId.SizeScale.lang()}({value})",
+                GetLabel: value => $"{ModConsts.SourceId.SizeScale.lang()}({value * 100}%)",
                 Init: config.SizeScale,
                 Min: 0.5f,
                 Max: 2,
                 Step: 0.05f,
                 OnChanged: value => config.SizeScale = value
-            )
-        );
-
-        _ui.Add(
-            layout: this,
-            headerLabel: ModConsts.SourceId.HorizontalAlignment,
-            cellWidth: _cellWidth1,
-            maxColumn: _maxColumn1,
-            CreateHorizontalTextAlignmentDropdownUIItem(
-                init: config.HorizontalAlignment,
-                onChanged: value => config.HorizontalAlignment = value
             )
         );
     }
@@ -163,10 +145,10 @@ internal class ModLayerConfigTabGenral : YKLayout<object>
         }
     }
 
-    private DropdownUIItem<ModHorizontalTextAlignment> CreateHorizontalTextAlignmentDropdownUIItem(ModHorizontalTextAlignment init, Action<ModHorizontalTextAlignment> onChanged)
+    private DropdownUIItem<ModHorizontalTextAlignment> CreateHorizontalTextAlignmentDropdownUIItem(string? label, ModHorizontalTextAlignment init, Action<ModHorizontalTextAlignment> onChanged)
     {
         return new(
-            Label: null,
+            Label: label,
             Init: _itemHorizontalTextAlignments.IndexOf(init),
             Values: _itemHorizontalTextAlignments,
             GetLabel: (_, value) => _itemHorizontalTextAlignmentIdLangs[value].lang(),

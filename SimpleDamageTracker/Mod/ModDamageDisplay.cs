@@ -41,6 +41,7 @@ internal sealed class ModDamageDisplay : MonoBehaviour
         _lastTotalDamage = -1;
 
         CreateTexts(roster);
+        RefreshIfNeeded();
     }
 
     private void CreateTexts(ButtonRoster roster)
