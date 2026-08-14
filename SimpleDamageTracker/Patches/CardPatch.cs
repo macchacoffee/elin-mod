@@ -71,14 +71,15 @@ internal static class CardPatch
         );
         matcher.AddLabels(labelList1);
 
-        // var insts = matcher.InstructionEnumeration();
-        // insts.Do(Plugin.LogInfo);
-        // return insts;
         return matcher.InstructionEnumeration();
     }
 
     private static void OnDamage(Card card, Card origin, long dmg)
     {
-        ModContext.DamageTracker.RecordDamage(card, origin, dmg);
+        if (origin?.Chara is not Chara originChara || !originChara.IsPCParty)
+        {
+            return;
+        }
+        ModContext.DamageTracker.AddDamage(originChara.uid, dmg);
     }
 }
