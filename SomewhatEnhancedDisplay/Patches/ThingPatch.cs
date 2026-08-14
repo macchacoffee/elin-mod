@@ -51,7 +51,7 @@ public static class ThingPatch
         // 末尾のスペースを削除する
         matcher.RemoveInstruction();
         matcher.InsertAndAdvance(
-            new CodeMatch(OpCodes.Ldstr, ")</size>")
+            new CodeInstruction(OpCodes.Ldstr, ")</size>")
         );
 
         // brtrue Label6
