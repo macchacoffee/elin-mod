@@ -1,7 +1,6 @@
 using System;
 using System.Reflection;
 using BepInEx;
-using BepInEx.Configuration;
 using HarmonyLib;
 
 namespace SimpleDamageTracker;
@@ -17,7 +16,6 @@ internal static class PluginInfo
 internal class Plugin : BaseUnityPlugin
 {
     internal static Plugin? Instance { get; private set; }
-    private static ConfigFile? ConfigFile { get; set; }
 
     private void Awake()
     {

@@ -67,14 +67,14 @@ internal static class CardPatch
             new CodeInstruction(OpCodes.Ldarg_S, 5),
             new CodeInstruction(OpCodes.Ldloc_0),
             new CodeInstruction(OpCodes.Ldfld, dmgOperand),
-            CodeInstruction.Call(() => OnDamage(default!, default!, default))
+            CodeInstruction.Call(() => RecordDamage(default!, default!, default))
         );
         matcher.AddLabels(labelList1);
 
         return matcher.InstructionEnumeration();
     }
 
-    private static void OnDamage(Card card, Card origin, long dmg)
+    private static void RecordDamage(Card card, Card origin, long dmg)
     {
         if (origin?.Chara is not Chara originChara || !originChara.IsPCParty)
         {

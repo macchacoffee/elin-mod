@@ -70,7 +70,6 @@ internal abstract class ModLayerConfigTabStyleTarget : YKLayout<ModLayerConfigCo
         }
     }
 
-
     protected record EditStyleDropdownUIItem<T>(
          string? Label,
          int Init,

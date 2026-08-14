@@ -1,6 +1,7 @@
 using System.Reflection;
 using HarmonyLib;
 using ModUtility.Patch;
+using SimpleDamageTracker.Mod;
 
 namespace SimpleDamageTracker.Patches;
 
