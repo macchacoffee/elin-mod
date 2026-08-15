@@ -43,6 +43,12 @@ internal class ModLayerConfigTabGenral : YKLayout<object>
                 Label: ModConsts.SourceId.UseAnimation,
                 Init: Config.UseAnimation,
                 OnChanged: value => Config.UseAnimation = value
+            ),
+            new ToogleUIItem(
+                Label: ModConsts.SourceId.UseCompactDamageFormat,
+                Init: Config.UseCompactDamageFormat,
+                OnChanged: value => Config.UseCompactDamageFormat = value,
+                Tooltip:  ModConsts.SourceId.TooltipUseCompactDamageFormat
             )
         );
 

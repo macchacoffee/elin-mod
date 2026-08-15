@@ -30,6 +30,9 @@ internal class ModConfigDisplay : JsonModConfigBase<ModConfigDisplay>
     [JsonProperty("useAnimation", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool UseAnimation { get; set; } = true;
 
+    [JsonProperty("useCompactDamageFormat", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool UseCompactDamageFormat { get; set; } = false;
+
     [JsonProperty("damage", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigDisplayText Damage { get; set; } = new()
     {

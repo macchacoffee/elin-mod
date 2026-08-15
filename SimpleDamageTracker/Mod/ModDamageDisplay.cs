@@ -24,7 +24,8 @@ internal sealed class ModDamageDisplay : MonoBehaviour
         bool DisplayDamage,
         bool DisplayDamageShare,
         bool DisplayNoDamage,
-        bool UseAnimation
+        bool UseAnimation,
+        bool UseCompactDamageFormat
     )
     {
         public double DamageShare => TotalDamage > 0 ? (double)Damage / TotalDamage * 100.0 : 0.0;
@@ -183,7 +184,8 @@ internal sealed class ModDamageDisplay : MonoBehaviour
             DisplayDamage: config.Damage.Display,
             DisplayDamageShare: config.DamageShare.Display,
             DisplayNoDamage: config.DisplayNoDamage,
-            UseAnimation: config.UseAnimation
+            UseAnimation: config.UseAnimation,
+            UseCompactDamageFormat: config.UseCompactDamageFormat
         );
 
         if (_hasValueState && state == _lastValueState)
@@ -201,7 +203,8 @@ internal sealed class ModDamageDisplay : MonoBehaviour
             || state.DisplayDamage != previousState.DisplayDamage
             || state.DisplayDamageShare != previousState.DisplayDamageShare
             || state.DisplayNoDamage != previousState.DisplayNoDamage
-            || state.UseAnimation != previousState.UseAnimation;
+            || state.UseAnimation != previousState.UseAnimation
+            || state.UseCompactDamageFormat != previousState.UseCompactDamageFormat;
 
         // 通常の計測中はDamage/TotalDamageとも増加しかしない
         // 減少した場合はリセットとみなしてアニメーションしない
@@ -291,7 +294,7 @@ internal sealed class ModDamageDisplay : MonoBehaviour
             _damageText!.text = string.Empty;
             return;
         }
-        _damageText!.text = $"{_displayDamage:N0}";
+        _damageText!.text = ModDamageFormatter.Format(_displayDamage, _lastValueState.UseCompactDamageFormat);
     }
 
     private void ApplyDamageShareText()

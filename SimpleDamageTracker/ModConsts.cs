@@ -24,6 +24,7 @@ internal static class ModConsts
         public static readonly string ConfigDamageShare = Prefixed("configDamageShare");
         public static readonly string DisplayNoDamage = Prefixed("displayNoDamage");
         public static readonly string UseAnimation = Prefixed("useAnimation");
+        public static readonly string UseCompactDamageFormat = Prefixed("useCompactDamageFormat");
         public static readonly string Display = Prefixed("display");
         public static readonly string PositionX = Prefixed("positionX");
         public static readonly string PositionY = Prefixed("positionY");
@@ -35,5 +36,6 @@ internal static class ModConsts
         public static readonly string Color = Prefixed("color");
         public static readonly string ResetConfig = Prefixed("resetConfig");
         public static readonly string DialogResetConfig = Prefixed("dialogResetConfig");
+        public static readonly string TooltipUseCompactDamageFormat = Prefixed("tooltipUseCompactDamageFormat");
     }
 }
