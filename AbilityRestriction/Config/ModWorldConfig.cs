@@ -11,36 +11,44 @@ namespace AbilityRestriction.Config;
 internal class ModWorldConfig : JsonModConfigBase<ModWorldConfig>
 {
     [JsonProperty("deniedAbilities")]
-    public ModConfigDeniedAbilities DeniedAbilities { get; set; } = [];
+    private ModConfigDeniedAbilities DeniedAbilities { get; set; } = [];
+
+    public ModWorldConfig() {}
+
+    public ModWorldConfig(ModConfigDeniedAbilities deniedAbilities)
+    {
+        DeniedAbilities = deniedAbilities;
+    }
 
     public ModConfigDeniedAbility? GetDeniedAbility(int uid)
     {
         return DeniedAbilities.TryGetValue(uid, out var ability) ? ability : null;
     }
 
-    public void SetDeniedAbility(int uid, ModConfigDeniedAbility deniedAbility)
+    public bool AddDeniedAct(int uid, ModConfigDeniedAct act)
     {
-        DeniedAbilities[uid] = deniedAbility;
-    }
-
-    public bool RemoveDeniedAbility(int uid)
-    {
-        return DeniedAbilities.Remove(uid);
-    }
-
-    public void CleanUp()
-    {
-        foreach (var pair in DeniedAbilities.ToArray())
+        if (!DeniedAbilities.TryGetValue(uid, out var deniedAbility))
         {
-            var uid = pair.Key;
-            var ability = pair.Value;
-            if (ability.IsEmpty() || !EClass.game.cards.globalCharas.ContainsKey(uid))
-            {
-                // 所有者のアビリティが禁止されていない、またはその所有者がゲームから消滅している場合、
-                // その所有者の禁止アビリティ設定は不要であるため削除する
-                DeniedAbilities.Remove(uid);
-            }
+            deniedAbility = new();
+            DeniedAbilities.Add(uid, deniedAbility);
         }
+
+        return deniedAbility.Add(act);
+    }
+
+    public bool RemoveDeniedAct(int uid, ModConfigDeniedAct act)
+    {
+        if (!DeniedAbilities.TryGetValue(uid, out var deniedAbility))
+        {
+            return false;
+        }
+
+        var removed = deniedAbility.Remove(act);
+        if (deniedAbility.IsEmpty)
+        {
+            DeniedAbilities.Remove(uid);
+        }
+        return removed;
     }
 }
 
@@ -50,7 +58,13 @@ internal class ModConfigDeniedAbility
 {
     [JsonProperty("acts")]
     [JsonConverter(typeof(ModConfigDeniedActConverter))]
-    public HashSet<ModConfigDeniedAct> Acts { get; private set; } = [];
+    private HashSet<ModConfigDeniedAct> Acts { get; set; } = [];
+
+    [JsonIgnore]
+    public bool IsEmpty => Acts.Count == 0;
+
+    [JsonIgnore]
+    public int Count => Acts.Count;
 
     public bool Contains(ModConfigDeniedAct act)
     {
@@ -62,16 +76,6 @@ internal class ModConfigDeniedAbility
         return Acts.Any(a => a.Id == actId);
     }
 
-    public bool IsEmpty()
-    {
-        return Acts.Count() == 0;
-    }
-
-    public int Count()
-    {
-        return Acts.Count();
-    }
-
     public bool Add(ModConfigDeniedAct act)
     {
         return Acts.Add(act);
@@ -80,11 +84,6 @@ internal class ModConfigDeniedAbility
     public bool Remove(ModConfigDeniedAct act)
     {
         return Acts.Remove(act);
-    }
-
-    public void IntersectWith(IEnumerable<ModConfigDeniedAct> otherActs)
-    {
-        Acts.IntersectWith(otherActs);
     }
 }
 
@@ -101,7 +100,7 @@ internal record ModConfigDeniedAct
         Pt = pt;
     }
 
-    public ModConfigDeniedAct(ActList.Item act) : this(act.act.id, act.pt) { }
+    public ModConfigDeniedAct(ActList.Item act) : this(act.act.id, act.pt) {}
 }
 
 // 旧形式の設定を新形式にマイグレーションするコンバータ
@@ -126,10 +125,7 @@ internal class ModConfigConverter : JsonConverter<ModWorldConfig>
         else
         {
             var deniedAbilities = obj.ToObject<ModConfigDeniedAbilities>();
-            return new()
-            {
-                DeniedAbilities = deniedAbilities
-            };
+            return new(deniedAbilities ?? []);
         }
     }
 

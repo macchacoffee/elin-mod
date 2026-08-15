@@ -32,7 +32,7 @@ internal static class DNAPatch
             {
                 // 制限しているアビリティのElementを復元し、
                 // 遺伝子の注入時のアビリティ重複チェックが正しく機能するようにする
-                __result = Element.Create(id, __instance.vals[1 + 1]);
+                __result = Element.Create(id, __instance.vals[i + 1]);
                 return;
             }
         }

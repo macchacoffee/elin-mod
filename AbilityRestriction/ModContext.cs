@@ -39,14 +39,10 @@ internal static class ModContext
         {
             WorldConfig = new();
         }
-
-        WorldConfig.CleanUp();
     }
 
     public static void SaveWorldConfig(string root)
     {
-        WorldConfig.CleanUp();
-
         var filePath = BuildWorldConfigFilePath(root);
         var text = WorldConfig.Serialize();
         if (GameIO.compressSave)

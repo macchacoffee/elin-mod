@@ -32,9 +32,7 @@ internal static class CharaAbilityPatch
 
         // charaが元々持っているアビリティの情報が必要になるため、保存しておく
         ModContext.OriginalActStorage.SetActs(owner, __instance.list.items);
-        // charaが忘れたアビリティを禁止アビリティの設定から削除する
-        deniedAbility.IntersectWith(__instance.list.items.Select(item => new ModConfigDeniedAct(item)));
         // 禁止されているアビリティをcharaのCharaAbilityから削除する
-        __instance.list.items.RemoveAll(item => deniedAbility.Contains(new ModConfigDeniedAct(item)));
+        __instance.list.items.RemoveAll(item => deniedAbility.Contains(new(item)));
     }
 }
