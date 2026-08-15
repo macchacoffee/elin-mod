@@ -1,6 +1,6 @@
 # Elin Mod
 
-[Elin](https://store.steampowered.com/app/2135150/Elin/)向けに作成したModのソースコードです。
+[Elin](https://store.steampowered.com/app/2135150/Elin/)向けに作成したModのソースコードです。  
 Steam Workshopで公開していないModも含まれます。
 
 ## 公開済みMod
