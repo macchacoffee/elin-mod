@@ -42,6 +42,12 @@ internal static class ModAbilityRestriction
                         ModContext.WorldConfig.SetDeniedAbility(chara.uid, deniedAbility);
                     }
                     chara.ability.Refresh();
+                    if (chara.ai is GoalCombat goal && goal.abilities != null)
+                    {
+                        // GoalCombatが持つアビリティ一覧が構築済みであれば再構築し、
+                        // 戦闘中でもアビリティ禁止設定の変更が反映されるようにする
+                        goal.BuildAbilityList();
+                    }
                 }, (buttonPairList) =>
                 {
                     foreach (var buttonPair in buttonPairList)

@@ -57,6 +57,11 @@ internal class ModConfigDeniedAbility
         return Acts.Contains(act);
     }
 
+    public bool ContainsId(int actId)
+    {
+        return Acts.Any(a => a.Id == actId);
+    }
+
     public bool IsEmpty()
     {
         return Acts.Count() == 0;
