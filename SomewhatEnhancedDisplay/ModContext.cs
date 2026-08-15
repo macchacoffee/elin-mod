@@ -7,8 +7,8 @@ namespace SomewhatEnhancedDisplay;
 
 internal static class ModContext
 {
-    private static readonly string _configFileName = $"{PluginInfo.Guid}.cfg";
-    private static readonly string _worldConfigFileName = $"{PluginInfo.Guid}.txt";
+    private const string _configFileName = $"{PluginInfo.Guid}.cfg";
+    private const string _worldConfigFileName = $"{PluginInfo.Guid}.txt";
 
     public static ModConfig Config { get; private set; } = new();
     public static ModWorldConfig WorldConfig { get; private set; } = new();

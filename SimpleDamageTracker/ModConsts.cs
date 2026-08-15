@@ -4,8 +4,8 @@ internal static class ModConsts
 {
     internal static class GameObjectName
     {
-        private const string Prefix = "MCSDT";
-        private static string Prefixed(string id) => $"{Prefix}{id}";
+        private const string _prefix = "MCSDT";
+        private static string Prefixed(string id) => $"{_prefix}{id}";
 
         public static readonly string ConfigGenaral = Prefixed("ConfigGenaral");
         public static readonly string DamageDisplayDamage = Prefixed("DamageDisplayDamage");
@@ -14,8 +14,8 @@ internal static class ModConsts
 
     internal static class SourceId
     {
-        private const string Prefix = "mc_sdt_";
-        private static string Prefixed(string id) => $"{Prefix}{id}";
+        private const string _prefix = "mc_sdt_";
+        private static string Prefixed(string id) => $"{_prefix}{id}";
 
         public static readonly string ModName = Prefixed("modName");
         public static readonly string ConfigGeneral = Prefixed("configGeneral");

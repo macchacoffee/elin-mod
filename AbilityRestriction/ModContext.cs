@@ -8,8 +8,8 @@ namespace AbilityRestriction;
 
 internal static class ModContext
 {
-    private static readonly string _configFileName = $"{PluginInfo.Guid}.cfg";
-    private static readonly string _worldConfigFileName = $"{PluginInfo.Guid}.txt";
+    private const string _configFileName = $"{PluginInfo.Guid}.cfg";
+    private const string _worldConfigFileName = $"{PluginInfo.Guid}.txt";
 
     public static ModOriginalActStorage OriginalActStorage { get; } = new();
     public static ModConfig Config { get; private set; } = new();

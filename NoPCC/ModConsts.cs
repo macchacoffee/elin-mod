@@ -4,8 +4,8 @@ internal static class ModConsts
 {
     internal static class SourceId
     {
-        private const string Prefix = "mc_np_";
-        private static string Prefixed(string id) => $"{Prefix}{id}";
+        private const string _prefix = "mc_np_";
+        private static string Prefixed(string id) => $"{_prefix}{id}";
 
         public static readonly string ModName = Prefixed("modName");
         public static readonly string Enable = Prefixed("enable");

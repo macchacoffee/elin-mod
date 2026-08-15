@@ -5,8 +5,8 @@ namespace AbilityRestriction.Config;
 
 internal class ModConfig : BepInExModConfigBase<ModConfig>
 {
-    private static readonly string _general = "General";
-    private static readonly string _cheats  = "Cheats";
+    private const string _general = "General";
+    private const string _cheats  = "Cheats";
 
     public BepInExModConfigEntry<bool> EnableViaResidentBoard { get; } = new(
         _general, "EnableViaResidentBoard", true,

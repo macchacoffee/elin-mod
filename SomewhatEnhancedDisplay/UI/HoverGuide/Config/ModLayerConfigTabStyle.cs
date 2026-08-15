@@ -9,8 +9,8 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
 internal class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
 {
-    private static readonly int _minStyleCount = 1;
-    private static readonly int _maxStyleCount = 10;
+    private const int _minStyleCount = 1;
+    private const int _maxStyleCount = 10;
 
     private Dictionary<string, Func<ModConfigHoverGuideStyle>> StyleFactories { get; }
 

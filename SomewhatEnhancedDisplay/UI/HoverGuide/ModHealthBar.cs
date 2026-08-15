@@ -10,10 +10,11 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
 internal class ModHealthBar
 {
-    private static readonly float _height = 32;
-    private static readonly float _barHeight = 8;
-    private static readonly int _valueFontSize = 16;
-    private static readonly float _tweenDelay = 0.1f;
+    private const float _height = 32;
+    private const float _barHeight = 8;
+    private const int _valueFontSize = 16;
+    private const float _tweenDelay = 0.1f;
+
     private GameObject LayoutObj { get; }
     public LayoutElement Layout { get; }
     private UIImage BGImage { get; }
@@ -21,9 +22,11 @@ internal class ModHealthBar
     private UIImage FGRestoreImage { get; }
     private UIImage FGImage { get; }
     private UIText ValueText { get; }
+
     private double ValueRatio { get; set; }
     private WeakReference<Chara?> Target { get; }
     private ModHoverGuideTargetModifier? TargetModifier { get; set; }
+
     private Tween? FGRestoreTween { get; set; }
     private Tween? FGDamageTween { get; set; }
 

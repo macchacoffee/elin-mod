@@ -6,7 +6,7 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
 internal class ModHoverGuideItem
 {
-    private static readonly int _paddingHeight = 1;
+    private const int _paddingHeight = 1;
 
     private UIText TextName1 { get; }
     private ModHealthBar HealthBar { get; }

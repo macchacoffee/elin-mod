@@ -10,8 +10,8 @@ namespace SimpleDamageTracker.UI.Config;
 
 internal class ModLayerConfigTabGenral : YKLayout<object>
 {
-    private static readonly int _cellWidth1 = 200;
-    private static readonly int _maxColumn1 = 3;
+    private const int _cellWidth1 = 200;
+    private const int _maxColumn1 = 3;
 
     private static readonly Dictionary<ModHorizontalTextAlignment, string> _itemHorizontalTextAlignmentIdLangs = new() {
         {ModHorizontalTextAlignment.Left, ModConsts.SourceId.AlignmentLeft},

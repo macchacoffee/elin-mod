@@ -12,7 +12,7 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
 internal static class ModCharaHoverTextBuilder
 {
-    private static readonly int _lowValueThreshold = 10;
+    private const int _lowValueThreshold = 10;
 
     private static readonly Dictionary<int, IModElement> _noneResistElements;
 

@@ -5,7 +5,7 @@ namespace FoodEffectMultiplier.Config;
 
 internal class ModConfig : BepInExModConfigBase<ModConfig>
 {
-    private static readonly string _general = "General";
+    private const string _general = "General";
 
     public BepInExModConfigEntry<float> PCMultiplier { get; } = new(
         _general, "PCMultiplier", -1f,

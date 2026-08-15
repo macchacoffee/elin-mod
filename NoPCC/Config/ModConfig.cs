@@ -12,9 +12,9 @@ internal class ModConfig : JsonModConfigBase<ModConfig>
 internal class ModConfigSprite : JsonModConfigBase<ModConfigSprite>
 {
     // お兄ちゃん お兄ちゃん！ お兄ちゃん？ お兄ちゃん！！
-    private static readonly int _initialTileId = 1918;
-    private static readonly int _initialSnowTileId = 1919;
-    private static readonly int _initialEmptyTileId = 0;
+    private const int _initialTileId = 1918;
+    private const int _initialSnowTileId = 1919;
+    private const int _initialEmptyTileId = 0;
 
     [JsonProperty("defaultTile", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigTile DefaultTile { get; private set; } = new() { Enable = true, Id = _initialTileId };

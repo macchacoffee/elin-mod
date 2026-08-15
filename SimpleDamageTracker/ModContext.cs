@@ -6,7 +6,7 @@ namespace SimpleDamageTracker;
 
 internal static class ModContext
 {
-    private static readonly string _worldConfigFileName = $"{PluginInfo.Guid}.txt";
+    private const string _worldConfigFileName = $"{PluginInfo.Guid}.txt";
 
     public static ModWorldConfig WorldConfig { get; private set; } = new();
     public static ModDamageTracker DamageTracker { get; } = new();

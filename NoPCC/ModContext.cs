@@ -5,7 +5,7 @@ namespace NoPCC;
 
 internal static class ModContext
 {
-    private static readonly string _configFileName = $"{PluginInfo.Guid}.txt";
+    private const string _configFileName = $"{PluginInfo.Guid}.txt";
 
     public static ModConfig Config { get; private set; } = new();
 

@@ -6,7 +6,7 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
 internal class ModHoverGuide
 {
-    private static readonly float _paddingHeight = 24;
+    private const float _paddingHeight = 24;
 
     private ModHoverGuideItem Item1 { get; }
     private ModHoverGuidePadding Padding1 { get; }

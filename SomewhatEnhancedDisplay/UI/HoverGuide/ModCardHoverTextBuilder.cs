@@ -5,7 +5,7 @@ namespace SomewhatEnhancedDisplay.UI.HoverGuide;
 
 internal static class ModCardHoverTextBuilder
 {
-    private static readonly int _paddingHeight = 1;
+    private const int _paddingHeight = 1;
 
     public static string BuildOtherCardsText(string hoverText, string otherCardsText)
     {

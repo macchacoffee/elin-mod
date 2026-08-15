@@ -4,11 +4,11 @@ namespace MoreEffectiveLuck.Config;
 
 internal class ModConfig : BepInExModConfigBase<ModConfig>
 {
-    private static readonly string _enchantPower = "EnchantPower";
-    private static readonly string _equipmentRarity = "EquipmentRarity";
-    private static readonly string _specialMerchantRarity = "SpecialMerchantRarity";
-    private static readonly string _reuqestReward = "ReuqestReward";
-    private static readonly string _luckChanger = "LuckChanger";
+    private const string _enchantPower = "EnchantPower";
+    private const string _equipmentRarity = "EquipmentRarity";
+    private const string _specialMerchantRarity = "SpecialMerchantRarity";
+    private const string _reuqestReward = "ReuqestReward";
+    private const string _luckChanger = "LuckChanger";
 
     public BepInExModConfigEntry<bool> EnableEnchantPower { get; } = new(
         _enchantPower, "Enable", true,

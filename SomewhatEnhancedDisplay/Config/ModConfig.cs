@@ -5,8 +5,8 @@ namespace SomewhatEnhancedDisplay.Config;
 
 internal class ModConfig : BepInExModConfigBase<ModConfig>
 {
-    private static readonly string _general = "General";
-    private static readonly string _hoverGuide = "HoverGuide";
+    private const string _general = "General";
+    private const string _hoverGuide = "HoverGuide";
 
     public BepInExModConfigEntry<bool> EnableHoverGuide { get; } = new(
         _general, "EnableHoverGuide", true,

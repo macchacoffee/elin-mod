@@ -5,7 +5,7 @@ namespace MoreEffectiveLuck.Mod;
 
 internal class ModLuckyFood
 {
-    private readonly static Dictionary<string, ModLuckyFood> IdToFood = new()
+    private static readonly Dictionary<string, ModLuckyFood> IdToFood = new()
     {
         ["kagamimochi"] = new(power: 10),
         ["churyu"] = new(power: 22),

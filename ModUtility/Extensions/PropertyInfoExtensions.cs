@@ -7,7 +7,7 @@ namespace ModUtility.Extensions;
 
 internal static class PropertyInfoExtensions
 {
-    private readonly static Dictionary<PropertyInfo, object> PropertyGetters = [];
+    private static readonly Dictionary<PropertyInfo, object> PropertyGetters = [];
 
     public static Func<TClass, TValue> GetGetter<TClass, TValue>(this PropertyInfo propInfo)
     {

@@ -6,7 +6,7 @@ namespace SimpleDamageTracker.Mod;
 
 internal sealed class ModDamageDisplay : MonoBehaviour
 {
-    private static readonly float _animationDuration = 0.2f;
+    private const float _animationDuration = 0.2f;
 
     private readonly record struct TextAppearance(
         float X,

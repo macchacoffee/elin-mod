@@ -4,7 +4,7 @@ namespace FactionEnchantInInventory.Config;
 
 internal class ModConfig : BepInExModConfigBase<ModConfig>
 {
-    private static readonly string _general = "General";
+    private const string _general = "General";
 
     public BepInExModConfigEntry<bool> EnableRecursiveCurse { get; } = new(
         _general, "EnableRecursiveCurse", false,
