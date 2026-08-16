@@ -16,7 +16,7 @@ internal static class IndividualBackgroundState
 
     private static readonly Func<Chara, string> _getUnifiedId = CreateUnifiedIdGetter();
     private static readonly ConcurrentDictionary<string, bool> _individualModes = new();
-    private static readonly ConcurrentDictionary<string, Chara> _charactersByIndividualPath = new();
+    private static readonly ConcurrentDictionary<string, WeakReference<Chara>> _charactersByIndividualPath = new();
     private static int _refreshRequested;
 
     [ThreadStatic]
@@ -41,12 +41,19 @@ internal static class IndividualBackgroundState
     internal static void Register(Chara chara)
     {
         var key = new ResourceKey(GetIndividualPath(chara));
-        _charactersByIndividualPath[key.ResourcePath] = chara;
+        _charactersByIndividualPath[key.ResourcePath] = new(chara);
     }
 
     internal static bool TryGetRegisteredChara(ResourceKey key, out Chara chara)
     {
-        return _charactersByIndividualPath.TryGetValue(key.ResourcePath, out chara!);
+        if (_charactersByIndividualPath.TryGetValue(key.ResourcePath, out var reference)
+            && reference.TryGetTarget(out chara))
+        {
+            return true;
+        }
+
+        chara = null!;
+        return false;
     }
 
     internal static bool IsIndividualMode(Chara chara)
