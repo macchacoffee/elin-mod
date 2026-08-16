@@ -1,0 +1,12 @@
+<Project>
+  <Import Project="..\Directory.Build.props" />
+
+  <ItemGroup>
+    <Reference Include="$(ElinWorkshopPath)\3400020753\YKFramework.dll">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="$(ElinWorkshopPath)\3587340176\Emmersive.dll">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+</Project>
