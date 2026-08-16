@@ -15,7 +15,7 @@ internal static class IndividualBackgroundState
     internal static readonly List<string> ModeLabels = ["Common", "Individual"];
 
     private static readonly Func<Chara, string> _getUnifiedId = CreateUnifiedIdGetter();
-    private static readonly ConcurrentDictionary<int, bool> _individualModes = new();
+    private static readonly ConcurrentDictionary<string, bool> _individualModes = new();
     private static readonly ConcurrentDictionary<string, Chara> _charactersByIndividualPath = new();
     private static int _refreshRequested;
 
@@ -51,12 +51,13 @@ internal static class IndividualBackgroundState
 
     internal static bool IsIndividualMode(Chara chara)
     {
-        return _individualModes.GetOrAdd(chara.uid, _ => HasIndividualBackground(chara));
+        var path = GetIndividualPath(chara);
+        return _individualModes.GetOrAdd(path, _ => HasCustomResource(new ResourceKey(path)));
     }
 
     internal static void SetIndividualMode(Chara chara, bool enabled)
     {
-        _individualModes[chara.uid] = enabled;
+        _individualModes[GetIndividualPath(chara)] = enabled;
     }
 
     internal static bool HasIndividualBackground(Chara chara)
