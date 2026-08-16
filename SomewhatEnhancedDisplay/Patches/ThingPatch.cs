@@ -47,7 +47,7 @@ internal static class ThingPatch
         matcher.MatchStartForward(
             new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(Card), nameof(Card.IsIdentified)))
         );
-        // 鑑定済みを判定する条件でModの設定を参照するように変更する。
+        // GetName()内の鑑定判定をホバー表示時のみMod設定を考慮する判定へ置き換える。
         var shouldDisplayAsIdentified = AccessTools.Method(typeof(ThingPatch), nameof(ShouldDisplayAsIdentified));
         matcher.Repeat(matchAction: m =>
         {
@@ -153,7 +153,7 @@ internal static class ThingPatch
         context.Restored = true;
     }
 
-    private static bool ShouldDisplayAsIdentified (Thing thing)
+    private static bool ShouldDisplayAsIdentified(Thing thing)
     {
         return thing.IsIdentified || (ReferenceEquals(_hoverTextTarget, thing) && StyleConfig.DisplayUnidentifiedItemsAsIdentified);
     }
