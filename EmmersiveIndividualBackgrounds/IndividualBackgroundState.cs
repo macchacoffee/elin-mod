@@ -35,7 +35,7 @@ internal static class IndividualBackgroundState
 
     internal static string GetIndividualPath(Chara chara)
     {
-        return $"{IndividualsDirectory}/{chara.uid}.txt";
+        return $"{IndividualsDirectory}/{Game.id}/{chara.uid}.txt";
     }
 
     internal static void Register(Chara chara)
