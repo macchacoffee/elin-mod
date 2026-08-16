@@ -33,7 +33,7 @@ internal static class CardPatch
 
     private static int ComputeFontSize(int size)
     {
-        // フォントサイズを微調整する
+        // フォントサイズを微調整する。
         return ModUIUtil.ComputeFontSize(size - 1);
     }
 

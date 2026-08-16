@@ -57,14 +57,14 @@ internal static class ElementPatch
 
         // ldstr "flag"
         // call static bool ClassExtension::Contains(string[] strs, string id)
-        // brtrue Label59
+        // brtrue <skipRatingText>
         matcher.MatchEndForward(
             new CodeMatch(OpCodes.Ldstr, "flag"),
             new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.Contains), [typeof(string[]), typeof(string)])),
             new CodeMatch(OpCodes.Brtrue)
         );
-        // string::Concat(string[] value)の引数valueの要素数を5→8に変更
-        // エンチャント値を追加するための枠を確保する
+        // string::Concat(string[] value)の引数valueの要素数を5から8に変更する。
+        // エンチャント値を追加するための枠を確保する。
         matcher.Advance(1);
         matcher.RemoveInstruction();
         matcher.InsertAndAdvance(
@@ -72,14 +72,14 @@ internal static class ElementPatch
         );
 
         // ldstr "]"
-        // stelem.ref NULL
+        // stelem.ref
         // call static string string::Concat(string[] values)
         matcher.MatchEndForward(
             new CodeMatch(OpCodes.Ldstr, "]"),
             new CodeMatch(OpCodes.Stelem_Ref),
             new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string[])]))
         );
-        // string::Concat(string[] value)の引数valueにエンチャント値の要素を追加
+        // string::Concat(string[] value)の引数valueにエンチャント値の要素を追加する。
         // value[5] = " ("
         // value[6] = num.ToString()
         // value[7] = ")"

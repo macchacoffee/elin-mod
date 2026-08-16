@@ -74,9 +74,9 @@ internal class ModHealthBar
 
     private static UIImage AddHealthBarImage(Transform transform, string name, Vector3 localScale, Color color)
     {
-        // GameObjectを生成し、layoutに挿入する
+        // GameObjectを生成し、layoutに挿入する。
         var obj = new GameObject(name);
-        // 体力バーの画像を設定する
+        // 体力バーの画像を設定する。
         var image = obj.AddComponent<UIImage>();
         image.sprite = ModUIUtil.White1x1Sprite;
         image.color = color;
@@ -161,7 +161,7 @@ internal class ModHealthBar
         if (!(FGRestoreTween?.IsPlaying() ?? false))
         {
             // 色の設定変更が即座に反映されるようにするため、
-            // 回復アニメーションが再生されていない場合は文字とバー画像の色を変更する
+            // 回復アニメーションが再生されていない場合は文字とバー画像の色を変更する。
             var ratio = GetHealthRatio(chara, modifier);
             ValueText.color =  GetTextColor(ratio);
             FGImage.color =  GetBarColor(ratio);
@@ -248,15 +248,15 @@ internal class ModHealthBar
 
     private static double RoundRatioForValueText(double ratio)
     {
-        // %表記で小数第1位まで表示するため、小数第3位以降を丸める
-        // 現在HPが最大HPよりも1でも低ければ0.999になるようにする
+        // %表記で小数第1位まで表示するため、小数第3位以降を丸める。
+        // 現在HPが最大HPよりも1でも低ければ0.999になるようにする。
         return ModMath.Ceiling(ratio < 1 ? Math.Min(ratio, 0.999) : ratio, 3);
     }
 
     private static string GetValueText(double ratio)
     {
         var pct = RoundRatioForValueText(ratio) * 100;
-        // 0%または100%以上の場合は小数点以下なし、それ以外の場合は小数第1位まで表示する
+        // 0%または100%以上の場合は小数点以下なし、それ以外の場合は小数第1位まで表示する。
         var pctText = pct == 0 || pct >= 100 ? $"{pct:0}" : $"{pct:0.0}";
         return $"{pctText}%";
     }

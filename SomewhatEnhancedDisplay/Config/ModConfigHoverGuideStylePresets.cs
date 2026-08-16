@@ -84,6 +84,7 @@ internal static class ModConfigHoverGuideStylePresets
                 DisplayFressness = false,
                 DisplayLockLv = false,
                 UseRarityColor = true,
+                DisplayUnidentifiedItemsAsIdentified = false,
             }
         };
     }
@@ -175,6 +176,7 @@ internal static class ModConfigHoverGuideStylePresets
                 DisplayFressness = true,
                 DisplayLockLv = true,
                 UseRarityColor = true,
+                DisplayUnidentifiedItemsAsIdentified = true,
             }
         };
     }

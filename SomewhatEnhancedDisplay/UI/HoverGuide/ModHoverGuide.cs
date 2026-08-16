@@ -34,11 +34,11 @@ internal class ModHoverGuide
         Item2 = new(widget);
 
         OriginalPivot = widget.layout.Rect().pivot;
-        // ゲーム設定のウィジェットのフォントサイズが "すごく小さい" (最小値) の場合を基準のフォントサイズとする
+        // ゲーム設定のウィジェットのフォントサイズが "すごく小さい" (最小値) の場合を基準のフォントサイズとする。
         BaseFontSize = widget.textName.fontSize - EClass.core.config.font.fontWidget.size;
 
         // ウィジェットを無効から有効に切り替えた際に表示が乱れないようにするため、
-        // 初期状態では追加コンポーネントなどは表示しないようにする
+        // 初期状態では追加コンポーネントなどは表示しないようにする。
         Padding1.Enabled = false;
     }
 
@@ -80,7 +80,7 @@ internal class ModHoverGuide
 
     private bool IsVisible()
     {
-        // widgetが非可視になるのはlayoutが非活性になるパターンと透明度が非常に小さい値になるパターンがある
+        // widgetが非可視になるのはlayoutが非活性になるパターンと透明度が非常に小さい値になるパターンがある。
         return MouseoverWidget.layout.isActiveAndEnabled && MouseoverWidget.cg.alpha >= 0.07f;
     }
 
@@ -181,9 +181,9 @@ internal class ModHoverGuide
 
     private void ShowInternal(ModHoverGuideTarget? target1, ModHoverGuideTarget? target2, bool isLocked)
     {
-        // 非可視の場合はホバーガイドのターゲットをクリアする
         if (!IsVisible())
         {
+            // 非可視の場合はホバーガイドのターゲットをクリアする。
             ClearTarget();
             if (!LocksCard)
             {
@@ -192,7 +192,7 @@ internal class ModHoverGuide
         }
 
         var fontColor = MouseoverWidget.textName.fontColor;
-        // 行間を広げるためにフォントサイズを少し大きく設定する
+        // 行間を広げるためにフォントサイズを少し大きく設定する。
         var fontSize1 = ModUIUtil.ComputeFontSize(BaseFontSize + 2);
         var fontSize2 = ModUIUtil.ComputeFontSize(BaseFontSize + 4);
         var sizeRatio = (float)fontSize2 / BaseFontSize;

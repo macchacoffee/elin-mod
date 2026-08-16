@@ -30,16 +30,16 @@ internal static class DNAPatch
         // text2 = text2 + " (" + element.Value + ")";
         var matcher = new CodeMatcher(instructions, generator);
 
-        // brfalse Label30
-        // ldloc.s 10 (System.String)
+        // brfalse <skipValue>
+        // ldloc.s (System.String)
         // ldstr " ("
         matcher.MatchStartForward(
             new CodeMatch(OpCodes.Brfalse),
             new CodeMatch(OpCodes.Ldloc_S),
             new CodeMatch(OpCodes.Ldstr, " (")
         );
-        // brfalseをpop (スタックの要素を1つ取り出すだけの命令) に置き換える
-        // 条件分岐がなくなり、常に遺伝子Elementの値が追加されるようになる
+        // 条件分岐をpopに置き換え、分岐判定の値だけをスタックから破棄する。
+        // 条件分岐がなくなり、常に遺伝子Elementの値が追加されるようになる。
         matcher.RemoveInstruction();
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Pop)

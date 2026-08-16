@@ -86,7 +86,7 @@ internal static class ModThingHoverTextBuilder
     {
         if (thing.trait.Decay == 0)
         {
-            // 腐らない場合
+            // 腐らない場合は空にする。
             return null;
         }
         var ratio = (float)(thing.MaxDecay - Math.Min(thing.decay, thing.MaxDecay)) / thing.MaxDecay;
@@ -98,7 +98,7 @@ internal static class ModThingHoverTextBuilder
     {
         if (thing.c_lockLv == 0)
         {
-            // 施錠されていない場合
+            // 施錠されていない場合は空にする。
             return null;
         }
         return $"{ModConsts.SourceId.LockLv.lang()}:{thing.c_lockLv}";

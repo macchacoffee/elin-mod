@@ -28,7 +28,7 @@ internal class ModLayerConfig : YKLayer<ModLayerConfigContext>
 
     public override void OnLayout()
     {
-        // 設定画面での選択中スタイルとホバーガイドの表示スタイルを同期する
+        // 設定画面での選択中スタイルとホバーガイドの表示スタイルを同期する。
         Context.SelectedStyleIndex = Config.CurrentStyleIndex;
         Context.AddSelectedStyleChangedListener((index, _) => Config.CurrentStyleIndex = index);
 
@@ -37,7 +37,7 @@ internal class ModLayerConfig : YKLayer<ModLayerConfigContext>
         CreateTab<ModLayerConfigTabStyleTargetChara>(ModConsts.SourceId.ConfigStyleTargetChara, ModConsts.GameObjectName.ConfigStyleTargetChara);
         CreateTab<ModLayerConfigTabStyleTargetThing>(ModConsts.SourceId.ConfigStyleTargetThing, ModConsts.GameObjectName.ConfigStyleTargetThing);
 
-        // タブの画像を設定する
+        // タブの画像を設定する。
         GetTab(ModConsts.GameObjectName.ConfigStyle).sprite = GetTabIconSprite(85);
         GetTab(ModConsts.GameObjectName.ConfigStyleTargetChara).sprite = GetTabIconSprite(115);
         GetTab(ModConsts.GameObjectName.ConfigStyleTargetThing).sprite = GetTabIconSprite(109);
@@ -121,7 +121,7 @@ internal class ModLayerConfig : YKLayer<ModLayerConfigContext>
             tabIdLang == ModConsts.SourceId.ConfigStyleTargetChara
             || tabIdLang == ModConsts.SourceId.ConfigStyleTargetThing)
         {
-            // スタイル関連のidLangはすべてスタイルのidLangに置き換える
+            // スタイル関連のidLangはすべてスタイルのidLangに置き換える。
             tabIdLang = ModConsts.SourceId.ConfigStyle;
         }
         return idLang.lang(tabIdLang.lang());

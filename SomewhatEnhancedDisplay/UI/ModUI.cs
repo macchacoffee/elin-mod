@@ -16,7 +16,7 @@ internal static class ModUI
         {
             if (EClass.ui.GetLayer<ModLayerConfig>() is not null)
             {
-                // Modのホバーガイド設定画面が開いている時は処理を中断する
+                // Modのホバーガイド設定画面が開いている時は処理を中断する。
                 return;
             }
 
@@ -32,7 +32,7 @@ internal static class ModUI
         {
             if (EClass.ui.GetLayer<ModLayerConfig>() is not null)
             {
-                // Modのホバーガイド設定画面が開いている時は処理を中断する
+                // Modのホバーガイド設定画面が開いている時は処理を中断する。
                 return;
             }
 

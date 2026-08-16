@@ -14,7 +14,7 @@ internal static class CharaExtensions
                 var maxHealth = Math.Max(chara.MaxHP, 0);
                 if (chara.HasElement(FEAT.featManaMeat))
                 {
-                    // マナの体フィートを持っている場合はマナも体力の一部として扱う
+                    // マナの体フィートを持っている場合はマナも体力の一部として扱う。
                     health += Math.Max(chara.mana.value, 0);
                     maxHealth += Math.Max(chara.mana.max, 0);
                 }

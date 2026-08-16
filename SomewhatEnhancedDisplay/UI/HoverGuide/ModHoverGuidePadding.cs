@@ -19,7 +19,7 @@ internal class ModHoverGuidePadding
     {
         var localScale = widget.textName.transform.localScale;
 
-        // GameObjectを生成し、layoutに挿入する
+        // GameObjectを生成し、layoutに挿入する。
         var obj = new GameObject(ModConsts.GameObjectName.HoverGuidePadding);
         Image = obj.AddComponent<UIImage>();
         Image.transform.Rect().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0);
@@ -27,7 +27,7 @@ internal class ModHoverGuidePadding
         obj.transform.localScale = localScale;
 
         // ウィジェットを無効から有効に切り替えた際に表示が乱れないようにするため、
-        // 初期状態では追加コンポーネントなどは表示しないようにする
+        // 初期状態では追加コンポーネントなどは表示しないようにする。
         Update(false, 0);
     }
 

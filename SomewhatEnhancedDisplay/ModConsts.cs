@@ -92,6 +92,7 @@ internal static class ModConsts
         public static readonly string DisableShadowform = Prefixed("disableShadowform");
         public static readonly string DisableMimicry = Prefixed("disableMimicry");
         public static readonly string UseRarityColor = Prefixed("useRarityColor");
+        public static readonly string DisplayUnidentifiedItemsAsIdentified = Prefixed("displayUnidentifiedItemsAsIdentified");
         public static readonly string HealthBarValue = Prefixed("healthBarValue");
         public static readonly string HealthBarWidth = Prefixed("healthBarWidth");
         public static readonly string UseAnimation = Prefixed("useAnimation");
@@ -192,5 +193,6 @@ internal static class ModConsts
         public static readonly string TooltipDisableMimicry = Prefixed("tooltipDisableMimicry");
         public static readonly string TooltipUseRarityColor = Prefixed("tooltipUseRarityColor");
         public static readonly string TooltipFressness = Prefixed("tooltipFressness");
+        public static readonly string TooltipDisplayUnidentifiedItemsAsIdentified = Prefixed("tooltipDisplayUnidentifiedItemsAsIdentified");
      }
 }

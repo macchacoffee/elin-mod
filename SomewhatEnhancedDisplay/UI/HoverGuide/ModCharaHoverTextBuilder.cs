@@ -289,7 +289,7 @@ internal static class ModCharaHoverTextBuilder
 
     private static string GetHPText(Chara chara, Chara realChara)
     {
-        // 擬人状態の場合は正体のキャラのHP割合を見かけ上のキャラの現在HPに反映する
+        // 擬人状態の場合は正体のキャラのHP割合を見かけ上のキャラの現在HPに反映する。
         var ratio = (float)realChara.hp / realChara.MaxHP;
         var hp = chara == realChara ? chara.hp : (int)(chara.MaxHP * ratio);
         var hpValueColor = Math.Ceiling(ratio * 100) > _lowValueThreshold ? ColorConfig.HPValueColor : ColorConfig.HPValueColor.Darken(0.2f);
@@ -300,7 +300,7 @@ internal static class ModCharaHoverTextBuilder
 
     private static string GetManaText(Chara chara, Chara realChara)
     {
-        // 擬人状態の場合は正体のキャラのマナ割合を見かけ上のキャラの現在マナに反映する
+        // 擬人状態の場合は正体のキャラのマナ割合を見かけ上のキャラの現在マナに反映する。
         var ratio = (float)realChara.mana.value / realChara.mana.max;
         var mana = chara == realChara ? chara.mana.value : (int)(chara.mana.max * ratio);
         var manaValueColor = Math.Ceiling(ratio * 100) > _lowValueThreshold ? ColorConfig.ManaValueColor : ColorConfig.ManaValueColor.Darken(0.2f);
@@ -311,7 +311,7 @@ internal static class ModCharaHoverTextBuilder
 
     private static string GetStaminaText(Chara chara, Chara realChara)
     {
-        // 擬人状態の場合は正体のキャラのスタミナ割合を見かけ上のキャラの現在スタミナに反映する
+        // 擬人状態の場合は正体のキャラのスタミナ割合を見かけ上のキャラの現在スタミナに反映する。
         var ratio = (float)realChara.stamina.value / realChara.stamina.max;
         var stamina = chara == realChara ? chara.stamina.value : (int)(chara.stamina.max * ratio);
         var staminaValueColor = Math.Ceiling(ratio * 100) > _lowValueThreshold ? ColorConfig.StaminaValueColor : ColorConfig.StaminaValueColor.Darken(0.2f);
@@ -506,7 +506,7 @@ internal static class ModCharaHoverTextBuilder
         {
             return null;
         }
-        // エーテル耐性が25以上の場合はエーテル病が進行しないことを示すため、"*"を追加する
+        // エーテル耐性が25以上の場合はエーテル病が進行しないことを示すため、"*"を追加する。
         var resImmunePlusText = resist.Id == SKILL.resEther && resist.Value >= 25 ? "*" : string.Empty;
         if (!EClass.sources.elements.alias.TryGetValue(eleAlias, out var element))
         {

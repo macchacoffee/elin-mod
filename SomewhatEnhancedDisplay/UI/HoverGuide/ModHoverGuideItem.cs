@@ -35,7 +35,7 @@ internal class ModHoverGuideItem
         TextName2.transform.localScale = localScale;
 
         // ウィジェットを無効から有効に切り替えた際に表示が乱れないようにするため、
-        // 初期状態では追加コンポーネントなどは表示しないようにする
+        // 初期状態では追加コンポーネントなどは表示しないようにする。
         TextName1.enabled = false;
         HealthBar.Hide();
         TextName2.enabled = false;

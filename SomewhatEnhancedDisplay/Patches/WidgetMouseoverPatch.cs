@@ -103,29 +103,29 @@ internal static class WidgetMouseoverPatch
         var matcher = new CodeMatcher(instructions, generator);
 
         // ホバーテキスト下部 (おおよそ2行目以降) に表示される文字列、
-        // GetHoverTextとGetHoverText2()を呼び出したインスタンスの参照を保存する変数を定義する
+        // GetHoverTextとGetHoverText2()を呼び出したインスタンスの参照を保存する変数を定義する。
         var localText2 = generator.DeclareLocal(typeof(string));
         var localText3 = generator.DeclareLocal(typeof(string));
         var localText4 = generator.DeclareLocal(typeof(string));
         var localTarget1 = generator.DeclareLocal(typeof(Card));
         var localTarget2 = generator.DeclareLocal(typeof(Card));
 
-        // ldarg.0 NULL
-        // ldc.i4.0 NULL
+        // ldarg.0
+        // ldc.i4.0
         // call void WidgetMouseover::Hide(bool immediate)
-        // ret NULL
+        // ret
         matcher.MatchStartForward(
             new CodeMatch(OpCodes.Ldarg_0),
             new CodeMatch(OpCodes.Ldc_I4_0),
             new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(WidgetMouseover), nameof(WidgetMouseover.Hide), [typeof(bool)])),
             new CodeMatch(OpCodes.Ret)
         );
-        // 固定ターゲットを表示する場合の遷移先となるLabelMod1を生成する
-        matcher.CreateLabelWithOffsets(3, out var LabelMod1);
-        // 固定ターゲットの表示を試行し、表示する場合はHide()の呼び出しをスキップする処理を追加する
+        // 固定ターゲットを表示する場合の継続位置を示すラベルを生成する。
+        matcher.CreateLabelWithOffsets(3, out var skipHide);
+        // 固定ターゲットの表示を試行し、表示する場合はHide()の呼び出しをスキップする処理を追加する。
         matcher.InsertAndAdvance(
             CodeInstruction.Call(() => TryShowHoverGuideLockedCard()),
-            new CodeInstruction(OpCodes.Brtrue, LabelMod1)
+            new CodeInstruction(OpCodes.Brtrue, skipHide)
         );
 
         // ldfld Chara Chara::ride
@@ -134,8 +134,8 @@ internal static class WidgetMouseoverPatch
             new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.ride))),
             new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Card), nameof(Card.GetHoverText2), []))
         );
-        // GetHoverText2()の戻り値と呼び出したインスタンスの参照 (騎乗Chara) を保存する
-        // GetHoverText2()の戻り値がtextに追加されないようにする
+        // GetHoverText2()の戻り値と呼び出したインスタンスの参照 (騎乗Chara) を保存する。
+        // GetHoverText2()の戻り値がtextに追加されないようにする。
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Dup)
         );
@@ -147,7 +147,7 @@ internal static class WidgetMouseoverPatch
             new CodeInstruction(OpCodes.Pop)
         );
 
-        // ldloc.2 NULL
+        // ldloc.2
         // Environment::get_NewLine()
         // call static string string::Concat(string str0, string str1)
         matcher.MatchStartForward(
@@ -155,7 +155,7 @@ internal static class WidgetMouseoverPatch
             new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(Environment), nameof(Environment.NewLine))),
             new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string)]))
         );
-        // textに改行が追加されないようにする
+        // textに改行が追加されないようにする。
         matcher.RemoveInstructions(4);
 
         // ldfld Chara Chara::parasite
@@ -164,7 +164,7 @@ internal static class WidgetMouseoverPatch
             new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.parasite))),
             new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Card), nameof(Card.GetHoverText), []))
         );
-        // GetHoverText()の戻り値を保存し、textに追加されないようにする
+        // GetHoverText()の戻り値を保存し、textに追加されないようにする。
         matcher.Advance(1);
         matcher.RemoveInstructions(2);
         matcher.InsertAndAdvance(
@@ -178,8 +178,8 @@ internal static class WidgetMouseoverPatch
             new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.parasite))),
             new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Card), nameof(Card.GetHoverText2), []))
         );
-        // GetHoverText2()の戻り値と呼び出したインスタンスの参照 (寄生Chara) を保存する
-        // GetHoverText2()の戻り値がtextに追加されないようにする
+        // GetHoverText2()の戻り値と呼び出したインスタンスの参照 (寄生Chara) を保存する。
+        // GetHoverText2()の戻り値がtextに追加されないようにする。
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Dup)
         );
@@ -197,20 +197,20 @@ internal static class WidgetMouseoverPatch
             new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.lang), [typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string)])),
             new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string)]))
         );
-        // "(他+n)"の文字列を調整し、GetHoverText()の戻り値の末尾に追加されるようにする
+        // "(他+n)"の文字列を調整し、GetHoverText()の戻り値の末尾に追加されるようにする。
         matcher.RemoveInstruction();
         matcher.InsertAndAdvance(
             CodeInstruction.Call(() => ModCardHoverTextBuilder.BuildOtherCardsText(default!, default!))
         );
 
-        // ldloc.3 NULL [Label21, Label22]
+        // ldloc.3
         // callvirt virtual string Card::GetHoverText2()
         matcher.MatchEndForward(
             new CodeMatch(OpCodes.Ldloc_3),
             new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Card), nameof(Card.GetHoverText2), []))
         );
-        // GetHoverText2()の戻り値と呼び出したインスタンスの参照 (card) を保存する
-        // GetHoverText2()の戻り値がtextに追加されないようにする
+        // GetHoverText2()の戻り値と呼び出したインスタンスの参照 (card) を保存する。
+        // GetHoverText2()の戻り値がtextに追加されないようにする。
         matcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Dup)
         );
@@ -222,9 +222,9 @@ internal static class WidgetMouseoverPatch
             new CodeInstruction(OpCodes.Pop)
         );
 
-        // ldloc.2 NULL
+        // ldloc.2
         // call static string Environment::get_NewLine()
-        // ldloc.0 NULL
+        // ldloc.0
         // ldfld IInspect PointTarget::target
         // callvirt abstract virtual string IInspect::get_InspectName()
         matcher.MatchStartForward(
@@ -234,7 +234,7 @@ internal static class WidgetMouseoverPatch
             new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(PointTarget), nameof(PointTarget.target))),
             new CodeMatch(OpCodes.Callvirt, AccessTools.PropertyGetter(typeof(IInspect), nameof(IInspect.InspectName)))
         );
-        // InspectNameを保存し、textには追加されないようにする
+        // InspectNameを保存し、textには追加されないようにする。
         matcher.RemoveInstructions(2);
         matcher.Advance(3);
         matcher.RemoveInstructions(2);
@@ -242,19 +242,19 @@ internal static class WidgetMouseoverPatch
             new CodeInstruction(OpCodes.Stloc_S, localText3)
         );
 
-        // ldarg.0 NULL [Label17, Label19, Label23, Label27, Label28, Label29, Label30]
-        // ldloc.2 NULL
+        // ldarg.0
+        // ldloc.2
         // call void WidgetMouseover::Show(string s)
         matcher.MatchStartForward(
             new CodeMatch(OpCodes.Ldarg_0),
             new CodeMatch(OpCodes.Ldloc_2),
             new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(WidgetMouseover), nameof(WidgetMouseover.Show), [typeof(string)]))
         );
-        // Show()を呼び出す代わりにModで追加したUIを更新するメソッドを呼び出す
-        var labelList1 = matcher.Labels.Copy();
+        // Show()を呼び出す代わりにModで追加したUIを更新するメソッドを呼び出す。
+        var originalShowLabels = matcher.Labels.Copy();
         matcher.Labels.Clear();
         matcher.RemoveInstruction();
-        matcher.AddLabels(labelList1);
+        matcher.AddLabels(originalShowLabels);
         matcher.Advance(1);
         matcher.RemoveInstruction();
         matcher.InsertAndAdvance(

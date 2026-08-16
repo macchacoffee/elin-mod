@@ -462,4 +462,7 @@ internal class ModConfigHoverGuideStyleThing : JsonModConfigBase<ModConfigHoverG
 
     [JsonProperty("useRarityColor", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool UseRarityColor { get; set; } = true;
+
+    [JsonProperty("displayUnidentifiedItemsAsIdentified", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool DisplayUnidentifiedItemsAsIdentified { get; set; } = false;
 }
