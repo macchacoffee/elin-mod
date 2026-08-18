@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Meta>
+  <title>Starweaver's Moongate Quick Fix</title>
+  <id>maccha_coffee_starweavers_moongate_quick_fix</id>
+  <author>抹茶コーヒー</author>
+  <loadPriority>100</loadPriority>
+  <version>0.23.325</version>
+  <description>
+  </description>
+  <tags>General</tags>
+  <visibility>Public</visibility>
+</Meta>
