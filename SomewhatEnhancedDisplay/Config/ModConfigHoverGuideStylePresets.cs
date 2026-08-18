@@ -51,6 +51,7 @@ internal static class ModConfigHoverGuideStylePresets
                 HealthBar = new()
                 {
                     DisplayValue = true,
+                    SplitManaBodyHealthBar = false,
                     DisplayForEnemy = new()
                     {
                         Target = ModHealthBarDisplayTarget.All,
@@ -143,6 +144,7 @@ internal static class ModConfigHoverGuideStylePresets
                 HealthBar = new()
                 {
                     DisplayValue = true,
+                    SplitManaBodyHealthBar = true,
                     DisplayForEnemy = new()
                     {
                         Target = ModHealthBarDisplayTarget.All,

@@ -21,9 +21,12 @@ internal class ModHealthBar
     private UIImage FGDamageImage { get; }
     private UIImage FGRestoreImage { get; }
     private UIImage FGImage { get; }
+    private UIImage FGHPImage { get; }
     private UIText ValueText { get; }
 
     private double ValueRatio { get; set; }
+    private double HPPartRatio { get; set; }
+    private bool SplitsManaBody { get; set; }
     private WeakReference<Chara?> Target { get; }
     private ModHoverGuideTargetModifier? TargetModifier { get; set; }
 
@@ -54,6 +57,8 @@ internal class ModHealthBar
         FGDamageImage = AddHealthBarImage(Layout.transform, ModConsts.GameObjectName.HealthBarFGDamage, localScale, ColorConfig.HealthBarBGColor);
         FGRestoreImage = AddHealthBarImage(Layout.transform, ModConsts.GameObjectName.HealthBarFGRestore, localScale, ColorConfig.HealthBarBGColor);
         FGImage = AddHealthBarImage(Layout.transform, ModConsts.GameObjectName.HealthBarFG, localScale, ColorConfig.HealthBarFGColor);
+        FGHPImage = AddHealthBarImage(Layout.transform, ModConsts.GameObjectName.HealthBarFGHP, localScale, ColorConfig.HealthBarFGColor);
+        FGHPImage.enabled = false;
 
         var valueObj = new GameObject(ModConsts.GameObjectName.HealthBarValue);
         ValueText = valueObj.AddComponent<UIText>();
@@ -130,20 +135,30 @@ internal class ModHealthBar
         }
 
         var ratio = GetHealthRatio(chara, modifier);
+        var splitsManaBody = ShouldSplitManaBody(chara, modifier);
+        var hpPartRatio = splitsManaBody ? GetHPPartRatio(chara, ratio) : 0;
 
-        if (!StyleConfig.HealthBar.UseAnimation || targetChanged)
+        if (!StyleConfig.HealthBar.UseAnimation || targetChanged || SplitsManaBody != splitsManaBody)
         {
-            SetValueImmediately(ratio);
+            SetValueImmediately(ratio, hpPartRatio, splitsManaBody);
         }
         else if (ValueRatio != ratio)
         {
             var textColor = GetTextColor(ratio);
-            var barColor = GetBarColor(ratio);
-            UpdateRestore(ratio, barColor, textColor);
-            UpdateDamage(ratio,barColor, textColor);
+            var barColor = GetBarColor(ratio, splitsManaBody);
+            var hpBarColor = GetBarColor(ratio);
+            UpdateRestore(ratio, hpPartRatio, splitsManaBody, barColor, hpBarColor, textColor);
+            UpdateDamage(ratio, hpPartRatio, splitsManaBody, barColor, hpBarColor, textColor);
+        }
+        else if (HPPartRatio != hpPartRatio)
+        {
+            SetHPPartImmediately(hpPartRatio, GetBarColor(ratio));
         }
 
         ValueRatio = ratio;
+        HPPartRatio = hpPartRatio;
+        SplitsManaBody = splitsManaBody;
+        UpdateColors(ratio);
     }
 
     private void UpdatePresentation(Chara chara, ModHoverGuideTargetModifier? modifier)
@@ -157,14 +172,20 @@ internal class ModHealthBar
         UpdateSize(enabled);
 
         ValueText.enabled = StyleConfig.HealthBar.DisplayValue;
+    }
 
+    private void UpdateColors(double ratio)
+    {
         if (!(FGRestoreTween?.IsPlaying() ?? false))
         {
             // 色の設定変更が即座に反映されるようにするため、
             // 回復アニメーションが再生されていない場合は文字とバー画像の色を変更する。
-            var ratio = GetHealthRatio(chara, modifier);
-            ValueText.color =  GetTextColor(ratio);
-            FGImage.color =  GetBarColor(ratio);
+            ValueText.color = GetTextColor(ratio);
+            FGImage.color = GetBarColor(ratio, SplitsManaBody);
+            if (SplitsManaBody)
+            {
+                FGHPImage.color = GetBarColor(ratio);
+            }
         }
     }
 
@@ -174,12 +195,19 @@ internal class ModHealthBar
         {
             return false;
         }
-        if (ValueRatio != 0 || FGRestoreTween?.IsPlaying() == true || FGDamageTween?.IsPlaying() == true)
+        if (ValueRatio != 0
+            || HPPartRatio != 0
+            || SplitsManaBody
+            || FGImage.fillAmount != 0
+            || FGRestoreTween?.IsPlaying() == true
+            || FGDamageTween?.IsPlaying() == true)
         {
-            SetValueImmediately(0);
+            SetValueImmediately(0, 0, false);
         }
 
         ValueRatio = 0;
+        HPPartRatio = 0;
+        SplitsManaBody = false;
 
         return true;
     }
@@ -212,6 +240,28 @@ internal class ModHealthBar
         return modifier?.HealthBarRatio ?? chara.HealthRatio;
     }
 
+    private static bool ShouldSplitManaBody(Chara chara, ModHoverGuideTargetModifier? modifier)
+    {
+        return StyleConfig.HealthBar.SplitManaBodyHealthBar
+            && modifier?.HealthBarRatio is null
+            && chara.Evalue(FEAT.featManaMeat) > 0;
+    }
+
+    private static double GetHPPartRatio(Chara chara, double totalRatio)
+    {
+        var maxHP = Math.Max((long)chara.MaxHP, 0);
+        var maxMana = Math.Max((long)chara.mana.max, 0);
+        var totalMax = maxHP + maxMana;
+        if (totalMax <= 0)
+        {
+            return 0;
+        }
+
+        var hpPartRatio = (double)Math.Max((long)chara.hp, 0) / totalMax;
+        var visibleTotalRatio = double.IsNaN(totalRatio) ? 0 : Math.Min(Math.Max(totalRatio, 0), 1);
+        return Math.Min(Math.Min(hpPartRatio, 1), visibleTotalRatio);
+    }
+
     private static Color GetTextColor(double ratio)
     {
         return Color.Lerp(ColorConfig.HealthBarLowValueTextColor, ColorConfig.HealthBarTextColor, (float)ratio);
@@ -222,12 +272,35 @@ internal class ModHealthBar
         return Color.Lerp(ColorConfig.HealthBarLowValueFGColor, ColorConfig.HealthBarFGColor, (float)ratio);
     }
 
-    private void SetValueImmediately(double ratio)
+    private static Color GetManaBarColor(double ratio)
     {
-        SetValueImmediately(ratio, GetBarColor(ratio), GetTextColor(ratio));
+        return Color.Lerp(ColorConfig.HealthBarLowValueManaFGColor, ColorConfig.HealthBarManaFGColor, (float)ratio);
     }
 
-    private void SetValueImmediately(double ratio, Color barColor, Color textColor)
+    private static Color GetBarColor(double ratio, bool splitsManaBody)
+    {
+        return splitsManaBody ? GetManaBarColor(ratio) : GetBarColor(ratio);
+    }
+
+    private void SetValueImmediately(double ratio, double hpPartRatio, bool splitsManaBody)
+    {
+        SetValueImmediately(
+            ratio,
+            hpPartRatio,
+            splitsManaBody,
+            GetBarColor(ratio, splitsManaBody),
+            GetBarColor(ratio),
+            GetTextColor(ratio)
+        );
+    }
+
+    private void SetValueImmediately(
+        double ratio,
+        double hpPartRatio,
+        bool splitsManaBody,
+        Color barColor,
+        Color hpBarColor,
+        Color textColor)
     {
         FGRestoreTween?.Kill(true);
         FGDamageTween?.Kill(true);
@@ -240,10 +313,24 @@ internal class ModHealthBar
         FGDamageImage.fillAmount = (float)ratio;
         FGRestoreImage.fillAmount = (float)ratio;
         FGImage.fillAmount = (float)ratio;
+        FGHPImage.fillAmount = splitsManaBody ? (float)hpPartRatio : 0;
+        FGHPImage.enabled = splitsManaBody;
 
         FGDamageImage.color = ColorConfig.HealthBarBGColor;
         FGRestoreImage.color = ColorConfig.HealthBarBGColor;
         FGImage.color = barColor;
+        FGHPImage.color = hpBarColor;
+    }
+
+    private void SetHPPartImmediately(double hpPartRatio, Color hpBarColor)
+    {
+        if (FGRestoreTween?.IsPlaying() == true)
+        {
+            FGRestoreTween.Kill(true);
+            FGRestoreTween = null;
+        }
+        FGHPImage.fillAmount = (float)hpPartRatio;
+        FGHPImage.color = hpBarColor;
     }
 
     private static double RoundRatioForValueText(double ratio)
@@ -261,13 +348,33 @@ internal class ModHealthBar
         return $"{pctText}%";
     }
 
-    private void UpdateRestore(double valueRatio, Color barColor, Color textColor)
+    private void UpdateRestore(
+        double valueRatio,
+        double hpPartRatio,
+        bool splitsManaBody,
+        Color barColor,
+        Color hpBarColor,
+        Color textColor)
     {
         var ratio = Math.Min(1, valueRatio);
         FGRestoreImage.fillAmount = (float)ratio;
         var ratioDelta = valueRatio - FGImage.fillAmount;
         if (ratioDelta == 0)
         {
+            if (FGRestoreTween?.IsPlaying() == true)
+            {
+                FGRestoreTween.Kill();
+                FGRestoreTween = null;
+                FGRestoreImage.color = ColorConfig.HealthBarBGColor;
+            }
+            FGImage.color = barColor;
+            ValueText.text = GetValueText(valueRatio);
+            ValueText.color = textColor;
+            if (splitsManaBody)
+            {
+                FGHPImage.fillAmount = (float)hpPartRatio;
+                FGHPImage.color = hpBarColor;
+            }
             return;
         }
         var hasOldTween = FGRestoreTween?.IsPlaying() ?? false;
@@ -280,7 +387,7 @@ internal class ModHealthBar
 
         var barRatio = FGImage.fillAmount;
         var duration = Math.Abs((float)ratio - barRatio) * 1.5f;
-        FGRestoreTween = DOTween.Sequence()
+        var sequence = DOTween.Sequence()
             .SetLink(LayoutObj)
             .Join(
                 FGImage
@@ -304,24 +411,47 @@ internal class ModHealthBar
                 ValueText
                 .DOColor(textColor, duration)
                 .SetLink(LayoutObj)
-                .SetEase(Ease.Linear))
-        .SetLink(LayoutObj)
-        .SetDelay(hasOldTween ? 0 : _tweenDelay)
-        .OnStart(() =>
+                .SetEase(Ease.Linear));
+        if (splitsManaBody)
         {
-            if (valueRatio > FGDamageImage.fillAmount)
+            if (FGHPImage.fillAmount != (float)hpPartRatio)
             {
-                FGDamageImage.fillAmount = (float)ratio;
+                sequence.Join(
+                    FGHPImage
+                    .DOFillAmount((float)hpPartRatio, duration)
+                    .SetLink(LayoutObj)
+                    .SetEase(Ease.Linear));
             }
-            FGRestoreImage.color = ColorConfig.HealthBarFGRestoreColor;
-        })
-        .OnComplete(() =>
-        {
-            FGRestoreImage.color = ColorConfig.HealthBarBGColor;
-        });
+            sequence.Join(
+                FGHPImage
+                .DOColor(hpBarColor, duration)
+                .SetLink(LayoutObj)
+                .SetEase(Ease.Linear));
+        }
+        FGRestoreTween = sequence
+            .SetLink(LayoutObj)
+            .SetDelay(hasOldTween ? 0 : _tweenDelay)
+            .OnStart(() =>
+            {
+                if (valueRatio > FGDamageImage.fillAmount)
+                {
+                    FGDamageImage.fillAmount = (float)ratio;
+                }
+                FGRestoreImage.color = ColorConfig.HealthBarFGRestoreColor;
+            })
+            .OnComplete(() =>
+            {
+                FGRestoreImage.color = ColorConfig.HealthBarBGColor;
+            });
     }
 
-    private void UpdateDamage(double valueRatio, Color barColor, Color textColor)
+    private void UpdateDamage(
+        double valueRatio,
+        double hpPartRatio,
+        bool splitsManaBody,
+        Color barColor,
+        Color hpBarColor,
+        Color textColor)
     {
         var ratio = Math.Min(1, valueRatio);
         var ratioDelta = valueRatio - FGDamageImage.fillAmount;
@@ -341,6 +471,11 @@ internal class ModHealthBar
         {
             FGImage.fillAmount = (float)ratio;
             FGImage.color = barColor;
+            if (splitsManaBody)
+            {
+                FGHPImage.fillAmount = (float)hpPartRatio;
+                FGHPImage.color = hpBarColor;
+            }
             ValueText.text = GetValueText(valueRatio);
             ValueText.color = textColor;
         }
@@ -387,6 +522,7 @@ internal class ModHealthBar
         UpdateTransformSize(Layout, width, height);
         UpdateTransformSize(BGImage, width, barHeight);
         UpdateTransformSize(FGImage, width, barHeight);
+        UpdateTransformSize(FGHPImage, width, barHeight);
         UpdateTransformSize(FGDamageImage, width, barHeight);
         UpdateTransformSize(FGRestoreImage, width, barHeight);
         UpdateTransformSize(ValueText, width, height);

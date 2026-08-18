@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Meta>
+  <title>Somewhat Enhanced Display</title>
+  <id>maccha_coffee_somewhat_enhanced_display</id>
+  <author>抹茶コーヒー</author>
+  <loadPriority>100</loadPriority>
+  <version>0.23.325</version>
+  <description>
+Enhances several in-game display features, allowing various types of information to be shown.
+
+In addition to displaying numerical values in status notifications and tooltips, this mod enhances the hover guides shown when you move the mouse cursor over characters and items.
+The hover guide can be customized in detail, including what information is displayed and how it looks, and you can create multiple display styles and switch between them during gameplay.
+
+[h2]Required Mod[/h2]
+This mod requires the following mod:
+[list]
+[*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3400020753]YK Framework[/url]
+[/list]
+
+[h2]Main Features[/h2]
+[list]
+[*] Displays values representing the strength of buffs, debuffs, conditions, and other effects in status notifications.
+[*] Displays enchantment values (strength) in equipment tooltips.
+[*] Displays numerical values for abilities, feats, and other elements in equipment and gene tooltips.
+[*] Adds various information to character hover guides.
+[*] Adds information such as Lv, material, freshness, and lock difficulty to hover guides for items and other objects.
+[*] Displays character HP bars in the hover guide.
+[*] Allows you to customize the hover guide's contents, colors, position, scale, and more.
+[*] Allows you to create multiple display styles and switch between them during gameplay.
+[*] Allows you to lock the hover guide target so its information remains displayed even after moving the mouse cursor away.
+[/list]
+
+[h2]Character Hover Guide[/h2]
+Greatly expands the information displayed when you move the mouse cursor over a character.
+Each item can be individually shown or hidden. Available information includes:
+[list]
+[*] Type (Unique, etc.), Lv
+[*] Level difference, elevation difference, faith, taste of blood, etc.
+[*] HP bar
+[*] Gender, age, race, class, friendliness, etc.
+[*] HP, MP, SP
+[*] DV, PV, speed, luck, EXP, element
+[*] Main attributes
+[*] Faith, favorite food, affinity, etc.
+[*] Feats and their values
+[*] Available abilities
+[*] Elemental resistances and their values
+[*] Buffs, debuffs, conditions, curses, and their values
+[/list]
+
+You can customize the display to your liking, from a simple layout that shows only the information you need to a detailed layout that lets you check many kinds of information at once.
+
+[h2]HP Bar[/h2]
+Displays a character's current HP as a bar in the hover guide.
+Display conditions can be configured separately for enemies, neutral characters, friendly characters, allies, and other target types. You can also choose whether to display the bar outside combat or at full HP, whether to show the HP percentage numerically, and more.
+
+[h2]Display Styles[/h2]
+Hover guide settings can be saved as multiple "styles."
+For example, you can create different styles such as:
+[list]
+[*] A minimal style that displays only essential information for regular use
+[*] A combat-oriented style focused on HP and resistances
+[*] A detailed style that displays more information for inspecting characters
+[/list]
+You can switch between these styles depending on the situation.
+
+By default, press the [b]H key[/b] to switch to the next style. The key can be changed in the general settings.
+
+[h2]Locking the Hover Target[/h2]
+You can lock the target currently displayed in the hover guide.
+While locked, information about that character or item remains displayed even after you move the mouse cursor away from it. The target's name is also enclosed in "*".
+By default, press the [b]L key[/b] to toggle the lock on or off. The key can be changed in the general settings.
+
+[h2]Display Customization[/h2]
+In addition to choosing what information is displayed, you can also customize settings such as:
+[list]
+[*] Display scale (can be scaled independently of the in-game UI settings)
+[*] Pivot (controls behavior such as which direction the guide expands as more lines are added)
+[*] Various text colors
+[*] HP bar colors
+[/list]
+
+The dedicated settings screen allows you to adjust these options while previewing the actual hover guide.
+
+[h2]Settings[/h2]
+Hover guide settings can be changed from the in-game system menu (Esc key → Tools → Somewhat Enhanced Display).
+These settings are saved separately for each save data in the following location:
+[code]%USERPROFILE%\AppData\LocalLow\Lafrontier\Elin\Save\world_x\maccha-coffee.somewhat-enhanced-display.txt[/code]
+
+The mod's general settings allow you to enable or disable individual features and change key bindings (style switching and target locking).
+You can change these settings from the in-game settings screen provided by [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3379819704]Mod Config GUI[/url], or by editing the following configuration file:
+[code]Elin\BepInEx\config\maccha-coffee.somewhat-enhanced-display.cfg[/code]
+
+If you want to clean up files that are no longer needed after you stop using this mod, delete the configuration files listed above.
+
+[h2]Compatibility[/h2]
+This mod cannot be used together with mods that make any of the following changes:
+[list]
+[*] Changes to hover guides
+[*] Changes to the display of enchantment tooltips
+[*] Changes to the display of gene tooltips
+[*] Changes to status notifications for buffs, debuffs, conditions, and similar effects
+[/list]
+
+It may be possible to use such mods together by disabling some features in the general settings, but compatibility is not guaranteed.
+
+[hr][/hr]
+[h2]Source Code[/h2]
+[url=https://github.com/macchacoffee/elin-mod/tree/main/SomewhatEnhancedDisplay]GitHub[/url]
+  </description>
+  <tags>General,QoL</tags>
+  <visibility>Public</visibility>
+</Meta>

@@ -141,6 +141,19 @@ internal class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
         EditStyleUI.Add(
             layout: this,
             headerLabel: null,
+            cellWidth: _cellWidth2,
+            maxColumn: _maxColumn2,
+            new EditStyleToogleUIItem(
+                Label: ModConsts.SourceId.SplitManaBodyHealthBar,
+                Init: Config.HealthBar.SplitManaBodyHealthBar,
+                OnChanged: value => Config.HealthBar.SplitManaBodyHealthBar = value,
+                GetConfig: () => Config.HealthBar.SplitManaBodyHealthBar,
+                Tooltip: ModConsts.SourceId.TooltipSplitManaBodyHealthBar
+            )
+        );
+        EditStyleUI.Add(
+            layout: this,
+            headerLabel: null,
             cellWidth: _cellWidth1,
             maxColumn: _maxColumn1,
             new EditStyleSliderUIItem(

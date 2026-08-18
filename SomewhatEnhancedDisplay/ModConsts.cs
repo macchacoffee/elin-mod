@@ -12,6 +12,7 @@ internal static class ModConsts
         public static readonly string HealthBar = Prefixed("HealthBar");
         public static readonly string HealthBarBG = Prefixed("HealthBarBG");
         public static readonly string HealthBarFG = Prefixed("HealthBarFG");
+        public static readonly string HealthBarFGHP = Prefixed("HealthBarFGHP");
         public static readonly string HealthBarFGDamage = Prefixed("HealthBarFGDamage");
         public static readonly string HealthBarFGRestore = Prefixed("HealthBarFGRestore");
         public static readonly string HealthBarValue = Prefixed("HealthBarValue");
@@ -96,6 +97,7 @@ internal static class ModConsts
         public static readonly string HealthBarValue = Prefixed("healthBarValue");
         public static readonly string HealthBarWidth = Prefixed("healthBarWidth");
         public static readonly string UseAnimation = Prefixed("useAnimation");
+        public static readonly string SplitManaBodyHealthBar = Prefixed("splitManaBodyHealthBar");
         public static readonly string Enemy = Prefixed("enemy");
         public static readonly string Netural = Prefixed("netural");
         public static readonly string Friend = Prefixed("friend");
@@ -139,9 +141,11 @@ internal static class ModConsts
         public static readonly string NoneResistLabelColor = Prefixed("noneResistLabelColor");
         public static readonly string HealthBarBGColor = Prefixed("healthBarBGColor");
         public static readonly string HealthBarFGColor = Prefixed("healthBarFGColor");
+        public static readonly string HealthBarManaFGColor = Prefixed("healthBarManaFGColor");
         public static readonly string HealthBarFGRestoreColor = Prefixed("healthBarFGRestoreColor");
         public static readonly string HealthBarFGDamageColor = Prefixed("healthBarFGDamageColor");
         public static readonly string HealthBarLowValueFGColor = Prefixed("healthBarLowValueFGColor");
+        public static readonly string HealthBarLowValueManaFGColor = Prefixed("healthBarLowValueManaFGColor");
         public static readonly string HealthBarTextColor = Prefixed("healthBarTextColor");
         public static readonly string HealthBarLowValueTextColor = Prefixed("healthBarLowValueTextColor");
         public static readonly string FressnessValueColor = Prefixed("fressnessValueColor");
@@ -186,6 +190,7 @@ internal static class ModConsts
         public static readonly string TooltipFeatValue = Prefixed("tooltipFeatValue");
         public static readonly string TooltipActParty = Prefixed("tooltipActParty");
         public static readonly string TooltipUseAnimation = Prefixed("tooltipUseAnimation");
+        public static readonly string TooltipSplitManaBodyHealthBar = Prefixed("tooltipSplitManaBodyHealthBar");
         public static readonly string TooltipGroupResistByLevel = Prefixed("tooltipGroupResistByLevel");
         public static readonly string TooltipUseShortResistLavelLabel = Prefixed("tooltipUseShortResistLavelLabel");
         public static readonly string TooltipDisplayNoneResistLevel = Prefixed("tooltipDisplayNoneResistLevel");

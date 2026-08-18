@@ -169,6 +169,16 @@ internal class ModLayerConfigTabGenral : YKLayout<ModLayerConfigContext>
                 OnChanged: color => ColorConfig.HealthBarLowValueFGColor = color
             ),
             new(
+                Label: ModConsts.SourceId.HealthBarManaFGColor,
+                Init: ColorConfig.HealthBarManaFGColor,
+                OnChanged: color => ColorConfig.HealthBarManaFGColor = color
+            ),
+            new(
+                Label: ModConsts.SourceId.HealthBarLowValueManaFGColor,
+                Init: ColorConfig.HealthBarLowValueManaFGColor,
+                OnChanged: color => ColorConfig.HealthBarLowValueManaFGColor = color
+            ),
+            new(
                 Label: ModConsts.SourceId.HealthBarFGRestoreColor,
                 Init: ColorConfig.HealthBarFGRestoreColor,
                 OnChanged: color => ColorConfig.HealthBarFGRestoreColor = color

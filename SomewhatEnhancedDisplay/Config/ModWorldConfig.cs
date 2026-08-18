@@ -160,6 +160,10 @@ internal class ModConfigHoverGuideColorSet : JsonModConfigBase<ModConfigHoverGui
     [JsonConverter(typeof(ModColorConverter))]
     public Color HealthBarFGColor { get; set; } = new(0.212f, 0.459f, 0.184f); // #36752FFF
 
+    [JsonProperty("healthBarManaFGColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonConverter(typeof(ModColorConverter))]
+    public Color HealthBarManaFGColor { get; set; } = new(0.212f, 0.373f, 0.620f); // #365F9EFF
+
     [JsonProperty("healthBarFGDamageColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ModColorConverter))]
     public Color HealthBarFGDamageColor { get; set; } = new(0.6f, 0.6f, 0.6f); // #999999FF
@@ -171,6 +175,10 @@ internal class ModConfigHoverGuideColorSet : JsonModConfigBase<ModConfigHoverGui
     [JsonProperty("healthBarLowValueFGColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ModColorConverter))]
     public Color HealthBarLowValueFGColor { get; set; } = new(0.485f, 0.189f, 0.104f); // #7C301BFF
+
+    [JsonProperty("healthBarLowValueManaFGColor", DefaultValueHandling = DefaultValueHandling.Include)]
+    [JsonConverter(typeof(ModColorConverter))]
+    public Color HealthBarLowValueManaFGColor { get; set; } = new(0.341f, 0.204f, 0.310f); // #57344FFF
 
     [JsonProperty("healthBarTextColor", DefaultValueHandling = DefaultValueHandling.Include)]
     [JsonConverter(typeof(ModColorConverter))]
@@ -388,6 +396,9 @@ internal class ModConfigHoverGuideHealthBar : JsonModConfigBase<ModConfigHoverGu
 
     [JsonProperty("useAnimation", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool UseAnimation { get; set; } = true;
+
+    [JsonProperty("splitManaBodyHealthBar", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool SplitManaBodyHealthBar { get; set; } = false;
 
     [JsonProperty("displayForEnemy", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHealthBarDisplay DisplayForEnemy { get; set; } = new()
