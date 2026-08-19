@@ -400,6 +400,9 @@ internal class ModConfigHoverGuideHealthBar : JsonModConfigBase<ModConfigHoverGu
     [JsonProperty("splitManaBodyHealthBar", DefaultValueHandling = DefaultValueHandling.Include)]
     public bool SplitManaBodyHealthBar { get; set; } = false;
 
+    [JsonProperty("reverseManaBodyHealthBar", DefaultValueHandling = DefaultValueHandling.Include)]
+    public bool ReverseManaBodyHealthBar { get; set; } = false;
+
     [JsonProperty("displayForEnemy", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHealthBarDisplay DisplayForEnemy { get; set; } = new()
     {

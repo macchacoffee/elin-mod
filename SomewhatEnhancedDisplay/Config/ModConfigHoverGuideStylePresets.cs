@@ -52,6 +52,7 @@ internal static class ModConfigHoverGuideStylePresets
                 {
                     DisplayValue = true,
                     SplitManaBodyHealthBar = false,
+                    ReverseManaBodyHealthBar = false,
                     DisplayForEnemy = new()
                     {
                         Target = ModHealthBarDisplayTarget.All,
@@ -90,7 +91,7 @@ internal static class ModConfigHoverGuideStylePresets
         };
     }
 
-   public static ModConfigHoverGuideStyle Default()
+    public static ModConfigHoverGuideStyle Default()
     {
         return new();
     }
@@ -145,6 +146,7 @@ internal static class ModConfigHoverGuideStylePresets
                 {
                     DisplayValue = true,
                     SplitManaBodyHealthBar = true,
+                    ReverseManaBodyHealthBar = false,
                     DisplayForEnemy = new()
                     {
                         Target = ModHealthBarDisplayTarget.All,

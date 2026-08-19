@@ -149,6 +149,13 @@ internal class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
                 OnChanged: value => Config.HealthBar.SplitManaBodyHealthBar = value,
                 GetConfig: () => Config.HealthBar.SplitManaBodyHealthBar,
                 Tooltip: ModConsts.SourceId.TooltipSplitManaBodyHealthBar
+            ),
+            new EditStyleToogleUIItem(
+                Label: ModConsts.SourceId.ReverseManaBodyHealthBar,
+                Init: Config.HealthBar.ReverseManaBodyHealthBar,
+                OnChanged: value => Config.HealthBar.ReverseManaBodyHealthBar = value,
+                GetConfig: () => Config.HealthBar.ReverseManaBodyHealthBar,
+                Tooltip: ModConsts.SourceId.TooltipReverseManaBodyHealthBar
             )
         );
         EditStyleUI.Add(
