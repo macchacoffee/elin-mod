@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Meta>
+  <title>NPC Goto Behavior Tweaks</title>
+  <id>maccha_coffee_npc_goto_behavior_tweaks</id>
+  <author>抹茶コーヒー</author>
+  <loadPriority>100</loadPriority>
+  <version>0.23.287</version>
+  <description>
+NPCが特定の場所を目指して移動する際の挙動を少し改善します。
+具体的には以下の調整を行います。
+[list]
+  [*] 移動の途中に邪魔な非敵対NPCが存在する時、押しのけて移動するまでにかかる時間を減らします。
+[/list]
+このModはゲーム本体のデータを変更しません。
+既存のセーブデータに対していつでも導入・使用停止できます。
+
+[hr][/hr]
+(Translated by ChatGPT)
+
+  </description>
+  <tags>General,QoL</tags>
+  <visibility>Public</visibility>
+</Meta>

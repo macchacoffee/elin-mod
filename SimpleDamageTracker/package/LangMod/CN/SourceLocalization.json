@@ -1,0 +1,22 @@
+{
+  "LangGeneral.mc_sdt_alignmentCenter.text": "居中",
+  "LangGeneral.mc_sdt_alignmentLeft.text": "左对齐",
+  "LangGeneral.mc_sdt_alignmentRight.text": "右对齐",
+  "LangGeneral.mc_sdt_color.text": "颜色",
+  "LangGeneral.mc_sdt_configDamage.text": "伤害",
+  "LangGeneral.mc_sdt_configDamageShare.text": "伤害占比",
+  "LangGeneral.mc_sdt_configDisplayItems.text": "显示项目",
+  "LangGeneral.mc_sdt_configGeneral.text": "常规",
+  "LangGeneral.mc_sdt_dialogResetConfig.text": "将设置恢复为默认值？",
+  "LangGeneral.mc_sdt_display.text": "显示",
+  "LangGeneral.mc_sdt_displayNoDamage.text": "伤害为0时也显示",
+  "LangGeneral.mc_sdt_horizontalAlignment.text": "水平对齐",
+  "LangGeneral.mc_sdt_modName.text": "Simple Damage Tracker",
+  "LangGeneral.mc_sdt_positionX.text": "X位置",
+  "LangGeneral.mc_sdt_positionY.text": "Y位置",
+  "LangGeneral.mc_sdt_resetConfig.text": "重置设置",
+  "LangGeneral.mc_sdt_sizeScale.text": "显示倍率",
+  "LangGeneral.mc_sdt_tooltipUseCompactDamageFormat.text": "将100万以上的伤害值使用 M、B、T 等单位进行缩写显示。",
+  "LangGeneral.mc_sdt_useAnimation.text": "使用动画",
+  "LangGeneral.mc_sdt_useCompactDamageFormat.text": "简化伤害显示"
+}

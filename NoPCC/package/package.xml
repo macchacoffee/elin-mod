@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Meta>
+  <title>No PCC</title>
+  <id>maccha_coffee_no_pcc</id>
+  <author>抹茶コーヒー</author>
+  <loadPriority>100</loadPriority>
+  <version>0.23.260</version>
+  <description></description>
+  <tags>General,Utility</tags>
+</Meta>

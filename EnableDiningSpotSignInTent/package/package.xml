@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Meta>
+  <title>Enable Dining Spot Sign in Tent</title>
+  <id>maccha_coffee_enable_dining_spot_sign_in_tent</id>
+  <author>抹茶コーヒー</author>
+  <loadPriority>100</loadPriority>
+  <version>0.23.287</version>
+  <description>
+テント内で「食堂の立札」が完全に機能するようにします。
+
+[list]
+  [*] テント内でも食堂の立札の範囲内で食事すると、食事効果が10%上昇するようになります (バージョンEA 23.288 Nightly以前の場合のみ)。
+  [*] テント内に食堂の立札が設置されていれば、パーティメンバーはその有効範囲に移動して食事するようになります。
+[/list]
+
+バージョンEA 23.289 Nightlyで、ゲーム本体側でテント内の食堂の立札でも食事効果が上昇する機能が実装されました。テント内でパーティメンバーが食堂の立札の有効範囲に移動して食事する機能は実装されていません。
+安定版でもNightlyでもこのModを導入でき、ゲーム本体のバージョンに応じて上記機能のうち必要なものだけを有効にします。
+
+このModはゲーム本体のデータを変更しません。
+既存のセーブデータに対していつでも導入・使用停止できます。
+
+[hr][/hr]
+This mod enables the "dining spot sign" to function fully inside tents.
+[list]
+  [*] Eating within the dining spot sign's range inside tents will grant a 10% increase to meal effects (only for versions up to EA 23.288 Nightly).
+  [*] If a dining spot sign is placed inside a tent, party members will move into its effective range before eating.
+[/list]
+
+Starting from EA 23.289 Nightly, the base game has implemented the feature that increases meal effects when eating within the dining spot sign's range inside tents. However, the behavior where party members move into the dining spot sign's effective range before eating has not been implemented.
+This mod can be used with both Stable and Nightly versions, and will automatically enable only the necessary features depending on the game version.
+
+This mod does not modify the game's core data.
+It can be enabled or disabled at any time, even for existing save data.
+
+[hr][/hr]
+[h2]Source Code[/h2]
+[url=https://github.com/macchacoffee/elin-mod/tree/main/EnableDiningSpotSignInTent]GitHub[/url]
+  </description>
+  <tags>General,QoL</tags>
+  <visibility>Public</visibility>
+</Meta>

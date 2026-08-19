@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Meta>
+  <title>Simple Damage Tracker</title>
+  <id>maccha_coffee_simple_damage_tracker</id>
+  <author>抹茶コーヒー</author>
+  <loadPriority>100</loadPriority>
+  <version>0.23.325</version>
+  <description>
+パーティメンバーごとの与ダメージとダメージ比率をパーティウィジェット上に表示します。
+多様な情報を提供することではなく、基本的なダメージ計測機能に絞って軽量に動作することを重視しています。
+
+[h2]必須Mod[/h2]
+このModを使用するには以下のModが必要です。
+[list]
+[*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3400020753]YK Framework[/url]
+[/list]
+
+[h2]表示する内容[/h2]
+[list]
+[*] 個々のパーティメンバーが与えたダメージ
+[*] パーティメンバーの全員が与えた総ダメージに対する比率
+[/list]
+
+これらの表示はゾーンを移動した時、またはセーブデータを読み込んだ時にリセットされます。
+
+[h2]設定[/h2]
+項目の表示有無、位置・サイズ・文字色、数値変化アニメーションの有無といった設定は、パーティ情報ウィジェット (ミドルクリック→Simple Damage Tracker) から設定画面を開いて変更できます。この設定はセーブデータごとに以下の場所へ保存されます。
+[code]%USERPROFILE%\AppData\LocalLow\Lafrontier\Elin\Save\world_x\maccha-coffee.simple-damage-tracker.txt[/code]
+
+Modの利用停止後に不要なファイルを掃除したい場合は上記の設定ファイルを消してください。
+
+[hr][/hr]
+Displays each party member's damage dealt and damage share on the party widget.
+Rather than providing a wide range of information, this Mod focuses on basic damage tracking features while minimizing its impact on game performance.
+
+[h2]Required Mod[/h2]
+The following Mod is required to use this Mod.
+[list]
+[*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3400020753]YK Framework[/url]
+[/list]
+
+[h2]Displayed Information[/h2]
+[list]
+[*] Damage dealt by each party member
+[*] Each party member's share of the total damage dealt by all party members
+[/list]
+
+These values are reset when you move to another zone or load a save.
+
+[h2]Settings[/h2]
+Settings such as whether each item is displayed, its position, size, and text color, as well as whether to animate changes in values, can be changed from the settings screen opened through the Party Info widget (middle-click → Simple Damage Tracker).
+These settings are saved separately for each save file at the following location:
+[code]%USERPROFILE%\AppData\LocalLow\Lafrontier\Elin\Save\world_x\maccha-coffee.simple-damage-tracker.txt[/code]
+
+If you want to clean up unnecessary files after you stop using this Mod, delete the configuration file above.
+
+[hr][/hr]
+[h2]Source Code[/h2]
+[url=https://github.com/macchacoffee/elin-mod/tree/main/SimpleDamageTracker]GitHub[/url]
+  </description>
+  <tags>General,QoL</tags>
+  <visibility>Public</visibility>
+</Meta>

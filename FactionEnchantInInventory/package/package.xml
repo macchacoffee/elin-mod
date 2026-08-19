@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Meta>
+  <title>Faction Enchant in Inventory</title>
+  <id>maccha_coffee_faction_enchant_in_inventory</id>
+  <author>抹茶コーヒー</author>
+  <loadPriority>100</loadPriority>
+  <version>0.23.325</version>
+  <description>
+神々のアーティファクトが有するファクションエンチャントの発動条件に「インベントリに存在する時」を追加します。装備する必要はありません。
+ただし以下の場合は対象外です。
+[list]
+ [*] 「それは装備するたびに呪われる」のエンチャントが付いている。
+ [*] ★収納箱 (および同種のコンテナ) の中に存在している
+ [*] PCの勢力に属さないキャラクターのインベントリに存在している。
+[/list]
+
+「それは装備するたびに呪われる」のエンチャントが付いている装備については、設定によって対象にすることも可能です。[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3379819704]Mod Config GUI[/url]のゲーム内設定画面から変更、または以下の設定ファイルを編集してください。
+[code]Elin\BepInEx\config\maccha-coffee.faction-enchant-in-inventory.cfg[/code]
+
+「諸々の理由で装備はできない…でも神様からのご褒美は自分のそばに置いておきたい！」といったロールプレイ用途を主に想定しています。
+
+実装の関係上、コンソールやModなどの通常以外の手段でPCの信仰対象を変えた場合はファクションエンチャントの適用状態が一時的におかしくなる場合があります。その時はセーブしてロードしなおせば正しい状態に戻るはずです。
+
+[hr][/hr]
+Adds "while in the inventory" as an activation condition for the faction enchantments found on god artifacts. They do not need to be equipped.
+However, the effect will not apply in the following cases:
+[list]
+ [*] The artifact has the "It curses itself every time it is equipped" enchantment.
+ [*] The artifact is stored inside a ★Storage chest or another container of the same type.
+ [*] The artifact is in the inventory of a character who does not belong to the player's faction.
+[/list]
+
+Artifacts with the "It curses itself every time it is equipped" enchantment can also be included, depending on the configuration. You can change this setting from the in-game settings menu provided by [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3379819704]Mod Config GUI[/url], or by editing the following configuration file:
+[code]Elin\BepInEx\config\maccha-coffee.faction-enchant-in-inventory.cfg[/code]
+
+This Mod is mainly intended for role-playing situations such as: "For one reason or another, I cannot equip it... but I still want to keep the reward from my god with me at all times!"
+
+Due to implementation limitations, changing the PC's deity through non-standard methods, such as console commands or other Mods, may temporarily cause faction enchantments to be applied incorrectly. If this happens, saving and reloading the game should restore them to the correct state.
+
+[hr][/hr]
+[h2]Source Code[/h2]
+[url=https://github.com/macchacoffee/elin-mod/tree/main/FactionEnchantInInventory]GitHub[/url]
+</description>
+  <tags>General</tags>
+  <visibility>Public</visibility>
+</Meta>

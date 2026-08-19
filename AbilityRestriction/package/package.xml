@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Meta>
+  <title>Ability Restriction</title>
+  <id>maccha_coffee_ability_restriction</id>
+  <author>抹茶コーヒー</author>
+  <loadPriority>100</loadPriority>
+  <version>0.23.325</version>
+  <description>
+キャラクターが使用するアビリティ (魔法も含む) を制限できるようにします。
+
+住民掲示板の住民をクリックした時の選択肢にある「アビリティの使用制限」から設定可能です。
+設定画面でチェックを外したアビリティは非戦闘時、戦闘時を問わず使用しなくなります。
+チェックを付けると再びそのアビリティを使用するようになります。
+
+[h2]制限されたアビリティの扱い[/h2]
+使用制限中のアビリティは「キャラクターがそのアビリティを覚えていない」ように扱われます。
+[list]
+  [*] キャラクターがドロップする遺伝子に含まれなくなる。
+  [*] Modなどでアビリティを一覧表示しても表示されない。
+[/list]
+これはアビリティの仕様上発生するものであり、不具合ではありません。
+
+[h2]設定[/h2]
+設定変更により、会話選択肢 (「実は…」→「行動について相談がある」) やインタラクションメニュー (ミドルクリック) からアビリティを制限できるようにすることも可能です。[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3379819704]Mod Config GUI[/url]のゲーム内設定画面から変更、または以下の設定ファイルを編集してください。
+[code]Elin\BepInEx\config\maccha-coffee.ability-restriction.cfg[/code]
+
+このModはゲーム本体のデータに対して不可逆な変更を行いません。
+Modの無効化や登録解除を実施すると、その時点で使用制限が全て解除されます。
+
+このModはセーブデータごとの設定ファイル (アビリティ使用制限設定の保存用) を以下の場所に生成します。
+[code]%USERPROFILE%\AppData\LocalLow\Lafrontier\Elin\Save\world_x\maccha-coffee.ability-restriction.txt[/code]
+Modの利用停止後に不要なファイルを掃除したい場合や、使用制限を全てリセットしたい場合はこのファイルを消してください。
+
+[hr][/hr]
+This mod allows you to restrict the abilities (including spells) that characters can use.
+
+You can configure the restrictions from "Restrict Abilities" in the options that appear when clicking a resident on the Resident Board.
+Any ability that is unchecked in the settings will no longer be used, both in and out of combat.
+Re-checking an ability will allow the character to use it again.
+
+[h2]How Restricted Abilities Are Treated[/h2]
+Abilities that are restricted are treated as if the character has not learned them:
+[list]
+ [*] They will no longer be included in genes dropped by the character.
+ [*] They will not appear in ability lists shown by mods or similar features.
+[/list]
+This behavior is due to the game's ability system and is not a bug.
+
+[h2]Settings[/h2]
+You can also enable the option to restrict abilities through conversation options ("Actually..." → "I'd like to talk about your actions.") or the interaction menu (middle-click). You can change this setting from the in-game settings screen provided by [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3379819704]Mod Config GUI[/url], or by editing the following configuration file:
+[code]Elin\BepInEx\config\maccha-coffee.ability-restriction.cfg[/code]
+
+This mod does not make any irreversible changes to the game's core data.
+When the mod is disabled or unsubscribed, all usage restrictions are lifted immediately.
+
+This mod creates a save-specific configuration file for storing ability restriction settings at the following location:
+[code]%USERPROFILE%\AppData\LocalLow\Lafrontier\Elin\Save\world_x\maccha-coffee.ability-restriction.txt[/code]
+If you want to clean up unnecessary files after stopping use of the mod, or if you want to reset all ability restrictions, please delete this file.
+
+[hr][/hr]
+[h2]Source Code[/h2]
+[url=https://github.com/macchacoffee/elin-mod/tree/main/AbilityRestriction]GitHub[/url]
+  </description>
+  <tags>General,QoL</tags>
+  <visibility>Public</visibility>
+</Meta>

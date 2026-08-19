@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Meta>
+  <title>Food Effect Multiplier</title>
+  <id>maccha_coffee_food_effect_multiplier</id>
+  <author>抹茶コーヒー</author>
+  <loadPriority>100</loadPriority>
+  <version>0.23.287</version>
+  <description>
+  </description>
+  <tags>General,Cheat</tags>
+  <visibility>Public</visibility>
+</Meta>

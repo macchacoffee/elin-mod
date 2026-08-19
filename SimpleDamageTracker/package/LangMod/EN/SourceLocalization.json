@@ -1,0 +1,22 @@
+{
+  "LangGeneral.mc_sdt_alignmentCenter.text": "Center",
+  "LangGeneral.mc_sdt_alignmentLeft.text": "Left",
+  "LangGeneral.mc_sdt_alignmentRight.text": "Right",
+  "LangGeneral.mc_sdt_color.text": "Color",
+  "LangGeneral.mc_sdt_configDamage.text": "Damage",
+  "LangGeneral.mc_sdt_configDamageShare.text": "Damage Share",
+  "LangGeneral.mc_sdt_configDisplayItems.text": "Display Items",
+  "LangGeneral.mc_sdt_configGeneral.text": "General",
+  "LangGeneral.mc_sdt_dialogResetConfig.text": "Do you wish to reset settings?",
+  "LangGeneral.mc_sdt_display.text": "Show",
+  "LangGeneral.mc_sdt_displayNoDamage.text": "Show at 0 damage",
+  "LangGeneral.mc_sdt_horizontalAlignment.text": "Alignment",
+  "LangGeneral.mc_sdt_modName.text": "Simple Damage Tracker",
+  "LangGeneral.mc_sdt_positionX.text": "X Position",
+  "LangGeneral.mc_sdt_positionY.text": "Y Position",
+  "LangGeneral.mc_sdt_resetConfig.text": "Reset Config",
+  "LangGeneral.mc_sdt_sizeScale.text": "Display Scale",
+  "LangGeneral.mc_sdt_tooltipUseCompactDamageFormat.text": "Abbreviates damage values of 1 million or more using units such as M, B, and T.",
+  "LangGeneral.mc_sdt_useAnimation.text": "Use Animation",
+  "LangGeneral.mc_sdt_useCompactDamageFormat.text": "Compact Damage"
+}

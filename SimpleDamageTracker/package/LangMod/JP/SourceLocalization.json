@@ -1,0 +1,22 @@
+{
+  "LangGeneral.mc_sdt_alignmentCenter.text": "中央寄せ",
+  "LangGeneral.mc_sdt_alignmentLeft.text": "左寄せ",
+  "LangGeneral.mc_sdt_alignmentRight.text": "右寄せ",
+  "LangGeneral.mc_sdt_color.text": "色",
+  "LangGeneral.mc_sdt_configDamage.text": "ダメージ",
+  "LangGeneral.mc_sdt_configDamageShare.text": "ダメージ比率",
+  "LangGeneral.mc_sdt_configDisplayItems.text": "表示項目",
+  "LangGeneral.mc_sdt_configGeneral.text": "一般",
+  "LangGeneral.mc_sdt_dialogResetConfig.text": "設定を初期状態に戻す？",
+  "LangGeneral.mc_sdt_display.text": "表示",
+  "LangGeneral.mc_sdt_displayNoDamage.text": "0ダメージでも表示",
+  "LangGeneral.mc_sdt_horizontalAlignment.text": "水平配置",
+  "LangGeneral.mc_sdt_modName.text": "Simple Damage Tracker",
+  "LangGeneral.mc_sdt_positionX.text": "X位置",
+  "LangGeneral.mc_sdt_positionY.text": "Y位置",
+  "LangGeneral.mc_sdt_resetConfig.text": "設定の初期化",
+  "LangGeneral.mc_sdt_sizeScale.text": "表示倍率",
+  "LangGeneral.mc_sdt_tooltipUseCompactDamageFormat.text": "100万以上のダメージをM、B、Tなどの単位で省略表示します。",
+  "LangGeneral.mc_sdt_useAnimation.text": "アニメーションを使用",
+  "LangGeneral.mc_sdt_useCompactDamageFormat.text": "ダメージを省略表示"
+}

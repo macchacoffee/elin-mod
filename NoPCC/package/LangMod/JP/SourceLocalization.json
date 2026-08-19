@@ -1,0 +1,16 @@
+{
+  "LangGeneral.mc_np_combatSnowSprite.text": "戦闘時 (冬服)",
+  "LangGeneral.mc_np_combatSprite.text": "戦闘時",
+  "LangGeneral.mc_np_defaultSprite.text": "デフォルト",
+  "LangGeneral.mc_np_enable.text": "有効",
+  "LangGeneral.mc_np_generalSettings.text": "全体設定",
+  "LangGeneral.mc_np_modName.text": "No PCC",
+  "LangGeneral.mc_np_replacePCCtoSprite.text": "PCCをスプライトに置き換える",
+  "LangGeneral.mc_np_rideCombatSnowSprite.text": "騎乗中戦闘時 (冬服)",
+  "LangGeneral.mc_np_rideCombatSprite.text": "騎乗中戦闘時",
+  "LangGeneral.mc_np_rideSnowSprite.text": "騎乗中 (冬服)",
+  "LangGeneral.mc_np_rideSprite.text": "騎乗中",
+  "LangGeneral.mc_np_snowSprite.text": "冬服",
+  "LangGeneral.mc_np_spriteSettings.text": "スプライト設定",
+  "LangGeneral.mc_np_undressSprite.text": "脱衣中"
+}

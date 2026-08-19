@@ -1,0 +1,16 @@
+{
+  "LangGeneral.mc_np_combatSnowSprite.text": "Combat (Winter)",
+  "LangGeneral.mc_np_combatSprite.text": "Combat",
+  "LangGeneral.mc_np_defaultSprite.text": "Default",
+  "LangGeneral.mc_np_enable.text": "Enable",
+  "LangGeneral.mc_np_generalSettings.text": "General",
+  "LangGeneral.mc_np_modName.text": "No PCC",
+  "LangGeneral.mc_np_replacePCCtoSprite.text": "Replace PCC to sprite",
+  "LangGeneral.mc_np_rideCombatSnowSprite.text": "Riding Combat (Winter)",
+  "LangGeneral.mc_np_rideCombatSprite.text": "Riding Combat",
+  "LangGeneral.mc_np_rideSnowSprite.text": "Riding (Winter)",
+  "LangGeneral.mc_np_rideSprite.text": "Riding",
+  "LangGeneral.mc_np_snowSprite.text": "Winter",
+  "LangGeneral.mc_np_spriteSettings.text": "Sprite",
+  "LangGeneral.mc_np_undressSprite.text": "Undressing"
+}
