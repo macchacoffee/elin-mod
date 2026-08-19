@@ -61,6 +61,14 @@
 - 日本語、英語、簡体字中国語で UI 文言を作る場合、直訳よりゲーム UI として自然で短い表現を優先する。
 - identifier、class 名、method 名、Harmony 用語は、説明文の中でも無理に日本語化しない。
 
+## ビルド・翻訳確認
+
+- Mod を build するときは、リポジトリルートの `tools/BuildMod.ps1 -Mod <Mod名>` を使用し、解決されたゲーム出力先と生成物を確認する。
+- `-ValidationOutput` を使用した場合も、最終確認として通常出力への build を別途実行する。
+- `package/LangMod` 配下の `SourceSheet.xlsx` を変更した場合は、`tools/TestSourceSheet.ps1 -Mod <Mod名>` を実行する。翻訳ファイルがない Mod は `Skipped` を正常な結果として扱う。
+- 翻訳を追加した場合は、`-RequiredSourceId` で追加した Source ID の存在も確認し、SourceSheet と各言語 JSON の担当範囲を確認する。
+- 最終報告には、build 実行コマンド、実際の出力先、確認した生成物を記載する。
+
 ## 調査資料
 
 必要な場合だけ以下を読む。すべてを毎回読み込む必要はない。
