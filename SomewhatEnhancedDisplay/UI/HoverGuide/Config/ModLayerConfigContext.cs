@@ -26,10 +26,15 @@ internal class ModLayerConfigContext
     private List<Action<ModConfigHoverGuideStyle, int>> StyleAddedListeners { get; } = [];
     private List<Action<ModConfigHoverGuideStyle, int>> StyleDeletedListeners { get; } = [];
     private List<Action<int, int>> StyleMovedListeners { get; } = [];
+    private List<Action> HealthBarPreviewChangedListeners { get; } = [];
 
     public Chara SampleChara { get; set; }
     public Thing SampleThing { get; set; }
-    public ModHoverGuideTargetModifier SampleModifier { get; set; } = new(healthBarRatio: 1);
+    public ModHoverGuideTargetModifier SampleModifier { get; set; } = new(
+        healthBarRatio: 1,
+        healthBarHPRatio: 1,
+        healthBarMPRatio: 1
+    );
 
     private static ModConfigHoverGuide Config => ModContext.WorldConfig.HoverGuide;
     public ModConfigHoverGuideStyle SelectedStyle => Config.Styles[SelectedStyleIndex];
@@ -67,9 +72,22 @@ internal class ModLayerConfigContext
         StyleDeletedListeners.Add(listener);
     }
 
-     public void AddStyleMovedListener(Action<int, int> listener)
+    public void AddStyleMovedListener(Action<int, int> listener)
     {
         StyleMovedListeners.Add(listener);
+    }
+
+    public void AddHealthBarPreviewChangedListener(Action listener)
+    {
+        HealthBarPreviewChangedListeners.Add(listener);
+    }
+
+    public void NotifyHealthBarPreviewChanged()
+    {
+        foreach (var listener in HealthBarPreviewChangedListeners)
+        {
+            listener();
+        }
     }
 
     private Chara PickSampleCharaRandom()
@@ -97,6 +115,7 @@ internal class ModLayerConfigContext
     public void UpdateSampleCharaRandom()
     {
         SampleChara = PickSampleCharaRandom();
+        NotifyHealthBarPreviewChanged();
     }
 
     public void UpdateSampleThingRandom()

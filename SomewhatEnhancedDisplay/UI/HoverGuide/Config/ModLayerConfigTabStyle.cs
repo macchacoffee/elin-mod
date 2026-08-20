@@ -6,6 +6,7 @@ using YKF;
 
 using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Extensions;
+using UnityEngine;
 
 namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
@@ -168,9 +169,12 @@ internal class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
         HeaderSmall(ModConsts.SourceId.HealthBar);
 
         Spacer(36);
-        var previewLayout2 = Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
+        var healthBarPreviewContainer = Vertical();
 
-        previewLayout2.AddModSlider(
+        var healthRatioPreviewLayout = healthBarPreviewContainer.Vertical();
+        healthRatioPreviewLayout.Layout.childAlignment = TextAnchor.UpperLeft;
+        var healthRatioPreviewRow = healthRatioPreviewLayout.Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
+        healthRatioPreviewRow.AddModSlider(
             getLabel: value => $"{ModConsts.SourceId.HealthRatio.lang()}({value}%)",
             init: (float)Context.SampleModifier.HealthBarRatio! * 100,
             min: 0,
@@ -178,5 +182,39 @@ internal class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
             step: 1,
             onChanged: value => Context.SampleModifier.HealthBarRatio = value / 100
         );
+
+        var manaBodyPreviewLayout = healthBarPreviewContainer.Vertical();
+        manaBodyPreviewLayout.Layout.childAlignment = TextAnchor.UpperLeft;
+        var hpPreviewRow = manaBodyPreviewLayout.Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
+        hpPreviewRow.AddModSlider(
+            getLabel: value => $"HP({value}%)",
+            init: (float)Context.SampleModifier.HealthBarHPRatio! * 100,
+            min: 0,
+            max: 100,
+            step: 1,
+            onChanged: value => Context.SampleModifier.HealthBarHPRatio = value / 100
+        );
+        manaBodyPreviewLayout.Spacer(36);
+        var mpPreviewRow = manaBodyPreviewLayout.Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
+        mpPreviewRow.AddModSlider(
+            getLabel: value => $"MP({value}%)",
+            init: (float)Context.SampleModifier.HealthBarMPRatio! * 100,
+            min: 0,
+            max: 100,
+            step: 1,
+            onChanged: value => Context.SampleModifier.HealthBarMPRatio = value / 100
+        );
+
+        void updateHealthBarPreviewLayout()
+        {
+            var useManaBodyPreview = Context.SelectedStyle.Chara.HealthBar.SplitManaBodyHealthBar
+                && Context.SampleChara.Evalue(FEAT.featManaMeat) > 0;
+            healthRatioPreviewLayout.Layout.gameObject.SetActive(!useManaBodyPreview);
+            manaBodyPreviewLayout.Layout.gameObject.SetActive(useManaBodyPreview);
+            healthBarPreviewContainer.RebuildLayout(recursive: true);
+        }
+        Context.AddSelectedStyleChangedListener((_, _) => updateHealthBarPreviewLayout());
+        Context.AddHealthBarPreviewChangedListener(updateHealthBarPreviewLayout);
+        updateHealthBarPreviewLayout();
     }
 }

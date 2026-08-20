@@ -137,10 +137,14 @@ internal class ModHealthBar
             return;
         }
 
-        var ratio = GetHealthRatio(chara, modifier);
-        var splitsManaBody = ShouldSplitManaBody(chara, modifier);
+        var hasManaBodyPreview = modifier?.HasManaBodyHealthBarPreview == true;
+        var splitsManaBody = ShouldSplitManaBody(chara, modifier, hasManaBodyPreview);
+        var usesManaBodyPreview = splitsManaBody && hasManaBodyPreview;
+        var ratio = GetHealthRatio(chara, modifier, usesManaBodyPreview);
         var reversesManaBody = splitsManaBody && StyleConfig.HealthBar.ReverseManaBodyHealthBar;
-        var splitPartRatio = splitsManaBody ? GetSplitPartRatio(chara, reversesManaBody) : 0;
+        var splitPartRatio = splitsManaBody
+            ? GetSplitPartRatio(chara, modifier, usesManaBodyPreview, reversesManaBody)
+            : 0;
 
         if (!StyleConfig.HealthBar.UseAnimation
             || targetChanged
@@ -247,22 +251,60 @@ internal class ModHealthBar
 
     private static double GetHealthRatio(Chara chara, ModHoverGuideTargetModifier? modifier)
     {
-        return modifier?.HealthBarRatio ?? chara.HealthRatio;
+        var hasManaBodyPreview = modifier?.HasManaBodyHealthBarPreview == true;
+        var usesManaBodyPreview = hasManaBodyPreview
+            && ShouldSplitManaBody(chara, modifier, hasManaBodyPreview);
+        return GetHealthRatio(chara, modifier, usesManaBodyPreview);
     }
 
-    private static bool ShouldSplitManaBody(Chara chara, ModHoverGuideTargetModifier? modifier)
+    private static double GetHealthRatio(
+        Chara chara,
+        ModHoverGuideTargetModifier? modifier,
+        bool usesManaBodyPreview)
+    {
+        if (!usesManaBodyPreview)
+        {
+            return modifier?.HealthBarRatio ?? chara.HealthRatio;
+        }
+
+        GetEffectiveHealthValues(
+            chara,
+            modifier,
+            usesManaBodyPreview,
+            out var maxHP,
+            out var maxMana,
+            out var currentHP,
+            out var currentMana
+        );
+        var maxTotal = maxHP + maxMana;
+        return maxTotal > 0 ? (currentHP + currentMana) / maxTotal : 0;
+    }
+
+    private static bool ShouldSplitManaBody(
+        Chara chara,
+        ModHoverGuideTargetModifier? modifier,
+        bool hasManaBodyPreview)
     {
         return StyleConfig.HealthBar.SplitManaBodyHealthBar
-            && modifier?.HealthBarRatio is null
+            && (modifier?.HealthBarRatio is null || hasManaBodyPreview)
             && chara.Evalue(FEAT.featManaMeat) > 0;
     }
 
-    private static double GetSplitPartRatio(Chara chara, bool reversesManaBody)
+    private static double GetSplitPartRatio(
+        Chara chara,
+        ModHoverGuideTargetModifier? modifier,
+        bool usesManaBodyPreview,
+        bool reversesManaBody)
     {
-        var maxHP = Math.Max((long)chara.MaxHP, 0);
-        var maxMana = Math.Max((long)chara.mana.max, 0);
-        var currentHP = Math.Max((long)chara.hp, 0);
-        var currentMana = Math.Max((long)chara.mana.value, 0);
+        GetEffectiveHealthValues(
+            chara,
+            modifier,
+            usesManaBodyPreview,
+            out var maxHP,
+            out var maxMana,
+            out var currentHP,
+            out var currentMana
+        );
         var splitBasis = Math.Max(maxHP + maxMana, currentHP + currentMana);
         if (splitBasis <= 0)
         {
@@ -270,7 +312,29 @@ internal class ModHealthBar
         }
 
         var splitPartValue = reversesManaBody ? currentMana : currentHP;
-        return (double)splitPartValue / splitBasis;
+        return splitPartValue / splitBasis;
+    }
+
+    private static void GetEffectiveHealthValues(
+        Chara chara,
+        ModHoverGuideTargetModifier? modifier,
+        bool usesManaBodyPreview,
+        out double maxHP,
+        out double maxMana,
+        out double currentHP,
+        out double currentMana)
+    {
+        maxHP = Math.Max((long)chara.MaxHP, 0);
+        maxMana = Math.Max((long)chara.mana.max, 0);
+        if (usesManaBodyPreview)
+        {
+            currentHP = maxHP * modifier!.HealthBarHPRatio!.Value;
+            currentMana = maxMana * modifier.HealthBarMPRatio!.Value;
+            return;
+        }
+
+        currentHP = Math.Max((long)chara.hp, 0);
+        currentMana = Math.Max((long)chara.mana.value, 0);
     }
 
     private static Color GetTextColor(double ratio)
@@ -579,7 +643,7 @@ internal class ModHealthBar
             return false;
         }
 
-        var isInFullHealth = modifier is not null ? modifier.HealthBarRatio >= 1 : chara.IsInFullHealth;
+        var isInFullHealth = modifier is not null ? GetHealthRatio(chara, modifier) >= 1 : chara.IsInFullHealth;
         return config.InFullHealth || FGImage.fillAmount < 1 || !isInFullHealth;
     }
 }

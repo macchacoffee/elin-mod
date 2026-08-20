@@ -87,6 +87,10 @@ internal class ModLayerConfig : YKLayer<ModLayerConfigContext>
     public override void OnSwitchContent(Window window)
     {
         ButtonReset?.mainText.SetText(CurrentTabLang(ModConsts.SourceId.ResetConfigTab));
+        if (Window.CurrentTab.idLang == ModConsts.SourceId.ConfigStyle)
+        {
+            Context.NotifyHealthBarPreviewChanged();
+        }
         Window.rectBottom.RebuildLayout(recursive: true);
         Window.CurrentContent.RebuildLayout(recursive: true);
         UpdateHoverGuideSample();
