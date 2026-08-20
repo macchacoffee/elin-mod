@@ -56,11 +56,31 @@ internal class ModHealthBar
         LayoutObj.transform.SetParent(widget.layout.transform);
         LayoutObj.transform.localScale = localScale;
 
-        BGImage = AddHealthBarImage(Layout.transform, ModConsts.GameObjectName.HealthBarBG, localScale, ColorConfig.HealthBarBGColor);
-        FGDamageImage = AddHealthBarImage(Layout.transform, ModConsts.GameObjectName.HealthBarFGDamage, localScale, ColorConfig.HealthBarBGColor);
-        FGRestoreImage = AddHealthBarImage(Layout.transform, ModConsts.GameObjectName.HealthBarFGRestore, localScale, ColorConfig.HealthBarBGColor);
-        FGImage = AddHealthBarImage(Layout.transform, ModConsts.GameObjectName.HealthBarFG, localScale, ColorConfig.HealthBarFGColor);
-        FGSplitImage = AddHealthBarImage(Layout.transform, ModConsts.GameObjectName.HealthBarFGSplit, localScale, ColorConfig.HealthBarFGColor);
+        BGImage = AddHealthBarImage(
+            Layout.transform,
+            ModConsts.GameObjectName.HealthBarBG,
+            localScale,
+            ColorConfig.HealthBarBGColor);
+        FGDamageImage = AddHealthBarImage(
+            Layout.transform,
+            ModConsts.GameObjectName.HealthBarFGDamage,
+            localScale,
+            ColorConfig.HealthBarBGColor);
+        FGRestoreImage = AddHealthBarImage(
+            Layout.transform,
+            ModConsts.GameObjectName.HealthBarFGRestore,
+            localScale,
+            ColorConfig.HealthBarBGColor);
+        FGImage = AddHealthBarImage(
+            Layout.transform,
+            ModConsts.GameObjectName.HealthBarFG,
+            localScale,
+            ColorConfig.HealthBarFGColor);
+        FGSplitImage = AddHealthBarImage(
+            Layout.transform,
+            ModConsts.GameObjectName.HealthBarFGSplit,
+            localScale,
+            ColorConfig.HealthBarFGColor);
         FGSplitImage.enabled = false;
 
         var valueObj = new GameObject(ModConsts.GameObjectName.HealthBarValue);

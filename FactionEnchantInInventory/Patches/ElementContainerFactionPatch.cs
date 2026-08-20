@@ -61,7 +61,9 @@ internal static class ElementContainerFactionPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(ElementContainerFaction.OnEquip), [typeof(Thing)])]
-    private static IEnumerable<CodeInstruction> OnEquip_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> OnEquip_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         //  if (value.IsGlobalElement)
@@ -85,7 +87,9 @@ internal static class ElementContainerFactionPatch
         // callvirt bool Element::get_IsGlobalElement()
         // brfalse Label3
         matcher.MatchEndForward(
-            new CodeMatch(OpCodes.Callvirt, AccessTools.PropertyGetter(typeof(Element), nameof(Element.IsGlobalElement))),
+            new CodeMatch(
+                OpCodes.Callvirt,
+                AccessTools.PropertyGetter(typeof(Element), nameof(Element.IsGlobalElement))),
             new CodeMatch(OpCodes.Brfalse)
         );
         // エンチャントの適用フラグを有効にする処理を追加する
@@ -98,7 +102,9 @@ internal static class ElementContainerFactionPatch
         var pos1 = matcher.Pos - 1;
         // stfld bool ElementContainerFaction::isDirty
         matcher.MatchEndForward(
-            new CodeMatch(OpCodes.Stfld, AccessTools.Field(typeof(ElementContainerFaction), nameof(ElementContainerFaction.isDirty)))
+            new CodeMatch(
+                OpCodes.Stfld,
+                AccessTools.Field(typeof(ElementContainerFaction), nameof(ElementContainerFaction.isDirty)))
         );
         matcher.Advance(1);
         matcher.Insert(
@@ -116,7 +122,9 @@ internal static class ElementContainerFactionPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(ElementContainerFaction.OnUnequip), [typeof(Thing)])]
-    private static IEnumerable<CodeInstruction> OnUnequip_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> OnUnequip_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         //  if (value.IsGlobalElement)
@@ -138,7 +146,9 @@ internal static class ElementContainerFactionPatch
         // callvirt bool Element::get_IsGlobalElement()
         // brfalse Label3
         matcher.MatchEndForward(
-            new CodeMatch(OpCodes.Callvirt, AccessTools.PropertyGetter(typeof(Element), nameof(Element.IsGlobalElement))),
+            new CodeMatch(
+                OpCodes.Callvirt,
+                AccessTools.PropertyGetter(typeof(Element), nameof(Element.IsGlobalElement))),
             new CodeMatch(OpCodes.Brfalse)
         );
         // エンチャントの適用フラグを有効にする処理を追加する

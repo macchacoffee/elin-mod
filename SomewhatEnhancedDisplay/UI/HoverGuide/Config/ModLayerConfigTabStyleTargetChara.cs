@@ -21,7 +21,8 @@ internal class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
         {ModHealthBarDisplayTarget.Elite, ModConsts.SourceId.TargetElite},
         {ModHealthBarDisplayTarget.All, ModConsts.SourceId.TargetAll},
     };
-    private static readonly List<ModHealthBarDisplayTarget> _healthBarDisplayTargets = [.. _healthBarDisplayTargetIdLangs.Keys];
+    private static readonly List<ModHealthBarDisplayTarget> _healthBarDisplayTargets =
+        [.. _healthBarDisplayTargetIdLangs.Keys];
 
     private ModConfigHoverGuideStyleChara Config => SelectedStyle.Chara;
 
@@ -589,7 +590,12 @@ internal class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
         );
     }
 
-    private void AddHealthBarDisplay(YKLayout layout, Func<ModConfigHealthBarDisplay> getConfig, string headerLabel, int cellWidth, int maxColumn)
+    private void AddHealthBarDisplay(
+        YKLayout layout,
+        Func<ModConfigHealthBarDisplay> getConfig,
+        string headerLabel,
+        int cellWidth,
+        int maxColumn)
     {
         EditStyleUI.Add(
             layout: layout,

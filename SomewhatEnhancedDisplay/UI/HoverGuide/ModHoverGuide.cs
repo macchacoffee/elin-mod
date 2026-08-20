@@ -136,7 +136,11 @@ internal class ModHoverGuide
             return true;
         }
 
-        if (!IsWidgetActive() || !IsVisible() || !LockCandidateCard.TryGetTarget(out var card) || card is null || !card.ExistsOnMap)
+        if (!IsWidgetActive()
+            || !IsVisible()
+            || !LockCandidateCard.TryGetTarget(out var card)
+            || card is null
+            || !card.ExistsOnMap)
         {
             return false;
         }

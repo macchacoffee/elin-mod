@@ -10,7 +10,12 @@ namespace Macchacoffee.ElinMods.SimpleDamageTracker.Extensions;
 
 internal static class YKLayoutExtensions
 {
-    public static UIButton AddModButton(this YKLayout layout, string label, Action onClicked, string? tooltip = null, int? width = null)
+    public static UIButton AddModButton(
+        this YKLayout layout,
+        string label,
+        Action onClicked,
+        string? tooltip = null,
+        int? width = null)
     {
         var button = layout.Button(label.lang(), onClicked);
         button.WithWidth(width ?? 150);
@@ -22,7 +27,12 @@ internal static class YKLayoutExtensions
         return button;
     }
 
-    public static UIButton AddModToggle(this YKLayout layout, string label, bool init, Action<bool> onChanged, string? tooltip = null)
+    public static UIButton AddModToggle(
+        this YKLayout layout,
+        string label,
+        bool init,
+        Action<bool> onChanged,
+        string? tooltip = null)
     {
         var toogle = layout.Toggle(label, init, onChanged);
         if (tooltip is not null)
@@ -33,7 +43,15 @@ internal static class YKLayoutExtensions
         return toogle;
     }
 
-    public static (UIDropdown, Action<int, IEnumerable<T>>) AddModDropdown<T>(this YKLayout layout, string? label, int init, IEnumerable<T> values, Func<int, T, string> getLabel, Action<int, T> onChanged, int? width = null, int? spacing = null)
+    public static (UIDropdown, Action<int, IEnumerable<T>>) AddModDropdown<T>(
+        this YKLayout layout,
+        string? label,
+        int init,
+        IEnumerable<T> values,
+        Func<int, T, string> getLabel,
+        Action<int, T> onChanged,
+        int? width = null,
+        int? spacing = null)
     {
         var layout2 = layout.Horizontal();
         layout2.Layout.childAlignment = TextAnchor.MiddleLeft;
@@ -49,12 +67,23 @@ internal static class YKLayoutExtensions
         }
         var valueList = values.ToList();
         string getLabel2(T value, int index) => getLabel(index, value);
-        var dropdown = layout2.Dropdown([.. valueList.Select(getLabel2)], index => onChanged(index, valueList[index]), init);
+        var dropdown = layout2.Dropdown(
+            [.. valueList.Select(getLabel2)],
+            index => onChanged(index, valueList[index]),
+            init);
         dropdown.WithWidth(width ?? 180);
         return (dropdown, (index, values) => dropdown.SetList(index, [.. values], getLabel2, onChanged));
     }
 
-    public static Slider AddModSlider(this YKLayout layout, Func<float, string> getLabel, float init, float min, float max, float step, Action<float> onChanged, int? width = null)
+    public static Slider AddModSlider(
+        this YKLayout layout,
+        Func<float, string> getLabel,
+        float init,
+        float min,
+        float max,
+        float step,
+        Action<float> onChanged,
+        int? width = null)
     {
         if (step <= 0)
         {
@@ -72,7 +101,12 @@ internal static class YKLayoutExtensions
         return slider;
     }
 
-    public static UIButton AddModColorPicker(this YKLayout layout, string label, Color? init, Action<Color> onChanged, string? tooltip = null)
+    public static UIButton AddModColorPicker(
+        this YKLayout layout,
+        string label,
+        Color? init,
+        Action<Color> onChanged,
+        string? tooltip = null)
     {
         var initColor = init ?? Color.clear;
         var button = Util.Instantiate<ButtonGeneral>($"{CorePath.UI.Button}ButtonColor", layout);

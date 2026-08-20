@@ -31,7 +31,9 @@ internal static class WidgetMouseoverPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(WidgetMouseover.Refresh), [])]
-    private static IEnumerable<CodeInstruction> Refresh_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> Refresh_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // if (!mouseTarget.hasTargetChanged && timer < 0.1f)
@@ -119,7 +121,9 @@ internal static class WidgetMouseoverPatch
         matcher.MatchStartForward(
             new CodeMatch(OpCodes.Ldarg_0),
             new CodeMatch(OpCodes.Ldc_I4_0),
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(WidgetMouseover), nameof(WidgetMouseover.Hide), [typeof(bool)])),
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(typeof(WidgetMouseover), nameof(WidgetMouseover.Hide), [typeof(bool)])),
             new CodeMatch(OpCodes.Ret)
         );
         // 固定ターゲットを表示する場合の継続位置を示すラベルを生成する。
@@ -155,7 +159,9 @@ internal static class WidgetMouseoverPatch
         matcher.MatchStartForward(
             new CodeMatch(OpCodes.Ldloc_2),
             new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(Environment), nameof(Environment.NewLine))),
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string)]))
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string)]))
         );
         // textに改行が追加されないようにする。
         matcher.RemoveInstructions(4);
@@ -196,8 +202,15 @@ internal static class WidgetMouseoverPatch
         // call static string ClassExtension::lang(string s, string ref1, string ref2, string ref3, string ref4, string ref5)
         // call static string string::Concat(string str0, string str1)
         matcher.MatchEndForward(
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.lang), [typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string)])),
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string)]))
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(
+                    typeof(ClassExtension),
+                    nameof(ClassExtension.lang),
+                    [typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string)])),
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string)]))
         );
         // "(他+n)"の文字列を調整し、GetHoverText()の戻り値の末尾に追加されるようにする。
         matcher.RemoveInstruction();
@@ -250,7 +263,9 @@ internal static class WidgetMouseoverPatch
         matcher.MatchStartForward(
             new CodeMatch(OpCodes.Ldarg_0),
             new CodeMatch(OpCodes.Ldloc_2),
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(WidgetMouseover), nameof(WidgetMouseover.Show), [typeof(string)]))
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(typeof(WidgetMouseover), nameof(WidgetMouseover.Show), [typeof(string)]))
         );
         // Show()を呼び出す代わりにModで追加したUIを更新するメソッドを呼び出す。
         var originalShowLabels = matcher.Labels.Copy();
@@ -284,7 +299,13 @@ internal static class WidgetMouseoverPatch
         return ModUI.HoverGuide!.TryShowLockedCard();
     }
 
-    private static void ShowHoverGuide(string? text1, string? text2, string? text3, string? text4, Card? card1, Card? card2)
+    private static void ShowHoverGuide(
+        string? text1,
+        string? text2,
+        string? text3,
+        string? text4,
+        Card? card1,
+        Card? card2)
     {
         var target1 =  new ModHoverGuideTarget(text1, text2, card1);
         var target2 =  new ModHoverGuideTarget(text3, text4, card2);

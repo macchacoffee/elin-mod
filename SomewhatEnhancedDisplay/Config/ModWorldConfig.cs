@@ -59,10 +59,16 @@ internal class ModConfigHoverGuide : JsonModConfigBase<ModConfigHoverGuide>
     [JsonProperty("colorSet", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigHoverGuideColorSet ColorSet { get; set; } = new();
 
-    [JsonProperty("styles", DefaultValueHandling = DefaultValueHandling.Include, ObjectCreationHandling = ObjectCreationHandling.Replace)]
+    [JsonProperty(
+        "styles",
+        DefaultValueHandling = DefaultValueHandling.Include,
+        ObjectCreationHandling = ObjectCreationHandling.Replace)]
     public List<ModConfigHoverGuideStyle> Styles { get; private set; } = [new()];
 
-    [JsonProperty("currentStyleIndex", DefaultValueHandling = DefaultValueHandling.Include, ObjectCreationHandling = ObjectCreationHandling.Replace)]
+    [JsonProperty(
+        "currentStyleIndex",
+        DefaultValueHandling = DefaultValueHandling.Include,
+        ObjectCreationHandling = ObjectCreationHandling.Replace)]
     public int CurrentStyleIndex { get; set; } = 0;
 
     [JsonIgnore]

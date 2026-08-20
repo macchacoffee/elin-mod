@@ -21,7 +21,9 @@ internal static class DramaCustomSequencePatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(DramaCustomSequence.Build), [typeof(Chara)])]
-    private static IEnumerable<CodeInstruction> Build_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> Build_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // if (c.IsPCParty)
@@ -112,7 +114,12 @@ internal static class DramaCustomSequencePatch
             new CodeMatch(OpCodes.Ldstr, "daInsult"),
             new CodeMatch(OpCodes.Ldstr, "_insult"),
             new CodeMatch(OpCodes.Ldc_I4_0),
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(DramaCustomSequence), nameof(DramaCustomSequence.Choice), [typeof(string), typeof(string), typeof(bool)])),
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(
+                    typeof(DramaCustomSequence),
+                    nameof(DramaCustomSequence.Choice),
+                    [typeof(string), typeof(string), typeof(bool)])),
             new CodeMatch(OpCodes.Pop)
         );
         matcher.Advance(1);
@@ -125,7 +132,12 @@ internal static class DramaCustomSequencePatch
             new CodeInstruction(OpCodes.Ldstr, ModConsts.SourceId.DaBane),
             new CodeInstruction(OpCodes.Ldstr, "_bane"),
             new CodeInstruction(OpCodes.Ldc_I4_0),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(DramaCustomSequence), nameof(DramaCustomSequence.Choice), [typeof(string), typeof(string), typeof(bool)])),
+            new CodeInstruction(
+                OpCodes.Call,
+                AccessTools.Method(
+                    typeof(DramaCustomSequence),
+                    nameof(DramaCustomSequence.Choice),
+                    [typeof(string), typeof(string), typeof(bool)])),
             new CodeInstruction(OpCodes.Pop)
         );
         matcher.CreateLabel(out var labelMod1);
@@ -136,32 +148,56 @@ internal static class DramaCustomSequencePatch
         // call void DramaCustomSequence::Step(string step)
         matcher.MatchEndForward(
             new CodeMatch(OpCodes.Ldstr, "_insult"),
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(DramaCustomSequence), nameof(DramaCustomSequence.Step), [typeof(string)]))
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(
+                    typeof(DramaCustomSequence),
+                    nameof(DramaCustomSequence.Step),
+                    [typeof(string)]))
         );
         // call void DramaCustomSequence::End()
         matcher.MatchEndForward(
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(DramaCustomSequence), nameof(DramaCustomSequence.End), []))
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(typeof(DramaCustomSequence), nameof(DramaCustomSequence.End), []))
         );
         matcher.Advance(1);
         matcher.Insert(
             new CodeInstruction(OpCodes.Ldarg_0),
             new CodeInstruction(OpCodes.Ldstr, "_bane"),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(DramaCustomSequence), nameof(DramaCustomSequence.Step), [typeof(string)])),
+            new CodeInstruction(
+                OpCodes.Call,
+                AccessTools.Method(
+                    typeof(DramaCustomSequence),
+                    nameof(DramaCustomSequence.Step),
+                    [typeof(string)])),
             new CodeInstruction(OpCodes.Ldarg_0),
             new CodeInstruction(OpCodes.Ldstr, "tg"),
             new CodeInstruction(OpCodes.Ldarg_0),
             new CodeInstruction(OpCodes.Ldloc_0),
             new CodeInstruction(OpCodes.Ldfld, charaOperand),
             new CodeInstruction(OpCodes.Ldstr, "insult"),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(DramaCustomSequence), nameof(DramaCustomSequence.GetTopic), [typeof(Chara), typeof(string)])),
+            new CodeInstruction(
+                OpCodes.Call,
+                AccessTools.Method(
+                    typeof(DramaCustomSequence),
+                    nameof(DramaCustomSequence.GetTopic),
+                    [typeof(Chara), typeof(string)])),
             new CodeInstruction(OpCodes.Ldnull),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(DramaCustomSequence), nameof(DramaCustomSequence._Talk), [typeof(string), typeof(string), typeof(string)])),
+            new CodeInstruction(
+                OpCodes.Call,
+                AccessTools.Method(
+                    typeof(DramaCustomSequence),
+                    nameof(DramaCustomSequence._Talk),
+                    [typeof(string), typeof(string), typeof(string)])),
             new CodeInstruction(OpCodes.Ldarg_0),
             new CodeInstruction(OpCodes.Ldloc_0),
             new CodeInstruction(OpCodes.Ldfld, charaOperand),
             CodeInstruction.Call(() => AddBaneMethodForBuild(default!, default!)),
             new CodeInstruction(OpCodes.Ldarg_0),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(DramaCustomSequence), nameof(DramaCustomSequence.End), []))
+            new CodeInstruction(
+                OpCodes.Call,
+                AccessTools.Method(typeof(DramaCustomSequence), nameof(DramaCustomSequence.End), []))
         );
 
         return matcher.InstructionEnumeration();

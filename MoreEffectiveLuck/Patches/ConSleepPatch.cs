@@ -23,7 +23,9 @@ internal static class ConSleepPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(ConSleep.OnRemoved), [])]
-    private static IEnumerable<CodeInstruction> OnSimulateDay_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> OnSimulateDay_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // EClass.player.DreamSpell();

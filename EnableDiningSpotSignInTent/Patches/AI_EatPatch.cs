@@ -22,7 +22,9 @@ internal static class AI_EatRunPatch
     [HarmonyTranspiler]
     [HarmonyPatch(MethodType.Enumerator)]
     [HarmonyPatch(nameof(AI_Eat.Run), [])]
-    internal static IEnumerable<CodeInstruction> MoveNext_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    internal static IEnumerable<CodeInstruction> MoveNext_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // if ((EClass._zone.IsPCFaction || EClass.rnd(4) != 0) && !owner.IsPCParty && owner.memberType != FactionMemberType.Livestock && !owner.noMove)

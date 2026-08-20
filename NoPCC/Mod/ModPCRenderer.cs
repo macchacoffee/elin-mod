@@ -59,7 +59,10 @@ internal static class ModPCRenderer
         {
             if (pc.combatCount > 0)
             {
-                tile = SelectTile(ModContext.Config.Sprite.RideCombatTile, ModContext.Config.Sprite.RideCombatSnowTile, tile);
+                tile = SelectTile(
+                    ModContext.Config.Sprite.RideCombatTile,
+                    ModContext.Config.Sprite.RideCombatSnowTile,
+                    tile);
             }
             else
             {

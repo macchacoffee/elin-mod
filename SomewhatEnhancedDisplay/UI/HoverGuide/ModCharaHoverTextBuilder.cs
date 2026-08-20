@@ -115,7 +115,9 @@ internal static class ModCharaHoverTextBuilder
             StyleConfig.DisplayJobTactics ? $"{GetJobText(chara)}/{GetTacticsText(chara)}" : null,
             hobby,
         }.Where(t => !string.IsNullOrEmpty(t)));
-        return !string.IsNullOrEmpty(text) ? text.TagSize(ModUIUtil.ComputeFontSize(13)).TagColor(ColorConfig.SubTextColor) : null;
+        return !string.IsNullOrEmpty(text)
+            ? text.TagSize(ModUIUtil.ComputeFontSize(13)).TagColor(ColorConfig.SubTextColor)
+            : null;
     }
 
     private static string? GetHoverTextProfile2(Chara chara, string fav)
@@ -124,7 +126,9 @@ internal static class ModCharaHoverTextBuilder
             StyleConfig.DisplayAffinity ? GetAffinityText(chara) : null,
             fav,
         }.Where(t => !string.IsNullOrEmpty(t)));
-        return !string.IsNullOrEmpty(text) ? text.TagSize(ModUIUtil.ComputeFontSize(13)).TagColor(ColorConfig.SubTextColor) : null;
+        return !string.IsNullOrEmpty(text)
+            ? text.TagSize(ModUIUtil.ComputeFontSize(13)).TagColor(ColorConfig.SubTextColor)
+            : null;
     }
 
     private static string? GetHoverStatusAttribute(Chara chara, Chara realChara)
@@ -139,7 +143,8 @@ internal static class ModCharaHoverTextBuilder
 
     private static string? GetHoverStatus(Chara chara)
     {
-        var displayExp = StyleConfig.DisplayExp && (!StyleConfig.DisplayExpForOnlyAlly || chara.hostility == Hostility.Ally);
+        var displayExp = StyleConfig.DisplayExp
+            && (!StyleConfig.DisplayExpForOnlyAlly || chara.hostility == Hostility.Ally);
         var text = string.Join(" ", new[] {
             StyleConfig.DisplayDVPV ? GetDVText(chara) : null,
             StyleConfig.DisplayDVPV ? GetPVText(chara) : null,
@@ -168,7 +173,9 @@ internal static class ModCharaHoverTextBuilder
             GetSkillMagText(chara),
             GetSkillChaText(chara),
         }.Where(t => !string.IsNullOrEmpty(t)));
-        return !string.IsNullOrEmpty(text) ? text.TagSize(ModUIUtil.ComputeFontSize(13)).TagColor(ColorConfig.SubTextColor) : null;
+        return !string.IsNullOrEmpty(text)
+            ? text.TagSize(ModUIUtil.ComputeFontSize(13)).TagColor(ColorConfig.SubTextColor)
+            : null;
     }
 
     private static string? GetHoverTextFeat(Chara chara)
@@ -189,7 +196,10 @@ internal static class ModCharaHoverTextBuilder
         var itemsPerLine = StyleConfig.FeatLineWrapping.GetItemsPerLine(feats.Count);
         var text = string.Join(
             Environment.NewLine,
-            feats.Select(f => $"{f.Name}{(StyleConfig.DisplayFeatValue && f.Value > 1 ? $"({f.Value})".TagSize(valueFontSize) : string.Empty)}")
+            feats.Select(f => $"{f.Name}{(
+                StyleConfig.DisplayFeatValue && f.Value > 1
+                    ? $"({f.Value})".TagSize(valueFontSize)
+                    : string.Empty)}")
                 .Chunk(itemsPerLine)
                 .Select(chuck => string.Join(", ", chuck).TagSize(lineFontSize))
         );
@@ -214,7 +224,10 @@ internal static class ModCharaHoverTextBuilder
         var itemsPerLine = StyleConfig.ActLineWrapping.GetItemsPerLine(acts.Count);
         var text = string.Join(
             Environment.NewLine,
-            acts.Select(a => $"{a.act.Name}{(StyleConfig.DisplayActParty && a.pt ? "(pt)".TagSize(ptFontSize) : string.Empty)}")
+            acts.Select(a => $"{a.act.Name}{(
+                StyleConfig.DisplayActParty && a.pt
+                    ? "(pt)".TagSize(ptFontSize)
+                    : string.Empty)}")
                 .Chunk(itemsPerLine)
                 .Select(chuck => string.Join(", ", chuck).TagSize(lineFontSize))
         );
@@ -229,7 +242,9 @@ internal static class ModCharaHoverTextBuilder
         }
 
         var resists = StyleConfig.DisplayNoneResistLevel ? new Dictionary<int, IModElement>(_noneResistElements) : [];
-        foreach (var resist in chara.elements.ListElements(e => e.source.category == "resist").Select(r => new ModElementReal(r)))
+        foreach (var resist in chara.elements
+            .ListElements(e => e.source.category == "resist")
+            .Select(r => new ModElementReal(r)))
         {
             resists[resist.Id] = resist;
         }
@@ -294,7 +309,9 @@ internal static class ModCharaHoverTextBuilder
         // 擬人状態の場合は正体のキャラのHP割合を見かけ上のキャラの現在HPに反映する。
         var ratio = (float)realChara.hp / realChara.MaxHP;
         var hp = chara == realChara ? chara.hp : (int)(chara.MaxHP * ratio);
-        var hpValueColor = Math.Ceiling(ratio * 100) > _lowValueThreshold ? ColorConfig.HPValueColor : ColorConfig.HPValueColor.Darken(0.2f);
+        var hpValueColor = Math.Ceiling(ratio * 100) > _lowValueThreshold
+            ? ColorConfig.HPValueColor
+            : ColorConfig.HPValueColor.Darken(0.2f);
         var hpText = "HP:".TagColor(ColorConfig.HPLabelColor).TagSize(ModUIUtil.ComputeFontSize(13));
         var hpValueText = $"{hp}/{chara.MaxHP}".TagColor(hpValueColor);
         return $"{hpText}{hpValueText}";
@@ -305,7 +322,9 @@ internal static class ModCharaHoverTextBuilder
         // 擬人状態の場合は正体のキャラのマナ割合を見かけ上のキャラの現在マナに反映する。
         var ratio = (float)realChara.mana.value / realChara.mana.max;
         var mana = chara == realChara ? chara.mana.value : (int)(chara.mana.max * ratio);
-        var manaValueColor = Math.Ceiling(ratio * 100) > _lowValueThreshold ? ColorConfig.ManaValueColor : ColorConfig.ManaValueColor.Darken(0.2f);
+        var manaValueColor = Math.Ceiling(ratio * 100) > _lowValueThreshold
+            ? ColorConfig.ManaValueColor
+            : ColorConfig.ManaValueColor.Darken(0.2f);
         var manaText = "MP:".TagColor(ColorConfig.ManaLabelColor).TagSize(ModUIUtil.ComputeFontSize(13));
         var manaValueText = $"{mana}/{chara.mana.max}".TagColor(manaValueColor);
         return $"{manaText}{manaValueText}";
@@ -316,7 +335,9 @@ internal static class ModCharaHoverTextBuilder
         // 擬人状態の場合は正体のキャラのスタミナ割合を見かけ上のキャラの現在スタミナに反映する。
         var ratio = (float)realChara.stamina.value / realChara.stamina.max;
         var stamina = chara == realChara ? chara.stamina.value : (int)(chara.stamina.max * ratio);
-        var staminaValueColor = Math.Ceiling(ratio * 100) > _lowValueThreshold ? ColorConfig.StaminaValueColor : ColorConfig.StaminaValueColor.Darken(0.2f);
+        var staminaValueColor = Math.Ceiling(ratio * 100) > _lowValueThreshold
+            ? ColorConfig.StaminaValueColor
+            : ColorConfig.StaminaValueColor.Darken(0.2f);
         var staminaText = "SP:".TagColor(ColorConfig.StaminaLabelColor).TagSize(ModUIUtil.ComputeFontSize(13));
         var staminaValuetext = $"{stamina}/{chara.stamina.max}".TagColor(staminaValueColor);
         return $"{staminaText}{staminaValuetext}";
@@ -450,7 +471,10 @@ internal static class ModCharaHoverTextBuilder
                 .Chunk(itemsPerLine)
                 .Select(chuck => string.Join(", ", chuck).TagSize(lineFontSize))
         );
-        return !string.IsNullOrEmpty(resistLevelText) && !string.IsNullOrEmpty(resistListText) ? $"{resistLevelText.TagSize(lineFontSize)} {resistListText}" : null;
+        return !string.IsNullOrEmpty(resistLevelText)
+            && !string.IsNullOrEmpty(resistListText)
+            ? $"{resistLevelText.TagSize(lineFontSize)} {resistListText}"
+            : null;
     }
 
     private static Color? GetElementColor(string alias)
@@ -466,11 +490,17 @@ internal static class ModCharaHoverTextBuilder
     {
         if (resistLevel > (int)Resist.None)
         {
-            return Color.Lerp(ColorConfig.NoneResistLabelColor, ColorConfig.ResistLabelColor, 1 * (resistLevel / (float)Resist.Immune));
+            return Color.Lerp(
+                ColorConfig.NoneResistLabelColor,
+                ColorConfig.ResistLabelColor,
+                1 * (resistLevel / (float)Resist.Immune));
         }
         else if (resistLevel < (int)Resist.None)
         {
-            return Color.Lerp(ColorConfig.NoneResistLabelColor, ColorConfig.NegativeResistLabelColor, 1 * (resistLevel / (float)Resist.CriticalWeakness));
+            return Color.Lerp(
+                ColorConfig.NoneResistLabelColor,
+                ColorConfig.NegativeResistLabelColor,
+                1 * (resistLevel / (float)Resist.CriticalWeakness));
         }
         else
         {

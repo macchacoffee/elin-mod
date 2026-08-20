@@ -25,7 +25,13 @@ internal interface IBepInExModConfigEntryBase
     public void Bind(ConfigFile configFile);
 }
 
-internal class BepInExModConfigEntry<T>(string section, string key, T defaultValue, string? description = null, AcceptableValueBase? acceptableValue = null, params object[] tags) : IBepInExModConfigEntryBase
+internal class BepInExModConfigEntry<T>(
+    string section,
+    string key,
+    T defaultValue,
+    string? description = null,
+    AcceptableValueBase? acceptableValue = null,
+    params object[] tags) : IBepInExModConfigEntryBase
 {
     private string Section { get; } = section;
     private string Key { get; } = key;
@@ -43,7 +49,9 @@ internal class BepInExModConfigEntry<T>(string section, string key, T defaultVal
 
     public void Bind(ConfigFile configFile)
     {
-        var configDescription = Description is not null ? new ConfigDescription(Description, AcceptableValue, Tags) : null;
+        var configDescription = Description is not null
+            ? new ConfigDescription(Description, AcceptableValue, Tags)
+            : null;
         Entry = configFile.Bind(Section, Key, DefaultValue, configDescription);
     }
 }

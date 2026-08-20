@@ -87,7 +87,9 @@ internal static class TraitPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(Trait.CreateStock), [])]
-    private static IEnumerable<CodeInstruction> CreateStock_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> CreateStock_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // CardBlueprint.SetRarity((EClass.rnd(num2 * 5) == 0) ? Rarity.Mythical : ((EClass.rnd(num2) == 0) ? Rarity.Legendary : ((EClass.rnd(5) == 0) ? Rarity.Superior : Rarity.Normal)));

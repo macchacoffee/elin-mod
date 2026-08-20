@@ -22,8 +22,12 @@ internal static class ThingPatch
     }
 
     [HarmonyTranspiler]
-    [HarmonyPatch(nameof(Thing.WriteNote), [typeof(UINote), typeof(Action<UINote>), typeof(IInspect.NoteMode), typeof(Recipe)])]
-    private static IEnumerable<CodeInstruction> WriteNote_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    [HarmonyPatch(
+        nameof(Thing.WriteNote),
+        [typeof(UINote), typeof(Action<UINote>), typeof(IInspect.NoteMode), typeof(Recipe)])]
+    private static IEnumerable<CodeInstruction> WriteNote_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // if (FoodEffect.IsLeftoverable(this))
@@ -96,9 +100,13 @@ internal static class ThingPatch
             // ldloc.s 10 (System.Single)
             matcher.MatchStartForward(
                 new CodeMatch(OpCodes.Ldloc_S),
-                new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(SourceElement.Row), nameof(SourceElement.Row.mtp))),
+                new CodeMatch(
+                    OpCodes.Ldfld,
+                    AccessTools.Field(typeof(SourceElement.Row), nameof(SourceElement.Row.mtp))),
                 new CodeMatch(OpCodes.Ldloc_S),
-                new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(SourceElement.Row), nameof(SourceElement.Row.mtp))),
+                new CodeMatch(
+                    OpCodes.Ldfld,
+                    AccessTools.Field(typeof(SourceElement.Row), nameof(SourceElement.Row.mtp))),
                 new CodeMatch(OpCodes.Ldloc_S)
             );
             var start = matcher.Pos;
@@ -156,7 +164,9 @@ internal static class ThingPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(Thing.GetEnchant), [typeof(long), typeof(Func<SourceElement.Row, bool>), typeof(bool)])]
-    private static IEnumerable<CodeInstruction> GetEnchant_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> GetEnchant_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // int num6 = (item.mtp + EClass.rnd(item.mtp + (int)num5)) / item.mtp * ((!(flag && neg)) ? 1 : (-1));

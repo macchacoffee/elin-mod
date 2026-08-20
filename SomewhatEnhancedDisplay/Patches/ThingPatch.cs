@@ -37,7 +37,9 @@ internal static class ThingPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(Thing.GetName), [typeof(NameStyle), typeof(int)])]
-    private static IEnumerable<CodeInstruction> GetName_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> GetName_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // base.IsIdentified
@@ -86,7 +88,9 @@ internal static class ThingPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(Thing.GetHoverText), [])]
-    private static IEnumerable<CodeInstruction> GetHoverText_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> GetHoverText_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // text = text + " <size=14>(" + Lang._weight(base.ChildrenAndSelfWeight) + ")</size> ";
@@ -132,7 +136,9 @@ internal static class ThingPatch
         // call static string string::Concat(string str0, string str1)
         // ret
         matcher.MatchStartForward(
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string)])),
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string)])),
             new CodeMatch(OpCodes.Ret)
         );
         // 表示内容の文字列を組み立てる処理を差し替える。
@@ -157,7 +163,9 @@ internal static class ThingPatch
 
     private static bool ShouldDisplayAsIdentified(Thing thing)
     {
-        return thing.IsIdentified || (ReferenceEquals(_hoverTextTarget, thing) && StyleConfig.DisplayUnidentifiedItemsAsIdentified);
+        return thing.IsIdentified
+            || (ReferenceEquals(_hoverTextTarget, thing)
+                && StyleConfig.DisplayUnidentifiedItemsAsIdentified);
     }
 
     private static string IntToString(int value)

@@ -30,7 +30,10 @@ internal static class StringExtensions
         return !text.IsEmpty() ? _tagSizeRegex.Replace(text, m => resizer(int.Parse(m.Value)).ToString()) : text;
     }
 
-    public static string ReplaceTagTexts(this string text, Func<string, string> replacer, Func<string, string>? firstReplacer = null)
+    public static string ReplaceTagTexts(
+        this string text,
+        Func<string, string> replacer,
+        Func<string, string>? firstReplacer = null)
     {
         var i = 0;
         return !text.IsEmpty() ? _tagTextRegex.Replace(text, m => {

@@ -110,7 +110,12 @@ internal class ModConfigConverter : JsonConverter<ModWorldConfig>
 {
     public override bool CanWrite => false;
 
-    public override ModWorldConfig ReadJson(JsonReader reader, Type objectType, ModWorldConfig existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override ModWorldConfig ReadJson(
+        JsonReader reader,
+        Type objectType,
+        ModWorldConfig existingValue,
+        bool hasExistingValue,
+        JsonSerializer serializer)
     {
         var token = JToken.Load(reader);
         if (token is not JObject obj)
@@ -141,7 +146,12 @@ internal class ModConfigDeniedActConverter : JsonConverter<HashSet<ModConfigDeni
 {
     public override bool CanWrite => false;
 
-    public override HashSet<ModConfigDeniedAct> ReadJson(JsonReader reader, Type objectType, HashSet<ModConfigDeniedAct> existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override HashSet<ModConfigDeniedAct> ReadJson(
+        JsonReader reader,
+        Type objectType,
+        HashSet<ModConfigDeniedAct> existingValue,
+        bool hasExistingValue,
+        JsonSerializer serializer)
     {
         var token = JToken.Load(reader);
         if (token is not JArray array)

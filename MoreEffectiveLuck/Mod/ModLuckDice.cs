@@ -22,15 +22,30 @@ internal class ModLuckDice<T>
         ResultFunc = resultFunc;
         ResultCompareFunc = resultCompareFunc;
         IsPositive = luck >= 0;
-        ExtraRollCount = Math.Min(Math.Abs(luck / luckPerRoll) + (Math.Abs(luck % luckPerRoll) > EClass.rnd(luckPerRoll) ? 1 : 0), maxRoll);
+        ExtraRollCount = Math.Min(
+            Math.Abs(luck / luckPerRoll)
+                + (Math.Abs(luck % luckPerRoll) > EClass.rnd(luckPerRoll)
+                    ? 1
+                    : 0),
+            maxRoll);
     }
 
-    public static ModLuckDice<T> Create(Func<T> resultFunc, Func<T, T, bool> resultCompareFunc, Card? card, int? luckPerRoll = null, int? maxRoll = null)
+    public static ModLuckDice<T> Create(
+        Func<T> resultFunc,
+        Func<T, T, bool> resultCompareFunc,
+        Card? card,
+        int? luckPerRoll = null,
+        int? maxRoll = null)
     {
         return Create(resultFunc, resultCompareFunc, card?.LUC ?? 0, luckPerRoll, maxRoll);
     }
 
-    public static ModLuckDice<T> Create(Func<T> resultFunc, Func<T, T, bool> resultCompareFunc, int luck, int? luckPerRoll = null, int? maxRoll = null)
+    public static ModLuckDice<T> Create(
+        Func<T> resultFunc,
+        Func<T, T, bool> resultCompareFunc,
+        int luck,
+        int? luckPerRoll = null,
+        int? maxRoll = null)
     {
         return new(resultFunc, resultCompareFunc, luck, luckPerRoll ??= 100, maxRoll ??= 20);
     }

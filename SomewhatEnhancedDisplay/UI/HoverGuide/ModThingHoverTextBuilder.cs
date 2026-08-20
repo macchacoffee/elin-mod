@@ -70,7 +70,9 @@ internal static class ModThingHoverTextBuilder
             StyleConfig.DisplayFressness ? GetFressnessText(thing) : null,
             StyleConfig.DisplayLockLv ? GetLockLvText(thing) : null,
         }.Where(t => !string.IsNullOrEmpty(t)));
-        return !string.IsNullOrEmpty(text) ? text.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor) : null;
+        return !string.IsNullOrEmpty(text)
+            ? text.TagSize(ModUIUtil.ComputeFontSize(13)).TagColorNullable(ColorConfig.SubTextColor)
+            : null;
     }
 
     private static string? GetHoverTextTrait(string traitText)
@@ -93,7 +95,11 @@ internal static class ModThingHoverTextBuilder
         }
         var ratio = (float)(thing.MaxDecay - Math.Min(thing.decay, thing.MaxDecay)) / thing.MaxDecay;
         var pct = Math.Ceiling(ratio * 100);
-        return $"{ModConsts.SourceId.Fressness.lang()}:{pct:0}%".TagColor(Color.Lerp(ColorConfig.FressnessLowValueColor, ColorConfig.FressnessValueColor, ratio));
+        return $"{ModConsts.SourceId.Fressness.lang()}:{pct:0}%".TagColor(
+            Color.Lerp(
+                ColorConfig.FressnessLowValueColor,
+                ColorConfig.FressnessValueColor,
+                ratio));
     }
 
     private static string? GetLockLvText(Thing thing)

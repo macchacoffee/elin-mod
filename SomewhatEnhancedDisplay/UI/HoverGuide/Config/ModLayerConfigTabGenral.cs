@@ -259,7 +259,12 @@ internal class ModLayerConfigTabGenral : YKLayout<ModLayerConfigContext>
 
     private record ColorConfigItem(string Label, Color? Init, Action<Color> OnChanged, string? Tooltip = null);
 
-    private void AddColorPickers(YKLayout layout, string headerLabel, int cellWidth, int maxColumn, params ColorConfigItem[] items)
+    private void AddColorPickers(
+        YKLayout layout,
+        string headerLabel,
+        int cellWidth,
+        int maxColumn,
+        params ColorConfigItem[] items)
     {
         layout.HeaderSmall(headerLabel);
         var grid = layout.Grid().WithPivot(0, 0.5f).WithCellSize(cellWidth, 50).WithConstraintCount(maxColumn);

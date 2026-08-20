@@ -20,8 +20,22 @@ internal static class CardPatch
     }
 
     [HarmonyTranspiler]
-    [HarmonyPatch(nameof(Card.DamageHP), [typeof(long), typeof(int), typeof(int), typeof(AttackSource), typeof(Card), typeof(bool), typeof(Thing), typeof(Chara), typeof(int)])]
-    private static IEnumerable<CodeInstruction> DamageHP_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    [HarmonyPatch(
+        nameof(Card.DamageHP),
+        [
+            typeof(long),
+            typeof(int),
+            typeof(int),
+            typeof(AttackSource),
+            typeof(Card),
+            typeof(bool),
+            typeof(Thing),
+            typeof(Chara),
+            typeof(int)
+        ])]
+    private static IEnumerable<CodeInstruction> DamageHP_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // else

@@ -22,7 +22,8 @@ internal static class ButtonRosterPatch
     [HarmonyPatch(nameof(ButtonRoster.SetChara), [typeof(Chara)])]
     private static void SetChara_Postfix(ButtonRoster __instance, Chara c)
     {
-        var display = __instance.GetComponent<ModDamageDisplay>() ?? __instance.gameObject.AddComponent<ModDamageDisplay>();
+        var display = __instance.GetComponent<ModDamageDisplay>()
+            ?? __instance.gameObject.AddComponent<ModDamageDisplay>();
         display.Bind(__instance, c);
     }
 

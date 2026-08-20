@@ -24,8 +24,22 @@ internal static class ElementPatch
     private static readonly Regex _enchantTextRegex = new(@"(\(-?\d+\)) (\(-?\d+[^\)]*\))", RegexOptions.Compiled);
 
     [HarmonyPrefix]
-    [HarmonyPatch(nameof(Element.AddEncNote), [typeof(UINote), typeof(Card), typeof(ElementContainer.NoteMode), typeof(Func<Element, string, string>), typeof(Action<UINote, Element>)])]
-    private static void AddEncNote_Prefix(Element __instance, UINote n, Card Card, ElementContainer.NoteMode mode, ref Func<Element, string, string>? funcText, Action<UINote, Element>? onAddNote)
+    [HarmonyPatch(
+        nameof(Element.AddEncNote),
+        [
+            typeof(UINote),
+            typeof(Card),
+            typeof(ElementContainer.NoteMode),
+            typeof(Func<Element, string, string>),
+            typeof(Action<UINote, Element>)
+        ])]
+    private static void AddEncNote_Prefix(
+        Element __instance,
+        UINote n,
+        Card Card,
+        ElementContainer.NoteMode mode,
+        ref Func<Element, string, string>? funcText,
+        Action<UINote, Element>? onAddNote)
     {
         if (funcText is null)
         {
@@ -42,8 +56,18 @@ internal static class ElementPatch
     }
 
     [HarmonyTranspiler]
-    [HarmonyPatch(nameof(Element.AddEncNote), [typeof(UINote), typeof(Card), typeof(ElementContainer.NoteMode), typeof(Func<Element, string, string>), typeof(Action<UINote, Element>)])]
-    private static IEnumerable<CodeInstruction> AddEncNote_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    [HarmonyPatch(
+        nameof(Element.AddEncNote),
+        [
+            typeof(UINote),
+            typeof(Card),
+            typeof(ElementContainer.NoteMode),
+            typeof(Func<Element, string, string>),
+            typeof(Action<UINote, Element>)
+        ])]
+    private static IEnumerable<CodeInstruction> AddEncNote_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // if (!flag && !flag2 && !source.tag.Contains("flag"))
@@ -62,7 +86,12 @@ internal static class ElementPatch
         // brtrue <skipRatingText>
         matcher.MatchEndForward(
             new CodeMatch(OpCodes.Ldstr, "flag"),
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.Contains), [typeof(string[]), typeof(string)])),
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(
+                    typeof(ClassExtension),
+                    nameof(ClassExtension.Contains),
+                    [typeof(string[]), typeof(string)])),
             new CodeMatch(OpCodes.Brtrue)
         );
         // string::Concat(string[] value)の引数valueの要素数を5から8に変更する。

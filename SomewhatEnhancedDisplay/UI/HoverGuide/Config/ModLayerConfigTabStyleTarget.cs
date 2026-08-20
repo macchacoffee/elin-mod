@@ -91,7 +91,9 @@ internal abstract class ModLayerConfigTabStyleTarget : YKLayout<ModLayerConfigCo
         }
     }
 
-    protected EditStyleDropdownUIItem<ModItemDisplayMode> CreateItemDisplayModeDropdownUIItem(Action<ModItemDisplayMode> onChanged, Func<ModItemDisplayMode> getConfig)
+    protected EditStyleDropdownUIItem<ModItemDisplayMode> CreateItemDisplayModeDropdownUIItem(
+        Action<ModItemDisplayMode> onChanged,
+        Func<ModItemDisplayMode> getConfig)
     {
         return new(
             Label: null,
@@ -117,7 +119,12 @@ internal abstract class ModLayerConfigTabStyleTarget : YKLayout<ModLayerConfigCo
             }
         }
 
-        public void Add(YKLayout layout, string? headerLabel, int cellWidth, int maxColumn, params IEditStyleUIItem[] items)
+        public void Add(
+            YKLayout layout,
+            string? headerLabel,
+            int cellWidth,
+            int maxColumn,
+            params IEditStyleUIItem[] items)
         {
             if (headerLabel is not null)
             {

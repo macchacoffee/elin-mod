@@ -23,7 +23,9 @@ internal static class FoodEffectPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(FoodEffect.Proc), [typeof(Chara), typeof(Thing), typeof(bool)])]
-    private static IEnumerable<CodeInstruction> Proc_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> Proc_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // if (!c.isDead)
@@ -71,7 +73,9 @@ internal static class FoodEffectPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(FoodEffect.ProcDrink), [typeof(Chara), typeof(Thing)])]
-    private static IEnumerable<CodeInstruction> ProcDrink_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> ProcDrink_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // if (c.HasCondition<ConAnorexia>())

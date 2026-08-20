@@ -25,7 +25,12 @@ internal static class ModReflection
         return assembly.GetType(typeName);
     }
 
-    public static MethodInfo? GetMethod(string assemblyName, string typeName, string methodName, Type[]? parameters = null, Type[]? generics = null)
+    public static MethodInfo? GetMethod(
+        string assemblyName,
+        string typeName,
+        string methodName,
+        Type[]? parameters = null,
+        Type[]? generics = null)
     {
         if (GetType(assemblyName, typeName) is not Type type)
         {
@@ -34,10 +39,15 @@ internal static class ModReflection
         return GetMethod(type, methodName, parameters, generics);
     }
 
-    public static MethodInfo? GetMethod(Type type, string methodName, Type[]? parameters = null, Type[]? generics = null)
+    public static MethodInfo? GetMethod(
+        Type type,
+        string methodName,
+        Type[]? parameters = null,
+        Type[]? generics = null)
     {
         var flags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
-        if (generics is not null && type.GetMethod(methodName, generics.Length, flags, null, parameters, null) is MethodInfo method)
+        if (generics is not null
+            && type.GetMethod(methodName, generics.Length, flags, null, parameters, null) is MethodInfo method)
         {
             return method.MakeGenericMethod(generics);
         }

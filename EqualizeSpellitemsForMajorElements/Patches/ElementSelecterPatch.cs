@@ -37,7 +37,9 @@ internal static class ElementSelecterPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(ElementSelecter.Select), [typeof(int)])]
-    private static IEnumerable<CodeInstruction> Select_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> Select_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // if ((useDomain && !EClass.player.domains.Contains(row.id) && EClass.rnd(10) > 1) || !row.tag.Contains(item.alias.Split('_', StringSplitOptions.None)[0]))
@@ -63,10 +65,20 @@ internal static class ElementSelecterPatch
         // ldelem.ref NULL
         // call static bool ClassExtension::Contains(string[] strs, string id)
         matcher.MatchEndForward(
-            new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(string), nameof(string.Split), [typeof(char), typeof(StringSplitOptions)])),
+            new CodeMatch(
+                OpCodes.Callvirt,
+                AccessTools.Method(
+                    typeof(string),
+                    nameof(string.Split),
+                    [typeof(char), typeof(StringSplitOptions)])),
             new CodeMatch(OpCodes.Ldc_I4_0),
             new CodeMatch(OpCodes.Ldelem_Ref),
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.Contains), [typeof(string[]), typeof(string)]))
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(
+                    typeof(ClassExtension),
+                    nameof(ClassExtension.Contains),
+                    [typeof(string[]), typeof(string)]))
         );
         // 属性のSourceElement.Rowのタグに指定された文字列が含まれていないかを判定する処理を差し替える
         matcher.RemoveInstruction();
@@ -80,7 +92,9 @@ internal static class ElementSelecterPatch
     private static bool ContainsTag(SourceElement.Row row, string alias)
     {
         var tag = row.tag;
-        if (row.categorySub == "eleAttack" && (ModContext.Config.EnableImpact.Value || row.id != SKILL.eleImpact) && row.id != SKILL.eleVoid)
+        if (row.categorySub == "eleAttack"
+            && (ModContext.Config.EnableImpact.Value || row.id != SKILL.eleImpact)
+            && row.id != SKILL.eleVoid)
         {
             // 衝撃、無以外の属性であれば各種魔法をタグに追加する
             // 設定で有効な場合は衝撃属性も対象にする

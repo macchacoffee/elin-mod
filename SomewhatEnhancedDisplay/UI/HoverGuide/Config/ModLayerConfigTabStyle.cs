@@ -173,7 +173,10 @@ internal class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
 
         var healthRatioPreviewLayout = healthBarPreviewContainer.Vertical();
         healthRatioPreviewLayout.Layout.childAlignment = TextAnchor.UpperLeft;
-        var healthRatioPreviewRow = healthRatioPreviewLayout.Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
+        var healthRatioPreviewRow = healthRatioPreviewLayout
+            .Horizontal()
+            .WithFitMode(ContentSizeFitter.FitMode.PreferredSize)
+            .WithPivot(0, 0.5f);
         healthRatioPreviewRow.AddModSlider(
             getLabel: value => $"{ModConsts.SourceId.HealthRatio.lang()}({value}%)",
             init: (float)Context.SampleModifier.HealthBarRatio! * 100,
@@ -185,7 +188,10 @@ internal class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
 
         var manaBodyPreviewLayout = healthBarPreviewContainer.Vertical();
         manaBodyPreviewLayout.Layout.childAlignment = TextAnchor.UpperLeft;
-        var hpPreviewRow = manaBodyPreviewLayout.Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
+        var hpPreviewRow = manaBodyPreviewLayout
+            .Horizontal()
+            .WithFitMode(ContentSizeFitter.FitMode.PreferredSize)
+            .WithPivot(0, 0.5f);
         hpPreviewRow.AddModSlider(
             getLabel: value => $"HP({value}%)",
             init: (float)Context.SampleModifier.HealthBarHPRatio! * 100,
@@ -195,7 +201,10 @@ internal class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
             onChanged: value => Context.SampleModifier.HealthBarHPRatio = value / 100
         );
         manaBodyPreviewLayout.Spacer(36);
-        var mpPreviewRow = manaBodyPreviewLayout.Horizontal().WithFitMode(ContentSizeFitter.FitMode.PreferredSize).WithPivot(0, 0.5f);
+        var mpPreviewRow = manaBodyPreviewLayout
+            .Horizontal()
+            .WithFitMode(ContentSizeFitter.FitMode.PreferredSize)
+            .WithPivot(0, 0.5f);
         mpPreviewRow.AddModSlider(
             getLabel: value => $"MP({value}%)",
             init: (float)Context.SampleModifier.HealthBarMPRatio! * 100,

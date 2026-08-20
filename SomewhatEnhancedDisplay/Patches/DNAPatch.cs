@@ -21,7 +21,9 @@ internal static class DNAPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(DNA.WriteNote), [typeof(UINote), typeof(Chara)])]
-    private static IEnumerable<CodeInstruction> WriteNote_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> WriteNote_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // if (flag)

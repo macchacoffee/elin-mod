@@ -23,7 +23,9 @@ internal static class FoodEffectPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(FoodEffect.Proc), [typeof(Chara), typeof(Thing), typeof(bool)])]
-    internal static IEnumerable<CodeInstruction> Proc_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    internal static IEnumerable<CodeInstruction> Proc_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // bool flag = EClass._zone.IsPCFaction && c2.IsInSpot<TraitSpotDining>();

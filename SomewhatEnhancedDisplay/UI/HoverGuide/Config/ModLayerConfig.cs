@@ -35,8 +35,12 @@ internal class ModLayerConfig : YKLayer<ModLayerConfigContext>
 
         CreateTab<ModLayerConfigTabGenral>(ModConsts.SourceId.ConfigGeneral, ModConsts.GameObjectName.ConfigGenaral);
         CreateTab<ModLayerConfigTabStyle>(ModConsts.SourceId.ConfigStyle, ModConsts.GameObjectName.ConfigStyle);
-        CreateTab<ModLayerConfigTabStyleTargetChara>(ModConsts.SourceId.ConfigStyleTargetChara, ModConsts.GameObjectName.ConfigStyleTargetChara);
-        CreateTab<ModLayerConfigTabStyleTargetThing>(ModConsts.SourceId.ConfigStyleTargetThing, ModConsts.GameObjectName.ConfigStyleTargetThing);
+        CreateTab<ModLayerConfigTabStyleTargetChara>(
+            ModConsts.SourceId.ConfigStyleTargetChara,
+            ModConsts.GameObjectName.ConfigStyleTargetChara);
+        CreateTab<ModLayerConfigTabStyleTargetThing>(
+            ModConsts.SourceId.ConfigStyleTargetThing,
+            ModConsts.GameObjectName.ConfigStyleTargetThing);
 
         // タブの画像を設定する。
         GetTab(ModConsts.GameObjectName.ConfigStyle).sprite = GetTabIconSprite(85);

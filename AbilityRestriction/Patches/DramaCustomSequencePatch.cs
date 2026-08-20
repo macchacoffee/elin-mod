@@ -22,7 +22,9 @@ internal static class DramaCustomSequencePatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(DramaCustomSequence.Build), [typeof(Chara)])]
-    private static IEnumerable<CodeInstruction> Build_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> Build_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // if (c.IsPCParty)
@@ -116,7 +118,12 @@ internal static class DramaCustomSequencePatch
             new CodeInstruction(OpCodes.Ldstr, ModConsts.SourceId.DaRestrictAbilities),
             new CodeInstruction(OpCodes.Ldstr, "_restrictAbilities"),
             new CodeInstruction(OpCodes.Ldc_I4_0),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(DramaCustomSequence), nameof(DramaCustomSequence.Choice), [typeof(string), typeof(string), typeof(bool)])),
+            new CodeInstruction(
+                OpCodes.Call,
+                AccessTools.Method(
+                    typeof(DramaCustomSequence),
+                    nameof(DramaCustomSequence.Choice),
+                    [typeof(string), typeof(string), typeof(bool)])),
             new CodeInstruction(OpCodes.Pop)
         );
         matcher.AddLabels(labelList1);
@@ -125,23 +132,37 @@ internal static class DramaCustomSequencePatch
         // call void DramaCustomSequence::Step(string step)
         matcher.MatchEndForward(
             new CodeMatch(OpCodes.Ldstr, "_insult"),
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(DramaCustomSequence), nameof(DramaCustomSequence.Step), [typeof(string)]))
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(
+                    typeof(DramaCustomSequence),
+                    nameof(DramaCustomSequence.Step),
+                    [typeof(string)]))
         );
         // call void DramaCustomSequence::End()
         matcher.MatchEndForward(
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(DramaCustomSequence), nameof(DramaCustomSequence.End), []))
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(typeof(DramaCustomSequence), nameof(DramaCustomSequence.End), []))
         );
         matcher.Advance(1);
         matcher.Insert(
             new CodeInstruction(OpCodes.Ldarg_0),
             new CodeInstruction(OpCodes.Ldstr, "_restrictAbilities"),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(DramaCustomSequence), nameof(DramaCustomSequence.Step), [typeof(string)])),
+            new CodeInstruction(
+                OpCodes.Call,
+                AccessTools.Method(
+                    typeof(DramaCustomSequence),
+                    nameof(DramaCustomSequence.Step),
+                    [typeof(string)])),
             new CodeInstruction(OpCodes.Ldarg_0),
             new CodeInstruction(OpCodes.Ldloc_0),
             new CodeInstruction(OpCodes.Ldfld, charaOperand),
             CodeInstruction.Call(() => HandleAbilityRestriction(default!, default!)),
             new CodeInstruction(OpCodes.Ldarg_0),
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(DramaCustomSequence), nameof(DramaCustomSequence.End), []))
+            new CodeInstruction(
+                OpCodes.Call,
+                AccessTools.Method(typeof(DramaCustomSequence), nameof(DramaCustomSequence.End), []))
         );
 
         return matcher.InstructionEnumeration();
@@ -149,7 +170,8 @@ internal static class DramaCustomSequencePatch
 
     private static bool IsAbilityRestrictionEnabled(Chara chara)
     {
-        return ModContext.Config.EnableViaConversation.Value && ModAbilityRestriction.CanRestrictAbility(chara);
+        return ModContext.Config.EnableViaConversation.Value
+            && ModAbilityRestriction.CanRestrictAbility(chara);
     }
 
     private static void HandleAbilityRestriction(DramaCustomSequence dcs, Chara chara)

@@ -23,7 +23,9 @@ internal static class FactionBranchPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(FactionBranch.OnSimulateDay), [typeof(VirtualDate)])]
-    private static IEnumerable<CodeInstruction> OnSimulateDay_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> OnSimulateDay_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // if (luckyMonth)

@@ -21,7 +21,9 @@ internal static class CharaPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(Chara.CanReplace), [typeof(Chara)])]
-    internal static IEnumerable<CodeInstruction> CanReplace_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    internal static IEnumerable<CodeInstruction> CanReplace_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // if (IsPCFaction && !c.IsPCParty)

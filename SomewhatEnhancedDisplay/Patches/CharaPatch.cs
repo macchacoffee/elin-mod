@@ -85,7 +85,9 @@ internal static class CharaPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(Chara.GetHoverText), [])]
-    private static IEnumerable<CodeInstruction> GetHoverText_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> GetHoverText_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // if (mimicry != null && mimicry.IsThing)
@@ -195,7 +197,9 @@ internal static class CharaPatch
         matcher.MatchEndForward(
             new CodeMatch(OpCodes.Ldarg_0),
             new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(Chara), nameof(Chara.mimicry))),
-            new CodeMatch(OpCodes.Callvirt, AccessTools.PropertyGetter(typeof(ConBaseTransmuteMimic), nameof(ConBaseTransmuteMimic.Card))),
+            new CodeMatch(
+                OpCodes.Callvirt,
+                AccessTools.PropertyGetter(typeof(ConBaseTransmuteMimic), nameof(ConBaseTransmuteMimic.Card))),
             new CodeMatch(OpCodes.Ldarg_0),
             new CodeMatch(OpCodes.Bne_Un)
         );
@@ -228,14 +232,20 @@ internal static class CharaPatch
 
         // ldfld UnityEngine.Gradient ColorProfile::gradientLVComparison
         matcher.MatchStartForward(
-            new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(ColorProfile), nameof(ColorProfile.gradientLVComparison)))
+            new CodeMatch(
+                OpCodes.Ldfld,
+                AccessTools.Field(typeof(ColorProfile), nameof(ColorProfile.gradientLVComparison)))
         );
         // callvirt UnityEngine.Color UnityEngine.Gradient::Evaluate(float time)
         // call static string ClassExtension::TagColor(string s, UnityEngine.Color c)
         // stloc.3
         matcher.MatchEndForward(
-            new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Gradient), nameof(Gradient.Evaluate), [typeof(float)])),
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.TagColor), [typeof(string), typeof(Color)])),
+            new CodeMatch(
+                OpCodes.Callvirt,
+                AccessTools.Method(typeof(Gradient), nameof(Gradient.Evaluate), [typeof(float)])),
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.TagColor), [typeof(string), typeof(Color)])),
             new CodeMatch(OpCodes.Stloc_3)
         );
         // レベル差の文字列を追加する条件でModの設定を参照するように変更する。
@@ -328,7 +338,9 @@ internal static class CharaPatch
         // callvirt bool GuildFighter::HasBounty(Chara c)
         matcher.MatchEndForward(
             new CodeMatch(OpCodes.Ldarg_0),
-            new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(GuildFighter), nameof(GuildFighter.HasBounty), [typeof(Chara)]))
+            new CodeMatch(
+                OpCodes.Callvirt,
+                AccessTools.Method(typeof(GuildFighter), nameof(GuildFighter.HasBounty), [typeof(Chara)]))
         );
         // 賞金首の文字列を追加する条件でModの設定を参照するように変更する。
         matcher.Advance(1);
@@ -347,7 +359,9 @@ internal static class CharaPatch
             new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(EClass), nameof(EClass.pc))),
             new CodeMatch(OpCodes.Ldc_I4, 481),
             new CodeMatch(OpCodes.Ldc_I4_0),
-            new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Card), nameof(Card.HasElement), [typeof(int), typeof(bool)]))
+            new CodeMatch(
+                OpCodes.Callvirt,
+                AccessTools.Method(typeof(Card), nameof(Card.HasElement), [typeof(int), typeof(bool)]))
         );
         // 信仰の文字列を追加する条件でModの設定を参照するように変更する。
         matcher.Advance(1);
@@ -373,7 +387,9 @@ internal static class CharaPatch
             new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(EClass), nameof(EClass.pc))),
             new CodeMatch(OpCodes.Ldc_I4, 6607),
             new CodeMatch(OpCodes.Ldc_I4_0),
-            new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Card), nameof(Card.HasElement), [typeof(int), typeof(bool)]))
+            new CodeMatch(
+                OpCodes.Callvirt,
+                AccessTools.Method(typeof(Card), nameof(Card.HasElement), [typeof(int), typeof(bool)]))
         );
         // 血の味の文字列を追加する条件でModの設定を参照するように変更する。
         matcher.Advance(1);
@@ -393,7 +409,9 @@ internal static class CharaPatch
 
         // call static string CraftUtil::GetBloodText(Chara c)
         matcher.MatchStartForward(
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(CraftUtil), nameof(CraftUtil.GetBloodText), [typeof(Chara)]))
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(typeof(CraftUtil), nameof(CraftUtil.GetBloodText), [typeof(Chara)]))
         );
         // 血の味の文字列を取得する処理をModの設定を参照するものに差し替える。
         matcher.RemoveInstruction();
@@ -404,7 +422,9 @@ internal static class CharaPatch
         // call static string string::Concat(string str0, string str1, string str2)
         // ret
         matcher.MatchStartForward(
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string), typeof(string)])),
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string), typeof(string)])),
             new CodeMatch(OpCodes.Ret)
         );
         // 表示内容の文字列を組み立てる処理を差し替える。
@@ -419,7 +439,9 @@ internal static class CharaPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(Chara.GetHoverText2), [])]
-    private static IEnumerable<CodeInstruction> GetHoverText2_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> GetHoverText2_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // if (mimicry != null && mimicry.IsThing)
@@ -530,17 +552,26 @@ internal static class CharaPatch
         // ldnull
         // call static string ClassExtension::lang(string s, string ref1, string ref2, string ref3, string ref4, string ref5)
         matcher.MatchStartForward(
-            new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(SourceData.BaseRow), nameof(SourceData.BaseRow.GetName), [])),
+            new CodeMatch(
+                OpCodes.Callvirt,
+                AccessTools.Method(typeof(SourceData.BaseRow), nameof(SourceData.BaseRow.GetName), [])),
             new CodeMatch(OpCodes.Ldnull),
             new CodeMatch(OpCodes.Ldnull),
             new CodeMatch(OpCodes.Ldnull),
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.lang), [typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string)]))
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(
+                    typeof(ClassExtension),
+                    nameof(ClassExtension.lang),
+                    [typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string)]))
         );
         // 好物のカテゴリー名、"/"、好きな食べ物名の文字列を結合する。
         matcher.Advance(1);
         matcher.RemoveInstructions(4);
         matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string), typeof(string)]))
+            new CodeInstruction(
+                OpCodes.Call,
+                AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string), typeof(string)]))
         );
 
         // isinst TraitWhipLove
@@ -570,7 +601,9 @@ internal static class CharaPatch
         matcher.MatchStartForward(
             new CodeMatch(OpCodes.Ldloc_2),
             new CodeMatch(OpCodes.Ldstr, "<size=14>"),
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string)])),
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string)])),
             new CodeMatch(OpCodes.Stloc_2)
         );
         // sizeタグの開始タグを追加する処理を削除する。
@@ -593,9 +626,13 @@ internal static class CharaPatch
         // ldstr ", "
         // call static string string::Concat(string str0, string str1, string str2)
         matcher.MatchEndForward(
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.TagColor), [typeof(string), typeof(Color)])),
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(typeof(ClassExtension), nameof(ClassExtension.TagColor), [typeof(string), typeof(Color)])),
             new CodeMatch(OpCodes.Ldstr, ", "),
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string), typeof(string)]))
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string), typeof(string)]))
         );
         // バフ・デバフ・状態・呪いの文字列を行折り返しに対応した内容で結合する。
         matcher.RemoveInstruction();
@@ -626,9 +663,13 @@ internal static class CharaPatch
         matcher.MatchStartForward(
             new CodeMatch(OpCodes.Ldstr, ", "),
             new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.ToCharArray), [])),
-            new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(string), nameof(string.TrimEnd), [typeof(char[])])),
+            new CodeMatch(
+                OpCodes.Callvirt,
+                AccessTools.Method(typeof(string), nameof(string.TrimEnd), [typeof(char[])])),
             new CodeMatch(OpCodes.Ldstr, "</size>"),
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string)])),
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string)])),
             new CodeMatch(OpCodes.Stloc_2),
             new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(EClass), nameof(EClass.debug)))
         );
@@ -641,7 +682,9 @@ internal static class CharaPatch
         // call static string string::Concat(string str0, string str1, string str2)
         // ret
         matcher.MatchStartForward(
-            new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string), typeof(string)])),
+            new CodeMatch(
+                OpCodes.Call,
+                AccessTools.Method(typeof(string), nameof(string.Concat), [typeof(string), typeof(string), typeof(string)])),
             new CodeMatch(OpCodes.Ret)
         );
         // 表示内容の文字列を組み立てる処理を差し替える。
@@ -754,7 +797,10 @@ internal static class CharaPatch
     {
         var config = StyleConfig.StatsLineWrapping;
         var newline = string.Empty;
-        if (config.Enable && config.MaxItemsPerLine > 0 && num >= config.MaxItemsPerLine && num % config.MaxItemsPerLine == 0)
+        if (config.Enable
+            && config.MaxItemsPerLine > 0
+            && num >= config.MaxItemsPerLine
+            && num % config.MaxItemsPerLine == 0)
         {
             newline = Environment.NewLine;
             separator = string.Empty;
@@ -808,7 +854,9 @@ internal static class CharaPatch
         public static string CraftUtilGetBloodTextForCharaHoverText(Chara c)
         {
             // CraftUtil.GetBloodText()のコードを複製し、ホバーテキスト取得処理向けに変更したスタブを作成する。
-            static IEnumerable<CodeInstruction> transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+            static IEnumerable<CodeInstruction> transpiler(
+                IEnumerable<CodeInstruction> instructions,
+                ILGenerator generator)
             {
                 // // 変更前
                 // int num = Mathf.Min(list.Count(), 3, EClass.debug.godMode ? 3 : (1 + EClass.pc.Evalue(6607) / 15));

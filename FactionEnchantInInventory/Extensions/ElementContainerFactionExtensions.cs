@@ -37,7 +37,10 @@ internal static class ElementContainerFactionExtensions
         }
     }
 
-    private static void UpdateRecursive(ElementContainerFaction ecf, Thing thing, Action<ElementContainerFaction, Thing> update)
+    private static void UpdateRecursive(
+        ElementContainerFaction ecf,
+        Thing thing,
+        Action<ElementContainerFaction, Thing> update)
     {
         update(ecf, thing);
 

@@ -20,7 +20,8 @@ internal class ModLayerConfigTabGenral : YKLayout<object>
         {ModHorizontalTextAlignment.Center, ModConsts.SourceId.AlignmentCenter},
         {ModHorizontalTextAlignment.Right, ModConsts.SourceId.AlignmentRight}
     };
-    private static readonly List<ModHorizontalTextAlignment> _itemHorizontalTextAlignments = [.. _itemHorizontalTextAlignmentIdLangs.Keys];
+    private static readonly List<ModHorizontalTextAlignment> _itemHorizontalTextAlignments =
+        [.. _itemHorizontalTextAlignmentIdLangs.Keys];
 
     private static ModConfigDisplay Config => ModContext.WorldConfig.Display;
 
@@ -50,7 +51,7 @@ internal class ModLayerConfigTabGenral : YKLayout<object>
                 Label: ModConsts.SourceId.UseCompactDamageFormat,
                 Init: Config.UseCompactDamageFormat,
                 OnChanged: value => Config.UseCompactDamageFormat = value,
-                Tooltip:  ModConsts.SourceId.TooltipUseCompactDamageFormat
+                Tooltip: ModConsts.SourceId.TooltipUseCompactDamageFormat
             )
         );
 
@@ -145,11 +146,11 @@ internal class ModLayerConfigTabGenral : YKLayout<object>
     }
 
     private record DropdownUIItem<T>(
-         string? Label,
-         int Init,
-         IEnumerable<T> Values,
-         Func<int, T, string> GetLabel,
-         Action<int, T> OnChanged) : IUIItem
+        string? Label,
+        int Init,
+        IEnumerable<T> Values,
+        Func<int, T, string> GetLabel,
+        Action<int, T> OnChanged) : IUIItem
     {
         public void AddUI(YKLayout layout)
         {
@@ -157,7 +158,10 @@ internal class ModLayerConfigTabGenral : YKLayout<object>
         }
     }
 
-    private DropdownUIItem<ModHorizontalTextAlignment> CreateHorizontalTextAlignmentDropdownUIItem(string? label, ModHorizontalTextAlignment init, Action<ModHorizontalTextAlignment> onChanged)
+    private DropdownUIItem<ModHorizontalTextAlignment> CreateHorizontalTextAlignmentDropdownUIItem(
+        string? label,
+        ModHorizontalTextAlignment init,
+        Action<ModHorizontalTextAlignment> onChanged)
     {
         return new(
             Label: label,
@@ -169,8 +173,8 @@ internal class ModLayerConfigTabGenral : YKLayout<object>
     }
 
     private record ColorUIItem(
-         string Label,
-         Color Init,
+        string Label,
+        Color Init,
         Action<Color> OnChanged,
         string? Tooltip = null) : IUIItem
     {

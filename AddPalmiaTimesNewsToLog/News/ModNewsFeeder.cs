@@ -129,7 +129,8 @@ internal class ModNewsFeeder
         string uri = $"{Net.urlChat}logs/all_{idLang}.json";
         using var request = UnityWebRequest.Get(uri);
         await request.SendWebRequest().ToUniTask(cancellationToken: token);
-        if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+        if (request.result == UnityWebRequest.Result.ConnectionError
+            || request.result == UnityWebRequest.Result.ProtocolError)
         {
             return [];
         }
@@ -159,7 +160,12 @@ internal class ModNewsFeeder
     {
         public override bool CanWrite => false;
 
-        public override ChatCategory ReadJson(JsonReader reader, Type objectType, ChatCategory existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override ChatCategory ReadJson(
+            JsonReader reader,
+            Type objectType,
+            ChatCategory existingValue,
+            bool hasExistingValue,
+            JsonSerializer serializer)
         {
             if (reader.Value is not string catString)
             {

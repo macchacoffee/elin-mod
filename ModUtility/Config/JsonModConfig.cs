@@ -27,7 +27,12 @@ internal class ModColorConverter : JsonConverter<Color?>
 {
     public override bool CanWrite => true;
 
-    public override Color? ReadJson(JsonReader reader, Type objectType, Color? existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override Color? ReadJson(
+        JsonReader reader,
+        Type objectType,
+        Color? existingValue,
+        bool hasExistingValue,
+        JsonSerializer serializer)
     {
         if (reader.Value is null && Nullable.GetUnderlyingType(objectType) is not null)
         {

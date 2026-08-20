@@ -15,7 +15,8 @@ internal static class LayerPanelAccess
         ?? throw new MissingMethodException(_layerType.FullName, "get_Instance");
     private static readonly MethodInfo _windowGetter = AccessTools.PropertyGetter(_layerType, "Window")
         ?? throw new MissingMethodException(_layerType.FullName, "get_Window");
-    private static readonly MethodInfo _currentContentGetter = AccessTools.PropertyGetter(_windowGetter.ReturnType, "CurrentContent")
+    private static readonly MethodInfo _currentContentGetter =
+        AccessTools.PropertyGetter(_windowGetter.ReturnType, "CurrentContent")
         ?? throw new MissingMethodException(_windowGetter.ReturnType.FullName, "get_CurrentContent");
     private static readonly MethodInfo _reopenMethod = AccessTools.Method(_layerType, "Reopen")
         ?? throw new MissingMethodException(_layerType.FullName, "Reopen");

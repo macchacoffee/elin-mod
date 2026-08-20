@@ -5,7 +5,10 @@ namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI;
 internal static class ModUIUtil
 {
     public static readonly Texture2D White1x1Texture = Create1x1WhiteTexture();
-    public static readonly Sprite White1x1Sprite = Sprite.Create(White1x1Texture, new Rect(0, 0, White1x1Texture.width, White1x1Texture.height), Vector2.zero);
+    public static readonly Sprite White1x1Sprite = Sprite.Create(
+        White1x1Texture,
+        new Rect(0, 0, White1x1Texture.width, White1x1Texture.height),
+        Vector2.zero);
 
     public static int ComputeFontSize(int baseSize)
     {

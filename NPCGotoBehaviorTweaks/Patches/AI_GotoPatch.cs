@@ -21,7 +21,9 @@ internal static class AI_GotoPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(AI_Goto.TryGoTo), [])]
-    private static IEnumerable<CodeInstruction> TryGoTo_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> TryGoTo_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // if (waitCount < 3 || EClass.rnd(5) != 0)

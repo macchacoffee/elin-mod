@@ -23,7 +23,9 @@ internal static class ModDelegate
             .Select((p, i) => Expression.Parameter(p.ParameterType, p.Name ?? $"arg{i}"))
             .ToArray();
 
-        var (instance, indexOffset) = method.IsStatic ? (null, 0) : (Expression.Convert(parameters[0], declaringType), 1);
+        var (instance, indexOffset) = method.IsStatic
+            ? (null, 0)
+            : (Expression.Convert(parameters[0], declaringType), 1);
 
         var methodArgs = methodParams
             .Select((p, i) =>

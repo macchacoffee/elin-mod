@@ -197,10 +197,10 @@ internal sealed class ModDamageDisplay : MonoBehaviour
         var hasPreviousState = _hasValueState;
         var previousState = _lastValueState;
 
-         var valueChanged = !hasPreviousState
+        var valueChanged = !hasPreviousState
             || state.Damage != previousState.Damage
             || state.TotalDamage != previousState.TotalDamage;
-         var displaySettingChanged = !hasPreviousState
+        var displaySettingChanged = !hasPreviousState
             || state.DisplayDamage != previousState.DisplayDamage
             || state.DisplayDamageShare != previousState.DisplayDamageShare
             || state.DisplayNoDamage != previousState.DisplayNoDamage
@@ -209,7 +209,7 @@ internal sealed class ModDamageDisplay : MonoBehaviour
 
         // 通常の計測中はDamage/TotalDamageとも増加しかしない
         // 減少した場合はリセットとみなしてアニメーションしない
-         var reset = hasPreviousState
+        var reset = hasPreviousState
             && (state.Damage < previousState.Damage || state.TotalDamage < previousState.TotalDamage);
 
         _lastValueState = state;

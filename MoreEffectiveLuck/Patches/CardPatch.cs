@@ -95,7 +95,10 @@ internal static class CardPatch
             });
             // call void Card::set_rarity(Rarity value)
             matcher.Start();
-            matcher.MatchStartForward(new CodeMatch(OpCodes.Call, AccessTools.PropertySetter(typeof(Card), nameof(Card.rarity))));
+            matcher.MatchStartForward(
+                new CodeMatch(
+                    OpCodes.Call,
+                    AccessTools.PropertySetter(typeof(Card), nameof(Card.rarity))));
             matcher.Repeat(matchAction: m =>
             {
                 m.RemoveInstruction();
@@ -137,7 +140,9 @@ internal static class CardPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(Card.Create), [typeof(string), typeof(int), typeof(int)])]
-    private static IEnumerable<CodeInstruction> Create_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> Create_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // if (EClass.rnd(10) == 0)

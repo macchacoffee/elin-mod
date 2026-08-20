@@ -22,7 +22,9 @@ internal static class QuestRandomPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(QuestRandom.OnDropReward), [])]
-    private static IEnumerable<CodeInstruction> OnDropReward_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> OnDropReward_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         // // 変更前
         // thing = ThingGen.Create("plat").SetNum(GetRewardPlat(num2));
@@ -33,7 +35,9 @@ internal static class QuestRandomPatch
         // プラチナ硬貨の数をダイスロールして決定する処理に差し替える
         // callvirt virtual int Quest::GetRewardPlat(int money)
         matcher.MatchStartForward(
-            new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Quest), nameof(Quest.GetRewardPlat), [typeof(int)]))
+            new CodeMatch(
+                OpCodes.Callvirt,
+                AccessTools.Method(typeof(Quest), nameof(Quest.GetRewardPlat), [typeof(int)]))
         );
         matcher.RemoveInstruction();
         matcher.InsertAndAdvance(
