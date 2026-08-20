@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
-using Macchacoffee.ElinMods.AbilityRestriction.Mod;
+
 using HarmonyLib;
+
+using Macchacoffee.ElinMods.AbilityRestriction.Mod;
 using Macchacoffee.ElinMods.ModUtility.Patch;
 
 namespace Macchacoffee.ElinMods.AbilityRestriction.Patches;

@@ -1,5 +1,6 @@
-using Macchacoffee.ElinMods.ModUtility.Config;
 using Newtonsoft.Json;
+
+using Macchacoffee.ElinMods.ModUtility.Config;
 
 namespace Macchacoffee.ElinMods.NoPCC.Config;
 

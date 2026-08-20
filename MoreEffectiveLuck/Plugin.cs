@@ -1,8 +1,10 @@
 using System;
 using System.Reflection;
+
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
+
 using Macchacoffee.ElinMods.ModUtility.External.ModConfigGUI;
 
 namespace Macchacoffee.ElinMods.MoreEffectiveLuck;

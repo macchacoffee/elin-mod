@@ -1,10 +1,12 @@
 using System;
+
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+
 using Macchacoffee.ElinMods.ModUtility.Util;
-using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Extensions;
 using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Extensions;
 
 namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide;
 

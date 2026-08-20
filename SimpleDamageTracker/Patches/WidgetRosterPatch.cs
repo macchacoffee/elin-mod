@@ -1,8 +1,10 @@
 using System.Reflection;
+
 using HarmonyLib;
+using YKF;
+
 using Macchacoffee.ElinMods.ModUtility.Patch;
 using Macchacoffee.ElinMods.SimpleDamageTracker.UI.Config;
-using YKF;
 
 namespace Macchacoffee.ElinMods.SimpleDamageTracker.Patches;
 

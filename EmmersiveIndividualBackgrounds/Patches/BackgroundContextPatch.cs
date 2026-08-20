@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+
 using Emmersive.API.Services;
 using Emmersive.Contexts;
 using HarmonyLib;

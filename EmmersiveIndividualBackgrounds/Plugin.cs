@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Reflection;
+
 using BepInEx;
-using Macchacoffee.ElinMods.EmmersiveIndividualBackgrounds.Patches;
 using HarmonyLib;
 using UnityEngine;
+
+using Macchacoffee.ElinMods.EmmersiveIndividualBackgrounds.Patches;
 
 namespace Macchacoffee.ElinMods.EmmersiveIndividualBackgrounds;
 

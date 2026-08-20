@@ -1,5 +1,7 @@
 using System.Reflection;
+
 using HarmonyLib;
+
 using Macchacoffee.ElinMods.ModUtility.Patch;
 
 namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Patches;

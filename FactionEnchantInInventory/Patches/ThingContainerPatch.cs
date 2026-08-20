@@ -1,7 +1,9 @@
 using System.Reflection;
+
 using HarmonyLib;
-using Macchacoffee.ElinMods.ModUtility.Patch;
+
 using Macchacoffee.ElinMods.FactionEnchantInInventory.Extensions;
+using Macchacoffee.ElinMods.ModUtility.Patch;
 
 namespace Macchacoffee.ElinMods.FactionEnchantInInventory.Patches;
 

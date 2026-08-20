@@ -2,9 +2,11 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
+
 using HarmonyLib;
-using Macchacoffee.ElinMods.ModUtility.Patch;
+
 using Macchacoffee.ElinMods.FactionEnchantInInventory.Extensions;
+using Macchacoffee.ElinMods.ModUtility.Patch;
 
 namespace Macchacoffee.ElinMods.FactionEnchantInInventory.Patches;
 

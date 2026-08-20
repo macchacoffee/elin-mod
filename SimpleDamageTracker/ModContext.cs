@@ -1,4 +1,5 @@
 using System.IO;
+
 using Macchacoffee.ElinMods.SimpleDamageTracker.Config;
 using Macchacoffee.ElinMods.SimpleDamageTracker.Mod;
 

@@ -1,4 +1,5 @@
 using BepInEx.Configuration;
+
 using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide;
 using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 

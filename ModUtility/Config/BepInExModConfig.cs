@@ -1,4 +1,5 @@
 using BepInEx.Configuration;
+
 using Macchacoffee.ElinMods.ModUtility.Extensions;
 
 namespace Macchacoffee.ElinMods.ModUtility.Config;

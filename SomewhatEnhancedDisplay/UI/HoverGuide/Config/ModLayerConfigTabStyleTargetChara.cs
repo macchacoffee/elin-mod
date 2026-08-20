@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
+
 using YKF;
+
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 
 namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 

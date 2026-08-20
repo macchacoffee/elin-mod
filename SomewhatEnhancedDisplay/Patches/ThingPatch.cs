@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
+
 using HarmonyLib;
+
 using Macchacoffee.ElinMods.ModUtility.Patch;
 using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Extensions;

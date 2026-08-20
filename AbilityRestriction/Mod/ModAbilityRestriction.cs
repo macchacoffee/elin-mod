@@ -1,6 +1,8 @@
-using UnityEngine;
-using Macchacoffee.ElinMods.AbilityRestriction.Config;
 using System;
+
+using UnityEngine;
+
+using Macchacoffee.ElinMods.AbilityRestriction.Config;
 
 namespace Macchacoffee.ElinMods.AbilityRestriction.Mod;
 

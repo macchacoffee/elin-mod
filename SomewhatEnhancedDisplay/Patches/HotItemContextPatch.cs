@@ -1,9 +1,11 @@
 using System.Reflection;
+
 using HarmonyLib;
-using Macchacoffee.ElinMods.ModUtility.Patch;
-using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 using UnityEngine;
 using YKF;
+
+using Macchacoffee.ElinMods.ModUtility.Patch;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
 namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Patches;
 

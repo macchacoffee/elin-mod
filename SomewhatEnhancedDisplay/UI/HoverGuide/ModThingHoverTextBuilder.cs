@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
+using UnityEngine;
+
 using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Extensions;
-using UnityEngine;
 
 namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide;
 

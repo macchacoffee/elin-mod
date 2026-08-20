@@ -1,4 +1,5 @@
 using System;
+
 using BepInEx.Configuration;
 
 namespace Macchacoffee.ElinMods.ModUtility.External.ModConfigGUI.UI;

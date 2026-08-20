@@ -1,4 +1,5 @@
 using System;
+
 using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Extensions;
 

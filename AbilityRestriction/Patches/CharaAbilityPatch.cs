@@ -1,7 +1,9 @@
 using System.Linq;
 using System.Reflection;
-using Macchacoffee.ElinMods.AbilityRestriction.Config;
+
 using HarmonyLib;
+
+using Macchacoffee.ElinMods.AbilityRestriction.Config;
 using Macchacoffee.ElinMods.ModUtility.Patch;
 
 namespace Macchacoffee.ElinMods.AbilityRestriction.Patches;

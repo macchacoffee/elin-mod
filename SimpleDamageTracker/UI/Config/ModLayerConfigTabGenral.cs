@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.UI;
 using YKF;
+
 using Macchacoffee.ElinMods.SimpleDamageTracker.Config;
 using Macchacoffee.ElinMods.SimpleDamageTracker.Extensions;
 

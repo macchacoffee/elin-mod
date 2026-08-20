@@ -1,5 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
+
 using Macchacoffee.ElinMods.SimpleDamageTracker.Config;
 
 namespace Macchacoffee.ElinMods.SimpleDamageTracker.Mod;

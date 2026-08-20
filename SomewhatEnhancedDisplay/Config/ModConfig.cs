@@ -1,5 +1,6 @@
-using Macchacoffee.ElinMods.ModUtility.Config;
 using UnityEngine;
+
+using Macchacoffee.ElinMods.ModUtility.Config;
 
 namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 

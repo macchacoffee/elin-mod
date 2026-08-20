@@ -1,6 +1,8 @@
 using System.Reflection;
-using Macchacoffee.ElinMods.AddPalmiaTimesNewsToLog.Config;
+
 using HarmonyLib;
+
+using Macchacoffee.ElinMods.AddPalmiaTimesNewsToLog.Config;
 using Macchacoffee.ElinMods.ModUtility.Patch;
 
 namespace Macchacoffee.ElinMods.AddPalmiaTimesNewsToLog.Patches;

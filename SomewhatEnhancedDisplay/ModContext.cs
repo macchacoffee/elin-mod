@@ -1,6 +1,8 @@
 using System.IO;
+
 using BepInEx;
 using BepInEx.Configuration;
+
 using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 
 namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay;

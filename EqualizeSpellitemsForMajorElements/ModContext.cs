@@ -1,6 +1,8 @@
 using System.IO;
+
 using BepInEx;
 using BepInEx.Configuration;
+
 using Macchacoffee.ElinMods.EqualizeSpellitemsForMajorElements.Config;
 
 namespace Macchacoffee.ElinMods.EqualizeSpellitemsForMajorElements;

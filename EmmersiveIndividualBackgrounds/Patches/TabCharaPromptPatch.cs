@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+
 using HarmonyLib;
 
 namespace Macchacoffee.ElinMods.EmmersiveIndividualBackgrounds.Patches;

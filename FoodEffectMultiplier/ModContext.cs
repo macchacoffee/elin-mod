@@ -1,6 +1,8 @@
 using System.IO;
+
 using BepInEx;
 using BepInEx.Configuration;
+
 using Macchacoffee.ElinMods.FoodEffectMultiplier.Config;
 
 namespace Macchacoffee.ElinMods.FoodEffectMultiplier;

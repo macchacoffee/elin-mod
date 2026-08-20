@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Macchacoffee.ElinMods.ModUtility.Config;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
+using Macchacoffee.ElinMods.ModUtility.Config;
 
 namespace Macchacoffee.ElinMods.AbilityRestriction.Config;
 

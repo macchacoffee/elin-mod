@@ -1,6 +1,7 @@
-using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 using UnityEngine;
 using YKF;
+
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 
 namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 

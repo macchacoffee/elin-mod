@@ -1,6 +1,8 @@
 using System;
 using System.Reflection;
+
 using HarmonyLib;
+
 using Macchacoffee.ElinMods.ModUtility.Patch;
 using Macchacoffee.ElinMods.StarweaversMoongateQuickFix.Mod;
 

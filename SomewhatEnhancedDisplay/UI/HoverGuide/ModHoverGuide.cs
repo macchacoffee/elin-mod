@@ -1,5 +1,7 @@
 using System;
+
 using UnityEngine;
+
 using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 
 namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide;

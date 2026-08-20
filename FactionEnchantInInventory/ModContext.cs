@@ -1,6 +1,8 @@
 using System.IO;
+
 using BepInEx;
 using BepInEx.Configuration;
+
 using Macchacoffee.ElinMods.FactionEnchantInInventory.Config;
 
 namespace Macchacoffee.ElinMods.FactionEnchantInInventory;

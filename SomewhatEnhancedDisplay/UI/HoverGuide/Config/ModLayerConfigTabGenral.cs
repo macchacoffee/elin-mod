@@ -1,9 +1,11 @@
 using System;
-using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
-using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Extensions;
+
 using UnityEngine;
 using UnityEngine.UI;
 using YKF;
+
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Extensions;
 
 namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 

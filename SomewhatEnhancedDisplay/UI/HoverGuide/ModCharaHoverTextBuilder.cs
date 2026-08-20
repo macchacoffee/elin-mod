@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Empyrean.Utils;
 using UnityEngine;
+
 using Macchacoffee.ElinMods.ModUtility.Extensions;
-using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Extensions;
 using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Extensions;
 using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.Adapters;
 
 namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide;

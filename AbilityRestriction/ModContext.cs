@@ -1,8 +1,10 @@
 using System.IO;
+
+using BepInEx;
+using BepInEx.Configuration;
+
 using Macchacoffee.ElinMods.AbilityRestriction.Config;
 using Macchacoffee.ElinMods.AbilityRestriction.Mod;
-using BepInEx.Configuration;
-using BepInEx;
 
 namespace Macchacoffee.ElinMods.AbilityRestriction;
 
