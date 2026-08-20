@@ -140,7 +140,7 @@ internal class ModHealthBar
         var ratio = GetHealthRatio(chara, modifier);
         var splitsManaBody = ShouldSplitManaBody(chara, modifier);
         var reversesManaBody = splitsManaBody && StyleConfig.HealthBar.ReverseManaBodyHealthBar;
-        var splitPartRatio = splitsManaBody ? GetSplitPartRatio(chara, ratio, reversesManaBody) : 0;
+        var splitPartRatio = splitsManaBody ? GetSplitPartRatio(chara, reversesManaBody) : 0;
 
         if (!StyleConfig.HealthBar.UseAnimation
             || targetChanged
@@ -257,21 +257,20 @@ internal class ModHealthBar
             && chara.Evalue(FEAT.featManaMeat) > 0;
     }
 
-    private static double GetSplitPartRatio(Chara chara, double totalRatio, bool reversesManaBody)
+    private static double GetSplitPartRatio(Chara chara, bool reversesManaBody)
     {
         var maxHP = Math.Max((long)chara.MaxHP, 0);
         var maxMana = Math.Max((long)chara.mana.max, 0);
-        var totalMax = maxHP + maxMana;
-        if (totalMax <= 0)
+        var currentHP = Math.Max((long)chara.hp, 0);
+        var currentMana = Math.Max((long)chara.mana.value, 0);
+        var splitBasis = Math.Max(maxHP + maxMana, currentHP + currentMana);
+        if (splitBasis <= 0)
         {
             return 0;
         }
 
-        var hpPartRatio = (double)Math.Max((long)chara.hp, 0) / totalMax;
-        var visibleTotalRatio = double.IsNaN(totalRatio) ? 0 : Math.Min(Math.Max(totalRatio, 0), 1);
-        hpPartRatio = Math.Min(Math.Min(hpPartRatio, 1), visibleTotalRatio);
-
-        return reversesManaBody ? visibleTotalRatio - hpPartRatio : hpPartRatio;
+        var splitPartValue = reversesManaBody ? currentMana : currentHP;
+        return (double)splitPartValue / splitBasis;
     }
 
     private static Color GetTextColor(double ratio)
