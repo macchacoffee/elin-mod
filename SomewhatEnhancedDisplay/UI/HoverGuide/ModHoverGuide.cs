@@ -1,8 +1,8 @@
 using System;
 using UnityEngine;
-using SomewhatEnhancedDisplay.Config;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 
-namespace SomewhatEnhancedDisplay.UI.HoverGuide;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide;
 
 internal class ModHoverGuide
 {

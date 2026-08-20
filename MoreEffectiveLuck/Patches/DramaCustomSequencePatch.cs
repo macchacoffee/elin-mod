@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
-using ModUtility.Patch;
+using Macchacoffee.ElinMods.ModUtility.Patch;
 
-namespace MoreEffectiveLuck.Patches;
+namespace Macchacoffee.ElinMods.MoreEffectiveLuck.Patches;
 
 [HarmonyPatch(typeof(DramaCustomSequence))]
 internal static class DramaCustomSequencePatch

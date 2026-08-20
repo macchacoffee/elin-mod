@@ -1,9 +1,9 @@
 using System.IO;
 using BepInEx;
 using BepInEx.Configuration;
-using FactionEnchantInInventory.Config;
+using Macchacoffee.ElinMods.FactionEnchantInInventory.Config;
 
-namespace FactionEnchantInInventory;
+namespace Macchacoffee.ElinMods.FactionEnchantInInventory;
 
 internal static class ModContext
 {

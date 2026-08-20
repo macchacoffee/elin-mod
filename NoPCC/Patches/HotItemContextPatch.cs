@@ -1,11 +1,11 @@
 using System.Reflection;
 using HarmonyLib;
-using ModUtility.Patch;
-using NoPCC.UI;
+using Macchacoffee.ElinMods.ModUtility.Patch;
+using Macchacoffee.ElinMods.NoPCC.UI;
 using UnityEngine;
 using YKF;
 
-namespace NoPCC.Patches;
+namespace Macchacoffee.ElinMods.NoPCC.Patches;
 
 [HarmonyPatch(typeof(HotItemContext))]
 internal static class HotItemContextPatch

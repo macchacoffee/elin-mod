@@ -1,7 +1,7 @@
-using ModUtility.Config;
+using Macchacoffee.ElinMods.ModUtility.Config;
 using UnityEngine;
 
-namespace SomewhatEnhancedDisplay.Config;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 
 internal class ModConfig : BepInExModConfigBase<ModConfig>
 {

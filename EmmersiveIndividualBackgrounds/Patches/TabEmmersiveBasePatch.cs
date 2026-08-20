@@ -4,7 +4,7 @@ using Emmersive.Contexts;
 using HarmonyLib;
 using YKF;
 
-namespace EmmersiveIndividualBackgrounds.Patches;
+namespace Macchacoffee.ElinMods.EmmersiveIndividualBackgrounds.Patches;
 
 [HarmonyPatch]
 internal static class TabEmmersiveBaseBuildPromptCardPatch

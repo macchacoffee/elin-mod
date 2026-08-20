@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ModUtility.Config;
+using Macchacoffee.ElinMods.ModUtility.Config;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace AbilityRestriction.Config;
+namespace Macchacoffee.ElinMods.AbilityRestriction.Config;
 
 [JsonConverter(typeof(ModConfigConverter))]
 internal class ModWorldConfig : JsonModConfigBase<ModWorldConfig>

@@ -1,6 +1,6 @@
 using System;
 
-namespace SomewhatEnhancedDisplay.Extensions;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Extensions;
 
 internal static class CharaExtensions
 {

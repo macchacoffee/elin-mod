@@ -1,9 +1,9 @@
 using System;
 using YKF;
-using NoPCC.Config;
-using NoPCC.Mod;
+using Macchacoffee.ElinMods.NoPCC.Config;
+using Macchacoffee.ElinMods.NoPCC.Mod;
 
-namespace NoPCC.UI;
+namespace Macchacoffee.ElinMods.NoPCC.UI;
 
 internal class ModConfigMainTab : YKLayout<object>
 {

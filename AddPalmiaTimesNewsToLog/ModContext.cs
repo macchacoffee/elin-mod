@@ -1,8 +1,8 @@
 using System.IO;
-using AddPalmiaTimesNewsToLog.Config;
-using AddPalmiaTimesNewsToLog.News;
+using Macchacoffee.ElinMods.AddPalmiaTimesNewsToLog.Config;
+using Macchacoffee.ElinMods.AddPalmiaTimesNewsToLog.News;
 
-namespace AddPalmiaTimesNewsToLog;
+namespace Macchacoffee.ElinMods.AddPalmiaTimesNewsToLog;
 
 internal static class ModContext
 {

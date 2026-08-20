@@ -1,4 +1,4 @@
-namespace SomewhatEnhancedDisplay.UI.HoverGuide;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide;
 
 internal record ModHoverGuideTarget(
     string? Text1,

@@ -5,7 +5,7 @@
     <Platforms>AnyCPU</Platforms>
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
-    <RootNamespace>NoPCC</RootNamespace>
+    <RootNamespace>Macchacoffee.ElinMods.NoPCC</RootNamespace>
     <AssemblyName>NoPCC</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputPath>$(ElinGamePath)\Package\Mod_$(AssemblyName)\</OutputPath>

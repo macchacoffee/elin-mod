@@ -3,7 +3,7 @@ using System.Reflection;
 using BepInEx;
 using HarmonyLib;
 
-namespace SimpleDamageTracker;
+namespace Macchacoffee.ElinMods.SimpleDamageTracker;
 
 internal static class PluginInfo
 {

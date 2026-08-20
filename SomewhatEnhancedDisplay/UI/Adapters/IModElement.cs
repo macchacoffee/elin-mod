@@ -1,4 +1,4 @@
-namespace SomewhatEnhancedDisplay.UI.Adapters;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.Adapters;
 
 internal interface IModElement
 {

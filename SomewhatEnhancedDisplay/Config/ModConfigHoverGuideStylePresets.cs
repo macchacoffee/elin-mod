@@ -1,4 +1,4 @@
-namespace SomewhatEnhancedDisplay.Config;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 
 internal static class ModConfigHoverGuideStylePresets
 {

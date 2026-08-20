@@ -1,7 +1,7 @@
 using System;
 using BepInEx.Configuration;
 
-namespace ModUtility.External.ModConfigGUI.UI;
+namespace Macchacoffee.ElinMods.ModUtility.External.ModConfigGUI.UI;
 
 [ModExternalType("ModConfigGUI", "ModConfigGUI.UI.LayerBuilder")]
 internal static class ExternalLayerBuilder

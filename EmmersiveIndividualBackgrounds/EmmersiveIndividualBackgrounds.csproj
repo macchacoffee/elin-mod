@@ -5,7 +5,7 @@
     <Platforms>AnyCPU</Platforms>
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
-    <RootNamespace>EmmersiveIndividualBackgrounds</RootNamespace>
+    <RootNamespace>Macchacoffee.ElinMods.EmmersiveIndividualBackgrounds</RootNamespace>
     <AssemblyName>EmmersiveIndividualBackgrounds</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputPath>$(ElinGamePath)\Package\Mod_$(AssemblyName)\</OutputPath>

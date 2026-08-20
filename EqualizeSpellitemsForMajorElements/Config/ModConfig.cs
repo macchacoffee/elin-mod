@@ -1,6 +1,6 @@
-using ModUtility.Config;
+using Macchacoffee.ElinMods.ModUtility.Config;
 
-namespace EqualizeSpellitemsForMajorElements.Config;
+namespace Macchacoffee.ElinMods.EqualizeSpellitemsForMajorElements.Config;
 
 internal class ModConfig : BepInExModConfigBase<ModConfig>
 {

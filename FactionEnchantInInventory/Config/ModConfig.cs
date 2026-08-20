@@ -1,6 +1,6 @@
-using ModUtility.Config;
+using Macchacoffee.ElinMods.ModUtility.Config;
 
-namespace FactionEnchantInInventory.Config;
+namespace Macchacoffee.ElinMods.FactionEnchantInInventory.Config;
 
 internal class ModConfig : BepInExModConfigBase<ModConfig>
 {

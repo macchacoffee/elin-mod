@@ -3,9 +3,9 @@ using System.Reflection;
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
-using ModUtility.External.ModConfigGUI;
+using Macchacoffee.ElinMods.ModUtility.External.ModConfigGUI;
 
-namespace FactionEnchantInInventory;
+namespace Macchacoffee.ElinMods.FactionEnchantInInventory;
 
 internal static class PluginInfo
 {

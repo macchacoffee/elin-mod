@@ -1,9 +1,9 @@
 using System.Reflection;
 using HarmonyLib;
-using ModUtility.Patch;
-using SimpleDamageTracker.Mod;
+using Macchacoffee.ElinMods.ModUtility.Patch;
+using Macchacoffee.ElinMods.SimpleDamageTracker.Mod;
 
-namespace SimpleDamageTracker.Patches;
+namespace Macchacoffee.ElinMods.SimpleDamageTracker.Patches;
 
 [HarmonyPatch(typeof(ButtonRoster))]
 internal static class ButtonRosterPatch

@@ -4,13 +4,13 @@ using System.Reflection;
 using System.Reflection.Emit;
 using UnityEngine;
 using HarmonyLib;
-using ModUtility.Patch;
-using SomewhatEnhancedDisplay.Config;
-using SomewhatEnhancedDisplay.Extensions;
-using SomewhatEnhancedDisplay.UI;
-using SomewhatEnhancedDisplay.UI.HoverGuide;
+using Macchacoffee.ElinMods.ModUtility.Patch;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Extensions;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide;
 
-namespace SomewhatEnhancedDisplay.Patches;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Patches;
 
 [HarmonyPatch(typeof(Chara))]
 internal static class CharaPatch

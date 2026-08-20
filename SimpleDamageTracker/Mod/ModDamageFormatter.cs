@@ -1,6 +1,6 @@
 using System;
 
-namespace SimpleDamageTracker.Mod;
+namespace Macchacoffee.ElinMods.SimpleDamageTracker.Mod;
 
 internal static class ModDamageFormatter
 {

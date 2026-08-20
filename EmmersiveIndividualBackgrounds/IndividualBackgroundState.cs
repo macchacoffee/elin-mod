@@ -6,7 +6,7 @@ using System.Threading;
 using Emmersive.API.Services;
 using HarmonyLib;
 
-namespace EmmersiveIndividualBackgrounds;
+namespace Macchacoffee.ElinMods.EmmersiveIndividualBackgrounds;
 
 internal static class IndividualBackgroundState
 {

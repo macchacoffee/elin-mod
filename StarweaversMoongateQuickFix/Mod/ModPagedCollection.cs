@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace StarweaversMoongateQuickFix.Mod;
+namespace Macchacoffee.ElinMods.StarweaversMoongateQuickFix.Mod;
 
 internal sealed class ModPagedCollection<T>(List<T> source, int pageSize) : ICollection<T>
 {

@@ -1,4 +1,4 @@
-namespace AddPalmiaTimesNewsToLog;
+namespace Macchacoffee.ElinMods.AddPalmiaTimesNewsToLog;
 
 internal static class ModConsts
 {

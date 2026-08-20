@@ -1,6 +1,6 @@
-using NoPCC.Config;
+using Macchacoffee.ElinMods.NoPCC.Config;
 
-namespace NoPCC.Mod;
+namespace Macchacoffee.ElinMods.NoPCC.Mod;
 
 internal static class ModPCRenderer
 {

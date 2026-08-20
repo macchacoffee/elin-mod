@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
-using StarweaversMoongateQuickFix.Mod;
+using Macchacoffee.ElinMods.StarweaversMoongateQuickFix.Mod;
 
-namespace StarweaversMoongateQuickFix.Patches;
+namespace Macchacoffee.ElinMods.StarweaversMoongateQuickFix.Patches;
 
 [HarmonyPatch]
 internal static class LayerListSetList2Patch

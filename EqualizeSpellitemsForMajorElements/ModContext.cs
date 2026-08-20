@@ -1,9 +1,9 @@
 using System.IO;
 using BepInEx;
 using BepInEx.Configuration;
-using EqualizeSpellitemsForMajorElements.Config;
+using Macchacoffee.ElinMods.EqualizeSpellitemsForMajorElements.Config;
 
-namespace EqualizeSpellitemsForMajorElements;
+namespace Macchacoffee.ElinMods.EqualizeSpellitemsForMajorElements;
 
 internal static class ModContext
 {

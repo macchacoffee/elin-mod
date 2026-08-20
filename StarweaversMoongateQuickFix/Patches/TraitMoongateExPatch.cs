@@ -1,10 +1,10 @@
 using System;
 using System.Reflection;
 using HarmonyLib;
-using ModUtility.Patch;
-using StarweaversMoongateQuickFix.Mod;
+using Macchacoffee.ElinMods.ModUtility.Patch;
+using Macchacoffee.ElinMods.StarweaversMoongateQuickFix.Mod;
 
-namespace StarweaversMoongateQuickFix.Patches;
+namespace Macchacoffee.ElinMods.StarweaversMoongateQuickFix.Patches;
 
 [HarmonyPatch(typeof(TraitMoongateEx))]
 internal static class TraitMoongateExPatch

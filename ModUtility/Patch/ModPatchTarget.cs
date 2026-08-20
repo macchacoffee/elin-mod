@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace ModUtility.Patch;
+namespace Macchacoffee.ElinMods.ModUtility.Patch;
 
 internal class ModPatchTarget(Version? MinVersion = null, Version? MaxVersion = null)
 {

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
-using ModUtility.Patch;
-using SomewhatEnhancedDisplay.UI;
-using SomewhatEnhancedDisplay.UI.HoverGuide;
+using Macchacoffee.ElinMods.ModUtility.Patch;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide;
 
-namespace SomewhatEnhancedDisplay.Patches;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Patches;
 
 [HarmonyPatch(typeof(WidgetMouseover))]
 internal static class WidgetMouseoverPatch

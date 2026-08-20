@@ -1,10 +1,10 @@
 using System;
 using System.Reflection;
 using HarmonyLib;
-using ModUtility.Patch;
-using AbilityRestriction.Mod;
+using Macchacoffee.ElinMods.ModUtility.Patch;
+using Macchacoffee.ElinMods.AbilityRestriction.Mod;
 
-namespace AbilityRestriction.Patches;
+namespace Macchacoffee.ElinMods.AbilityRestriction.Patches;
 
 [HarmonyPatch(typeof(UIContextMenu))]
 internal static class UIContextMenuPatch

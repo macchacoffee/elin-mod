@@ -1,7 +1,7 @@
 using BepInEx.Configuration;
-using ModUtility.Config;
+using Macchacoffee.ElinMods.ModUtility.Config;
 
-namespace FoodEffectMultiplier.Config;
+namespace Macchacoffee.ElinMods.FoodEffectMultiplier.Config;
 
 internal class ModConfig : BepInExModConfigBase<ModConfig>
 {

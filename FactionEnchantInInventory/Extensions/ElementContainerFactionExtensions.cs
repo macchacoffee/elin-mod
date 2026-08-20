@@ -1,6 +1,6 @@
 using System;
 
-namespace FactionEnchantInInventory.Extensions;
+namespace Macchacoffee.ElinMods.FactionEnchantInInventory.Extensions;
 
 internal static class ElementContainerFactionExtensions
 {

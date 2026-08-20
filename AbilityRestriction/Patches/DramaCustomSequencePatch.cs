@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
-using AbilityRestriction.Mod;
+using Macchacoffee.ElinMods.AbilityRestriction.Mod;
 using HarmonyLib;
-using ModUtility.Patch;
+using Macchacoffee.ElinMods.ModUtility.Patch;
 
-namespace AbilityRestriction.Patches;
+namespace Macchacoffee.ElinMods.AbilityRestriction.Patches;
 
 [HarmonyPatch(typeof(DramaCustomSequence))]
 internal static class DramaCustomSequencePatch

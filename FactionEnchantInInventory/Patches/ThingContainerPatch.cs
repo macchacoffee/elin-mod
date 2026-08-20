@@ -1,9 +1,9 @@
 using System.Reflection;
 using HarmonyLib;
-using ModUtility.Patch;
-using FactionEnchantInInventory.Extensions;
+using Macchacoffee.ElinMods.ModUtility.Patch;
+using Macchacoffee.ElinMods.FactionEnchantInInventory.Extensions;
 
-namespace FactionEnchantInInventory.Patches;
+namespace Macchacoffee.ElinMods.FactionEnchantInInventory.Patches;
 
 [HarmonyPatch(typeof(ThingContainer))]
 internal static class ThingContainerPatch

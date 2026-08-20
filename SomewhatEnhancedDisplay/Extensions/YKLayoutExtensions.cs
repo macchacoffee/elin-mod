@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using YKF;
 
-namespace SomewhatEnhancedDisplay.Extensions;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Extensions;
 
 internal static class YKLayoutExtensions
 {

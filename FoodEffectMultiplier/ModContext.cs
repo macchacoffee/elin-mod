@@ -1,9 +1,9 @@
 using System.IO;
 using BepInEx;
 using BepInEx.Configuration;
-using FoodEffectMultiplier.Config;
+using Macchacoffee.ElinMods.FoodEffectMultiplier.Config;
 
-namespace FoodEffectMultiplier;
+namespace Macchacoffee.ElinMods.FoodEffectMultiplier;
 
 internal static class ModContext
 {

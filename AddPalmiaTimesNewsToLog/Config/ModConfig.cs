@@ -1,8 +1,8 @@
-using ModUtility.Config;
+using Macchacoffee.ElinMods.ModUtility.Config;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace AddPalmiaTimesNewsToLog.Config;
+namespace Macchacoffee.ElinMods.AddPalmiaTimesNewsToLog.Config;
 
 internal enum ModLogTarget
 {

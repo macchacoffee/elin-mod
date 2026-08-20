@@ -1,4 +1,4 @@
-namespace SomewhatEnhancedDisplay;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay;
 
 internal static class ModConsts
 {

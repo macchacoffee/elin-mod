@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace AbilityRestriction.Mod;
+namespace Macchacoffee.ElinMods.AbilityRestriction.Mod;
 
 internal class ModOriginalActStorage
 {

@@ -1,7 +1,7 @@
 using UnityEngine;
 using YKF;
 
-namespace SimpleDamageTracker.UI.Config;
+namespace Macchacoffee.ElinMods.SimpleDamageTracker.UI.Config;
 
 internal class ModLayerConfig : YKLayer<object>
 {

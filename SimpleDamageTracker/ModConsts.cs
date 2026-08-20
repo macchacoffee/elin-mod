@@ -1,4 +1,4 @@
-namespace SimpleDamageTracker;
+namespace Macchacoffee.ElinMods.SimpleDamageTracker;
 
 internal static class ModConsts
 {

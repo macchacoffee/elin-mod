@@ -1,4 +1,4 @@
-namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
 internal class ModLayerConfigTabStyleTargetThing : ModLayerConfigTabStyleTarget
 {

@@ -3,10 +3,10 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using HarmonyLib;
-using ModUtility.Patch;
-using FactionEnchantInInventory.Extensions;
+using Macchacoffee.ElinMods.ModUtility.Patch;
+using Macchacoffee.ElinMods.FactionEnchantInInventory.Extensions;
 
-namespace FactionEnchantInInventory.Patches;
+namespace Macchacoffee.ElinMods.FactionEnchantInInventory.Patches;
 
 [HarmonyPatch(typeof(ElementContainerFaction))]
 internal static class ElementContainerFactionPatch

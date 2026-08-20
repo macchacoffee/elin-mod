@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using HarmonyLib;
 
-namespace EmmersiveIndividualBackgrounds.Patches;
+namespace Macchacoffee.ElinMods.EmmersiveIndividualBackgrounds.Patches;
 
 [HarmonyPatch]
 internal static class TabCharaPromptPatch

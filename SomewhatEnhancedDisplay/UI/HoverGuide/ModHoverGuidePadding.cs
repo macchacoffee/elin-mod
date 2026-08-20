@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SomewhatEnhancedDisplay.UI.HoverGuide;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide;
 
 internal class ModHoverGuidePadding
 {

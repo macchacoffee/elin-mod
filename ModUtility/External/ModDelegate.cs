@@ -3,7 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace ModUtility.External;
+namespace Macchacoffee.ElinMods.ModUtility.External;
 
 internal static class ModDelegate
 {

@@ -1,8 +1,8 @@
-using SomewhatEnhancedDisplay.Config;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 using UnityEngine;
 using YKF;
 
-namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
 internal class ModLayerConfig : YKLayer<ModLayerConfigContext>
 {

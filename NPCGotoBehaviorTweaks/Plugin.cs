@@ -3,7 +3,7 @@ using System.Reflection;
 using BepInEx;
 using HarmonyLib;
 
-namespace NPCGotoBehaviorTweaks;
+namespace Macchacoffee.ElinMods.NPCGotoBehaviorTweaks;
 
 internal static class PluginInfo
 {

@@ -1,4 +1,4 @@
-namespace MoreEffectiveLuck;
+namespace Macchacoffee.ElinMods.MoreEffectiveLuck;
 
 internal static class ModConsts
 {

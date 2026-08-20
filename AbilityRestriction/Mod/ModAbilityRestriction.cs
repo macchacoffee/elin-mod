@@ -1,8 +1,8 @@
 using UnityEngine;
-using AbilityRestriction.Config;
+using Macchacoffee.ElinMods.AbilityRestriction.Config;
 using System;
 
-namespace AbilityRestriction.Mod;
+namespace Macchacoffee.ElinMods.AbilityRestriction.Mod;
 
 internal static class ModAbilityRestriction
 {

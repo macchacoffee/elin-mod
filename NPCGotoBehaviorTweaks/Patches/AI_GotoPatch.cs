@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
-using ModUtility.Patch;
+using Macchacoffee.ElinMods.ModUtility.Patch;
 
-namespace NPCGotoBehaviorTweaks.Patches;
+namespace Macchacoffee.ElinMods.NPCGotoBehaviorTweaks.Patches;
 
 [HarmonyPatch(typeof(AI_Goto))]
 internal static class AI_GotoPatch

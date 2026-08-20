@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SomewhatEnhancedDisplay.Config;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 
-namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
 internal class ModLayerConfigContext
 {

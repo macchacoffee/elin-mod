@@ -1,7 +1,7 @@
 using BepInEx.Configuration;
-using ModUtility.External.ModConfigGUI.UI;
+using Macchacoffee.ElinMods.ModUtility.External.ModConfigGUI.UI;
 
-namespace ModUtility.External.ModConfigGUI;
+namespace Macchacoffee.ElinMods.ModUtility.External.ModConfigGUI;
 
 internal static class ModConfigGUISupport
 {

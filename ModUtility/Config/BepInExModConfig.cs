@@ -1,7 +1,7 @@
 using BepInEx.Configuration;
-using ModUtility.Extensions;
+using Macchacoffee.ElinMods.ModUtility.Extensions;
 
-namespace ModUtility.Config;
+namespace Macchacoffee.ElinMods.ModUtility.Config;
 
 internal abstract class BepInExModConfigBase<T> where T : BepInExModConfigBase<T>
 {

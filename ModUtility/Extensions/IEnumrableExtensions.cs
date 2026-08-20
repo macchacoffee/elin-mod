@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ModUtility.Extensions;
+namespace Macchacoffee.ElinMods.ModUtility.Extensions;
 
 internal static class IEnumrableExtensions
 {

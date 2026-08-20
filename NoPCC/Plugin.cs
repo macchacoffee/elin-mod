@@ -3,7 +3,7 @@ using System.Reflection;
 using BepInEx;
 using HarmonyLib;
 
-namespace NoPCC;
+namespace Macchacoffee.ElinMods.NoPCC;
 
 internal static class PluginInfo
 {

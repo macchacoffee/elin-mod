@@ -1,8 +1,8 @@
 using System.IO;
-using SimpleDamageTracker.Config;
-using SimpleDamageTracker.Mod;
+using Macchacoffee.ElinMods.SimpleDamageTracker.Config;
+using Macchacoffee.ElinMods.SimpleDamageTracker.Mod;
 
-namespace SimpleDamageTracker;
+namespace Macchacoffee.ElinMods.SimpleDamageTracker;
 
 internal static class ModContext
 {

@@ -1,6 +1,6 @@
 using System;
 
-namespace ModUtility.External;
+namespace Macchacoffee.ElinMods.ModUtility.External;
 
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class ModExternalTypeAttribute(string assemblyName, string typeName) : Attribute

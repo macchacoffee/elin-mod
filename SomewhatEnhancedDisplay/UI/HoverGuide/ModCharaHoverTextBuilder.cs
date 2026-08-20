@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Empyrean.Utils;
 using UnityEngine;
-using ModUtility.Extensions;
-using SomewhatEnhancedDisplay.Extensions;
-using SomewhatEnhancedDisplay.Config;
-using SomewhatEnhancedDisplay.UI.Adapters;
+using Macchacoffee.ElinMods.ModUtility.Extensions;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Extensions;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.Adapters;
 
-namespace SomewhatEnhancedDisplay.UI.HoverGuide;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide;
 
 internal static class ModCharaHoverTextBuilder
 {

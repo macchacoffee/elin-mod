@@ -3,7 +3,7 @@ using System.Reflection;
 using BepInEx;
 using HarmonyLib;
 
-namespace EnableDiningSpotSignInTent;
+namespace Macchacoffee.ElinMods.EnableDiningSpotSignInTent;
 
 internal static class PluginInfo
 {

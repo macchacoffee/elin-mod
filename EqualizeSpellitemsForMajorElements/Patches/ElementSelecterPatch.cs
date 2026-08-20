@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
-using ModUtility.Patch;
+using Macchacoffee.ElinMods.ModUtility.Patch;
 
-namespace EqualizeSpellitemsForMajorElements.Patches;
+namespace Macchacoffee.ElinMods.EqualizeSpellitemsForMajorElements.Patches;
 
 [HarmonyPatch(typeof(ElementSelecter))]
 internal static class ElementSelecterPatch

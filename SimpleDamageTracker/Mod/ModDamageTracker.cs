@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SimpleDamageTracker.Mod;
+namespace Macchacoffee.ElinMods.SimpleDamageTracker.Mod;
 
 internal class ModDamageTracker
 {

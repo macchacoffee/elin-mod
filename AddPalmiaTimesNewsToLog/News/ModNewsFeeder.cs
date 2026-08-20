@@ -5,9 +5,9 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
-using AddPalmiaTimesNewsToLog.Config;
+using Macchacoffee.ElinMods.AddPalmiaTimesNewsToLog.Config;
 
-namespace AddPalmiaTimesNewsToLog.News;
+namespace Macchacoffee.ElinMods.AddPalmiaTimesNewsToLog.News;
 
 internal class ModNewsFeeder
 {

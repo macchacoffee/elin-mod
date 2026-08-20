@@ -2,7 +2,7 @@ using System;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace ModUtility.Config;
+namespace Macchacoffee.ElinMods.ModUtility.Config;
 
 internal abstract class JsonModConfigBase<T> where T : JsonModConfigBase<T>
 {

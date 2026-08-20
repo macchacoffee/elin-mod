@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
-using ModUtility.Patch;
+using Macchacoffee.ElinMods.ModUtility.Patch;
 
-namespace FoodEffectMultiplier.Patches;
+namespace Macchacoffee.ElinMods.FoodEffectMultiplier.Patches;
 
 
 [HarmonyPatch(typeof(FoodEffect))]

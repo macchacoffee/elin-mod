@@ -4,7 +4,7 @@ using HarmonyLib;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace EmmersiveIndividualBackgrounds.Patches;
+namespace Macchacoffee.ElinMods.EmmersiveIndividualBackgrounds.Patches;
 
 internal static class LayerPanelAccess
 {

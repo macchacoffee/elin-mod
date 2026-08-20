@@ -1,4 +1,4 @@
-namespace NoPCC;
+namespace Macchacoffee.ElinMods.NoPCC;
 
 internal static class ModConsts
 {

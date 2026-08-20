@@ -2,7 +2,7 @@ using Emmersive.API.Services;
 using Emmersive.Contexts;
 using HarmonyLib;
 
-namespace EmmersiveIndividualBackgrounds.Patches;
+namespace Macchacoffee.ElinMods.EmmersiveIndividualBackgrounds.Patches;
 
 [HarmonyPatch(typeof(ResourceFetch))]
 internal static class ResourceFetchPatch

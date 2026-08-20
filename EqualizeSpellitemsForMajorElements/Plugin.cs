@@ -3,9 +3,9 @@ using System.Reflection;
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
-using ModUtility.External.ModConfigGUI;
+using Macchacoffee.ElinMods.ModUtility.External.ModConfigGUI;
 
-namespace EqualizeSpellitemsForMajorElements;
+namespace Macchacoffee.ElinMods.EqualizeSpellitemsForMajorElements;
 
 internal static class PluginInfo
 {

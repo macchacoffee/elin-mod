@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MoreEffectiveLuck.Mod;
+namespace Macchacoffee.ElinMods.MoreEffectiveLuck.Mod;
 
 internal class ModLuckyFood
 {

@@ -1,7 +1,7 @@
 using System.IO;
-using NoPCC.Config;
+using Macchacoffee.ElinMods.NoPCC.Config;
 
-namespace NoPCC;
+namespace Macchacoffee.ElinMods.NoPCC;
 
 internal static class ModContext
 {

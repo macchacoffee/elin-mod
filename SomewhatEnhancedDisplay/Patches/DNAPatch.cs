@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
-using ModUtility.Patch;
+using Macchacoffee.ElinMods.ModUtility.Patch;
 
-namespace SomewhatEnhancedDisplay.Patches;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Patches;
 
 [HarmonyPatch(typeof(DNA))]
 internal static class DNAPatch

@@ -4,9 +4,9 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text.RegularExpressions;
 using HarmonyLib;
-using ModUtility.Patch;
+using Macchacoffee.ElinMods.ModUtility.Patch;
 
-namespace SomewhatEnhancedDisplay.Patches;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Patches;
 
 [HarmonyPatch(typeof(Element))]
 internal static class ElementPatch

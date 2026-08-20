@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SomewhatEnhancedDisplay.UI;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI;
 
 internal static class ModUIUtil
 {

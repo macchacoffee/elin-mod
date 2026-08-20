@@ -1,9 +1,9 @@
 using System.IO;
 using BepInEx;
 using BepInEx.Configuration;
-using MoreEffectiveLuck.Config;
+using Macchacoffee.ElinMods.MoreEffectiveLuck.Config;
 
-namespace MoreEffectiveLuck;
+namespace Macchacoffee.ElinMods.MoreEffectiveLuck;
 
 internal static class ModContext
 {

@@ -1,7 +1,7 @@
 
 using System;
 
-namespace MoreEffectiveLuck.Mod;
+namespace Macchacoffee.ElinMods.MoreEffectiveLuck.Mod;
 
 internal class ModLuckDice<T>
 {

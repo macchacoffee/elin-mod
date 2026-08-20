@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace ModUtility.External;
+namespace Macchacoffee.ElinMods.ModUtility.External;
 
 internal sealed class ModExternalMethod
 {

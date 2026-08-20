@@ -1,10 +1,10 @@
 using System.Reflection;
 using HarmonyLib;
-using ModUtility.Patch;
-using SimpleDamageTracker.UI.Config;
+using Macchacoffee.ElinMods.ModUtility.Patch;
+using Macchacoffee.ElinMods.SimpleDamageTracker.UI.Config;
 using YKF;
 
-namespace SimpleDamageTracker.Patches;
+namespace Macchacoffee.ElinMods.SimpleDamageTracker.Patches;
 
 [HarmonyPatch(typeof(WidgetRoster))]
 internal static class WidgetRosterPatch

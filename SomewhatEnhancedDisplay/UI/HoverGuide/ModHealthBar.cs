@@ -2,11 +2,11 @@ using System;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-using ModUtility.Util;
-using SomewhatEnhancedDisplay.Extensions;
-using SomewhatEnhancedDisplay.Config;
+using Macchacoffee.ElinMods.ModUtility.Util;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Extensions;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 
-namespace SomewhatEnhancedDisplay.UI.HoverGuide;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide;
 
 internal class ModHealthBar
 {

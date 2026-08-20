@@ -5,7 +5,7 @@
     <Platforms>AnyCPU</Platforms>
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
-    <RootNamespace>FactionEnchantInInventory</RootNamespace>
+    <RootNamespace>Macchacoffee.ElinMods.FactionEnchantInInventory</RootNamespace>
     <AssemblyName>FactionEnchantInInventory</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputPath>$(ElinGamePath)\Package\Mod_$(AssemblyName)\</OutputPath>

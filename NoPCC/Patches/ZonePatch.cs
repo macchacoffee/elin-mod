@@ -1,9 +1,9 @@
 using System.Reflection;
 using HarmonyLib;
-using ModUtility.Patch;
-using NoPCC.Mod;
+using Macchacoffee.ElinMods.ModUtility.Patch;
+using Macchacoffee.ElinMods.NoPCC.Mod;
 
-namespace NoPCC.Patches;
+namespace Macchacoffee.ElinMods.NoPCC.Patches;
 
 [HarmonyPatch(typeof(Zone))]
 internal static class ZonePatch

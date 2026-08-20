@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace StarweaversMoongateQuickFix.Mod;
+namespace Macchacoffee.ElinMods.StarweaversMoongateQuickFix.Mod;
 
 internal static class ModMoongatePaging
 {

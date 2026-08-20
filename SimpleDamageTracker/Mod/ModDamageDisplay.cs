@@ -1,8 +1,8 @@
 using DG.Tweening;
 using UnityEngine;
-using SimpleDamageTracker.Config;
+using Macchacoffee.ElinMods.SimpleDamageTracker.Config;
 
-namespace SimpleDamageTracker.Mod;
+namespace Macchacoffee.ElinMods.SimpleDamageTracker.Mod;
 
 internal sealed class ModDamageDisplay : MonoBehaviour
 {

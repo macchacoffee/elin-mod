@@ -1,11 +1,11 @@
 using System;
-using SomewhatEnhancedDisplay.Config;
-using SomewhatEnhancedDisplay.Extensions;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
 using YKF;
 
-namespace SomewhatEnhancedDisplay.UI.HoverGuide.Config;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
 internal class ModLayerConfigTabGenral : YKLayout<ModLayerConfigContext>
 {

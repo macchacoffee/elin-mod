@@ -1,7 +1,7 @@
 using UnityEngine;
 using YKF;
 
-namespace NoPCC.UI;
+namespace Macchacoffee.ElinMods.NoPCC.UI;
 
 internal class LayerModConfig : YKLayer<object>
 {

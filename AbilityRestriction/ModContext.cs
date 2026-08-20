@@ -1,10 +1,10 @@
 using System.IO;
-using AbilityRestriction.Config;
-using AbilityRestriction.Mod;
+using Macchacoffee.ElinMods.AbilityRestriction.Config;
+using Macchacoffee.ElinMods.AbilityRestriction.Mod;
 using BepInEx.Configuration;
 using BepInEx;
 
-namespace AbilityRestriction;
+namespace Macchacoffee.ElinMods.AbilityRestriction;
 
 internal static class ModContext
 {

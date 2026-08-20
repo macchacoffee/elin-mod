@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
-using ModUtility.Patch;
-using MoreEffectiveLuck.Mod;
+using Macchacoffee.ElinMods.ModUtility.Patch;
+using Macchacoffee.ElinMods.MoreEffectiveLuck.Mod;
 
-namespace MoreEffectiveLuck.Patches;
+namespace Macchacoffee.ElinMods.MoreEffectiveLuck.Patches;
 
 [HarmonyPatch(typeof(Thing))]
 internal static class ThingPatch

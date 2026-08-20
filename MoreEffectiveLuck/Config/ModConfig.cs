@@ -1,6 +1,6 @@
-using ModUtility.Config;
+using Macchacoffee.ElinMods.ModUtility.Config;
 
-namespace MoreEffectiveLuck.Config;
+namespace Macchacoffee.ElinMods.MoreEffectiveLuck.Config;
 
 internal class ModConfig : BepInExModConfigBase<ModConfig>
 {

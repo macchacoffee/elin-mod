@@ -1,8 +1,8 @@
 using System.Reflection;
 using HarmonyLib;
-using ModUtility.Patch;
+using Macchacoffee.ElinMods.ModUtility.Patch;
 
-namespace SomewhatEnhancedDisplay.Patches;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Patches;
 
 [HarmonyPatch(typeof(GameIO))]
 internal static class GameIOPatch

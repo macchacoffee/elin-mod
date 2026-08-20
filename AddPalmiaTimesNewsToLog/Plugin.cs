@@ -3,7 +3,7 @@ using System.Reflection;
 using BepInEx;
 using HarmonyLib;
 
-namespace AddPalmiaTimesNewsToLog;
+namespace Macchacoffee.ElinMods.AddPalmiaTimesNewsToLog;
 
 internal static class PluginInfo
 {

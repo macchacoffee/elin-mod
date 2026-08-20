@@ -2,11 +2,11 @@ using System;
 using System.Collections;
 using System.Reflection;
 using BepInEx;
-using EmmersiveIndividualBackgrounds.Patches;
+using Macchacoffee.ElinMods.EmmersiveIndividualBackgrounds.Patches;
 using HarmonyLib;
 using UnityEngine;
 
-namespace EmmersiveIndividualBackgrounds;
+namespace Macchacoffee.ElinMods.EmmersiveIndividualBackgrounds;
 
 internal static class PluginInfo
 {

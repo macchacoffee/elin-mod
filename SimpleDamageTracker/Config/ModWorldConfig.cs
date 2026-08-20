@@ -1,8 +1,8 @@
-using ModUtility.Config;
+using Macchacoffee.ElinMods.ModUtility.Config;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace SimpleDamageTracker.Config;
+namespace Macchacoffee.ElinMods.SimpleDamageTracker.Config;
 
 internal enum ModHorizontalTextAlignment
 {

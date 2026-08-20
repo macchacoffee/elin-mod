@@ -1,9 +1,9 @@
 using System.Reflection;
-using AbilityRestriction.Mod;
+using Macchacoffee.ElinMods.AbilityRestriction.Mod;
 using HarmonyLib;
-using ModUtility.Patch;
+using Macchacoffee.ElinMods.ModUtility.Patch;
 
-namespace AbilityRestriction.Patches;
+namespace Macchacoffee.ElinMods.AbilityRestriction.Patches;
 
 [HarmonyPatch(typeof(BaseListPeople))]
 internal static class BaseListPeoplePatch

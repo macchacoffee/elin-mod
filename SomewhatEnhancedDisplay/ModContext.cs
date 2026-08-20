@@ -1,9 +1,9 @@
 using System.IO;
 using BepInEx;
 using BepInEx.Configuration;
-using SomewhatEnhancedDisplay.Config;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 
-namespace SomewhatEnhancedDisplay;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay;
 
 internal static class ModContext
 {

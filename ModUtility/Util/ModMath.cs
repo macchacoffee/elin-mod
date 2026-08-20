@@ -1,6 +1,6 @@
 using System;
 
-namespace ModUtility.Util;
+namespace Macchacoffee.ElinMods.ModUtility.Util;
 
 internal static class ModMath
 {

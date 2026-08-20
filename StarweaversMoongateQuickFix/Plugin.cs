@@ -3,7 +3,7 @@ using System.Reflection;
 using BepInEx;
 using HarmonyLib;
 
-namespace StarweaversMoongateQuickFix;
+namespace Macchacoffee.ElinMods.StarweaversMoongateQuickFix;
 
 internal static class PluginInfo
 {

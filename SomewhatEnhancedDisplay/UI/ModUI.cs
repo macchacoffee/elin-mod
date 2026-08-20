@@ -1,8 +1,8 @@
 using BepInEx.Configuration;
-using SomewhatEnhancedDisplay.UI.HoverGuide;
-using SomewhatEnhancedDisplay.UI.HoverGuide.Config;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
-namespace SomewhatEnhancedDisplay.UI;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI;
 
 internal static class ModUI
 {

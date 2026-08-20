@@ -2,7 +2,7 @@ using System;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-namespace SomewhatEnhancedDisplay.Extensions;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Extensions;
 
 internal static class StringExtensions
 {

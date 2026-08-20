@@ -1,4 +1,4 @@
-namespace AbilityRestriction;
+namespace Macchacoffee.ElinMods.AbilityRestriction;
 
 internal static class ModConsts
 {

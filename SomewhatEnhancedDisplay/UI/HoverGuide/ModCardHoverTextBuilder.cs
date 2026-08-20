@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace SomewhatEnhancedDisplay.UI.HoverGuide;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide;
 
 internal static class ModCardHoverTextBuilder
 {

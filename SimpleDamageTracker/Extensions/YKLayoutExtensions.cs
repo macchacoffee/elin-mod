@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using YKF;
 
-namespace SimpleDamageTracker.Extensions;
+namespace Macchacoffee.ElinMods.SimpleDamageTracker.Extensions;
 
 internal static class YKLayoutExtensions
 {

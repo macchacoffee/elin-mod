@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ModUtility.Config;
+using Macchacoffee.ElinMods.ModUtility.Config;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace SomewhatEnhancedDisplay.Config;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 
 internal enum ModItemDisplayMode
 {

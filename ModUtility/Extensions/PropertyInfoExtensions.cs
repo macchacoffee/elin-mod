@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace ModUtility.Extensions;
+namespace Macchacoffee.ElinMods.ModUtility.Extensions;
 
 internal static class PropertyInfoExtensions
 {

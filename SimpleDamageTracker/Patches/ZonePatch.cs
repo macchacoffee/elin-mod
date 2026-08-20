@@ -1,8 +1,8 @@
 using System.Reflection;
 using HarmonyLib;
-using ModUtility.Patch;
+using Macchacoffee.ElinMods.ModUtility.Patch;
 
-namespace SimpleDamageTracker.Patches;
+namespace Macchacoffee.ElinMods.SimpleDamageTracker.Patches;
 
 [HarmonyPatch(typeof(Zone))]
 internal static class ZonePatch

@@ -1,4 +1,4 @@
-namespace SomewhatEnhancedDisplay.UI.Adapters;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.Adapters;
 
 internal class ModElementMock(int id, int value, SourceElement.Row source) : IModElement
 {

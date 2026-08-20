@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using YKF;
-using SimpleDamageTracker.Config;
-using SimpleDamageTracker.Extensions;
+using Macchacoffee.ElinMods.SimpleDamageTracker.Config;
+using Macchacoffee.ElinMods.SimpleDamageTracker.Extensions;
 
-namespace SimpleDamageTracker.UI.Config;
+namespace Macchacoffee.ElinMods.SimpleDamageTracker.UI.Config;
 
 internal class ModLayerConfigTabGenral : YKLayout<object>
 {

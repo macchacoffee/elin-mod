@@ -1,7 +1,7 @@
-using ModUtility.Config;
+using Macchacoffee.ElinMods.ModUtility.Config;
 using UnityEngine;
 
-namespace AbilityRestriction.Config;
+namespace Macchacoffee.ElinMods.AbilityRestriction.Config;
 
 internal class ModConfig : BepInExModConfigBase<ModConfig>
 {

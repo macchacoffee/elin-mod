@@ -1,11 +1,11 @@
 using System.Reflection;
 using HarmonyLib;
-using ModUtility.Patch;
-using SomewhatEnhancedDisplay.UI.HoverGuide.Config;
+using Macchacoffee.ElinMods.ModUtility.Patch;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 using UnityEngine;
 using YKF;
 
-namespace SomewhatEnhancedDisplay.Patches;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Patches;
 
 [HarmonyPatch(typeof(HotItemContext))]
 internal static class HotItemContextPatch

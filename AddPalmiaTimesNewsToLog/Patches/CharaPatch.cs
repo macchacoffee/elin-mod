@@ -1,9 +1,9 @@
 using System.Reflection;
-using AddPalmiaTimesNewsToLog.Config;
+using Macchacoffee.ElinMods.AddPalmiaTimesNewsToLog.Config;
 using HarmonyLib;
-using ModUtility.Patch;
+using Macchacoffee.ElinMods.ModUtility.Patch;
 
-namespace AddPalmiaTimesNewsToLog.Patches;
+namespace Macchacoffee.ElinMods.AddPalmiaTimesNewsToLog.Patches;
 
 [HarmonyPatch(typeof(Chara))]
 internal static class CharaPatch

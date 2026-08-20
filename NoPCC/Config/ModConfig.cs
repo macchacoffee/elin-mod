@@ -1,7 +1,7 @@
-using ModUtility.Config;
+using Macchacoffee.ElinMods.ModUtility.Config;
 using Newtonsoft.Json;
 
-namespace NoPCC.Config;
+namespace Macchacoffee.ElinMods.NoPCC.Config;
 
 internal class ModConfig : JsonModConfigBase<ModConfig>
 {

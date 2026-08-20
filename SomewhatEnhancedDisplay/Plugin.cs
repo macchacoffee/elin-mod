@@ -3,10 +3,10 @@ using System.Reflection;
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
-using ModUtility.External.ModConfigGUI;
-using SomewhatEnhancedDisplay.UI;
+using Macchacoffee.ElinMods.ModUtility.External.ModConfigGUI;
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI;
 
-namespace SomewhatEnhancedDisplay;
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay;
 
 internal static class PluginInfo
 {

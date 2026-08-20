@@ -3,7 +3,7 @@ using Emmersive.API.Services;
 using Emmersive.Contexts;
 using HarmonyLib;
 
-namespace EmmersiveIndividualBackgrounds.Patches;
+namespace Macchacoffee.ElinMods.EmmersiveIndividualBackgrounds.Patches;
 
 [HarmonyPatch(typeof(BackgroundContext))]
 internal static class BackgroundContextPatch
