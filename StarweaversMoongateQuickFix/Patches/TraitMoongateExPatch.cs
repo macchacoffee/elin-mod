@@ -21,23 +21,27 @@ internal static class TraitMoongateExPatch
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(TraitMoongateEx._OnUse), [])]
-    private static void _OnUse_Prefix(TraitMoongateEx __instance)
+    private static void _OnUse_Prefix()
     {
         ModMoongatePaging.IsOpening = true;
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(TraitMoongateEx._OnUse), [])]
-    private static void _OnUse_Postfix(TraitMoongateEx __instance)
+    private static void _OnUse_Postfix()
     {
         ModMoongatePaging.IsOpening = false;
     }
 
     [HarmonyFinalizer]
     [HarmonyPatch(nameof(TraitMoongateEx._OnUse), [])]
-    private static Exception _OnUse_Finalizer(Exception __exception)
+    private static Exception? _OnUse_Finalizer(Exception? __exception)
     {
         ModMoongatePaging.IsOpening = false;
+        if (__exception != null)
+        {
+            ModMoongatePaging.AbortOpening();
+        }
         return __exception;
     }
 }

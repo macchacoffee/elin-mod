@@ -2,7 +2,10 @@ using System;
 using System.Reflection;
 
 using BepInEx;
+using BepInEx.Configuration;
 using HarmonyLib;
+
+using Macchacoffee.ElinMods.ModUtility.External.ModConfigGUI;
 
 namespace Macchacoffee.ElinMods.StarweaversMoongateQuickFix;
 
@@ -10,17 +13,18 @@ internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.starweavers-moongate-quick-fix";
     public const string Name = "Starweaver's Moongate Quick Fix";
-    public const string Version = "0.1.0";
+    public const string Version = "1.0.0";
 }
 
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]
 internal class Plugin : BaseUnityPlugin
 {
-    internal static Plugin? Instance { get; private set; }
+    private static ConfigFile? ConfigFile { get; set; }
 
     private void Awake()
     {
-        Instance = this;
+        ConfigFile = ModContext.BindConfig();
+
         try
         {
             Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), PluginInfo.Guid);
@@ -31,18 +35,8 @@ internal class Plugin : BaseUnityPlugin
         }
     }
 
-    internal static void LogDebug(object message)
+    private void Start()
     {
-        Instance?.Logger.LogDebug(message);
-    }
-
-    internal static void LogInfo(object message)
-    {
-        Instance?.Logger.LogInfo(message);
-    }
-
-    internal static void LogError(object message)
-    {
-        Instance?.Logger.LogError(message);
+        ModConfigGUISupport.ResisterConfig(PluginInfo.Guid, PluginInfo.Name, ConfigFile!);
     }
 }

@@ -40,7 +40,16 @@ internal static class LayerListSetList2Patch
             return;
         }
 
-        ModMoongatePaging.SetupPageButton();
+        ModMoongatePaging.SetupPageControls();
+    }
+}
+
+[HarmonyPatch(typeof(UIList), nameof(UIList.List), [typeof(bool)])]
+internal static class UIListListPatch
+{
+    private static void Postfix(UIList __instance)
+    {
+        ModMoongatePaging.UpdatePageControls(__instance);
     }
 }
 

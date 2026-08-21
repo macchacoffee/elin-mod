@@ -6,6 +6,7 @@
   <loadPriority>100</loadPriority>
   <version>0.23.325</version>
   <description>
+星詠みのムーンゲートの訪問履歴をページ分割し、大量の履歴がある場合の表示・スクロール性能を改善します。
   </description>
   <tags>General</tags>
   <visibility>Public</visibility>

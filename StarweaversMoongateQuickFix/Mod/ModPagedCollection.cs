@@ -6,56 +6,72 @@ namespace Macchacoffee.ElinMods.StarweaversMoongateQuickFix.Mod;
 
 internal sealed class ModPagedCollection<T>(List<T> source, int pageSize) : ICollection<T>
 {
-    private readonly List<T> _source = source;
-    private readonly int _pageSize = pageSize;
+    private readonly List<T> _source = source ?? throw new ArgumentNullException(nameof(source));
+    private readonly int _pageSize = pageSize > 0
+        ? pageSize
+        : throw new ArgumentOutOfRangeException(nameof(pageSize));
 
-    public int Page { get; private set; }
+    public int PageIndex { get; private set; }
 
-    public int PageCount => Math.Max(1, (_source.Count + _pageSize - 1) / _pageSize);
+    public int PageCount => _source.Count == 0 ? 1 : ((_source.Count - 1) / _pageSize) + 1;
+
+    public bool CanMovePrevious => PageIndex > 0;
+
+    public bool CanMoveNext => PageIndex < PageCount - 1;
 
     public int Count
     {
         get
         {
-            NormalizePage();
-            var start = Page * _pageSize;
+            ClampPageIndex();
+            var start = PageIndex * _pageSize;
             return Math.Min(_pageSize, Math.Max(0, _source.Count - start));
         }
     }
 
     public bool IsReadOnly => true;
 
-    public void NextPage()
+    public bool MoveNext()
     {
-        Page = (Page + 1) % PageCount;
+        ClampPageIndex();
+        if (!CanMoveNext)
+        {
+            return false;
+        }
+
+        PageIndex++;
+        return true;
     }
 
-    public void PrevPage()
+    public bool MovePrevious()
     {
-        Page--;
-        if (Page < 0)
+        ClampPageIndex();
+        if (!CanMovePrevious)
         {
-            Page = PageCount - 1;
+            return false;
         }
+
+        PageIndex--;
+        return true;
     }
 
-    public void NormalizePage()
+    public void ClampPageIndex()
     {
-        if (Page >= PageCount)
+        if (PageIndex >= PageCount)
         {
-            Page = PageCount - 1;
+            PageIndex = PageCount - 1;
         }
-        if (Page < 0)
+        if (PageIndex < 0)
         {
-            Page = 0;
+            PageIndex = 0;
         }
     }
 
     public IEnumerator<T> GetEnumerator()
     {
-        NormalizePage();
+        ClampPageIndex();
 
-        var start = Page * _pageSize;
+        var start = PageIndex * _pageSize;
         var end = Math.Min(start + _pageSize, _source.Count);
         for (var i = start; i < end; i++)
         {

@@ -4,60 +4,55 @@ namespace Macchacoffee.ElinMods.StarweaversMoongateQuickFix.Mod;
 
 internal static class ModMoongatePaging
 {
-    private const int PageSize = 50;
-
     public static bool IsOpening { get; set; }
 
     private static LayerList? _layer;
     private static ModPagedCollection<MapMetaData>? _maps;
+    private static UIButton? _previousButton;
+    private static UIButton? _nextButton;
 
     public static void Attach(LayerList layer, List<MapMetaData> source, ref ICollection<MapMetaData> collection)
     {
-        var paged = new ModPagedCollection<MapMetaData>(source, PageSize);
+        Release();
+
+        var paged = new ModPagedCollection<MapMetaData>(source, ModContext.Config.ItemsPerPage.Value);
         _layer = layer;
         _maps = paged;
         collection = paged;
     }
 
-    public static void SetupPageButton()
+    public static void SetupPageControls()
     {
-        if (!_layer || _maps == null || !_layer!.buttonReroll)
+        if (!_layer || _maps == null || _maps.PageCount <= 1 || _layer!.windows.Count == 0 ||
+            _previousButton != null || _nextButton != null)
         {
             return;
         }
 
-        var button = _layer.buttonReroll;
+        var window = _layer.windows[0];
+        _previousButton = window.AddBottomButton("", PreviousPage, setFirst: true);
+        _nextButton = window.AddBottomButton("", NextPage);
 
-        button.SetActive(true);
-        button.onClick.RemoveAllListeners();
-
-        // 左クリック: 次ページ
-        button.onClick.AddListener(NextPage);
-        // 右クリック: 前ページ
-        button.onRightClick = PrevPage;
-
-        UpdatePageButton();
+        UpdatePageControls();
     }
 
-    public static void NextPage()
+    private static void NextPage()
     {
-        if (!_layer || _maps == null)
+        if (!_layer || _maps == null || !_maps.MoveNext())
         {
             return;
         }
 
-        _maps.NextPage();
         Refresh();
     }
 
-    public static void PrevPage()
+    private static void PreviousPage()
     {
-        if (!_layer || _maps == null)
+        if (!_layer || _maps == null || !_maps.MovePrevious())
         {
             return;
         }
 
-        _maps.PrevPage();
         Refresh();
     }
 
@@ -70,24 +65,42 @@ internal static class ModMoongatePaging
         {
             _layer.scroll.verticalNormalizedPosition = 1f;
         }
-
-        UpdatePageButton();
     }
 
-    public static void UpdatePageButton()
+    public static void UpdatePageControls(UIList list)
     {
-        if (!_layer || _maps == null || !_layer!.buttonReroll)
+        if (!_layer || _layer!.list != list)
         {
             return;
         }
 
-        _maps.NormalizePage();
+        UpdatePageControls();
+    }
 
-        var button = _layer.buttonReroll;
-        if (button.mainText)
+    private static void UpdatePageControls()
+    {
+        var previousButton = _previousButton;
+        var nextButton = _nextButton;
+        if (!_layer || _maps == null || previousButton == null || nextButton == null)
         {
-            button.mainText.text = $"{_maps.Page + 1} / {_maps.PageCount}";
+            return;
         }
+
+        _maps.ClampPageIndex();
+
+        var showControls = _maps.PageCount > 1;
+        previousButton.SetActive(showControls);
+        nextButton.SetActive(showControls);
+        if (!showControls)
+        {
+            return;
+        }
+
+        var pageText = $"{_maps.PageIndex + 1} / {_maps.PageCount}";
+        previousButton.mainText.text = $"◀  {pageText}";
+        nextButton.mainText.text = $"{pageText}  ▶";
+        previousButton.SetInteractableWithAlpha(_maps.CanMovePrevious);
+        nextButton.SetInteractableWithAlpha(_maps.CanMoveNext);
     }
 
     public static void Detach(LayerList layer)
@@ -97,7 +110,30 @@ internal static class ModMoongatePaging
             return;
         }
 
+        Release();
+    }
+
+    public static void AbortOpening()
+    {
+        Release();
+    }
+
+    private static void Release()
+    {
+        if (_previousButton != null)
+        {
+            _previousButton.onClick.RemoveListener(PreviousPage);
+            _previousButton.SetActive(false);
+        }
+        if (_nextButton != null)
+        {
+            _nextButton.onClick.RemoveListener(NextPage);
+            _nextButton.SetActive(false);
+        }
+
         _layer = null;
         _maps = null;
+        _previousButton = null;
+        _nextButton = null;
     }
 }
