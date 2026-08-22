@@ -1,6 +1,7 @@
 # Starweaver's Moongate Paging
 
-★星詠みのムーンゲート使用時のユーザマップ履歴一覧をページ分割し、大量の履歴がある場合のリスト表示・スクロール性能を改善します。
+★星詠みのムーンゲートの行き先リストにページング機能を追加します。
 
-- 前後ボタンでページを移動でき、現在ページと総ページ数を表示します。
-- 1ページの表示件数はBepInEx設定の `General.ItemsPerPage` で10～200件に変更できます（デフォルト50件）。Mod Config GUIからも変更できます。
+## 説明
+
+[Steam Workshopページ](https://steamcommunity.com/sharedfiles/filedetails/?id=)を参照してください。
