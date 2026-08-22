@@ -2,7 +2,7 @@ using BepInEx.Configuration;
 
 using Macchacoffee.ElinMods.ModUtility.Config;
 
-namespace Macchacoffee.ElinMods.StarweaversMoongateQuickFix.Config;
+namespace Macchacoffee.ElinMods.StarweaversMoongatePaging.Config;
 
 internal class ModConfig : BepInExModConfigBase<ModConfig>
 {

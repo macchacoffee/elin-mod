@@ -5,8 +5,8 @@
     <Platforms>AnyCPU</Platforms>
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
-    <RootNamespace>Macchacoffee.ElinMods.StarweaversMoongateQuickFix</RootNamespace>
-    <AssemblyName>StarweaversMoongateQuickFix</AssemblyName>
+    <RootNamespace>Macchacoffee.ElinMods.StarweaversMoongatePaging</RootNamespace>
+    <AssemblyName>StarweaversMoongatePaging</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputPath>$(ElinGamePath)\Package\Mod_$(AssemblyName)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

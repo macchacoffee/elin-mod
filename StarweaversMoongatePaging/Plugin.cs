@@ -8,12 +8,12 @@ using HarmonyLib;
 using Macchacoffee.ElinMods.ModUtility.External.ModConfigGUI;
 using Macchacoffee.ElinMods.ModUtility.Logging;
 
-namespace Macchacoffee.ElinMods.StarweaversMoongateQuickFix;
+namespace Macchacoffee.ElinMods.StarweaversMoongatePaging;
 
 internal static class PluginInfo
 {
-    public const string Guid = "maccha-coffee.starweavers-moongate-quick-fix";
-    public const string Name = "Starweaver's Moongate Quick Fix";
+    public const string Guid = "maccha-coffee.starweavers-moongate-paging";
+    public const string Name = "Starweaver's Moongate Paging";
     public const string Version = "1.0.0";
 }
 

@@ -3,9 +3,9 @@ using System.IO;
 using BepInEx;
 using BepInEx.Configuration;
 
-using Macchacoffee.ElinMods.StarweaversMoongateQuickFix.Config;
+using Macchacoffee.ElinMods.StarweaversMoongatePaging.Config;
 
-namespace Macchacoffee.ElinMods.StarweaversMoongateQuickFix;
+namespace Macchacoffee.ElinMods.StarweaversMoongatePaging;
 
 internal static class ModContext
 {

@@ -3,9 +3,9 @@ using System.Reflection;
 using HarmonyLib;
 
 using Macchacoffee.ElinMods.ModUtility.Patch;
-using Macchacoffee.ElinMods.StarweaversMoongateQuickFix.Mod;
+using Macchacoffee.ElinMods.StarweaversMoongatePaging.Mod;
 
-namespace Macchacoffee.ElinMods.StarweaversMoongateQuickFix.Patches;
+namespace Macchacoffee.ElinMods.StarweaversMoongatePaging.Patches;
 
 [HarmonyPatch(typeof(UIList))]
 internal static class UIListPatch

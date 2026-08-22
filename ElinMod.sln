@@ -26,7 +26,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDamageTracker", "Simp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SomewhatEnhancedDisplay", "SomewhatEnhancedDisplay\SomewhatEnhancedDisplay.csproj", "{DD3DCE8C-DCFD-C1F8-08F1-8C179909DBE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarweaversMoongateQuickFix", "StarweaversMoongateQuickFix\StarweaversMoongateQuickFix.csproj", "{48B1A2D3-5FAC-4B7A-7D84-14C9A0F58D63}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarweaversMoongatePaging", "StarweaversMoongatePaging\StarweaversMoongatePaging.csproj", "{48B1A2D3-5FAC-4B7A-7D84-14C9A0F58D63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

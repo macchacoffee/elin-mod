@@ -1,4 +1,4 @@
-# Starweaver's Moongate Quick Fix
+# Starweaver's Moongate Paging
 
 ★星詠みのムーンゲート使用時のユーザマップ履歴一覧をページ分割し、大量の履歴がある場合のリスト表示・スクロール性能を改善します。
 

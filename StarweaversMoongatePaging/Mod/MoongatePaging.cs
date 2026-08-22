@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Macchacoffee.ElinMods.StarweaversMoongateQuickFix.Mod;
+namespace Macchacoffee.ElinMods.StarweaversMoongatePaging.Mod;
 
 internal static class MoongatePaging
 {
