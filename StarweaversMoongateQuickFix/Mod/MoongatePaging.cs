@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -7,22 +8,36 @@ namespace Macchacoffee.ElinMods.StarweaversMoongateQuickFix.Mod;
 
 internal static class MoongatePaging
 {
-    public static bool IsOpening { get; set; }
-
     private static LayerList? _layer;
     private static PagedCollection<MapMetaData>? _maps;
     private static UIButton? _previousButton;
     private static UIButton? _pageIndicator;
     private static UIButton? _nextButton;
 
-    public static void Attach(LayerList layer, List<MapMetaData> source, ref ICollection<MapMetaData> collection)
+    public static LayerList SetList2(
+        LayerList layer,
+        List<MapMetaData> source,
+        Func<MapMetaData, string> getText,
+        Action<MapMetaData, ItemGeneral> onClick,
+        Action<MapMetaData, ItemGeneral> onInstantiate,
+        bool autoClose)
     {
         Release();
 
         var paged = new PagedCollection<MapMetaData>(source, ModContext.Config.ItemsPerPage.Value);
         _layer = layer;
         _maps = paged;
-        collection = paged;
+        try
+        {
+            var result = layer.SetList2(paged, getText, onClick, onInstantiate, autoClose);
+            SetupPageControls();
+            return result;
+        }
+        catch
+        {
+            Release();
+            throw;
+        }
     }
 
     public static void SetupPageControls()
@@ -155,11 +170,6 @@ internal static class MoongatePaging
             return;
         }
 
-        Release();
-    }
-
-    public static void AbortOpening()
-    {
         Release();
     }
 

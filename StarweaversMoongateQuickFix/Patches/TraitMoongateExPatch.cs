@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Reflection.Emit;
 
 using HarmonyLib;
+using Macchacoffee.ElinMods.ModUtility.Logging;
 
 using Macchacoffee.ElinMods.ModUtility.Patch;
 using Macchacoffee.ElinMods.StarweaversMoongateQuickFix.Mod;
@@ -19,29 +22,33 @@ internal static class TraitMoongateExPatch
         return _patchTarget.IsPatchable(original);
     }
 
-    [HarmonyPrefix]
+    [HarmonyTranspiler]
     [HarmonyPatch(nameof(TraitMoongateEx._OnUse), [])]
-    private static void _OnUse_Prefix()
+    private static IEnumerable<CodeInstruction> _OnUse_Transpiler(
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
-        MoongatePaging.IsOpening = true;
-    }
+        // // 変更前
+        // layer = EClass.ui.AddLayer<LayerList>().SetList2(list, ...);
+        // // 変更後
+        // layer = MoongatePaging.SetList2(EClass.ui.AddLayer<LayerList>(), list, ...);
+        var targetMethod = AccessTools.DeclaredMethod(
+            typeof(LayerList),
+            nameof(LayerList.SetList2),
+            generics: [typeof(MapMetaData)])
+            ?? throw new MissingMethodException(typeof(LayerList).FullName, nameof(LayerList.SetList2));
+        var replacementMethod = AccessTools.Method(typeof(MoongatePaging), nameof(MoongatePaging.SetList2))
+            ?? throw new MissingMethodException(typeof(MoongatePaging).FullName, nameof(MoongatePaging.SetList2));
+        var matcher = new CodeMatcher(instructions, generator);
 
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(TraitMoongateEx._OnUse), [])]
-    private static void _OnUse_Postfix()
-    {
-        MoongatePaging.IsOpening = false;
-    }
+        // callvirt instance LayerList LayerList::SetList2<MapMetaData>(...)
+        matcher.MatchStartForward(
+            new CodeMatch(OpCodes.Callvirt, targetMethod)
+        ).ThrowIfInvalid("Could not find TraitMoongateEx._OnUse's call to LayerList.SetList2<MapMetaData>.");
+        // ムーンゲートのリスト生成だけをページング用の処理に置き換える。
+        matcher.Opcode = OpCodes.Call;
+        matcher.Operand = replacementMethod;
 
-    [HarmonyFinalizer]
-    [HarmonyPatch(nameof(TraitMoongateEx._OnUse), [])]
-    private static Exception? _OnUse_Finalizer(Exception? __exception)
-    {
-        MoongatePaging.IsOpening = false;
-        if (__exception != null)
-        {
-            MoongatePaging.AbortOpening();
-        }
-        return __exception;
+        return matcher.InstructionEnumeration();
     }
 }
