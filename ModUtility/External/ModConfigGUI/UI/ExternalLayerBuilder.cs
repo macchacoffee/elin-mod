@@ -4,10 +4,10 @@ using BepInEx.Configuration;
 
 namespace Macchacoffee.ElinMods.ModUtility.External.ModConfigGUI.UI;
 
-[ModExternalType("ModConfigGUI", "ModConfigGUI.UI.LayerBuilder")]
+[ExternalType("ModConfigGUI", "ModConfigGUI.UI.LayerBuilder")]
 internal static class ExternalLayerBuilder
 {
-    private static readonly ModExternalMethodSet _ext = ModExternalMethod.For(typeof(ExternalLayerBuilder));
+    private static readonly ExternalMethodSet _ext = ExternalMethod.For(typeof(ExternalLayerBuilder));
     public static bool IsAvailable => _ext.IsAvailable;
 
     private static readonly Lazy<Action<string, string, ConfigFile>?> _registerDefaultBuilder =

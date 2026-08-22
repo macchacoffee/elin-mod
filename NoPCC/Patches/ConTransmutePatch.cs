@@ -10,7 +10,7 @@ namespace Macchacoffee.ElinMods.NoPCC.Patches;
 [HarmonyPatch(typeof(ConTransmute))]
 internal static class ConTransmutePatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
@@ -28,6 +28,6 @@ internal static class ConTransmutePatch
         }
 
         // Update for preventing PCC appears after transmuting.
-        ModPCRenderer.Update();
+        PCRenderer.Update();
     }
 }

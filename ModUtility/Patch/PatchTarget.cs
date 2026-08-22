@@ -1,0 +1,26 @@
+using System.Reflection;
+
+namespace Macchacoffee.ElinMods.ModUtility.Patch;
+
+internal class PatchTarget(Version? MinVersion = null, Version? MaxVersion = null)
+{
+    public bool IsPatchable(MethodBase? targetMethod)
+    {
+        if (targetMethod is not null)
+        {
+            return true;
+        }
+
+        var isPatchable = true;
+        if (isPatchable && MinVersion is Version minVersion)
+        {
+            isPatchable = !EClass.core.version.IsBelow(minVersion);
+        }
+        if (isPatchable && MaxVersion is Version maxVersion)
+        {
+            isPatchable = EClass.core.version.IsSameOrBelow(maxVersion);
+        }
+
+        return isPatchable;
+    }
+}

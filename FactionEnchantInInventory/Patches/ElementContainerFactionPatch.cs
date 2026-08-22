@@ -13,7 +13,7 @@ namespace Macchacoffee.ElinMods.FactionEnchantInInventory.Patches;
 [HarmonyPatch(typeof(ElementContainerFaction))]
 internal static class ElementContainerFactionPatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)

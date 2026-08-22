@@ -10,6 +10,6 @@ internal class LayerModConfig : YKLayer<object>
 
     public override void OnLayout()
     {
-        CreateTab<ModConfigMainTab>(ModConsts.SourceId.ModName, "nopcc.config.main");
+        CreateTab<LayerModConfigTabMain>(ModConsts.SourceId.ModName, "nopcc.config.main");
     }
 }

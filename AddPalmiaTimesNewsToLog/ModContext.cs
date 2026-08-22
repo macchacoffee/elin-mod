@@ -11,7 +11,7 @@ internal static class ModContext
 
     public static ModConfig Config { get; private set; } = new();
 
-    public static ModNewsFeeder NewsFeeder { get; } = new();
+    public static NewsFeeder NewsFeeder { get; } = new();
 
     private static string BuildConfigFilePath(string root)
     {

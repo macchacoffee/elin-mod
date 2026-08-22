@@ -12,7 +12,7 @@ namespace Macchacoffee.ElinMods.MoreEffectiveLuck.Patches;
 [HarmonyPatch(typeof(Trait))]
 internal static class TraitPatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
@@ -140,7 +140,7 @@ internal static class TraitPatch
         {
             return resultFunc();
         }
-        var dice = ModLuckDice<Rarity>.Create(
+        var dice = LuckDice<Rarity>.Create(
             resultFunc: resultFunc,
             resultCompareFunc: (result, prev) => result > prev,
             card: EClass.pc,

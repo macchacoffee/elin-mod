@@ -1,0 +1,143 @@
+using UnityEngine;
+using YKF;
+
+using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
+
+namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
+
+internal class LayerModConfig : YKLayer<LayerModConfigContext>
+{
+    public override string Title { get; } = $"{ModConsts.SourceId.ModName.lang()} {ModConsts.SourceId.ConfigHoverGuide.lang()}";
+    public override Rect Bound { get; } = new Rect(0, 0, 720, 540);
+
+    private UIButton? ButtonReset { get; set; }
+
+    private LayerModConfigContext Context => Data;
+    private static ModConfigHoverGuide Config => ModContext.WorldConfig.HoverGuide;
+
+    public override string GetTextHeader(Window window)
+    {
+        var prefix = string.Empty;
+        var idLang = Window.CurrentTab.idLang;
+        if (idLang == ModConsts.SourceId.ConfigStyleTargetChara
+            || idLang == ModConsts.SourceId.ConfigStyleTargetThing)
+        {
+            prefix = $"[{Context.SelectedStyleName}] ";
+        }
+        return $"{prefix}{ModConsts.SourceId.ConfigOf.lang(base.GetTextHeader(window))}";
+    }
+
+    public override void OnLayout()
+    {
+        // 設定画面での選択中スタイルとホバーガイドの表示スタイルを同期する。
+        Context.SelectedStyleIndex = Config.CurrentStyleIndex;
+        Context.AddSelectedStyleChangedListener((index, _) => Config.CurrentStyleIndex = index);
+
+        CreateTab<LayerModConfigTabGenral>(ModConsts.SourceId.ConfigGeneral, ModConsts.GameObjectName.ConfigGenaral);
+        CreateTab<LayerModConfigTabStyle>(ModConsts.SourceId.ConfigStyle, ModConsts.GameObjectName.ConfigStyle);
+        CreateTab<LayerModConfigTabStyleTargetChara>(
+            ModConsts.SourceId.ConfigStyleTargetChara,
+            ModConsts.GameObjectName.ConfigStyleTargetChara);
+        CreateTab<LayerModConfigTabStyleTargetThing>(
+            ModConsts.SourceId.ConfigStyleTargetThing,
+            ModConsts.GameObjectName.ConfigStyleTargetThing);
+
+        // タブの画像を設定する。
+        GetTab(ModConsts.GameObjectName.ConfigStyle).sprite = GetTabIconSprite(85);
+        GetTab(ModConsts.GameObjectName.ConfigStyleTargetChara).sprite = GetTabIconSprite(115);
+        GetTab(ModConsts.GameObjectName.ConfigStyleTargetThing).sprite = GetTabIconSprite(109);
+
+        ModUI.HoverGuide?.ClearTarget();
+        UpdateHoverGuideSample(Context.SampleChara);
+
+        Window.AddBottomButton(ModConsts.SourceId.ResetConfig, () =>
+        {
+            Dialog.YesNo(ModConsts.SourceId.DialogResetConfig, () =>
+            {
+                Close();
+                ModContext.WorldConfig.ResetHoverGuide();
+                YK.CreateLayer<LayerModConfig, LayerModConfigContext>(new(Context.SampleChara, Context.SampleThing));
+            });
+        });
+
+        ButtonReset = Window.AddBottomButton(CurrentTabLang(ModConsts.SourceId.ResetConfigTab), () =>
+        {
+            Dialog.YesNo(CurrentTabLang(ModConsts.SourceId.DialogResetConfigTab), () =>
+            {
+                Close();
+                var idLang = Window.CurrentTab.idLang;
+                if (idLang == ModConsts.SourceId.ConfigGeneral)
+                {
+                    ModContext.WorldConfig.ResetHoverGuideGeneral();
+                }
+                else if (
+                    idLang == ModConsts.SourceId.ConfigStyle
+                    || idLang == ModConsts.SourceId.ConfigStyleTargetChara
+                    || idLang == ModConsts.SourceId.ConfigStyleTargetThing)
+                {
+                    ModContext.WorldConfig.ResetHoverGuideStyle();
+                }
+                YK.CreateLayer<LayerModConfig, LayerModConfigContext>(new(Context.SampleChara, Context.SampleThing));
+            });
+        });
+    }
+
+    public override void OnKill()
+    {
+        ModUI.HoverGuide?.UnlockCard();
+        ModUI.HoverGuide?.ClearTarget();
+    }
+
+    public override void OnSwitchContent(Window window)
+    {
+        ButtonReset?.mainText.SetText(CurrentTabLang(ModConsts.SourceId.ResetConfigTab));
+        if (Window.CurrentTab.idLang == ModConsts.SourceId.ConfigStyle)
+        {
+            Context.NotifyHealthBarPreviewChanged();
+        }
+        Window.rectBottom.RebuildLayout(recursive: true);
+        Window.CurrentContent.RebuildLayout(recursive: true);
+        UpdateHoverGuideSample();
+    }
+
+    private void UpdateHoverGuideSample()
+    {
+        var idLang = Window.CurrentTab.idLang;
+        if (idLang == ModConsts.SourceId.ConfigStyleTargetChara)
+        {
+            UpdateHoverGuideSample(Context.SampleChara);
+        }
+        else if (idLang == ModConsts.SourceId.ConfigStyleTargetThing)
+        {
+            UpdateHoverGuideSample(Context.SampleThing);
+        }
+    }
+
+    private void UpdateHoverGuideSample(Card card)
+    {
+        ModUI.HoverGuide?.LockCard(card, Context.SampleModifier);
+    }
+
+    private Window.Setting.Tab GetTab(string name)
+    {
+        return Window.setting.tabs[Window.GetTab(name)];
+    }
+
+    private string CurrentTabLang(string idLang)
+    {
+        var tabIdLang = Window.CurrentTab.idLang;
+        if (
+            tabIdLang == ModConsts.SourceId.ConfigStyleTargetChara
+            || tabIdLang == ModConsts.SourceId.ConfigStyleTargetThing)
+        {
+            // スタイル関連のidLangはすべてスタイルのidLangに置き換える。
+            tabIdLang = ModConsts.SourceId.ConfigStyle;
+        }
+        return idLang.lang(tabIdLang.lang());
+    }
+
+    private static Sprite? GetTabIconSprite(int id)
+    {
+        return SpriteSheet.Get($"{CorePath.Icon}icons_48 static", $"icons_48 static_{id}");
+    }
+}

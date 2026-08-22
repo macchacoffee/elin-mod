@@ -12,7 +12,7 @@ namespace Macchacoffee.ElinMods.StarweaversMoongateQuickFix.Patches;
 [HarmonyPatch(typeof(LayerList))]
 internal static class LayerListPatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
@@ -24,14 +24,14 @@ internal static class LayerListPatch
     [HarmonyPatch(nameof(LayerList.OnKill), [])]
     private static void OnKill_Prefix(LayerList __instance)
     {
-        ModMoongatePaging.Detach(__instance);
+        MoongatePaging.Detach(__instance);
     }
 }
 
 [HarmonyPatch]
 internal static class LayerListSetList2Patch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
@@ -52,7 +52,7 @@ internal static class LayerListSetList2Patch
     [HarmonyPrefix]
     private static void Prefix(LayerList __instance, ref ICollection<MapMetaData> __0)
     {
-        if (!ModMoongatePaging.IsOpening)
+        if (!MoongatePaging.IsOpening)
         {
             return;
         }
@@ -61,17 +61,17 @@ internal static class LayerListSetList2Patch
             return;
         }
 
-        ModMoongatePaging.Attach(__instance, source, ref __0);
+        MoongatePaging.Attach(__instance, source, ref __0);
     }
 
     [HarmonyPostfix]
     private static void Postfix()
     {
-        if (!ModMoongatePaging.IsOpening)
+        if (!MoongatePaging.IsOpening)
         {
             return;
         }
 
-        ModMoongatePaging.SetupPageControls();
+        MoongatePaging.SetupPageControls();
     }
 }

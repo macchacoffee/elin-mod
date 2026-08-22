@@ -10,7 +10,7 @@ internal static class ModContext
     private const string _worldConfigFileName = $"{PluginInfo.Guid}.txt";
 
     public static ModWorldConfig WorldConfig { get; private set; } = new();
-    public static ModDamageTracker DamageTracker { get; } = new();
+    public static DamageTracker DamageTracker { get; } = new();
 
     private static string BuildWorldConfigFilePath(string root)
     {

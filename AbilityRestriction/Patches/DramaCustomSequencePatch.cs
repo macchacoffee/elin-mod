@@ -12,7 +12,7 @@ namespace Macchacoffee.ElinMods.AbilityRestriction.Patches;
 [HarmonyPatch(typeof(DramaCustomSequence))]
 internal static class DramaCustomSequencePatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
@@ -171,14 +171,14 @@ internal static class DramaCustomSequencePatch
     private static bool IsAbilityRestrictionEnabled(Chara chara)
     {
         return ModContext.Config.EnableViaConversation.Value
-            && ModAbilityRestriction.CanRestrictAbility(chara);
+            && Mod.AbilityRestriction.CanRestrictAbility(chara);
     }
 
     private static void HandleAbilityRestriction(DramaCustomSequence dcs, Chara chara)
     {
         dcs.Method(() =>
         {
-            ModAbilityRestriction.BuildSettingLayer(chara)();
+            Mod.AbilityRestriction.BuildSettingLayer(chara)();
         });
     }
 }

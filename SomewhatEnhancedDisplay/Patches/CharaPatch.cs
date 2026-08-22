@@ -17,7 +17,7 @@ namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Patches;
 [HarmonyPatch(typeof(Chara))]
 internal static class CharaPatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
@@ -827,7 +827,7 @@ internal static class CharaPatch
         text = text.TagResize(ComputeFontSize);
         text2 = text2.ReplaceTagTexts(replacer, firstReplacer).TagResize(ComputeFontSize);
         s = s.ReplaceTagTexts(replacer, firstReplacer).TagResize(ComputeFontSize);
-        return ModCharaHoverTextBuilder.BuildHoverText(chara, text, text2, s);
+        return CharaHoverTextBuilder.BuildHoverText(chara, text, text2, s);
     }
 
     private static string BuildHoverText2(string text, string text2, string text3, Chara chara)
@@ -835,13 +835,13 @@ internal static class CharaPatch
         text = text.TagResize(ComputeFontSize);
         text2 = text2.TagResize(ComputeFontSize);
         text3 = text3.TagResize(ComputeFontSize);
-        return ModCharaHoverTextBuilder.BuildHoverText2(chara, text, text2, text3);
+        return CharaHoverTextBuilder.BuildHoverText2(chara, text, text2, text3);
     }
 
     [HarmonyPatch(typeof(CraftUtil))]
     internal static class CraftUtilPatch
     {
-        private static readonly ModPatchTarget _patchTarget = new();
+        private static readonly PatchTarget _patchTarget = new();
 
         [HarmonyPrepare]
         private static bool Prepare(MethodBase? original)

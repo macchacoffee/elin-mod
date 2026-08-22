@@ -14,7 +14,7 @@ namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Patches;
 [HarmonyPatch(typeof(WidgetMouseover))]
 internal static class WidgetMouseoverPatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
@@ -215,7 +215,7 @@ internal static class WidgetMouseoverPatch
         // "(他+n)"の文字列を調整し、GetHoverText()の戻り値の末尾に追加されるようにする。
         matcher.RemoveInstruction();
         matcher.InsertAndAdvance(
-            CodeInstruction.Call(() => ModCardHoverTextBuilder.BuildOtherCardsText(default!, default!))
+            CodeInstruction.Call(() => CardHoverTextBuilder.BuildOtherCardsText(default!, default!))
         );
 
         // ldloc.3
@@ -307,8 +307,8 @@ internal static class WidgetMouseoverPatch
         Card? card1,
         Card? card2)
     {
-        var target1 =  new ModHoverGuideTarget(text1, text2, card1);
-        var target2 =  new ModHoverGuideTarget(text3, text4, card2);
+        var target1 =  new HoverGuideTarget(text1, text2, card1);
+        var target2 =  new HoverGuideTarget(text3, text4, card2);
         ModUI.HoverGuide!.Show(target1, target2);
     }
 }

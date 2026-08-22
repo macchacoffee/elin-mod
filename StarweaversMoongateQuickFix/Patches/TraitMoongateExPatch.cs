@@ -11,7 +11,7 @@ namespace Macchacoffee.ElinMods.StarweaversMoongateQuickFix.Patches;
 [HarmonyPatch(typeof(TraitMoongateEx))]
 internal static class TraitMoongateExPatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
@@ -23,24 +23,24 @@ internal static class TraitMoongateExPatch
     [HarmonyPatch(nameof(TraitMoongateEx._OnUse), [])]
     private static void _OnUse_Prefix()
     {
-        ModMoongatePaging.IsOpening = true;
+        MoongatePaging.IsOpening = true;
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(TraitMoongateEx._OnUse), [])]
     private static void _OnUse_Postfix()
     {
-        ModMoongatePaging.IsOpening = false;
+        MoongatePaging.IsOpening = false;
     }
 
     [HarmonyFinalizer]
     [HarmonyPatch(nameof(TraitMoongateEx._OnUse), [])]
     private static Exception? _OnUse_Finalizer(Exception? __exception)
     {
-        ModMoongatePaging.IsOpening = false;
+        MoongatePaging.IsOpening = false;
         if (__exception != null)
         {
-            ModMoongatePaging.AbortOpening();
+            MoongatePaging.AbortOpening();
         }
         return __exception;
     }

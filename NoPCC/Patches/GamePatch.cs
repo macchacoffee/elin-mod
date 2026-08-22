@@ -10,7 +10,7 @@ namespace Macchacoffee.ElinMods.NoPCC.Patches;
 [HarmonyPatch(typeof(Game))]
 internal static class GamePatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
@@ -26,7 +26,7 @@ internal static class GamePatch
         ModContext.LoadConfig(root);
 
         // Requires to initialize after every game load.
-        ModPCRenderer.Initialize();
-        ModPCRenderer.Update();
+        PCRenderer.Initialize();
+        PCRenderer.Update();
     }
 }

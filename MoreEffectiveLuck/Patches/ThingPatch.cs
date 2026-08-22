@@ -13,7 +13,7 @@ namespace Macchacoffee.ElinMods.MoreEffectiveLuck.Patches;
 [HarmonyPatch(typeof(Thing))]
 internal static class ThingPatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
@@ -212,7 +212,7 @@ internal static class ThingPatch
 
     private static bool IsLuckyFood(Thing thing)
     {
-        return ModLuckyFood.IsLuckyFood(thing);
+        return LuckyFood.IsLuckyFood(thing);
     }
 
     private static int CalculateNum6ForGetEnchant(SourceElement.Row row, float num5, bool flag, bool neg)
@@ -222,7 +222,7 @@ internal static class ThingPatch
         {
             return resultFunc();
         }
-        var dice = ModLuckDice<int>.Create(
+        var dice = LuckDice<int>.Create(
             resultFunc: resultFunc,
             resultCompareFunc: (result, prev) => result > prev,
             card: EClass.pc,

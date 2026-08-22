@@ -12,7 +12,7 @@ namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Patches;
 [HarmonyPatch(typeof(Card))]
 internal static class CardPatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
@@ -43,6 +43,6 @@ internal static class CardPatch
     {
         text = text.TagResize(ComputeFontSize);
         traitText = traitText.TagResize(ComputeFontSize);
-        return ModThingHoverTextBuilder.BuildHoverText2(thing, text, traitText);
+        return ThingHoverTextBuilder.BuildHoverText2(thing, text, traitText);
     }
 }

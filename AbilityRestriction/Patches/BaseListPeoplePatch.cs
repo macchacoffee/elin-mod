@@ -10,7 +10,7 @@ namespace Macchacoffee.ElinMods.AbilityRestriction.Patches;
 [HarmonyPatch(typeof(BaseListPeople))]
 internal static class BaseListPeoplePatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
@@ -32,7 +32,7 @@ internal static class BaseListPeoplePatch
         {
             return;
         }
-        if (!ModAbilityRestriction.CanRestrictAbility(c))
+        if (!Mod.AbilityRestriction.CanRestrictAbility(c))
         {
             return;
         }

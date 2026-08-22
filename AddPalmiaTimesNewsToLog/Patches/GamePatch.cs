@@ -9,7 +9,7 @@ namespace Macchacoffee.ElinMods.AddPalmiaTimesNewsToLog.Patches;
 [HarmonyPatch(typeof(Game))]
 internal static class GamePatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)

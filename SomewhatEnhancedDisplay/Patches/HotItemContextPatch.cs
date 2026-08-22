@@ -12,7 +12,7 @@ namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Patches;
 [HarmonyPatch(typeof(HotItemContext))]
 internal static class HotItemContextPatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
@@ -32,7 +32,7 @@ internal static class HotItemContextPatch
         var uiContextMenu = EClass.ui.contextMenu.currentMenu.AddOrGetChild("tool");
         uiContextMenu.AddButton(ModConsts.SourceId.ModName, () =>
         {
-            YK.CreateLayer<ModLayerConfig, ModLayerConfigContext>(new());
+            YK.CreateLayer<LayerModConfig, LayerModConfigContext>(new());
         });
     }
 }

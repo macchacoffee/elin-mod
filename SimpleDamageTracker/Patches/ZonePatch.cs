@@ -9,7 +9,7 @@ namespace Macchacoffee.ElinMods.SimpleDamageTracker.Patches;
 [HarmonyPatch(typeof(Zone))]
 internal static class ZonePatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)

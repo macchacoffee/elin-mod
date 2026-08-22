@@ -12,7 +12,7 @@ namespace Macchacoffee.ElinMods.FoodEffectMultiplier.Patches;
 [HarmonyPatch(typeof(FoodEffect))]
 internal static class FoodEffectPatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)

@@ -10,7 +10,7 @@ namespace Macchacoffee.ElinMods.NoPCC.Patches;
 [HarmonyPatch(typeof(Zone))]
 internal static class ZonePatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
@@ -22,6 +22,6 @@ internal static class ZonePatch
     [HarmonyPatch(nameof(Zone.Activate), [])]
     private static void Activate_Postfix()
     {
-        ModPCRenderer.Update();
+        PCRenderer.Update();
     }
 }

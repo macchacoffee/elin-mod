@@ -11,7 +11,7 @@ namespace Macchacoffee.ElinMods.AbilityRestriction.Patches;
 [HarmonyPatch(typeof(UIContextMenu))]
 internal static class UIContextMenuPatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
@@ -33,7 +33,7 @@ internal static class UIContextMenuPatch
         }
         var chara = BaseListPeoplePatch.TargetChara;
         BaseListPeoplePatch.TargetChara = null;
-        __instance.AddButton(ModConsts.SourceId.RestrictAbilities, ModAbilityRestriction.BuildSettingLayer(chara));
+        __instance.AddButton(ModConsts.SourceId.RestrictAbilities, Mod.AbilityRestriction.BuildSettingLayer(chara));
     }
 
     [HarmonyPostfix]
@@ -48,10 +48,10 @@ internal static class UIContextMenuPatch
         {
             return;
         }
-        if (!ModAbilityRestriction.CanRestrictAbility(chara))
+        if (!Mod.AbilityRestriction.CanRestrictAbility(chara))
         {
             return;
         }
-        __instance.AddButton(ModConsts.SourceId.RestrictAbilities, ModAbilityRestriction.BuildSettingLayer(chara));
+        __instance.AddButton(ModConsts.SourceId.RestrictAbilities, Mod.AbilityRestriction.BuildSettingLayer(chara));
     }
 }

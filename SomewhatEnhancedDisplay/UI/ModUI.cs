@@ -1,13 +1,12 @@
 using BepInEx.Configuration;
 
-using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide;
 using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
 namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI;
 
 internal static class ModUI
 {
-    public static ModHoverGuide? HoverGuide { get; set; }
+    public static HoverGuide.HoverGuide? HoverGuide { get; set; }
 
     public static void Update()
     {
@@ -15,7 +14,7 @@ internal static class ModUI
 
         if (new KeyboardShortcut(ModContext.Config.NextStyleKey.Value).IsDown())
         {
-            if (EClass.ui.GetLayer<ModLayerConfig>() is not null)
+            if (EClass.ui.GetLayer<LayerModConfig>() is not null)
             {
                 // Modのホバーガイド設定画面が開いている時は処理を中断する。
                 return;
@@ -31,7 +30,7 @@ internal static class ModUI
 
         if (new KeyboardShortcut(ModContext.Config.LockKey.Value).IsDown())
         {
-            if (EClass.ui.GetLayer<ModLayerConfig>() is not null)
+            if (EClass.ui.GetLayer<LayerModConfig>() is not null)
             {
                 // Modのホバーガイド設定画面が開いている時は処理を中断する。
                 return;

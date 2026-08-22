@@ -10,7 +10,7 @@ namespace Macchacoffee.ElinMods.NoPCC.Patches;
 [HarmonyPatch(typeof(ActRide))]
 internal static class ActRidePatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
@@ -27,7 +27,7 @@ internal static class ActRidePatch
             return;
         }
 
-        ModPCRenderer.Update();
+        PCRenderer.Update();
     }
 
     [HarmonyPostfix]
@@ -39,7 +39,7 @@ internal static class ActRidePatch
             return;
         }
 
-        ModPCRenderer.Update();
+        PCRenderer.Update();
     }
 
     [HarmonyPostfix]
@@ -51,6 +51,6 @@ internal static class ActRidePatch
             return;
         }
 
-        ModPCRenderer.Update();
+        PCRenderer.Update();
     }
 }

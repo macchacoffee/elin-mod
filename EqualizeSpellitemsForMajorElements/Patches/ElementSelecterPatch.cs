@@ -13,7 +13,7 @@ namespace Macchacoffee.ElinMods.EqualizeSpellitemsForMajorElements.Patches;
 [HarmonyPatch(typeof(ElementSelecter))]
 internal static class ElementSelecterPatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)

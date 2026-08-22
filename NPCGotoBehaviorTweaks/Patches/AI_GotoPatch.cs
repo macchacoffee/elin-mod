@@ -11,7 +11,7 @@ namespace Macchacoffee.ElinMods.NPCGotoBehaviorTweaks.Patches;
 [HarmonyPatch(typeof(AI_Goto))]
 internal static class AI_GotoPatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)

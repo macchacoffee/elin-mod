@@ -11,7 +11,7 @@ namespace Macchacoffee.ElinMods.EnableDiningSpotSignInTent.Patches;
 [HarmonyPatch(typeof(Chara))]
 internal static class CharaPatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)

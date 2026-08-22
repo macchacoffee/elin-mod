@@ -13,7 +13,7 @@ internal static class ModContext
     private const string _configFileName = $"{PluginInfo.Guid}.cfg";
     private const string _worldConfigFileName = $"{PluginInfo.Guid}.txt";
 
-    public static ModOriginalActStorage OriginalActStorage { get; } = new();
+    public static OriginalActStorage OriginalActStorage { get; } = new();
     public static ModConfig Config { get; private set; } = new();
     public static ModWorldConfig WorldConfig { get; private set; } = new();
 

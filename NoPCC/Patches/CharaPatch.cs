@@ -10,7 +10,7 @@ namespace Macchacoffee.ElinMods.NoPCC.Patches;
 [HarmonyPatch(typeof(Chara))]
 internal static class CharaPatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
@@ -27,7 +27,7 @@ internal static class CharaPatch
             return;
         }
 
-        ModPCRenderer.Update();
+        PCRenderer.Update();
     }
 
     [HarmonyPostfix]
@@ -39,6 +39,6 @@ internal static class CharaPatch
             return;
         }
 
-        ModPCRenderer.Update();
+        PCRenderer.Update();
     }
 }

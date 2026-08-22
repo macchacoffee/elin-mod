@@ -11,7 +11,7 @@ namespace Macchacoffee.ElinMods.EnableDiningSpotSignInTent.Patches;
 [HarmonyPatch(typeof(FoodEffect))]
 internal static class FoodEffectPatch
 {
-    private static readonly ModPatchTarget _patchTarget = new(
+    private static readonly PatchTarget _patchTarget = new(
         MaxVersion: new Version { minor = 23, batch = 288 }
     );
 

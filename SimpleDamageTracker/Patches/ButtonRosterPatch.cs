@@ -10,7 +10,7 @@ namespace Macchacoffee.ElinMods.SimpleDamageTracker.Patches;
 [HarmonyPatch(typeof(ButtonRoster))]
 internal static class ButtonRosterPatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
@@ -22,8 +22,8 @@ internal static class ButtonRosterPatch
     [HarmonyPatch(nameof(ButtonRoster.SetChara), [typeof(Chara)])]
     private static void SetChara_Postfix(ButtonRoster __instance, Chara c)
     {
-        var display = __instance.GetComponent<ModDamageDisplay>()
-            ?? __instance.gameObject.AddComponent<ModDamageDisplay>();
+        var display = __instance.GetComponent<DamageDisplay>()
+            ?? __instance.gameObject.AddComponent<DamageDisplay>();
         display.Bind(__instance, c);
     }
 
@@ -31,6 +31,6 @@ internal static class ButtonRosterPatch
     [HarmonyPatch(nameof(ButtonRoster.Refresh), [])]
     private static void Refresh_Postfix(ButtonRoster __instance)
     {
-        __instance.GetComponent<ModDamageDisplay>()?.RefreshIfNeeded();
+        __instance.GetComponent<DamageDisplay>()?.RefreshIfNeeded();
     }
 }

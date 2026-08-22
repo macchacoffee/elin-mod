@@ -11,7 +11,7 @@ namespace Macchacoffee.ElinMods.AbilityRestriction.Patches;
 [HarmonyPatch(typeof(CharaAbility))]
 internal static class CharaAbilityPatch
 {
-    private static readonly ModPatchTarget _patchTarget = new();
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
