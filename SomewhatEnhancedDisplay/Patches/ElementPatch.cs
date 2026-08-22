@@ -34,7 +34,6 @@ internal static class ElementPatch
             typeof(Action<UINote, Element>)
         ])]
     private static void AddEncNote_Prefix(
-        Element __instance,
         UINote n,
         Card Card,
         ElementContainer.NoteMode mode,

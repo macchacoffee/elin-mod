@@ -21,7 +21,7 @@ internal static class WidgetRosterPatch
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(WidgetRoster.OnSetContextMenu), [typeof(UIContextMenu)])]
-    private static void OnSetContextMenu_Postfix(WidgetRoster __instance, UIContextMenu m)
+    private static void OnSetContextMenu_Postfix(UIContextMenu m)
     {
         m.AddButton(ModConsts.SourceId.ModName, () =>
         {
