@@ -6,6 +6,7 @@ using BepInEx.Configuration;
 using HarmonyLib;
 
 using Macchacoffee.ElinMods.ModUtility.External.ModConfigGUI;
+using Macchacoffee.ElinMods.ModUtility.Logging;
 
 namespace Macchacoffee.ElinMods.StarweaversMoongateQuickFix;
 
@@ -23,6 +24,7 @@ internal class Plugin : BaseUnityPlugin
 
     private void Awake()
     {
+        ModLog.Initialize(Logger);
         ConfigFile = ModContext.BindConfig();
 
         try
@@ -31,7 +33,7 @@ internal class Plugin : BaseUnityPlugin
         }
         catch (Exception ex)
         {
-            Logger.LogError($"Failed to apply harmony patch: {ex}");
+            ModLog.Error($"Failed to apply harmony patch: {ex}");
         }
     }
 

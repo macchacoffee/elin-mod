@@ -5,6 +5,8 @@ using HarmonyLib;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Macchacoffee.ElinMods.ModUtility.Logging;
+
 namespace Macchacoffee.ElinMods.EmmersiveIndividualBackgrounds.Patches;
 
 internal static class LayerPanelAccess
@@ -33,7 +35,7 @@ internal static class LayerPanelAccess
         }
         catch (Exception ex)
         {
-            Plugin.LogError($"Failed to reopen Elin with AI panel: {ex}");
+            ModLog.Error($"Failed to reopen Elin with AI panel: {ex}");
         }
     }
 
@@ -42,7 +44,7 @@ internal static class LayerPanelAccess
         var plugin = Plugin.Instance;
         if (plugin == null)
         {
-            Plugin.LogError("Cannot schedule Elin with AI panel reopen because the plugin is unavailable.");
+            ModLog.Error("Cannot schedule Elin with AI panel reopen because the plugin is unavailable.");
             return;
         }
 

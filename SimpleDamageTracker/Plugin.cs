@@ -4,6 +4,8 @@ using System.Reflection;
 using BepInEx;
 using HarmonyLib;
 
+using Macchacoffee.ElinMods.ModUtility.Logging;
+
 namespace Macchacoffee.ElinMods.SimpleDamageTracker;
 
 internal static class PluginInfo
@@ -16,33 +18,16 @@ internal static class PluginInfo
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]
 internal class Plugin : BaseUnityPlugin
 {
-    internal static Plugin? Instance { get; private set; }
-
     private void Awake()
     {
-        Instance = this;
+        ModLog.Initialize(Logger);
         try
         {
             Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), PluginInfo.Guid);
         }
         catch (Exception ex)
         {
-            Logger.LogError($"Failed to apply harmony patch: {ex}");
+            ModLog.Error($"Failed to apply harmony patch: {ex}");
         }
-    }
-
-    internal static void LogDebug(object message)
-    {
-        Instance?.Logger.LogDebug(message);
-    }
-
-    internal static void LogInfo(object message)
-    {
-        Instance?.Logger.LogInfo(message);
-    }
-
-    internal static void LogError(object message)
-    {
-        Instance?.Logger.LogError(message);
     }
 }

@@ -6,6 +6,7 @@ using BepInEx.Configuration;
 using HarmonyLib;
 
 using Macchacoffee.ElinMods.ModUtility.External.ModConfigGUI;
+using Macchacoffee.ElinMods.ModUtility.Logging;
 
 namespace Macchacoffee.ElinMods.MoreEffectiveLuck;
 
@@ -18,14 +19,12 @@ internal static class PluginInfo
 
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]
 internal class Plugin : BaseUnityPlugin
-{
-    internal static Plugin? Instance { get; private set; }
-    internal static Harmony? Harmony { get; private set; }
+{    internal static Harmony? Harmony { get; private set; }
     private static ConfigFile? ConfigFile { get; set; }
 
     private void Awake()
     {
-        Instance = this;
+        ModLog.Initialize(Logger);
         ConfigFile = ModContext.BindConfig();
         Harmony = new Harmony(PluginInfo.Guid);
         try
@@ -34,27 +33,12 @@ internal class Plugin : BaseUnityPlugin
         }
         catch (Exception ex)
         {
-            Logger.LogError($"Failed to apply harmony patch: {ex}");
+            ModLog.Error($"Failed to apply harmony patch: {ex}");
         }
     }
 
     private void Start()
     {
         ModConfigGUISupport.ResisterConfig(PluginInfo.Guid, PluginInfo.Name, ConfigFile!);
-    }
-
-    internal static void LogDebug(object message)
-    {
-        Instance?.Logger.LogDebug(message);
-    }
-
-    internal static void LogInfo(object message)
-    {
-        Instance?.Logger.LogInfo(message);
-    }
-
-    internal static void LogError(object message)
-    {
-        Instance?.Logger.LogError(message);
     }
 }

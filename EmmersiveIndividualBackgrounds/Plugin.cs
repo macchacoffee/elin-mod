@@ -7,6 +7,7 @@ using HarmonyLib;
 using UnityEngine;
 
 using Macchacoffee.ElinMods.EmmersiveIndividualBackgrounds.Patches;
+using Macchacoffee.ElinMods.ModUtility.Logging;
 
 namespace Macchacoffee.ElinMods.EmmersiveIndividualBackgrounds;
 
@@ -28,9 +29,10 @@ internal class Plugin : BaseUnityPlugin
     private void Awake()
     {
         Instance = this;
+        ModLog.Initialize(Logger);
         if (AccessTools.TypeByName("Emmersive.EmMod") == null)
         {
-            Logger.LogError(
+            ModLog.Error(
                 $"Elin with AI ({PluginInfo.EmmersiveGuid}) is not loaded. " +
                 "Emmersive Individual Backgrounds will remain disabled.");
             enabled = false;
@@ -43,13 +45,8 @@ internal class Plugin : BaseUnityPlugin
         }
         catch (Exception ex)
         {
-            Logger.LogError($"Failed to apply harmony patch: {ex}");
+            ModLog.Error($"Failed to apply harmony patch: {ex}");
         }
-    }
-
-    internal static void LogError(object message)
-    {
-        Instance?.Logger.LogError(message);
     }
 
     internal void SchedulePanelReopen(float? scrollPosition)
