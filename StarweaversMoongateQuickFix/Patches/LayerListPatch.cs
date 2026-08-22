@@ -1,24 +1,55 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 using HarmonyLib;
 
+using Macchacoffee.ElinMods.ModUtility.Patch;
 using Macchacoffee.ElinMods.StarweaversMoongateQuickFix.Mod;
 
 namespace Macchacoffee.ElinMods.StarweaversMoongateQuickFix.Patches;
 
+[HarmonyPatch(typeof(LayerList))]
+internal static class LayerListPatch
+{
+    private static readonly ModPatchTarget _patchTarget = new();
+
+    [HarmonyPrepare]
+    private static bool Prepare(MethodBase? original)
+    {
+        return _patchTarget.IsPatchable(original);
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(LayerList.OnKill), [])]
+    private static void OnKill_Prefix(LayerList __instance)
+    {
+        ModMoongatePaging.Detach(__instance);
+    }
+}
+
 [HarmonyPatch]
 internal static class LayerListSetList2Patch
 {
-    private static MethodBase TargetMethod()
+    private static readonly ModPatchTarget _patchTarget = new();
+
+    [HarmonyPrepare]
+    private static bool Prepare(MethodBase? original)
     {
-        var method = AccessTools
-            .GetDeclaredMethods(typeof(LayerList))
-            .Single(x => x.Name == nameof(LayerList.SetList2) && x.IsGenericMethodDefinition);
-        return method.MakeGenericMethod(typeof(MapMetaData));
+        return _patchTarget.IsPatchable(original);
     }
 
+    [HarmonyTargetMethod]
+    private static MethodBase SetList2_TargetMethod()
+    {
+        return AccessTools.DeclaredMethod(
+                   typeof(LayerList),
+                   nameof(LayerList.SetList2),
+                   generics: [typeof(MapMetaData)])
+               ?? throw new MissingMethodException(typeof(LayerList).FullName, nameof(LayerList.SetList2));
+    }
+
+    [HarmonyPrefix]
     private static void Prefix(LayerList __instance, ref ICollection<MapMetaData> __0)
     {
         if (!ModMoongatePaging.IsOpening)
@@ -33,6 +64,7 @@ internal static class LayerListSetList2Patch
         ModMoongatePaging.Attach(__instance, source, ref __0);
     }
 
+    [HarmonyPostfix]
     private static void Postfix()
     {
         if (!ModMoongatePaging.IsOpening)
@@ -41,23 +73,5 @@ internal static class LayerListSetList2Patch
         }
 
         ModMoongatePaging.SetupPageControls();
-    }
-}
-
-[HarmonyPatch(typeof(UIList), nameof(UIList.List), [typeof(bool)])]
-internal static class UIListListPatch
-{
-    private static void Postfix(UIList __instance)
-    {
-        ModMoongatePaging.UpdatePageControls(__instance);
-    }
-}
-
-[HarmonyPatch(typeof(LayerList), nameof(LayerList.OnKill))]
-internal static class LayerListOnKillPatch
-{
-    private static void Prefix(LayerList __instance)
-    {
-        ModMoongatePaging.Detach(__instance);
     }
 }
