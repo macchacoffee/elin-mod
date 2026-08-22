@@ -11,6 +11,7 @@ Steam Workshopで公開していないModも含まれます。
 * [Faction Enchant in Inventory](https://github.com/macchacoffee/elin-mod/tree/main/FactionEnchantInInventory)
 * [Simple Damage Tracker](https://github.com/macchacoffee/elin-mod/tree/main/SimpleDamageTracker)
 * [Somewhat Enhanced Display](https://github.com/macchacoffee/elin-mod/tree/main/SomewhatEnhancedDisplay)
+* [Starweaver's Moongate Paging](https://github.com/macchacoffee/elin-mod/tree/main/StarweaversMoongatePaging)
 
 ## その他Mod (開発中 / 実験的なもの)
 
@@ -20,4 +21,3 @@ Steam Workshopで公開していないModも含まれます。
 * [More Effective Luck](https://github.com/macchacoffee/elin-mod/tree/main/MoreEffectiveLuck)
 * [NPC Goto Behavior Tweaks](https://github.com/macchacoffee/elin-mod/tree/main/NPCGotoBehaviorTweaks)
 * [NoPCC](https://github.com/macchacoffee/elin-mod/tree/main/NoPCC)
-* [Starweaver's Moongate Paging](https://github.com/macchacoffee/elin-mod/tree/main/StarweaversMoongatePaging)
