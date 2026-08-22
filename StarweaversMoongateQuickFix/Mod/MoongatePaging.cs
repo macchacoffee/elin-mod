@@ -40,7 +40,7 @@ internal static class MoongatePaging
         }
     }
 
-    public static void SetupPageControls()
+    private static void SetupPageControls()
     {
         if (!_layer || _maps == null || _maps.PageCount <= 1 || _layer!.windows.Count == 0 ||
             _previousButton != null || _pageIndicator != null || _nextButton != null)
