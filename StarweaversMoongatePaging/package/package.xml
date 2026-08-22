@@ -8,8 +8,7 @@
   <description>
 ★星詠みのムーンゲートの行き先リストにページング機能を追加します。
 
-訪問済みのユーザーマップが大量に保存されている場合、バニラではリスト内のすべての項目についてUIを一度に生成します。
-このModでは1ページに表示する件数を制限することで、リストを開く際の負荷やスクロール時の動作を改善します。
+訪問済みのユーザーマップが大量に保存されている場合、バニラではリスト内のすべての項目についてUIを一度に生成します。このModでは1ページに表示する件数を制限することで、リストを開く際の負荷やスクロール時の動作を改善します。
 
 1ページ当たりの表示件数は設定によって変更可能です。[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3379819704]Mod Config GUI[/url]のゲーム内設定画面から変更、または以下の設定ファイルを編集してください。
 [code]Elin\BepInEx\config\maccha-coffee.starweavers-moongate-paging[/code]
@@ -21,8 +20,7 @@
 [hr][/hr]
 Adds pagination to the destination list of the ★Starweaver's Moongate.
 
-When a large number of visited user maps are saved, the vanilla game creates UI elements for every entry in the list at once.
-This mod limits the number of entries displayed per page, reducing the load when opening the list and improving scrolling performance.
+When a large number of visited user maps are saved, the vanilla game creates UI elements for every entry in the list at once. This mod limits the number of entries displayed per page, reducing the load when opening the list and improving scrolling performance.
 
 The number of entries displayed per page can be changed in the settings. You can change it from the in-game settings menu provided by [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3379819704]Mod Config GUI[/url], or by editing the following configuration file:
 [code]Elin\BepInEx\config\maccha-coffee.starweavers-moongate-paging[/code]
