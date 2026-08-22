@@ -307,8 +307,8 @@ internal static class WidgetMouseoverPatch
         Card? card1,
         Card? card2)
     {
-        var target1 =  new HoverGuideTarget(text1, text2, card1);
-        var target2 =  new HoverGuideTarget(text3, text4, card2);
+        var target1 = new HoverGuideTarget(text1, text2, card1);
+        var target2 = new HoverGuideTarget(text3, text4, card2);
         ModUI.HoverGuide!.Show(target1, target2);
     }
 }

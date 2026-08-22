@@ -102,7 +102,7 @@ internal static class DramaCustomSequencePatch
             new CodeMatch(OpCodes.Ldfld),
             new CodeMatch(OpCodes.Callvirt, AccessTools.PropertyGetter(typeof(Card), nameof(Card.IsPCParty)))
         );
-       matcher.Advance(1);
+        matcher.Advance(1);
         var charaOperand = matcher.Operand;
         matcher.Advance(-1);
         var pos1 = matcher.Pos;

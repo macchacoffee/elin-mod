@@ -125,8 +125,8 @@ internal static class ModConsts
         public static readonly string ResetConfig = Prefixed("resetConfig");
         public static readonly string ResetConfigTab = Prefixed("resetConfigTab");
         public static readonly string DialogResetConfig = Prefixed("dialogResetConfig");
-        public static readonly string DialogResetConfigTab = Prefixed("dialogResetConfigTab"); 
-        public static readonly string DialogDeleteStyle = Prefixed("dialogDeleteStyle"); 
+        public static readonly string DialogResetConfigTab = Prefixed("dialogResetConfigTab");
+        public static readonly string DialogDeleteStyle = Prefixed("dialogDeleteStyle");
         public static readonly string ZoomScale = Prefixed("zoomScale");
         public static readonly string HorizontalPivot = Prefixed("horizontalPivot");
         public static readonly string VerticalPivot = Prefixed("verticalPivot");
@@ -201,5 +201,5 @@ internal static class ModConsts
         public static readonly string TooltipUseRarityColor = Prefixed("tooltipUseRarityColor");
         public static readonly string TooltipFressness = Prefixed("tooltipFressness");
         public static readonly string TooltipDisplayUnidentifiedItemsAsIdentified = Prefixed("tooltipDisplayUnidentifiedItemsAsIdentified");
-     }
+    }
 }

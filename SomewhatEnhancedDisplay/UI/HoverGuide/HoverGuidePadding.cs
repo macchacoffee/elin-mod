@@ -37,7 +37,7 @@ internal class HoverGuidePadding
 
         if (Image.enabled != enabled)
         {
-             Image.enabled = enabled;
+            Image.enabled = enabled;
         }
 
         var actualHeight = enabled ? height : 0;

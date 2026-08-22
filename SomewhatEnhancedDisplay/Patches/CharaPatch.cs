@@ -278,7 +278,7 @@ internal static class CharaPatch
             new CodeMatch(OpCodes.Ldstr, "livestock")
         );
         // 拠点のメンバータイプの文字列を追加する条件でModの設定を参照するように変更する。
-         var skipFactionMemberTypeText = matcher.Operand;
+        var skipFactionMemberTypeText = matcher.Operand;
         // ldarg.0
         // ldfld FactionMemberType Chara::memberType
         // ldc.i4.4
@@ -863,7 +863,7 @@ internal static class CharaPatch
                 // // 変更後
                 // int num = Mathf.Min(list.Count(), 3, EClass.debug.godMode || CharaPatch.DisplaysAlwaysBloodTaste() ? 3 : (1 + EClass.pc.Evalue(6607) / 15));
                 var matcher = new CodeMatcher(instructions, generator);
-                
+
                 // ldfld bool CoreDebug::godMode
                 matcher.MatchStartForward(
                     new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(CoreDebug), nameof(CoreDebug.godMode)))

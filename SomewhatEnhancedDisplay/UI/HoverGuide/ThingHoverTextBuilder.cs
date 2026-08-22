@@ -19,7 +19,7 @@ internal static class ThingHoverTextBuilder
     {
         // cardText: Card.GetHoverText()の戻り値 (名前)
         // text: thingの追加情報
-        cardText = StyleConfig.UseRarityColor ? cardText.TagColorIfNotEmptyNullable(GetRarityColor(thing)) : cardText; 
+        cardText = StyleConfig.UseRarityColor ? cardText.TagColorIfNotEmptyNullable(GetRarityColor(thing)) : cardText;
         return string.Join(" ", new[] {
             GetHoverTextLv(thing),
             $"{GetHoverTextName(cardText)}{GetHoverTextNameExtra(text)}"

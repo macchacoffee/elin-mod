@@ -15,7 +15,7 @@ internal class ModWorldConfig : JsonModConfigBase<ModWorldConfig>
     [JsonProperty("deniedAbilities")]
     private ModConfigDeniedAbilities DeniedAbilities { get; set; } = [];
 
-    public ModWorldConfig() {}
+    public ModWorldConfig() { }
 
     public ModWorldConfig(ModConfigDeniedAbilities deniedAbilities)
     {
@@ -102,7 +102,7 @@ internal record ModConfigDeniedAct
         Pt = pt;
     }
 
-    public ModConfigDeniedAct(ActList.Item act) : this(act.act.id, act.pt) {}
+    public ModConfigDeniedAct(ActList.Item act) : this(act.act.id, act.pt) { }
 }
 
 // 旧形式の設定を新形式にマイグレーションするコンバータ

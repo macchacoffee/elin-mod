@@ -45,7 +45,7 @@ internal class LuckyFood
             var rnd = EClass.rnd(100);
             if (rnd == 0)
             {
-                 power += 50;
+                power += 50;
             }
             else if (rnd < 0 && rnd <= 5)
             {

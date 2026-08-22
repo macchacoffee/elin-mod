@@ -67,9 +67,9 @@ internal class HoverGuide
         }
         else if (lockedCard is Card card && !card.ExistsOnMap)
         {
-             UnlockCard();
-             ClearTarget();
-             lockedCard = null;
+            UnlockCard();
+            ClearTarget();
+            lockedCard = null;
         }
 
         return lockedCard;
@@ -221,7 +221,7 @@ internal class HoverGuide
             return;
         }
 
-         ClearLockCandidate();
+        ClearLockCandidate();
 
         MouseoverWidget.layout.Rect().pivot = OriginalPivot;
         MouseoverWidget.textName.enabled = true;

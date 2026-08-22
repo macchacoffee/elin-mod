@@ -54,7 +54,7 @@ internal class LayerModConfigContext
 
     public static string GetStyleName(int index, ModConfigHoverGuideStyle style)
     {
-        return  $"{index + 1}. {style.Name}";
+        return $"{index + 1}. {style.Name}";
     }
 
     public void AddSelectedStyleChangedListener(Action<int, int> listener)

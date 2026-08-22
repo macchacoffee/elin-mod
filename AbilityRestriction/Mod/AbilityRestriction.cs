@@ -17,7 +17,8 @@ internal static class AbilityRestriction
     {
         var originalActs = ModContext.OriginalActStorage.GetActs(chara);
 
-        return () => {
+        return () =>
+        {
             EClass.ui.AddLayer<LayerList>()
                 .SetListCheck(originalActs,
                 item => item.act.Name + (item.pt ? $" ({ModConsts.SourceId.Party.lang()})" : ""),

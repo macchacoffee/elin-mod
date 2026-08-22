@@ -9,5 +9,5 @@ internal static class ModConsts
 
         public static readonly string DaBane = Prefixed("daBane");
         public static readonly string IsLuckyFood = Prefixed("isLuckyFood");
-     }
+    }
 }

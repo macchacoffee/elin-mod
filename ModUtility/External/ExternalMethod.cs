@@ -7,7 +7,7 @@ namespace Macchacoffee.ElinMods.ModUtility.External;
 
 internal sealed class ExternalMethod
 {
-     public static ExternalMethodSet For(Type wrapperType) => new(wrapperType);
+    public static ExternalMethodSet For(Type wrapperType) => new(wrapperType);
 }
 
 internal class ExternalMethodSet(Type wrapperType)

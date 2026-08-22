@@ -21,5 +21,5 @@ internal static class ModConsts
         public static readonly string CombatSnowSprite = Prefixed("combatSnowSprite");
         public static readonly string RideCombatSprite = Prefixed("rideCombatSprite");
         public static readonly string RideCombatSnowSprite = Prefixed("rideCombatSnowSprite");
-     }
+    }
 }

@@ -21,10 +21,10 @@ internal class ModConfigSprite : JsonModConfigBase<ModConfigSprite>
     public ModConfigTile DefaultTile { get; private set; } = new() { Enable = true, Id = _initialTileId };
 
     [JsonProperty("snowTile", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModConfigTile SnowTile { get; private set; } =  new() { Enable = false, Id = _initialSnowTileId };
+    public ModConfigTile SnowTile { get; private set; } = new() { Enable = false, Id = _initialSnowTileId };
 
     [JsonProperty("undressTile", DefaultValueHandling = DefaultValueHandling.Include)]
-    public ModConfigTile UndressTile { get; private set;} = new() { Enable = false, Id = _initialEmptyTileId };
+    public ModConfigTile UndressTile { get; private set; } = new() { Enable = false, Id = _initialEmptyTileId };
 
     [JsonProperty("rideTile", DefaultValueHandling = DefaultValueHandling.Include)]
     public ModConfigTile RideTile { get; private set; } = new() { Enable = false, Id = _initialEmptyTileId };

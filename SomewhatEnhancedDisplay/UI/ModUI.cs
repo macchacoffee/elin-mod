@@ -20,7 +20,7 @@ internal static class ModUI
                 return;
             }
 
-            if ( ModContext.WorldConfig.HoverGuide.Styles.Count > 1)
+            if (ModContext.WorldConfig.HoverGuide.Styles.Count > 1)
             {
                 ModContext.WorldConfig.HoverGuide.AdvanceCurrentStyle();
                 SE.ClickGeneral();

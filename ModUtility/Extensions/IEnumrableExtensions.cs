@@ -13,7 +13,7 @@ internal static class IEnumrableExtensions
             throw new ArgumentException("Chuck size must be more than 0");
         }
 
-        while(source.Any())
+        while (source.Any())
         {
             yield return source.Take(size);
             source = source.Skip(size);

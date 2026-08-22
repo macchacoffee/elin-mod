@@ -25,8 +25,8 @@ internal class ModLayerConfigTabGenral : YKLayout<object>
 
     private static ModConfigDisplay Config => ModContext.WorldConfig.Display;
 
-    private UIManager _ui = new();
- 
+    private readonly UIManager _ui = new();
+
     public override void OnLayout()
     {
 
@@ -123,7 +123,7 @@ internal class ModLayerConfigTabGenral : YKLayout<object>
     {
         public void AddUI(YKLayout layout)
         {
-            layout.AddModToggle(Label, Init, OnChanged, Tooltip);;
+            layout.AddModToggle(Label, Init, OnChanged, Tooltip); ;
         }
     }
 

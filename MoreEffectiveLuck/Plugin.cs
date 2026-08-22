@@ -19,7 +19,8 @@ internal static class PluginInfo
 
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]
 internal class Plugin : BaseUnityPlugin
-{    internal static Harmony? Harmony { get; private set; }
+{
+    internal static Harmony? Harmony { get; private set; }
     private static ConfigFile? ConfigFile { get; set; }
 
     private void Awake()

@@ -6,7 +6,8 @@ internal static class ElementContainerFactionExtensions
 {
     public static void OnAdd(this ElementContainerFaction ecf, Thing thing)
     {
-        UpdateRecursive(ecf, thing, (ecf, t) => {
+        UpdateRecursive(ecf, thing, (ecf, t) =>
+        {
             // 「それは装備するたびに呪われる」エンチャントが付いているアイテムは対象外とする
             // 設定で有効な場合は対象外にしない
             if (ModContext.Config.EnableRecursiveCurse.Value || t.Evalue(ENC.permaCurse) <= 0)

@@ -115,7 +115,6 @@ internal static class ThingPatch
             // ldloc.s 7 (SourceElement+Row)
             matcher.MatchStartForward(
                 new CodeMatch(OpCodes.Mul),
-                
                 new CodeMatch(OpCodes.Stloc_S),
                 new CodeMatch(OpCodes.Ldloc_S)
             );

@@ -40,6 +40,6 @@ internal static class CardHoverTextBuilder
 
     private static string? GetHoverTextOtherCards(string otherCards)
     {
-         return !string.IsNullOrEmpty(otherCards) ? otherCards.TagSize(ModUIUtil.ComputeFontSize(13)) : null;
+        return !string.IsNullOrEmpty(otherCards) ? otherCards.TagSize(ModUIUtil.ComputeFontSize(13)) : null;
     }
 }

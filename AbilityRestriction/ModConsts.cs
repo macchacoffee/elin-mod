@@ -10,5 +10,5 @@ internal static class ModConsts
         public static readonly string RestrictAbilities = Prefixed("restrictAbilities");
         public static readonly string Party = Prefixed("party");
         public static readonly string DaRestrictAbilities = Prefixed("daRestrictAbilities");
-     }
+    }
 }

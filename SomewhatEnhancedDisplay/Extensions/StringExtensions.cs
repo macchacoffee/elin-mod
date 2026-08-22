@@ -36,7 +36,8 @@ internal static class StringExtensions
         Func<string, string>? firstReplacer = null)
     {
         var i = 0;
-        return !text.IsEmpty() ? _tagTextRegex.Replace(text, m => {
+        return !text.IsEmpty() ? _tagTextRegex.Replace(text, m =>
+        {
             return i++ == 0 && firstReplacer is not null ? firstReplacer(m.Value) : replacer(m.Value);
         }) : text;
     }

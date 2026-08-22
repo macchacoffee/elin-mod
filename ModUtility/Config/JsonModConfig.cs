@@ -21,7 +21,7 @@ internal abstract class JsonModConfigBase<T> where T : JsonModConfigBase<T>
     {
         return Deserialize(Serialize());
     }
-} 
+}
 
 internal class ModColorConverter : JsonConverter<Color?>
 {

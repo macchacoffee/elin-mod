@@ -25,7 +25,7 @@ internal class NewsFeeder
     private List<ModChatLog> ChatItems { get; set; } = [];
     private int? Seed { get; set; }
 
-    private CancellationTokenSource Cancellation { get; }= new();
+    private CancellationTokenSource Cancellation { get; } = new();
 
     private RunningState State { get; set; } = RunningState.Stopped;
     private bool IsNewsReady { get; set; } = false;
@@ -40,8 +40,8 @@ internal class NewsFeeder
             return [];
         }
 
-       return [
-            .. PopRandownNewItems().Select(i => i.content),
+        return [
+             .. PopRandownNewItems().Select(i => i.content),
             .. ChatItems.Copy().Shuffle().Where(IsValidChat).Take(Config.Chat.MaxCount).Select(i => i.Msg),
         ];
     }
@@ -171,7 +171,7 @@ internal class NewsFeeder
             {
                 throw new JsonSerializationException($"Unexpected JSON format in ModChatCategoryConverter: {reader.Value}");
             }
-            
+
             if (!Enum.TryParse<ChatCategory>(catString, out var cat))
             {
                 throw new JsonSerializationException($"Unexpected ChatCategory format in ModChatCategoryConverter: {catString}");
