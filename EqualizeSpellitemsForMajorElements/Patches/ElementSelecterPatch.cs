@@ -25,13 +25,17 @@ internal static class ElementSelecterPatch
 
     static ElementSelecterPatch()
     {
-        if (EClass.core.version.IsBelow(new Version { minor = 23, batch = 330 }))
+        if (EClass.core.version.IsBelow(new Version { major = 0, minor = 23, batch = 330 }))
         {
             _elementTags = ["hand", "arrow", "bolt", "ball", "miasma", "funnel", "weapon", "sword"];
         }
-        else
+        else if (EClass.core.version.IsBelow(new Version { major = 0, minor = 23, batch = 340 }))
         {
             _elementTags = ["hand", "arrow", "bolt", "ball", "miasma", "funnel", "weapon", "sword", "flare", "comet"];
+        }
+        else
+        {
+            _elementTags = ["hand", "arrow", "bolt", "ball", "miasma", "funnel", "weapon", "sword", "flare", "comet", "missile"];
         }
     }
 

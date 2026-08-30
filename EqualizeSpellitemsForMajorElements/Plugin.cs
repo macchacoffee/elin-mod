@@ -14,7 +14,7 @@ internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.equalize-spellitems-for-major-elements";
     public const string Name = "Equalize Spellitems for Major Elements";
-    public const string Version = "1.0.1";
+    public const string Version = "1.1.0";
 }
 
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]
