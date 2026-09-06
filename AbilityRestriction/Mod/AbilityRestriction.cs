@@ -36,10 +36,10 @@ internal static class AbilityRestriction
                     }
 
                     chara.ability.Refresh();
-                    if (chara.ai is GoalCombat goal && goal.abilities != null)
+                    if (chara.ai is GoalCombat goal && goal.abilities is not null && goal.owner is not null)
                     {
                         // GoalCombatが持つアビリティ一覧が構築済みであれば再構築し、
-                        // 戦闘中でもアビリティ禁止設定の変更が反映されるようにする
+                        // 戦闘中でもアビリティ禁止設定の変更が反映されるようにする。
                         goal.BuildAbilityList();
                     }
                 }, buttonPairList =>

@@ -28,7 +28,7 @@ internal static class LayerPanelAccess
         try
         {
             var instance = _instanceGetter.Invoke(null, null);
-            if (instance != null)
+            if (instance is not null)
             {
                 _reopenMethod.Invoke(instance, null);
             }
@@ -42,7 +42,7 @@ internal static class LayerPanelAccess
     internal static void ScheduleReopenPreservingScrollPosition()
     {
         var plugin = Plugin.Instance;
-        if (plugin == null)
+        if (plugin is null)
         {
             ModLog.Error("Cannot schedule Elin with AI panel reopen because the plugin is unavailable.");
             return;
@@ -65,13 +65,13 @@ internal static class LayerPanelAccess
     private static ScrollRect? GetCurrentScrollRect()
     {
         var instance = _instanceGetter.Invoke(null, null);
-        if (instance == null)
+        if (instance is null)
         {
             return null;
         }
 
         var window = _windowGetter.Invoke(instance, null) as Component;
-        if (window == null)
+        if (window is null)
         {
             return null;
         }

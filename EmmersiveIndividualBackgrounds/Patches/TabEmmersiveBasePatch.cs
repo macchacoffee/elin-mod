@@ -21,7 +21,7 @@ internal static class TabEmmersiveBaseBuildPromptCardPatch
     private static void BuildPromptCard_Prefix(ref string path)
     {
         var chara = IndividualBackgroundState.CurrentChara;
-        if (chara == null || path != IndividualBackgroundState.GetCommonPath(chara))
+        if (chara is null || path != IndividualBackgroundState.GetCommonPath(chara))
         {
             return;
         }
@@ -36,7 +36,7 @@ internal static class TabEmmersiveBaseBuildPromptCardPatch
     private static void BuildPromptCard_Postfix(YKLayout __result)
     {
         var chara = IndividualBackgroundState.CurrentChara;
-        if (chara == null || __result == null)
+        if (chara is null || __result is null)
         {
             return;
         }

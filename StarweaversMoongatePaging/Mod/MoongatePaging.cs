@@ -42,8 +42,8 @@ internal static class MoongatePaging
 
     private static void SetupPageControls()
     {
-        if (!_layer || _maps == null || _maps.PageCount <= 1 || _layer!.windows.Count == 0 ||
-            _previousButton != null || _pageIndicator != null || _nextButton != null)
+        if (!_layer || _maps is null || _maps.PageCount <= 1 || _layer!.windows.Count == 0 ||
+            _previousButton is not null || _pageIndicator is not null || _nextButton is not null)
         {
             return;
         }
@@ -97,7 +97,7 @@ internal static class MoongatePaging
 
     private static void NextPage()
     {
-        if (!_layer || _maps == null || !_maps.MoveNext())
+        if (!_layer || _maps is null || !_maps.MoveNext())
         {
             return;
         }
@@ -107,7 +107,7 @@ internal static class MoongatePaging
 
     private static void PreviousPage()
     {
-        if (!_layer || _maps == null || !_maps.MovePrevious())
+        if (!_layer || _maps is null || !_maps.MovePrevious())
         {
             return;
         }
@@ -141,7 +141,7 @@ internal static class MoongatePaging
         var previousButton = _previousButton;
         var pageIndicator = _pageIndicator;
         var nextButton = _nextButton;
-        if (!_layer || _maps == null || previousButton == null || pageIndicator == null || nextButton == null)
+        if (!_layer || _maps is null || previousButton is null || pageIndicator is null || nextButton is null)
         {
             return;
         }
@@ -175,17 +175,17 @@ internal static class MoongatePaging
 
     private static void Release()
     {
-        if (_previousButton != null)
+        if (_previousButton is not null)
         {
             _previousButton.onClick.RemoveListener(PreviousPage);
             _previousButton.SetActive(false);
         }
-        if (_nextButton != null)
+        if (_nextButton is not null)
         {
             _nextButton.onClick.RemoveListener(NextPage);
             _nextButton.SetActive(false);
         }
-        if (_pageIndicator != null)
+        if (_pageIndicator is not null)
         {
             _pageIndicator.SetActive(false);
         }

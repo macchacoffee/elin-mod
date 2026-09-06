@@ -66,12 +66,12 @@ internal sealed class DamageDisplay : MonoBehaviour
 
     private void CreateTexts(ButtonRoster roster)
     {
-        if (_damageText == null)
+        if (_damageText is null)
         {
             _damageText = CreateText(roster, ModConsts.GameObjectName.DamageDisplayDamage);
         }
 
-        if (_damageShareText == null)
+        if (_damageShareText is null)
         {
             _damageShareText = CreateText(roster, ModConsts.GameObjectName.DamageDisplayPercentage);
         }
@@ -99,7 +99,7 @@ internal sealed class DamageDisplay : MonoBehaviour
 
     public void RefreshIfNeeded()
     {
-        if (_damageText == null || _damageShareText == null)
+        if (_damageText is null || _damageShareText is null)
         {
             return;
         }

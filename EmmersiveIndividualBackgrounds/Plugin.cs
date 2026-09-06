@@ -30,7 +30,7 @@ internal class Plugin : BaseUnityPlugin
     {
         Instance = this;
         ModLog.Initialize(Logger);
-        if (AccessTools.TypeByName("Emmersive.EmMod") == null)
+        if (AccessTools.TypeByName("Emmersive.EmMod") is null)
         {
             ModLog.Error(
                 $"Elin with AI ({PluginInfo.EmmersiveGuid}) is not loaded. " +

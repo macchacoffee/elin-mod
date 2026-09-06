@@ -21,7 +21,7 @@ internal static class DNAPatch
     [HarmonyPatch(nameof(DNA.GetInvalidAction), [typeof(Chara)])]
     private static void GetInvalidAction_Postfix(DNA __instance, Chara c, ref Element __result)
     {
-        if (__result != null)
+        if (__result is not null)
         {
             return;
         }
