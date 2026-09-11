@@ -16,8 +16,8 @@ internal static class StackMerger
             return;
         }
 
-        // Successful merges cannot change any StackKey member, so buckets are
-        // independent and can be stabilized in their first-appearance order.
+        // マージに成功してもStackKeyの構成要素は変化しないため、各bucketは独立しており、
+        // 初出順に1つずつ安定するまで処理できる。
         var orderedBuckets = BuildBuckets(things);
         foreach (var bucket in orderedBuckets)
         {
@@ -30,9 +30,8 @@ internal static class StackMerger
         var lookup = new Dictionary<StackKey, Bucket>(things.Count);
         var orderedBuckets = new List<Bucket>(things.Count);
 
-        // Keep this key limited to strict equality checks performed by Thing.CanStackTo
-        // before Trait.CanStackTo. In particular, do not add the conditional dye check
-        // or any checks that vanilla performs after Trait.CanStackTo.
+        // このキーには、Thing.CanStackToがTrait.CanStackToより前に行う厳密な一致判定だけを含める。
+        // 特に、条件付きの染色判定や、バニラがTrait.CanStackToより後に行う判定は追加しない。
         foreach (var thing in things)
         {
             if (thing.invY == ThingContainer.InvYHotbar || thing.isDestroyed)
@@ -93,8 +92,8 @@ internal static class StackMerger
         }
     }
 
-    // Every member below maps to an unconditional equality check performed by
-    // Thing.CanStackTo before Trait.CanStackTo. Recheck this boundary on updates.
+    // 以下の各メンバーは、Thing.CanStackToがTrait.CanStackToより前に行う無条件の一致判定に対応する。
+    // ゲーム更新時には、この境界が変わっていないか再確認すること。
     private readonly struct StackKey : IEquatable<StackKey>
     {
         private readonly string? _id;
@@ -121,8 +120,8 @@ internal static class StackMerger
             _isGifted = thing.isGifted;
             _idRefCard = thing.c_idRefCard;
             _idRefCard2 = thing.c_idRefCard2;
-            // A successful merge only averages decay values that are already on the
-            // same side of MaxDecay, so this classification remains stable afterward.
+            // マージに成功するのはMaxDecayの同じ側にあるdecay値同士だけであり、
+            // その加重平均も閾値を跨がないため、マージ後もこの分類は変化しない。
             _isDecayed = thing.IsDecayed;
         }
 
@@ -167,31 +166,21 @@ internal static class StackMerger
         }
     }
 
-    private sealed class Bucket
+    private sealed class Bucket(Thing first)
     {
         private const int MinCompactCount = 32;
         private const int CompactRatioDenominator = 4;
 
-        private readonly Thing _first;
-        private List<Thing>? _items;
-        private int _destroyedCount;
-
-        public Bucket(Thing first)
-        {
-            _first = first;
-            _items = null;
-            _destroyedCount = 0;
-        }
+        private readonly Thing _first = first;
+        private List<Thing>? _items = null;
+        private int _destroyedCount = 0;
 
         public void Add(Thing thing)
         {
-            if (_items is null)
+            _items ??= new(4)
             {
-                _items = new List<Thing>(4)
-                {
-                    _first,
-                };
-            }
+                _first,
+            };
 
             _items.Add(thing);
         }
@@ -207,8 +196,8 @@ internal static class StackMerger
             {
                 var merged = false;
 
-                // The list preserves ThingContainer-relative order. After a merge,
-                // restart this bucket to preserve vanilla source/target semantics.
+                // ListはThingContainer内での相対順を維持する。マージ後はこのbucketの先頭へ戻り、
+                // バニラと同じsource / targetの探索規則を維持する。
                 foreach (var source in _items)
                 {
                     if (source.invY == ThingContainer.InvYHotbar || source.isDestroyed)
@@ -223,7 +212,7 @@ internal static class StackMerger
                             && target.invY != ThingContainer.InvYHotbar
                             && source.TryStackTo(target))
                         {
-                            // A successful TryStackTo always destroys its source.
+                            // TryStackToが成功すると、sourceは必ずDestroyされる。
                             _destroyedCount++;
                             merged = true;
                             break;
@@ -241,8 +230,8 @@ internal static class StackMerger
                     return;
                 }
 
-                // Compact only after leaving both enumerators. RemoveAll preserves
-                // the relative order of every surviving candidate.
+                // 両方のEnumeratorを抜けた後だけcompactする。
+                // RemoveAllは生存している候補の相対順を維持する。
                 if (_destroyedCount >= MinCompactCount
                     && _destroyedCount * CompactRatioDenominator >= _items.Count)
                 {

@@ -12,7 +12,7 @@ internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.container-performance-fix";
     public const string Name = "Container Performance Fix";
-    public const string Version = "1.1.0";
+    public const string Version = "1.0.0";
 }
 
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]

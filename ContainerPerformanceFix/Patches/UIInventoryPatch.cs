@@ -1,21 +1,32 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Emit;
 
 using HarmonyLib;
 
 using Macchacoffee.ElinMods.ContainerPerformanceFix.Mod;
 using Macchacoffee.ElinMods.ModUtility.Logging;
+using Macchacoffee.ElinMods.ModUtility.Patch;
 
 namespace Macchacoffee.ElinMods.ContainerPerformanceFix.Patches;
 
-[HarmonyPatch(typeof(UIInventory), nameof(UIInventory.Sort), [typeof(bool)])]
+[HarmonyPatch(typeof(UIInventory))]
 internal static class UIInventoryPatch
 {
+    private static readonly PatchTarget _patchTarget = new();
+
+    [HarmonyPrepare]
+    private static bool Prepare(MethodBase? original)
+    {
+        return _patchTarget.IsPatchable(original);
+    }
+
     private static bool _failureLogged;
 
     [HarmonyTranspiler]
+    [HarmonyPatch(nameof(UIInventory.Sort), [typeof(bool)])]
     private static IEnumerable<CodeInstruction> Sort_Transpiler(
         IEnumerable<CodeInstruction> instructions)
     {
@@ -380,7 +391,7 @@ internal static class UIInventoryPatch
 
         _failureLogged = true;
         ModLog.Error(
-            $"Container Performance Fix did not modify UIInventory.Sort. "
+            $"Failed to modify UIInventory.Sort. "
             + $"The game will use vanilla behavior. Reason: {reason}");
     }
 }

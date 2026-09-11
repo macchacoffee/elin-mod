@@ -6,17 +6,15 @@
   <loadPriority>100</loadPriority>
   <version>0.23.338</version>
   <description>
-コンテナのソート時に行われるスタック候補の探索を最適化します。
-
-アイテムが大量に入った★収納箱などで、スクロールやページ変更に伴うソート処理の負荷を軽減します。スタック可否の最終判定と統合処理はゲーム本体に任せ、ソート後の処理も変更しません。
+コンテナにおけるスクロールやページ変更のパフォーマンスを改善します。
+これにより、アイテムを大量に入れた★収納箱で発生する動作のもっさり感が軽減されます。
 
 このModはゲーム本体のデータを変更しません。
 既存のセーブデータに対していつでも導入・使用停止できます。
 
 [hr][/hr]
-Optimizes stack candidate searches performed while sorting containers.
-
-This reduces sorting overhead during scrolling and page changes in containers with many items, especially the ★Magic Chest. The game remains responsible for the final stack decision and merge operation, and post-merge sorting behavior is unchanged.
+Improves the performance of scrolling and page switching in containers.
+This helps reduce sluggishness when using ★Storage chest Chests containing a large number of items.
 
 This mod does not modify game data and can be added to or removed from existing saves at any time.
 
