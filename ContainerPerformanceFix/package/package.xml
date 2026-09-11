@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Meta>
+  <title>Container Performance Fix</title>
+  <id>maccha_coffee_container_performance_fix</id>
+  <author>抹茶コーヒー</author>
+  <loadPriority>100</loadPriority>
+  <version>0.23.338</version>
+  <description>
+コンテナにおけるスクロールやページ変更のパフォーマンスを改善します。
+これにより、アイテムを大量に入れた★収納箱で発生する動作のもっさり感が軽減されます。
+
+このModはゲーム本体のデータを変更しません。
+既存のセーブデータに対していつでも導入・使用停止できます。
+
+[hr][/hr]
+Improves the performance of scrolling and page switching in containers.
+This helps reduce sluggishness when using ★Storage chest Chests containing a large number of items.
+
+This mod does not modify game data and can be added to or removed from existing saves at any time.
+
+[hr][/hr]
+[h2]Source Code[/h2]
+[url=https://github.com/macchacoffee/elin-mod/tree/main/ContainerPerformanceFix]GitHub[/url]
+  </description>
+  <tags>General,QoL</tags>
+  <visibility>Public</visibility>
+</Meta>

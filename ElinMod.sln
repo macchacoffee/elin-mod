@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SomewhatEnhancedDisplay", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarweaversMoongatePaging", "StarweaversMoongatePaging\StarweaversMoongatePaging.csproj", "{48B1A2D3-5FAC-4B7A-7D84-14C9A0F58D63}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContainerPerformanceFix", "ContainerPerformanceFix\ContainerPerformanceFix.csproj", "{89E82F5A-9D7C-4AB0-A39F-54D8BEAE2B51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,6 +88,10 @@ Global
 		{48B1A2D3-5FAC-4B7A-7D84-14C9A0F58D63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48B1A2D3-5FAC-4B7A-7D84-14C9A0F58D63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48B1A2D3-5FAC-4B7A-7D84-14C9A0F58D63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89E82F5A-9D7C-4AB0-A39F-54D8BEAE2B51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89E82F5A-9D7C-4AB0-A39F-54D8BEAE2B51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89E82F5A-9D7C-4AB0-A39F-54D8BEAE2B51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89E82F5A-9D7C-4AB0-A39F-54D8BEAE2B51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
