@@ -31,7 +31,7 @@ internal static class StackMerger
                     continue;
                 }
 
-                if (!buckets.TryGetValue(new StackKey(source.id, source.idMaterial), out var bucket))
+                if (!buckets.TryGetValue(new StackKey(source), out var bucket))
                 {
                     continue;
                 }
@@ -57,8 +57,9 @@ internal static class StackMerger
     {
         var buckets = new Dictionary<StackKey, Bucket>(things.Count);
 
-        // CanStackTo rejects a different id or idMaterial before compress can mutate
-        // encLV/elements. The key only removes comparisons that vanilla must reject.
+        // Keep this key limited to strict equality checks performed by Thing.CanStackTo
+        // before Trait.CanStackTo. In particular, do not add the conditional dye check
+        // or any checks that vanilla performs after Trait.CanStackTo.
         foreach (var thing in things)
         {
             if (thing.invY == ThingContainer.InvYHotbar || thing.isDestroyed)
@@ -66,7 +67,7 @@ internal static class StackMerger
                 continue;
             }
 
-            var key = new StackKey(thing.id, thing.idMaterial);
+            var key = new StackKey(thing);
             if (buckets.TryGetValue(key, out var bucket))
             {
                 bucket.Add(thing);
@@ -118,21 +119,52 @@ internal static class StackMerger
         }
     }
 
+    // Every member below maps to an unconditional equality check performed by
+    // Thing.CanStackTo before Trait.CanStackTo. Recheck this boundary on updates.
     private readonly struct StackKey : IEquatable<StackKey>
     {
-        private readonly string _id;
+        private readonly string? _id;
         private readonly int _idMaterial;
+        private readonly int _refVal;
+        private readonly BlessedState _blessedState;
+        private readonly int _rarityLv;
+        private readonly int _tier;
+        private readonly int _idSkin;
+        private readonly bool _isGifted;
+        private readonly string? _idRefCard;
+        private readonly string? _idRefCard2;
+        private readonly bool _isDecayed;
 
-        public StackKey(string id, int idMaterial)
+        public StackKey(Thing thing)
         {
-            _id = id;
-            _idMaterial = idMaterial;
+            _id = thing.id;
+            _idMaterial = thing.idMaterial;
+            _refVal = thing.refVal;
+            _blessedState = thing.blessedState;
+            _rarityLv = thing.rarityLv;
+            _tier = thing.tier;
+            _idSkin = thing.idSkin;
+            _isGifted = thing.isGifted;
+            _idRefCard = thing.c_idRefCard;
+            _idRefCard2 = thing.c_idRefCard2;
+            // A successful merge only averages decay values that are already on the
+            // same side of MaxDecay, so this classification remains stable afterward.
+            _isDecayed = thing.IsDecayed;
         }
 
         public bool Equals(StackKey other)
         {
             return _idMaterial == other._idMaterial
-                && string.Equals(_id, other._id, StringComparison.Ordinal);
+                && _refVal == other._refVal
+                && _blessedState == other._blessedState
+                && _rarityLv == other._rarityLv
+                && _tier == other._tier
+                && _idSkin == other._idSkin
+                && _isGifted == other._isGifted
+                && _isDecayed == other._isDecayed
+                && string.Equals(_id, other._id, StringComparison.Ordinal)
+                && string.Equals(_idRefCard, other._idRefCard, StringComparison.Ordinal)
+                && string.Equals(_idRefCard2, other._idRefCard2, StringComparison.Ordinal);
         }
 
         public override bool Equals(object? obj)
@@ -144,7 +176,19 @@ internal static class StackMerger
         {
             unchecked
             {
-                return ((_id?.GetHashCode() ?? 0) * 397) ^ _idMaterial;
+                var hash = 17;
+                hash = hash * 31 + (_id?.GetHashCode() ?? 0);
+                hash = hash * 31 + _idMaterial;
+                hash = hash * 31 + _refVal;
+                hash = hash * 31 + (int)_blessedState;
+                hash = hash * 31 + _rarityLv;
+                hash = hash * 31 + _tier;
+                hash = hash * 31 + _idSkin;
+                hash = hash * 31 + (_isGifted ? 1 : 0);
+                hash = hash * 31 + (_idRefCard?.GetHashCode() ?? 0);
+                hash = hash * 31 + (_idRefCard2?.GetHashCode() ?? 0);
+                hash = hash * 31 + (_isDecayed ? 1 : 0);
+                return hash;
             }
         }
     }
