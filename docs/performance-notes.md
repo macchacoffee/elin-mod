@@ -44,6 +44,42 @@ HealthBar の対象状態を毎フレーム確認する設計について、Stop
 - polling を削除・イベント駆動化する場合は、性能だけでなく「ダメージ発生時にすぐアニメーションが始まる」「lock / fade / death の状態を正しく追従する」という現在の挙動を維持できるか確認する。
 - Max は一時的な spike の影響を受けるため、Average / Total / Count と測定条件を優先して比較する。
 
+## Container Performance Fix
+
+### `(id, idMaterial)` bucket 探索のマイクロベンチ
+
+対象:
+
+- `UIInventory.Sort()` 冒頭のスタック候補探索を模した、全 item の key が異なるケース。
+- vanilla 相当の全組み合わせ走査と、`Dictionary<StackKey, ...>` 構築・lookup を比較。
+
+測定条件:
+
+- .NET SDK 10.0.112 / Windows
+- 各 item の `TryStackTo()` 本体は呼ばず、候補探索構造だけを測定。
+- 小さい Count は反復回数を増やし、Count 500 以上は各20回の平均。
+- Elin / Unity Mono 上の実測ではないため、絶対時間や倍率はゲーム内性能を保証しない。
+
+| Count | 全組み合わせ走査 | bucket | 比率 |
+|---:|---:|---:|---:|
+| 100 | 189.82 us | 14.23 us | 13.3x |
+| 500 | 4,270.70 us | 73.59 us | 58.0x |
+| 1,000 | 12,373.55 us | 143.92 us | 86.0x |
+| 2,000 | 20,716.97 us | 191.34 us | 108.3x |
+| 4,000 | 92,056.31 us | 419.98 us | 219.2x |
+
+小規模時の結果:
+
+- Count 8: 全走査 1.40 us / bucket 1.30 us
+- Count 16: 全走査 4.17 us / bucket 2.38 us
+- Count 24: 全走査 9.25 us / bucket 3.53 us
+
+判断:
+
+- 全 item の key が異なる主対象では、Count に伴う探索コストの増加を大幅に抑えられる。
+- Dictionary allocation の利益が小さい Count 16 以下は、GC を増やさないため vanilla 相当探索を維持する。
+- 同一 key だがスタック不可能な item ばかりの場合は、bucket 内探索が O(n²) のまま残る。
+
 ## 測定を追加するときの形式
 
 ```text

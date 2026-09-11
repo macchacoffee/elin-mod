@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Meta>
+  <title>Container Performance Fix</title>
+  <id>maccha_coffee_container_performance_fix</id>
+  <author>抹茶コーヒー</author>
+  <loadPriority>100</loadPriority>
+  <version>0.23.338</version>
+  <description>
+コンテナのソート時に行われるスタック候補の探索を最適化します。
+
+アイテムが大量に入った★収納箱などで、スクロールやページ変更に伴うソート処理の負荷を軽減します。スタック可否の最終判定と統合処理はゲーム本体に任せ、ソート後の処理も変更しません。
+
+このModはゲーム本体のデータを変更しません。
+既存のセーブデータに対していつでも導入・使用停止できます。
+
+[hr][/hr]
+Optimizes stack candidate searches performed while sorting containers.
+
+This reduces sorting overhead during scrolling and page changes in containers with many items, especially the ★Magic Chest. The game remains responsible for the final stack decision and merge operation, and post-merge sorting behavior is unchanged.
+
+This mod does not modify game data and can be added to or removed from existing saves at any time.
+
+[hr][/hr]
+[h2]Source Code[/h2]
+[url=https://github.com/macchacoffee/elin-mod/tree/main/ContainerPerformanceFix]GitHub[/url]
+  </description>
+  <tags>General,QoL</tags>
+  <visibility>Public</visibility>
+</Meta>
