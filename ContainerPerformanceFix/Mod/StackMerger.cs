@@ -16,46 +16,19 @@ internal static class StackMerger
             return;
         }
 
-        var buckets = BuildBuckets(things);
-
-        while (true)
+        // Successful merges cannot change any StackKey member, so buckets are
+        // independent and can be stabilized in their first-appearance order.
+        var orderedBuckets = BuildBuckets(things);
+        foreach (var bucket in orderedBuckets)
         {
-            var merged = false;
-
-            // Source order remains the current ThingContainer order, just like vanilla.
-            for (var sourceIndex = 0; sourceIndex < things.Count; sourceIndex++)
-            {
-                var source = things[sourceIndex];
-                if (source.invY == ThingContainer.InvYHotbar || source.isDestroyed)
-                {
-                    continue;
-                }
-
-                if (!buckets.TryGetValue(new StackKey(source), out var bucket))
-                {
-                    continue;
-                }
-
-                if (bucket.TryMergeFrom(source))
-                {
-                    merged = true;
-                    break;
-                }
-            }
-
-            if (!merged)
-            {
-                return;
-            }
-
-            // TryStackTo destroys and removes the source after a successful merge.
-            // Restart from the first source to preserve vanilla's mutation semantics.
+            bucket.MergeStacks();
         }
     }
 
-    private static Dictionary<StackKey, Bucket> BuildBuckets(ThingContainer things)
+    private static List<Bucket> BuildBuckets(ThingContainer things)
     {
-        var buckets = new Dictionary<StackKey, Bucket>(things.Count);
+        var lookup = new Dictionary<StackKey, Bucket>(things.Count);
+        var orderedBuckets = new List<Bucket>(things.Count);
 
         // Keep this key limited to strict equality checks performed by Thing.CanStackTo
         // before Trait.CanStackTo. In particular, do not add the conditional dye check
@@ -68,18 +41,19 @@ internal static class StackMerger
             }
 
             var key = new StackKey(thing);
-            if (buckets.TryGetValue(key, out var bucket))
+            if (lookup.TryGetValue(key, out var bucket))
             {
                 bucket.Add(thing);
-                buckets[key] = bucket;
             }
             else
             {
-                buckets.Add(key, new Bucket(thing));
+                bucket = new Bucket(thing);
+                lookup.Add(key, bucket);
+                orderedBuckets.Add(bucket);
             }
         }
 
-        return buckets;
+        return orderedBuckets;
     }
 
     private static void MergeStacksVanillaOrder(ThingContainer things)
@@ -193,53 +167,89 @@ internal static class StackMerger
         }
     }
 
-    private struct Bucket
+    private sealed class Bucket
     {
+        private const int MinCompactCount = 32;
+        private const int CompactRatioDenominator = 4;
+
         private readonly Thing _first;
-        private List<Thing>? _remaining;
+        private List<Thing>? _items;
+        private int _destroyedCount;
 
         public Bucket(Thing first)
         {
             _first = first;
-            _remaining = null;
+            _items = null;
+            _destroyedCount = 0;
         }
 
         public void Add(Thing thing)
         {
-            (_remaining ??= new List<Thing>(1)).Add(thing);
+            if (_items is null)
+            {
+                _items = new List<Thing>(4)
+                {
+                    _first,
+                };
+            }
+
+            _items.Add(thing);
         }
 
-        public bool TryMergeFrom(Thing source)
+        public void MergeStacks()
         {
-            if (TryMerge(source, _first))
+            if (_items is null)
             {
-                return true;
+                return;
             }
 
-            if (_remaining is null)
+            while (_items.Count - _destroyedCount > 1)
             {
-                return false;
-            }
+                var merged = false;
 
-            foreach (var target in _remaining)
-            {
-                if (TryMerge(source, target))
+                // The list preserves ThingContainer-relative order. After a merge,
+                // restart this bucket to preserve vanilla source/target semantics.
+                foreach (var source in _items)
                 {
-                    return true;
+                    if (source.invY == ThingContainer.InvYHotbar || source.isDestroyed)
+                    {
+                        continue;
+                    }
+
+                    foreach (var target in _items)
+                    {
+                        if (!ReferenceEquals(source, target)
+                            && !target.isDestroyed
+                            && target.invY != ThingContainer.InvYHotbar
+                            && source.TryStackTo(target))
+                        {
+                            // A successful TryStackTo always destroys its source.
+                            _destroyedCount++;
+                            merged = true;
+                            break;
+                        }
+                    }
+
+                    if (merged)
+                    {
+                        break;
+                    }
+                }
+
+                if (!merged)
+                {
+                    return;
+                }
+
+                // Compact only after leaving both enumerators. RemoveAll preserves
+                // the relative order of every surviving candidate.
+                if (_destroyedCount >= MinCompactCount
+                    && _destroyedCount * CompactRatioDenominator >= _items.Count)
+                {
+                    _items.RemoveAll(static thing => thing.isDestroyed);
+                    _destroyedCount = 0;
                 }
             }
-
-            return false;
-        }
-
-        private static bool TryMerge(Thing source, Thing target)
-        {
-            // A shared key is only a candidate filter. TryStackTo remains the sole
-            // authority for every stateful vanilla check, including compress behavior.
-            return !ReferenceEquals(source, target)
-                && !target.isDestroyed
-                && target.invY != ThingContainer.InvYHotbar
-                && source.TryStackTo(target);
         }
     }
 }

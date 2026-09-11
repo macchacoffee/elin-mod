@@ -118,6 +118,53 @@ HealthBar の対象状態を毎フレーム確認する設計について、Stop
 - 実際の改善幅は保存されている参照カードなどの分布に依存するため、上記の倍率を
   実セーブデータへそのまま当てはめない。
 
+### per-bucket merge / live compaction の合成ケース比較
+
+対象:
+
+- StackKey と bucket 内の source / target / restart 順序を変えず、container 全体ではなく
+  初出順の bucket ごとにmergeを完結させる方式を旧方式と比較。
+- mergeで残ったdestroy済み参照は、32件以上かつbucket Listの25%以上になった時点で
+  restart前に `RemoveAll()` する。
+
+測定条件:
+
+- .NET SDK 10.0.112 / Windows
+- warmup 3回後、各15回の中央値。
+- Case A: 3,000 Thing、30 bucket、最大100件、全候補がスタック不可。
+- Case B: 3,000 Thing、1,801 bucket、最大1,200件。最大bucketは4件ずつスタック可能な
+  300グループで、merge成功900回。
+- Case C: 1,200 Thingが同じbucketに属し、全件がスタック可能。merge成功1,199回。
+- Elin / Unity Monoや実セーブではなく、探索構造と状態更新を模した合成モデル。
+  絶対時間はゲーム内性能を保証しない。
+
+| ケース | 旧 TryStackTo相当 | 新 TryStackTo相当 | 旧destroyed skip | 新destroyed skip | compact回数 / 削除数 | 旧中央値 | 新中央値 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| A | 297,000 | 297,000 | 0 | 0 | 0 / 0 | 3,413.60 us | 3,399.90 us |
+| B | 80,820,600 | 80,820,600 | 81,404,550 | 12,933,364 | 4 / 821 | 1,270,998.90 us | 885,518.30 us |
+| C | 1,199 | 1,199 | 719,400 | 206,254 | 11 / 1,177 | 4,111.40 us | 1,342.70 us |
+
+Case Cの新方式でcompactionを無効にした場合:
+
+- TryStackTo相当: 1,199
+- destroyed skip: 1,436,402
+- 中央値: 8,097.50 us
+
+互換性モデル確認:
+
+- 4件の同一bucketで `A -> B`, `B -> C`, `C -> D` の順にmergeし、UID Dが生存。
+- mixed / compress ON・OFF / food / corpse / equipment / decayed / hotbar相当状態を含む
+  40 Thing × 1,000 seedで旧方式と新方式を比較。
+- Thing数、生存uid、id、idMaterial、Num、decay、encLV、elements、invX、invYが一致。
+- bucketごとのmerge方向とsource / target順も一致。
+
+結論:
+
+- 同じbucket内の比較を省略しないため、TryStackTo相当回数は旧方式と同一。
+- mergeがないCase Aは実質同等。mergeが多いCase Bでは全体restartの除去、Case Cでは
+  live compactionによるdestroy済み参照の除去が主な改善要因になった。
+- Case Cのdestroyed skipは旧方式比約71%、compactionなしの新方式比約86%減少した。
+
 ## 測定を追加するときの形式
 
 ```text
