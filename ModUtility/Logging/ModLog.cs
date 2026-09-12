@@ -26,6 +26,11 @@ internal static class ModLog
         Source.LogInfo(message);
     }
 
+    public static void Warning(object message)
+    {
+        Source.LogWarning(message);
+    }
+
     public static void Error(object message)
     {
         Source.LogError(message);
