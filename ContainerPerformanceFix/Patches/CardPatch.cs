@@ -84,8 +84,6 @@ internal static class CardPatch
             ).ThrowIfInvalid(
                 "Could not find Card.SecondaryCompare's name comparison.");
 
-            // static GetName(Card, NameStyle, int) consumes the same three stack values and
-            // produces the same string as the original virtual call.
             matcher.Advance(4)
                 .SetAndAdvance(OpCodes.Call, cachedGetName)
                 .Advance(3)
