@@ -16,8 +16,6 @@ internal static class StackMerger
             return;
         }
 
-        // マージに成功してもStackKeyの構成要素は変化しないため、各bucketは独立しており、
-        // 初出順に1つずつ安定するまで処理できる。
         var orderedBuckets = BuildBuckets(things);
         foreach (var bucket in orderedBuckets)
         {
@@ -30,8 +28,8 @@ internal static class StackMerger
         var lookup = new Dictionary<StackKey, Bucket>(things.Count);
         var orderedBuckets = new List<Bucket>(things.Count);
 
-        // このキーには、Thing.CanStackToがTrait.CanStackToより前に行う厳密な一致判定だけを含める。
-        // 特に、条件付きの染色判定や、バニラがTrait.CanStackToより後に行う判定は追加しない。
+        // Thing.CanStackToがTrait.CanStackToより前に行う一致判定だけを含める。
+        // 条件付きの染色判定やバニラがTrait.CanStackToより後に行う判定は追加しない。
         foreach (var thing in things)
         {
             if (thing.invY == ThingContainer.InvYHotbar || thing.isDestroyed)
@@ -92,38 +90,21 @@ internal static class StackMerger
         }
     }
 
-    // 以下の各メンバーは、Thing.CanStackToがTrait.CanStackToより前に行う無条件の一致判定に対応する。
-    // ゲーム更新時には、この境界が変わっていないか再確認すること。
-    private readonly struct StackKey : IEquatable<StackKey>
+    // 以下の各メンバーはThing.CanStackToがTrait.CanStackToより前に行う無条件の一致判定に対応する。
+    // ゲーム更新時にはこの条件が変わっていないか再確認する必要がある。
+    private readonly struct StackKey(Thing thing) : IEquatable<StackKey>
     {
-        private readonly string? _id;
-        private readonly int _idMaterial;
-        private readonly int _refVal;
-        private readonly BlessedState _blessedState;
-        private readonly int _rarityLv;
-        private readonly int _tier;
-        private readonly int _idSkin;
-        private readonly bool _isGifted;
-        private readonly string? _idRefCard;
-        private readonly string? _idRefCard2;
-        private readonly bool _isDecayed;
-
-        public StackKey(Thing thing)
-        {
-            _id = thing.id;
-            _idMaterial = thing.idMaterial;
-            _refVal = thing.refVal;
-            _blessedState = thing.blessedState;
-            _rarityLv = thing.rarityLv;
-            _tier = thing.tier;
-            _idSkin = thing.idSkin;
-            _isGifted = thing.isGifted;
-            _idRefCard = thing.c_idRefCard;
-            _idRefCard2 = thing.c_idRefCard2;
-            // マージに成功するのはMaxDecayの同じ側にあるdecay値同士だけであり、
-            // その加重平均も閾値を跨がないため、マージ後もこの分類は変化しない。
-            _isDecayed = thing.IsDecayed;
-        }
+        private readonly string? _id = thing.id;
+        private readonly int _idMaterial = thing.idMaterial;
+        private readonly int _refVal = thing.refVal;
+        private readonly BlessedState _blessedState = thing.blessedState;
+        private readonly int _rarityLv = thing.rarityLv;
+        private readonly int _tier = thing.tier;
+        private readonly int _idSkin = thing.idSkin;
+        private readonly bool _isGifted = thing.isGifted;
+        private readonly string? _idRefCard = thing.c_idRefCard;
+        private readonly string? _idRefCard2 = thing.c_idRefCard2;
+        private readonly bool _isDecayed = thing.IsDecayed;
 
         public bool Equals(StackKey other)
         {
@@ -196,8 +177,6 @@ internal static class StackMerger
             {
                 var merged = false;
 
-                // ListはThingContainer内での相対順を維持する。マージ後はこのbucketの先頭へ戻り、
-                // バニラと同じsource / targetの探索規則を維持する。
                 foreach (var source in _items)
                 {
                     if (source.invY == ThingContainer.InvYHotbar || source.isDestroyed)
@@ -212,7 +191,7 @@ internal static class StackMerger
                             && target.invY != ThingContainer.InvYHotbar
                             && source.TryStackTo(target))
                         {
-                            // TryStackToが成功すると、sourceは必ずDestroyされる。
+                            // TryStackToが成功するとsourceは破棄される。
                             _destroyedCount++;
                             merged = true;
                             break;
@@ -230,8 +209,6 @@ internal static class StackMerger
                     return;
                 }
 
-                // 両方のEnumeratorを抜けた後だけcompactする。
-                // RemoveAllは生存している候補の相対順を維持する。
                 if (_destroyedCount >= MinCompactCount
                     && _destroyedCount * CompactRatioDenominator >= _items.Count)
                 {

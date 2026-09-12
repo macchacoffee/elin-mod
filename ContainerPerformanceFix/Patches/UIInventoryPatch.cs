@@ -17,14 +17,13 @@ internal static class UIInventoryPatch
 {
     private static readonly PatchTarget _patchTarget = new();
 
-    private static UIInventory? _redrawSortOwner;
-
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
     {
         return _patchTarget.IsPatchable(original);
     }
 
+    private static UIInventory? _redrawSortOwner;
     private static bool _mergeFailureLogged;
     private static bool _duplicateSortFailureLogged;
 
@@ -38,64 +37,12 @@ internal static class UIInventoryPatch
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(UIInventory.Sort), [typeof(bool)])]
     private static IEnumerable<CodeInstruction> Sort_Transpiler(
-        IEnumerable<CodeInstruction> instructions)
+        IEnumerable<CodeInstruction> instructions,
+        ILGenerator generator)
     {
         var patched = instructions.ToList();
-
-        try
-        {
-            if (!TryFindMergeLoop(patched, out var start, out var end, out var reason))
-            {
-                LogMergePatchFailure(reason);
-            }
-            else
-            {
-                var replacementMethod = AccessTools.DeclaredMethod(
-                    typeof(StackMerger),
-                    nameof(StackMerger.FastMergeStacks),
-                    [typeof(UIInventory)]);
-                if (replacementMethod is null)
-                {
-                    LogMergePatchFailure("FastMergeStacks could not be resolved.");
-                }
-                else
-                {
-                    var replacement = new CodeInstruction(OpCodes.Ldarg_0);
-                    replacement.labels.AddRange(patched[start].labels);
-
-                    var mergePatched = patched.ToList();
-                    mergePatched.RemoveRange(start, end - start + 1);
-                    mergePatched.InsertRange(start,
-                    [
-                        replacement,
-                        new CodeInstruction(OpCodes.Call, replacementMethod)
-                    ]);
-                    patched = mergePatched;
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            LogMergePatchFailure($"Unexpected error while matching the stack merge loop: {ex}");
-        }
-
-        try
-        {
-            if (TryReplaceFinalRedraw(patched, out var redrawPatched, out var reason))
-            {
-                patched = redrawPatched;
-            }
-            else
-            {
-                LogDuplicateSortPatchFailure(reason);
-            }
-        }
-        catch (Exception ex)
-        {
-            LogDuplicateSortPatchFailure(
-                $"Unexpected error while matching the final redraw: {ex}");
-        }
-
+        patched = PatchMergeLoop(patched, generator);
+        patched = PatchFinalRedraw(patched, generator);
         return patched;
     }
 
@@ -114,224 +61,174 @@ internal static class UIInventoryPatch
         }
     }
 
-    private static bool TryReplaceFinalRedraw(
-        IReadOnlyList<CodeInstruction> instructions,
-        out List<CodeInstruction> patched,
-        out string reason)
+    private static List<CodeInstruction> PatchFinalRedraw(
+        List<CodeInstruction> instructions,
+        ILGenerator generator)
     {
-        patched = instructions.ToList();
-        reason = "The final UIInventory list redraw pattern was not found.";
-
-        var baseRedraw = AccessTools.DeclaredMethod(
-            typeof(BaseList),
-            nameof(BaseList.Redraw),
-            Type.EmptyTypes);
-        var listRedraw = AccessTools.DeclaredMethod(
-            typeof(UIList),
-            nameof(UIList.Redraw),
-            Type.EmptyTypes);
-        var listField = AccessTools.DeclaredField(
-            typeof(UIInventory),
-            nameof(UIInventory.list));
-        var guardedRedraw = AccessTools.DeclaredMethod(
-            typeof(UIInventoryPatch),
-            nameof(GuardedRedraw),
-            [typeof(UIList), typeof(UIInventory)]);
-        if (baseRedraw is null || listRedraw is null
-            || listField is null || guardedRedraw is null)
+        try
         {
-            reason = "A method or field required for guarded redraw could not be resolved.";
-            return false;
-        }
-
-        var redrawCalls = new List<int>();
-        for (var i = 0; i < instructions.Count; i++)
-        {
-            if (instructions[i].Calls(baseRedraw) || instructions[i].Calls(listRedraw))
+            var baseRedraw = AccessTools.DeclaredMethod(
+                typeof(BaseList),
+                nameof(BaseList.Redraw),
+                Type.EmptyTypes);
+            var listRedraw = AccessTools.DeclaredMethod(
+                typeof(UIList),
+                nameof(UIList.Redraw),
+                Type.EmptyTypes);
+            var listField = AccessTools.DeclaredField(
+                typeof(UIInventory),
+                nameof(UIInventory.list));
+            var guardedRedraw = AccessTools.DeclaredMethod(
+                typeof(UIInventoryPatch),
+                nameof(GuardedRedraw),
+                [typeof(UIList), typeof(UIInventory)]);
+            if (baseRedraw is null || listRedraw is null
+                || listField is null || guardedRedraw is null)
             {
-                redrawCalls.Add(i);
+                throw new MissingMemberException(
+                    "A method or field required for guarded redraw could not be resolved.");
             }
-        }
 
-        if (redrawCalls.Count != 1)
+            // // 変更前
+            // if (redraw)
+            // {
+            //     list.Redraw();
+            // }
+            // // 変更後
+            // if (redraw)
+            // {
+            //     GuardedRedraw(list, this);
+            // }
+            var matcher = new CodeMatcher(instructions, generator);
+            matcher.MatchStartForward(
+                new CodeMatch(OpCodes.Ldarg_1),
+                new CodeMatch(IsBranchFalse),
+                new CodeMatch(OpCodes.Ldarg_0),
+                new CodeMatch(OpCodes.Ldfld, listField),
+                new CodeMatch(instruction =>
+                    instruction.Calls(baseRedraw) || instruction.Calls(listRedraw)),
+                new CodeMatch(OpCodes.Ret)
+            ).ThrowIfInvalid("Could not find UIInventory.Sort's final redraw block.");
+
+            if (matcher.InstructionAt(1).operand is not Label returnLabel
+                || !matcher.InstructionAt(5).labels.Contains(returnLabel))
+            {
+                throw new InvalidOperationException(
+                    "The redraw=false branch did not target the matched return.");
+            }
+
+            matcher.Advance(4);
+            if (matcher.Blocks.Count != 0)
+            {
+                throw new InvalidOperationException(
+                    "The final Redraw call was on an exception-block boundary.");
+            }
+
+            var callLabels = matcher.Labels.ToList();
+            matcher.Labels.Clear();
+            matcher.InsertAndAdvance(
+                new CodeInstruction(OpCodes.Ldarg_0).WithLabels(callLabels));
+            matcher.Set(OpCodes.Call, guardedRedraw);
+            return matcher.Instructions();
+        }
+        catch (Exception ex)
         {
-            reason = $"Expected exactly one list Redraw call, found {redrawCalls.Count}.";
-            return false;
+            LogDuplicateSortPatchFailure(
+                $"Unexpected error while matching the final redraw: {ex}");
+            return instructions;
         }
-
-        var callIndex = redrawCalls[0];
-        if (callIndex < 4 || callIndex + 2 != instructions.Count
-            || instructions[callIndex - 4].opcode != OpCodes.Ldarg_1
-            || !IsBranchFalse(instructions[callIndex - 3])
-            || instructions[callIndex - 2].opcode != OpCodes.Ldarg_0
-            || instructions[callIndex - 1].opcode != OpCodes.Ldfld
-            || !Equals(instructions[callIndex - 1].operand, listField)
-            || instructions[callIndex + 1].opcode != OpCodes.Ret)
-        {
-            reason = "The Redraw call was not inside the expected redraw-argument tail block.";
-            return false;
-        }
-
-        if (instructions[callIndex - 3].operand is not Label returnLabel)
-        {
-            reason = "The redraw condition did not branch to a label.";
-            return false;
-        }
-
-        var branchTargetIndex = FindLabelTarget(instructions, returnLabel);
-        if (branchTargetIndex != callIndex + 1)
-        {
-            reason = "The redraw=false branch did not target the final return.";
-            return false;
-        }
-
-        if (instructions[callIndex].blocks.Count != 0)
-        {
-            reason = "The final Redraw call was on an exception-block boundary.";
-            return false;
-        }
-
-        var inventoryLoad = new CodeInstruction(OpCodes.Ldarg_0);
-        inventoryLoad.labels.AddRange(instructions[callIndex].labels);
-        var guardedCall = new CodeInstruction(OpCodes.Call, guardedRedraw);
-
-        patched.RemoveAt(callIndex);
-        patched.InsertRange(callIndex,
-        [
-            inventoryLoad,
-            guardedCall
-        ]);
-        return true;
     }
 
-    private static bool TryFindMergeLoop(
-        IReadOnlyList<CodeInstruction> instructions,
-        out int start,
-        out int end,
-        out string reason)
+    private static List<CodeInstruction> PatchMergeLoop(
+        List<CodeInstruction> instructions,
+        ILGenerator generator)
     {
-        start = -1;
-        end = -1;
-        reason = "The vanilla stack merge loop pattern was not found.";
-
-        var tryStackTo = AccessTools.DeclaredMethod(
-            typeof(Card),
-            nameof(Card.TryStackTo),
-            [typeof(Thing)]);
-        if (tryStackTo is null)
+        try
         {
-            reason = "Card.TryStackTo(Thing) could not be resolved.";
-            return false;
-        }
+            var tryStackTo = AccessTools.DeclaredMethod(
+                typeof(Card),
+                nameof(Card.TryStackTo),
+                [typeof(Thing)])
+                ?? throw new MissingMethodException(
+                    typeof(Card).FullName,
+                    nameof(Card.TryStackTo));
 
-        var tryStackCalls = new List<int>();
-        for (var i = 0; i < instructions.Count; i++)
-        {
-            if (instructions[i].Calls(tryStackTo))
+            // // 変更前
+            // var merged = true;
+            // while (merged)
+            // {
+            //     merged = false;
+            //     // owner.Container.thingsを二重に走査してTryStackToする。
+            // }
+            // // 変更後
+            // StackMerger.FastMergeStacks(this);
+            var matcher = new CodeMatcher(instructions, generator);
+            var flagLocal = -1;
+            var conditionLabel = default(Label);
+
+            matcher.MatchStartForward(
+                new CodeMatch(instruction => instruction.LoadsConstant(1)),
+                new CodeMatch(instruction =>
+                    TryGetLocalIndex(instruction, store: true, out flagLocal)),
+                new CodeMatch(instruction =>
+                    TryGetUnconditionalBranchTarget(instruction, out conditionLabel)),
+                new CodeMatch(instruction => instruction.LoadsConstant(0)),
+                new CodeMatch(instruction =>
+                    TryGetLocalIndex(instruction, store: true, out var local)
+                    && local == flagLocal)
+            ).ThrowIfInvalid("Could not find UIInventory.Sort's merge-loop initializer.");
+
+            var start = matcher.Pos;
+            var loopBodyLabels = matcher.InstructionAt(3).labels;
+
+            matcher.MatchStartForward(
+                new CodeMatch(OpCodes.Callvirt, tryStackTo),
+                new CodeMatch(IsBranchFalse)
+            ).ThrowIfInvalid(
+                "Could not find Card.TryStackTo inside UIInventory.Sort's merge loop.");
+
+            matcher.MatchStartForward(
+                new CodeMatch(instruction =>
+                    instruction.labels.Contains(conditionLabel)
+                    && TryGetLocalIndex(instruction, store: false, out var local)
+                    && local == flagLocal),
+                new CodeMatch(instruction =>
+                    IsBranchTrue(instruction)
+                    && instruction.operand is Label loopBodyLabel
+                    && loopBodyLabels.Contains(loopBodyLabel))
+            ).ThrowIfInvalid(
+                "Could not find UIInventory.Sort's merge-loop condition.");
+
+            var end = matcher.Pos + 1;
+            if (!ExceptionBlocksAreContained(instructions, start, end))
             {
-                tryStackCalls.Add(i);
+                throw new InvalidOperationException(
+                    "The merge loop crossed an exception-block boundary.");
             }
-        }
 
-        if (tryStackCalls.Count != 1)
-        {
-            reason = $"Expected exactly one Card.TryStackTo call, found {tryStackCalls.Count}.";
-            return false;
-        }
-
-        var tryStackCall = tryStackCalls[0];
-        var startCandidates = new List<int>();
-        for (var i = 0; i + 4 < tryStackCall; i++)
-        {
-            if (instructions[i].opcode == OpCodes.Ldc_I4_1
-                && TryGetStoredLocalIndex(instructions[i + 1], out _)
-                && IsUnconditionalBranch(instructions[i + 2])
-                && instructions[i + 3].opcode == OpCodes.Ldc_I4_0
-                && TryGetStoredLocalIndex(instructions[i + 4], out _))
+            if (HasExternalBranchIntoRemovedRegion(instructions, start, end))
             {
-                startCandidates.Add(i);
+                throw new InvalidOperationException(
+                    "Code outside the merge loop branched into the replacement range.");
             }
-        }
 
-        if (startCandidates.Count != 1)
+            // The original loop and the replacement both enter and leave with an empty stack.
+            // Mutating the first instruction preserves any entry labels and block metadata.
+            matcher.Start()
+                .Advance(start)
+                .Set(OpCodes.Ldarg_0, null)
+                .Advance(1)
+                .RemoveInstructions(end - start)
+                .InsertAndAdvance(
+                    CodeInstruction.Call(() => StackMerger.FastMergeStacks(default!)));
+            return matcher.Instructions();
+        }
+        catch (Exception ex)
         {
-            reason = $"Expected one merge-loop initializer, found {startCandidates.Count}.";
-            return false;
+            LogMergePatchFailure(
+                $"Unexpected error while matching the stack merge loop: {ex}");
+            return instructions;
         }
-
-        start = startCandidates[0];
-        if (!TryGetStoredLocalIndex(instructions[start + 1], out var flagLocal)
-            || !TryGetStoredLocalIndex(instructions[start + 4], out var loopFlagLocal)
-            || flagLocal != loopFlagLocal)
-        {
-            reason = "The merge-loop flag local did not match its initializer.";
-            return false;
-        }
-
-        if (instructions[start + 2].operand is not Label conditionLabel)
-        {
-            reason = "The initial merge-loop branch target was not a label.";
-            return false;
-        }
-
-        var conditionIndex = FindLabelTarget(instructions, conditionLabel);
-        if (conditionIndex <= tryStackCall || conditionIndex + 1 >= instructions.Count)
-        {
-            reason = "The merge-loop condition target was outside the expected range.";
-            return false;
-        }
-
-        if (!TryGetLoadedLocalIndex(instructions[conditionIndex], out var conditionLocal)
-            || conditionLocal != flagLocal
-            || !IsBranchTrue(instructions[conditionIndex + 1]))
-        {
-            reason = "The trailing merge-loop condition did not use the expected flag.";
-            return false;
-        }
-
-        var loopBodyLabels = instructions[start + 3].labels;
-        if (instructions[conditionIndex + 1].operand is not Label loopBodyLabel
-            || !loopBodyLabels.Contains(loopBodyLabel))
-        {
-            reason = "The trailing merge-loop branch did not return to the loop body.";
-            return false;
-        }
-
-        end = conditionIndex + 1;
-        if (tryStackCall <= start || tryStackCall >= end
-            || tryStackCall + 1 >= instructions.Count
-            || !IsBranchFalse(instructions[tryStackCall + 1]))
-        {
-            reason = "Card.TryStackTo was not inside the expected success-check structure.";
-            return false;
-        }
-
-        if (!ExceptionBlocksAreContained(instructions, start, end))
-        {
-            reason = "The merge loop crossed an exception-block boundary.";
-            return false;
-        }
-
-        if (HasExternalBranchIntoRemovedRegion(instructions, start, end))
-        {
-            reason = "Code outside the merge loop branched into the replacement range.";
-            return false;
-        }
-
-        return true;
-    }
-
-    private static int FindLabelTarget(IReadOnlyList<CodeInstruction> instructions, Label label)
-    {
-        for (var i = 0; i < instructions.Count; i++)
-        {
-            if (instructions[i].labels.Contains(label))
-            {
-                return i;
-            }
-        }
-
-        return -1;
     }
 
     private static bool ExceptionBlocksAreContained(
@@ -418,66 +315,37 @@ internal static class UIInventoryPatch
         return false;
     }
 
-    private static bool TryGetStoredLocalIndex(CodeInstruction instruction, out int index)
-    {
-        if (instruction.opcode == OpCodes.Stloc_0)
-        {
-            index = 0;
-            return true;
-        }
-        if (instruction.opcode == OpCodes.Stloc_1)
-        {
-            index = 1;
-            return true;
-        }
-        if (instruction.opcode == OpCodes.Stloc_2)
-        {
-            index = 2;
-            return true;
-        }
-        if (instruction.opcode == OpCodes.Stloc_3)
-        {
-            index = 3;
-            return true;
-        }
-
-        return TryGetOperandLocalIndex(instruction, OpCodes.Stloc, OpCodes.Stloc_S, out index);
-    }
-
-    private static bool TryGetLoadedLocalIndex(CodeInstruction instruction, out int index)
-    {
-        if (instruction.opcode == OpCodes.Ldloc_0)
-        {
-            index = 0;
-            return true;
-        }
-        if (instruction.opcode == OpCodes.Ldloc_1)
-        {
-            index = 1;
-            return true;
-        }
-        if (instruction.opcode == OpCodes.Ldloc_2)
-        {
-            index = 2;
-            return true;
-        }
-        if (instruction.opcode == OpCodes.Ldloc_3)
-        {
-            index = 3;
-            return true;
-        }
-
-        return TryGetOperandLocalIndex(instruction, OpCodes.Ldloc, OpCodes.Ldloc_S, out index);
-    }
-
-    private static bool TryGetOperandLocalIndex(
+    private static bool TryGetLocalIndex(
         CodeInstruction instruction,
-        OpCode longOpcode,
-        OpCode shortOpcode,
+        bool store,
         out int index)
     {
-        index = -1;
-        if (instruction.opcode != longOpcode && instruction.opcode != shortOpcode)
+        index = store
+            ? instruction.opcode switch
+            {
+                var opcode when opcode == OpCodes.Stloc_0 => 0,
+                var opcode when opcode == OpCodes.Stloc_1 => 1,
+                var opcode when opcode == OpCodes.Stloc_2 => 2,
+                var opcode when opcode == OpCodes.Stloc_3 => 3,
+                _ => -1,
+            }
+            : instruction.opcode switch
+            {
+                var opcode when opcode == OpCodes.Ldloc_0 => 0,
+                var opcode when opcode == OpCodes.Ldloc_1 => 1,
+                var opcode when opcode == OpCodes.Ldloc_2 => 2,
+                var opcode when opcode == OpCodes.Ldloc_3 => 3,
+                _ => -1,
+            };
+        if (index >= 0)
+        {
+            return true;
+        }
+
+        var expectedLongOpcode = store ? OpCodes.Stloc : OpCodes.Ldloc;
+        var expectedShortOpcode = store ? OpCodes.Stloc_S : OpCodes.Ldloc_S;
+        if (instruction.opcode != expectedLongOpcode
+            && instruction.opcode != expectedShortOpcode)
         {
             return false;
         }
@@ -499,6 +367,21 @@ internal static class UIInventoryPatch
             default:
                 return false;
         }
+    }
+
+    private static bool TryGetUnconditionalBranchTarget(
+        CodeInstruction instruction,
+        out Label target)
+    {
+        if (IsUnconditionalBranch(instruction)
+            && instruction.operand is Label label)
+        {
+            target = label;
+            return true;
+        }
+
+        target = default;
+        return false;
     }
 
     private static bool IsUnconditionalBranch(CodeInstruction instruction)

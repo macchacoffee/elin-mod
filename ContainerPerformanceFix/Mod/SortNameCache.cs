@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace Macchacoffee.ElinMods.ContainerPerformanceFix.Mod;
 
-// Card.SecondaryCompareが要求する名前だけを、一回のCoreExtension.Sort内で再利用する。
+// Card.SecondaryCompareが使用する名前を、1回のCoreExtension.Sort内で再利用するキャッシュ。
 internal static class SortNameCache
 {
     [ThreadStatic]
@@ -32,7 +32,7 @@ internal static class SortNameCache
             return;
         }
 
-        _cache ??= new Dictionary<Card, string>(CardReferenceComparer.Instance);
+        _cache ??= new(CardReferenceComparer.Instance);
         _cache.Clear();
     }
 
@@ -43,7 +43,6 @@ internal static class SortNameCache
             return;
         }
 
-        // Dictionary本体は再利用するが、Cardと生成文字列の参照はSortを越えて保持しない。
         _cache?.Clear();
     }
 
