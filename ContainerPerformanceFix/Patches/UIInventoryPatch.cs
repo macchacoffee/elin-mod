@@ -17,57 +17,191 @@ internal static class UIInventoryPatch
 {
     private static readonly PatchTarget _patchTarget = new();
 
+    private static UIInventory? _redrawSortOwner;
+
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
     {
         return _patchTarget.IsPatchable(original);
     }
 
-    private static bool _failureLogged;
+    private static bool _mergeFailureLogged;
+    private static bool _duplicateSortFailureLogged;
+
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(UIInventory.Sort), [typeof(bool)])]
+    private static bool Sort_Prefix(UIInventory __instance, bool redraw)
+    {
+        return redraw || !ReferenceEquals(_redrawSortOwner, __instance);
+    }
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(UIInventory.Sort), [typeof(bool)])]
     private static IEnumerable<CodeInstruction> Sort_Transpiler(
         IEnumerable<CodeInstruction> instructions)
     {
-        var original = instructions.ToList();
+        var patched = instructions.ToList();
 
         try
         {
-            if (!TryFindMergeLoop(original, out var start, out var end, out var reason))
+            if (!TryFindMergeLoop(patched, out var start, out var end, out var reason))
             {
-                LogPatchFailure(reason);
-                return original;
+                LogMergePatchFailure(reason);
             }
-
-            var replacementMethod = AccessTools.DeclaredMethod(
-                typeof(StackMerger),
-                nameof(StackMerger.FastMergeStacks),
-                [typeof(UIInventory)]);
-            if (replacementMethod is null)
+            else
             {
-                LogPatchFailure("FastMergeStacks could not be resolved.");
-                return original;
+                var replacementMethod = AccessTools.DeclaredMethod(
+                    typeof(StackMerger),
+                    nameof(StackMerger.FastMergeStacks),
+                    [typeof(UIInventory)]);
+                if (replacementMethod is null)
+                {
+                    LogMergePatchFailure("FastMergeStacks could not be resolved.");
+                }
+                else
+                {
+                    var replacement = new CodeInstruction(OpCodes.Ldarg_0);
+                    replacement.labels.AddRange(patched[start].labels);
+
+                    var mergePatched = patched.ToList();
+                    mergePatched.RemoveRange(start, end - start + 1);
+                    mergePatched.InsertRange(start,
+                    [
+                        replacement,
+                        new CodeInstruction(OpCodes.Call, replacementMethod)
+                    ]);
+                    patched = mergePatched;
+                }
             }
-
-            var replacement = new CodeInstruction(OpCodes.Ldarg_0);
-            replacement.labels.AddRange(original[start].labels);
-
-            var patched = original.ToList();
-            patched.RemoveRange(start, end - start + 1);
-            patched.InsertRange(start,
-            [
-                replacement,
-                new CodeInstruction(OpCodes.Call, replacementMethod)
-            ]);
-
-            return patched;
         }
         catch (Exception ex)
         {
-            LogPatchFailure($"Unexpected error while matching UIInventory.Sort: {ex}");
-            return original;
+            LogMergePatchFailure($"Unexpected error while matching the stack merge loop: {ex}");
         }
+
+        try
+        {
+            if (TryReplaceFinalRedraw(patched, out var redrawPatched, out var reason))
+            {
+                patched = redrawPatched;
+            }
+            else
+            {
+                LogDuplicateSortPatchFailure(reason);
+            }
+        }
+        catch (Exception ex)
+        {
+            LogDuplicateSortPatchFailure(
+                $"Unexpected error while matching the final redraw: {ex}");
+        }
+
+        return patched;
+    }
+
+    private static void GuardedRedraw(UIList list, UIInventory inventory)
+    {
+        var previous = _redrawSortOwner;
+        _redrawSortOwner = inventory;
+
+        try
+        {
+            list.Redraw();
+        }
+        finally
+        {
+            _redrawSortOwner = previous;
+        }
+    }
+
+    private static bool TryReplaceFinalRedraw(
+        IReadOnlyList<CodeInstruction> instructions,
+        out List<CodeInstruction> patched,
+        out string reason)
+    {
+        patched = instructions.ToList();
+        reason = "The final UIInventory list redraw pattern was not found.";
+
+        var baseRedraw = AccessTools.DeclaredMethod(
+            typeof(BaseList),
+            nameof(BaseList.Redraw),
+            Type.EmptyTypes);
+        var listRedraw = AccessTools.DeclaredMethod(
+            typeof(UIList),
+            nameof(UIList.Redraw),
+            Type.EmptyTypes);
+        var listField = AccessTools.DeclaredField(
+            typeof(UIInventory),
+            nameof(UIInventory.list));
+        var guardedRedraw = AccessTools.DeclaredMethod(
+            typeof(UIInventoryPatch),
+            nameof(GuardedRedraw),
+            [typeof(UIList), typeof(UIInventory)]);
+        if (baseRedraw is null || listRedraw is null
+            || listField is null || guardedRedraw is null)
+        {
+            reason = "A method or field required for guarded redraw could not be resolved.";
+            return false;
+        }
+
+        var redrawCalls = new List<int>();
+        for (var i = 0; i < instructions.Count; i++)
+        {
+            if (instructions[i].Calls(baseRedraw) || instructions[i].Calls(listRedraw))
+            {
+                redrawCalls.Add(i);
+            }
+        }
+
+        if (redrawCalls.Count != 1)
+        {
+            reason = $"Expected exactly one list Redraw call, found {redrawCalls.Count}.";
+            return false;
+        }
+
+        var callIndex = redrawCalls[0];
+        if (callIndex < 4 || callIndex + 2 != instructions.Count
+            || instructions[callIndex - 4].opcode != OpCodes.Ldarg_1
+            || !IsBranchFalse(instructions[callIndex - 3])
+            || instructions[callIndex - 2].opcode != OpCodes.Ldarg_0
+            || instructions[callIndex - 1].opcode != OpCodes.Ldfld
+            || !Equals(instructions[callIndex - 1].operand, listField)
+            || instructions[callIndex + 1].opcode != OpCodes.Ret)
+        {
+            reason = "The Redraw call was not inside the expected redraw-argument tail block.";
+            return false;
+        }
+
+        if (instructions[callIndex - 3].operand is not Label returnLabel)
+        {
+            reason = "The redraw condition did not branch to a label.";
+            return false;
+        }
+
+        var branchTargetIndex = FindLabelTarget(instructions, returnLabel);
+        if (branchTargetIndex != callIndex + 1)
+        {
+            reason = "The redraw=false branch did not target the final return.";
+            return false;
+        }
+
+        if (instructions[callIndex].blocks.Count != 0)
+        {
+            reason = "The final Redraw call was on an exception-block boundary.";
+            return false;
+        }
+
+        var inventoryLoad = new CodeInstruction(OpCodes.Ldarg_0);
+        inventoryLoad.labels.AddRange(instructions[callIndex].labels);
+        var guardedCall = new CodeInstruction(OpCodes.Call, guardedRedraw);
+
+        patched.RemoveAt(callIndex);
+        patched.InsertRange(callIndex,
+        [
+            inventoryLoad,
+            guardedCall
+        ]);
+        return true;
     }
 
     private static bool TryFindMergeLoop(
@@ -382,16 +516,29 @@ internal static class UIInventoryPatch
         return instruction.opcode == OpCodes.Brfalse || instruction.opcode == OpCodes.Brfalse_S;
     }
 
-    private static void LogPatchFailure(string reason)
+    private static void LogMergePatchFailure(string reason)
     {
-        if (_failureLogged)
+        if (_mergeFailureLogged)
         {
             return;
         }
 
-        _failureLogged = true;
+        _mergeFailureLogged = true;
         ModLog.Error(
-            $"Failed to modify UIInventory.Sort. "
-            + $"The game will use vanilla behavior. Reason: {reason}");
+            $"Failed to patch the UIInventory.Sort stack merge optimization. "
+            + $"Falling back to vanilla stack merging. Reason: {reason}");
+    }
+
+    private static void LogDuplicateSortPatchFailure(string reason)
+    {
+        if (_duplicateSortFailureLogged)
+        {
+            return;
+        }
+
+        _duplicateSortFailureLogged = true;
+        ModLog.Error(
+            $"Failed to patch duplicate Sort suppression. "
+            + $"Falling back to vanilla redraw sorting. Reason: {reason}");
     }
 }
