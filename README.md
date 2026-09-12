@@ -6,6 +6,7 @@ Steam Workshopで公開していないModも含まれます。
 ## 公開済みMod
 
 * [Ability Restriction](https://github.com/macchacoffee/elin-mod/tree/main/AbilityRestriction)
+* [Container Performance Fix](https://github.com/macchacoffee/elin-mod/tree/main/ContainerPerformanceFix)
 * [Enable Dining Spot Sign in Tent](https://github.com/macchacoffee/elin-mod/tree/main/EnableDiningSpotSignInTent)
 * [Equalize Spellitems for Major Elements](https://github.com/macchacoffee/elin-mod/tree/main/EqualizeSpellitemsForMajorElements)
 * [Faction Enchant in Inventory](https://github.com/macchacoffee/elin-mod/tree/main/FactionEnchantInInventory)
@@ -16,7 +17,6 @@ Steam Workshopで公開していないModも含まれます。
 ## その他Mod (開発中 / 実験的なもの)
 
 * [Add Palmia Times News to Log](https://github.com/macchacoffee/elin-mod/tree/main/AddPalmiaTimesNewsToLog)
-* [Container Performance Fix](https://github.com/macchacoffee/elin-mod/tree/main/ContainerPerformanceFix)
 * [Elin with AI - Individual Backgrounds](https://github.com/macchacoffee/elin-mod/tree/main/EmmersiveIndividualBackgrounds)
 * [Food Effect Multiplier](https://github.com/macchacoffee/elin-mod/tree/main/FoodEffectMultiplier)
 * [More Effective Luck](https://github.com/macchacoffee/elin-mod/tree/main/MoreEffectiveLuck)
