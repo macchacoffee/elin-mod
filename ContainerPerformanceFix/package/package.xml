@@ -6,14 +6,14 @@
   <loadPriority>100</loadPriority>
   <version>0.23.338</version>
   <description>
-コンテナにおけるスクロールやページ変更のパフォーマンスを改善します。
+コンテナにおけるソートやページ切り替えのパフォーマンスを改善します。
 これにより、アイテムを大量に入れた★収納箱で発生する動作のもっさり感が軽減されます。
 
 このModはゲーム本体のデータを変更しません。
 既存のセーブデータに対していつでも導入・使用停止できます。
 
 [hr][/hr]
-Improves the performance of scrolling and page switching in containers.
+Improves the performance of sorting and page switching in containers.
 This helps reduce sluggishness when using ★Storage chest Chests containing a large number of items.
 
 This mod does not modify game data and can be added to or removed from existing saves at any time.
@@ -22,6 +22,6 @@ This mod does not modify game data and can be added to or removed from existing 
 [h2]Source Code[/h2]
 [url=https://github.com/macchacoffee/elin-mod/tree/main/ContainerPerformanceFix]GitHub[/url]
   </description>
-  <tags>General,QoL</tags>
+  <tags>General</tags>
   <visibility>Public</visibility>
 </Meta>
