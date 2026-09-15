@@ -1,9 +1,8 @@
-using System.Linq;
 using System.Reflection;
 
 using HarmonyLib;
+using UnityEngine;
 
-using Macchacoffee.ElinMods.AbilityRestriction.Config;
 using Macchacoffee.ElinMods.ModUtility.Patch;
 
 namespace Macchacoffee.ElinMods.AbilityRestriction.Patches;
@@ -36,5 +35,26 @@ internal static class CharaAbilityPatch
         ModContext.OriginalActStorage.SetActs(owner, __instance.list.items);
         // 禁止されているアビリティをcharaのCharaAbilityから削除する
         __instance.list.items.RemoveAll(item => deniedAbility.Contains(new(item)));
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(CharaAbility.Add), [typeof(int), typeof(int), typeof(bool)])]
+    private static void Add_Prefix(CharaAbility __instance, int id, int chance, bool pt)
+    {
+        var owner = __instance.owner;
+        Mod.AbilityRestriction.UnrestrictAbility(owner, new(id, pt));
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(CharaAbility.Remove), [typeof(int)])]
+    private static void Remove_Postfix(CharaAbility __instance, int id)
+    {
+        var owner = __instance.owner;
+        var actId = Mathf.Abs(id);
+        var pt = id < 0;
+        if (!Mod.AbilityRestriction.HasUnderlyingAbility(owner, actId))
+        {
+            Mod.AbilityRestriction.UnrestrictAbility(owner, new(actId, pt));
+        }
     }
 }

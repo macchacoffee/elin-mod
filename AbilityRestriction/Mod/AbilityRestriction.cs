@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 using UnityEngine;
 
@@ -13,6 +14,49 @@ internal static class AbilityRestriction
         return !chara.IsPC && (ModContext.Config.EnableForAllNPC.Value || chara.IsHomeMember());
     }
 
+    public static bool HasUnderlyingAbility(Chara chara, int actId)
+    {
+        // Charaに設定されたアビリティを確認する。
+        if (chara._listAbility?.Any(a => Mathf.Abs(a) == actId) == true)
+        {
+            return true;
+        }
+
+        // SourceCharaに設定されたアビリティを確認する。
+        foreach (var act in chara.source.actCombat)
+        {
+            var alias = act.Split('/')[0];
+
+            if (chara.MainElement != Element.Void
+                && EClass.sources.elements.alias[alias].aliasRef == "mold")
+            {
+                alias += chara.MainElement.source.alias.Replace("ele", "");
+            }
+
+            if (ACT.dict[alias].source.id == actId)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static bool IsAbilityRestricted(Chara chara, ModConfigDeniedAct act)
+    {
+        return ModContext.WorldConfig.GetDeniedAbility(chara.uid)?.Contains(act) == true;
+    }
+
+    public static void RestrictAbility(Chara chara, ModConfigDeniedAct act)
+    {
+        ModContext.WorldConfig.AddDeniedAct(chara.uid, act);
+    }
+
+    public static void UnrestrictAbility(Chara chara, ModConfigDeniedAct act)
+    {
+        ModContext.WorldConfig.RemoveDeniedAct(chara.uid, act);
+    }
+
     public static Action BuildSettingLayer(Chara chara)
     {
         var originalActs = ModContext.OriginalActStorage.GetActs(chara);
@@ -25,14 +69,13 @@ internal static class AbilityRestriction
                 (item, _) =>
                 {
                     var act = new ModConfigDeniedAct(item);
-                    var deniedAbility = ModContext.WorldConfig.GetDeniedAbility(chara.uid);
-                    if (deniedAbility?.Contains(act) == true)
+                    if (IsAbilityRestricted(chara, act))
                     {
-                        ModContext.WorldConfig.RemoveDeniedAct(chara.uid, act);
+                        UnrestrictAbility(chara, act);
                     }
                     else
                     {
-                        ModContext.WorldConfig.AddDeniedAct(chara.uid, act);
+                        RestrictAbility(chara, act);
                     }
 
                     chara.ability.Refresh();
@@ -49,9 +92,8 @@ internal static class AbilityRestriction
                         var button = (buttonPair.component as ItemGeneral)!.button1;
                         var item = buttonPair.obj as ActList.Item;
                         var act = new ModConfigDeniedAct(item!);
-                        var deniedAbility = ModContext.WorldConfig.GetDeniedAbility(chara.uid);
 
-                        button.SetCheck(deniedAbility?.Contains(act) != true);
+                        button.SetCheck(!IsAbilityRestricted(chara, act));
                         button.GetComponent<CanvasGroup>().enabled = false;
                     }
                 })
