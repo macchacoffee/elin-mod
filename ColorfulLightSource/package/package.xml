@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Meta>
+  <title>Colorful Light Source</title>
+  <id>maccha_coffee_colorful-light-source</id>
+  <author>抹茶コーヒー</author>
+  <loadPriority>100</loadPriority>
+  <version>0.23.325</version>
+  <description>
+光源スロットについて、装備した光源アイテムに個別設定された光の色が反映されるようにします。
+
+[hr][/hr]
+[h2]Source Code[/h2]
+[url=https://github.com/macchacoffee/elin-mod/tree/main/ColorfulLightSource]GitHub[/url]
+</description>
+  <tags>General</tags>
+  <visibility>Public</visibility>
+</Meta>
