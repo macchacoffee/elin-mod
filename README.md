@@ -17,6 +17,7 @@ Steam Workshopで公開していないModも含まれます。
 ## その他Mod (開発中 / 実験的なもの)
 
 * [Add Palmia Times News to Log](https://github.com/macchacoffee/elin-mod/tree/main/AddPalmiaTimesNewsToLog)
+* [Colorful Light Source](https://github.com/macchacoffee/elin-mod/tree/main/ColorfulLightSource)
 * [Elin with AI - Individual Backgrounds](https://github.com/macchacoffee/elin-mod/tree/main/EmmersiveIndividualBackgrounds)
 * [Food Effect Multiplier](https://github.com/macchacoffee/elin-mod/tree/main/FoodEffectMultiplier)
 * [More Effective Luck](https://github.com/macchacoffee/elin-mod/tree/main/MoreEffectiveLuck)
