@@ -66,7 +66,7 @@ internal static class ElementContainerFactionPatch
         ILGenerator generator)
     {
         // // 変更前
-        //  if (value.IsGlobalElement)
+        // if (value.IsGlobalElement)
         // {
         //     ModBase(value.id, value.Value).vExp = value.vExp;
         //     isDirty = true;

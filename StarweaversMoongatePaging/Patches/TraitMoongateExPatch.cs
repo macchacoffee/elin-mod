@@ -4,8 +4,8 @@ using System.Reflection;
 using System.Reflection.Emit;
 
 using HarmonyLib;
-using Macchacoffee.ElinMods.ModUtility.Logging;
 
+using Macchacoffee.ElinMods.ModUtility.Logging;
 using Macchacoffee.ElinMods.ModUtility.Patch;
 using Macchacoffee.ElinMods.StarweaversMoongatePaging.Mod;
 
