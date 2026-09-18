@@ -360,7 +360,7 @@ internal static class CharaHoverTextBuilder
     private static string GetSkillSpdText(Chara chara)
     {
         var spdText = $"{EClass.sources.elements.map[SKILL.SPD].GetName()}:".TagSize(ModUIUtil.ComputeFontSize(13));
-        var spdValueText = $"{chara.elements.Value(SKILL.SPD)}";
+        var spdValueText = $"{chara.Speed}";
         return $"{spdText}{spdValueText}";
     }
 
