@@ -6,6 +6,15 @@
   <loadPriority>100</loadPriority>
   <version>0.23.338</version>
   <description>
+[h1]重要[/h1]
+EA 23.346 Nightlyの公式アップデートで★収納箱などのソート時に関するパフォーマンスの改善が行われました。
+このアップデート以降、本Modを利用する必要がなくなります。最新版NightlyおよびEA 23.346以降の安定版アップデート適用後は、本Modを無効化・削除してください。
+
+[h1]Important[/h1]
+The official EA 23.346 Nightly update improved sorting performance for ★Storage Chests and similar containers.
+As of this update, this mod is no longer necessary. Please disable or remove this mod after updating to the latest Nightly version or to a Stable version based on EA 23.346 or later.
+
+[hr][/hr]
 コンテナにおけるソートやページ切り替えのパフォーマンスを改善します。
 これにより、アイテムを大量に入れた★収納箱で発生する動作のもっさり感が軽減されます。
 
