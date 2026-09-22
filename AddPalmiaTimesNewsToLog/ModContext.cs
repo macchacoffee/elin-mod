@@ -9,7 +9,7 @@ internal static class ModContext
 {
     private const string _configFileName = $"{PluginInfo.Guid}.txt";
 
-    public static ModConfig Config { get; private set; } = new();
+    public static ModWorldConfig WorldConfig { get; private set; } = new();
 
     public static NewsFeeder NewsFeeder { get; } = new();
 
@@ -18,24 +18,24 @@ internal static class ModContext
         return Path.Combine(root, _configFileName);
     }
 
-    public static void LoadConfig(string root)
+    public static void LoadWorldConfig(string root)
     {
         var filePath = BuildConfigFilePath(root);
         if (File.Exists(filePath))
         {
             var text = IO.IsCompressed(filePath) ? IO.Decompress(filePath) : File.ReadAllText(filePath);
-            Config = ModConfig.Deserialize(text);
+            WorldConfig = ModWorldConfig.Deserialize(text);
         }
         else
         {
-            Config = new();
+            WorldConfig = new();
         }
     }
 
-    public static void SaveConfig(string root)
+    public static void SaveWorldConfig(string root)
     {
         var filePath = BuildConfigFilePath(root);
-        var text = Config.Serialize();
+        var text = WorldConfig.Serialize();
         if (GameIO.compressSave)
         {
             IO.Compress(filePath, text);

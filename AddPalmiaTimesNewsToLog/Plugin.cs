@@ -38,11 +38,11 @@ internal class Plugin : BaseUnityPlugin
             return;
         }
 
-        if (ModContext.Config.Enable && !ModContext.NewsFeeder.IsRunning)
+        if (ModContext.WorldConfig.Enable && !ModContext.NewsFeeder.IsRunning)
         {
             ModContext.NewsFeeder.StartFetching();
         }
-        else if (!ModContext.Config.Enable && ModContext.NewsFeeder.IsRunning)
+        else if (!ModContext.WorldConfig.Enable && ModContext.NewsFeeder.IsRunning)
         {
             ModContext.NewsFeeder.StopFetching();
         }

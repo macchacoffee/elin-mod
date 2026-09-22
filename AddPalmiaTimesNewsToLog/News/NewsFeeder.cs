@@ -31,7 +31,7 @@ internal class NewsFeeder
     private bool IsNewsReady { get; set; } = false;
     public bool IsRunning => State != RunningState.Stopped;
 
-    private static ModConfig Config => ModContext.Config;
+    private static ModWorldConfig Config => ModContext.WorldConfig;
 
     public List<string> GetRandomNews()
     {
@@ -41,12 +41,12 @@ internal class NewsFeeder
         }
 
         return [
-             .. PopRandownNewItems().Select(i => i.content),
+             .. PopRandomNewItems().Select(i => i.content),
             .. ChatItems.Copy().Shuffle().Where(IsValidChat).Take(Config.Chat.MaxCount).Select(i => i.Msg),
         ];
     }
 
-    private List<NewsList.Item> PopRandownNewItems()
+    private List<NewsList.Item> PopRandomNewItems()
     {
         var items = NewsItems.Copy().Shuffle();
         var newsItems = items.Take(Config.News.MaxCount).ToList();
@@ -58,9 +58,9 @@ internal class NewsFeeder
     {
         return chat.Cat switch
         {
-            ChatCategory.Dead => ModContext.Config.Chat.FetchDead,
-            ChatCategory.Wish => ModContext.Config.Chat.FetchWish,
-            ChatCategory.Marriage => ModContext.Config.Chat.FetchMarriage,
+            ChatCategory.Dead => ModContext.WorldConfig.Chat.FetchDead,
+            ChatCategory.Wish => ModContext.WorldConfig.Chat.FetchWish,
+            ChatCategory.Marriage => ModContext.WorldConfig.Chat.FetchMarriage,
             _ => false,
         };
     }
@@ -114,6 +114,11 @@ internal class NewsFeeder
 
     private List<NewsList.Item> FetchNews()
     {
+        if (!Config.News.Enable)
+        {
+            return [];
+        }
+
         var daySeed = ELayer.world.dayData.seed;
         if (Seed is not null && Seed == daySeed)
         {
@@ -126,6 +131,11 @@ internal class NewsFeeder
 
     private async UniTask<List<ModChatLog>> FetchChatAsync(CancellationToken token, string idLang)
     {
+        if (!Config.Chat.Enable)
+        {
+            return [];
+        }
+
         string uri = $"{Net.urlChat}logs/all_{idLang}.json";
         using var request = UnityWebRequest.Get(uri);
         await request.SendWebRequest().ToUniTask(cancellationToken: token);

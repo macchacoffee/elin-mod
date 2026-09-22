@@ -43,10 +43,10 @@ internal static class CharaPatch
 
     private static void LogNews(string news)
     {
-        switch (ModContext.Config.LogTarget)
+        switch (ModContext.WorldConfig.LogTarget)
         {
             case ModLogTarget.Log:
-                Msg.Say(news.TagColor(ModContext.Config.LogColor));
+                Msg.Say(news.TagColor(ModContext.WorldConfig.LogColor));
                 break;
             case ModLogTarget.Feed:
                 // TODO 1件ずつ表示する
