@@ -8,6 +8,15 @@
   <description>
 光源スロットについて、装備した光源アイテムに個別設定された光の色が反映されるようにします。
 
+このModはゲーム本体のデータを変更しません。
+既存のセーブデータに対していつでも導入・使用停止できます。
+
+[hr][/hr]
+Allows light source items equipped in the light source slot to emit their individually configured light colors.
+
+This mod does not modify the game's core data.
+It can be enabled or disabled at any time, even for existing save data.
+
 [hr][/hr]
 [h2]Source Code[/h2]
 [url=https://github.com/macchacoffee/elin-mod/tree/main/ColorfulLightSource]GitHub[/url]
