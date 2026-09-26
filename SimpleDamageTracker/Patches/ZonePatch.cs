@@ -28,6 +28,7 @@ internal static class ZonePatch
         if (game.isLoading || game.activeZone != __instance)
         {
             ModContext.DamageTracker.Reset();
+            ModContext.DamageTakenTracker.Reset();
         }
     }
 

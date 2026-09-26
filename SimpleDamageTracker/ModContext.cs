@@ -11,6 +11,7 @@ internal static class ModContext
 
     public static ModWorldConfig WorldConfig { get; private set; } = new();
     public static DamageTracker DamageTracker { get; } = new();
+    public static DamageTracker DamageTakenTracker { get; } = new();
 
     private static string BuildWorldConfigFilePath(string root)
     {

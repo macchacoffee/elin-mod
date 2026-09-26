@@ -90,12 +90,15 @@ internal static class CardPatch
         return matcher.InstructionEnumeration();
     }
 
-    private static void RecordDamage(Card card, Card origin, long dmg)
+    private static void RecordDamage(Card card, Card? origin, long dmg)
     {
-        if (origin?.Chara is not Chara originChara || !originChara.IsPCParty)
+        if (origin?.Chara is Chara originChara && originChara.IsPCParty)
         {
-            return;
+            ModContext.DamageTracker.AddDamage(originChara.uid, dmg);
         }
-        ModContext.DamageTracker.AddDamage(originChara.uid, dmg);
+        if (card.Chara is Chara targetChara && targetChara.IsPCParty)
+        {
+            ModContext.DamageTakenTracker.AddDamage(targetChara.uid, dmg);
+        }
     }
 }

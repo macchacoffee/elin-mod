@@ -10,6 +10,8 @@ internal static class ModConsts
         public static readonly string ConfigGenaral = Prefixed("ConfigGenaral");
         public static readonly string DamageDisplayDamage = Prefixed("DamageDisplayDamage");
         public static readonly string DamageDisplayPercentage = Prefixed("DamageDisplayPercentage");
+        public static readonly string DamageDisplayTaken = Prefixed("DamageDisplayTaken");
+        public static readonly string DamageDisplayTakenPercentage = Prefixed("DamageDisplayTakenPercentage");
     }
 
     internal static class SourceId
@@ -22,6 +24,8 @@ internal static class ModConsts
         public static readonly string ConfigDisplayItems = Prefixed("configDisplayItems");
         public static readonly string ConfigDamage = Prefixed("configDamage");
         public static readonly string ConfigDamageShare = Prefixed("configDamageShare");
+        public static readonly string ConfigDamageTaken = Prefixed("configDamageTaken");
+        public static readonly string ConfigDamageTakenShare = Prefixed("configDamageTakenShare");
         public static readonly string DisplayNoDamage = Prefixed("displayNoDamage");
         public static readonly string UseAnimation = Prefixed("useAnimation");
         public static readonly string UseCompactDamageFormat = Prefixed("useCompactDamageFormat");

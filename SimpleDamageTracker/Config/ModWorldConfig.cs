@@ -55,6 +55,28 @@ internal class ModConfigDisplay : JsonModConfigBase<ModConfigDisplay>
         HorizontalAlignment = ModHorizontalTextAlignment.Left,
         Color = new(1f, 1f, 1f), // #FFFFFFFF
     };
+
+    [JsonProperty("damageTaken", DefaultValueHandling = DefaultValueHandling.Include)]
+    public ModConfigDisplayText DamageTaken { get; set; } = new()
+    {
+        Display = false,
+        X = -30f,
+        Y = 10f,
+        SizeScale = 1f,
+        HorizontalAlignment = ModHorizontalTextAlignment.Left,
+        Color = new(0.851f, 0.537f, 0.537f), // #D98989FF
+    };
+
+    [JsonProperty("damageTakenShare", DefaultValueHandling = DefaultValueHandling.Include)]
+    public ModConfigDisplayText DamageTakenShare { get; set; } = new()
+    {
+        Display = false,
+        X = -30f,
+        Y = -6f,
+        SizeScale = 0.9f,
+        HorizontalAlignment = ModHorizontalTextAlignment.Left,
+        Color = new(0.851f, 0.537f, 0.537f), // #D98989FF
+    };
 }
 
 internal class ModConfigDisplayText : JsonModConfigBase<ModConfigDisplayText>

@@ -59,6 +59,8 @@ internal class ModLayerConfigTabGenral : YKLayout<object>
 
         AddDisplayTextUI(Config.Damage, ModConsts.SourceId.ConfigDamage);
         AddDisplayTextUI(Config.DamageShare, ModConsts.SourceId.ConfigDamageShare);
+        AddDisplayTextUI(Config.DamageTaken, ModConsts.SourceId.ConfigDamageTaken);
+        AddDisplayTextUI(Config.DamageTakenShare, ModConsts.SourceId.ConfigDamageTakenShare);
     }
 
     private void AddDisplayTextUI(ModConfigDisplayText config, string headerLabel)

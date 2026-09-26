@@ -19,6 +19,8 @@
 [list]
 [*] 個々のパーティメンバーが与えたダメージ
 [*] パーティメンバーの全員が与えた総ダメージに対する比率
+[*] 個々のパーティメンバーが受けたダメージ
+[*] パーティメンバーの全員が受けた総ダメージに対する比率
 [/list]
 
 これらの表示はゾーンを移動した時、またはセーブデータを読み込んだ時にリセットされます。
@@ -43,6 +45,8 @@ The following Mod is required to use this Mod.
 [list]
 [*] Damage dealt by each party member
 [*] Each party member's share of the total damage dealt by all party members
+[*] Damage taken by each party member
+[*] Each party member's share of the total damage taken by all party members
 [/list]
 
 These values are reset when you move to another zone or load a save.
