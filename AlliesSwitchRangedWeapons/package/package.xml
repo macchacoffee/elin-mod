@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Meta>
+  <title>Allies Switch Ranged Weapons</title>
+  <id>maccha_coffee_allies_switch_ranged_weapons</id>
+  <author>抹茶コーヒー</author>
+  <loadPriority>100</loadPriority>
+  <version>0.23.338</version>
+  <description>
+味方が特定の遠隔武器を使い続けるのではなく、所持しているすべての遠隔武器から選んで使うようになります。
+
+選ばれる遠隔武器は完全にランダムです。同じ武器が連続することもあります。
+
+住民が未使用の遠隔武器を共有コンテナへ収納するバニラの仕様は変更していません。
+複数の遠隔武器を持たせると収納されてしまう可能性があるため、大事なものに指定してください。
+
+[hr][/hr]
+Allies choose from all the ranged weapons they carry instead of continuing to use a single ranged weapon.
+
+Weapon selection is completely random. The same weapon may be selected consecutively.
+
+The vanilla behavior that allows residents to store unused ranged weapons in shared containers remains unchanged.
+If you give them multiple ranged weapons, they may put the spare weapons into storage. Mark the weapons as important to keep them in their inventory.
+
+[hr][/hr]
+[h2]Source Code[/h2]
+[url=https://github.com/macchacoffee/elin-mod/tree/main/AlliesSwitchRangedWeapons]GitHub[/url]
+  </description>
+  <tags>General,QoL</tags>
+  <visibility>Public</visibility>
+</Meta>
