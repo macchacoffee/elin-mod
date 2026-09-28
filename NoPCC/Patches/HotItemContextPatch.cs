@@ -32,7 +32,7 @@ internal static class HotItemContextPatch
         var uiContextMenu = EClass.ui.contextMenu.currentMenu.AddOrGetChild("tool");
         uiContextMenu.AddButton(ModConsts.SourceId.ModName, () =>
         {
-            YK.CreateLayer<LayerModConfig>();
+            YK.CreateLayer<UI.LayerModConfig>();
         });
     }
 }
