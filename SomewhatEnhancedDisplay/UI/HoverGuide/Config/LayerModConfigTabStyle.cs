@@ -10,17 +10,17 @@ using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Extensions;
 
 namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
-internal class LayerModConfigTabStyle : YKLayout<LayerModConfigContext>
+internal class ModLayerConfigTabStyle : YKLayout<ModLayerConfigContext>
 {
     private const int _minStyleCount = 1;
     private const int _maxStyleCount = 10;
 
     private Dictionary<string, Func<ModConfigHoverGuideStyle>> StyleFactories { get; }
 
-    private LayerModConfigContext Context => Layer.Data;
+    private ModLayerConfigContext Context => Layer.Data;
     private static ModConfigHoverGuide Config => ModContext.WorldConfig.HoverGuide;
 
-    public LayerModConfigTabStyle()
+    public ModLayerConfigTabStyle()
     {
         StyleFactories = new() {
             {ModConsts.SourceId.AddStyleCopy, () => Context.SelectedStyle.DeepCopy()},
@@ -45,7 +45,7 @@ internal class LayerModConfigTabStyle : YKLayout<LayerModConfigContext>
             label: null,
             init: 0,
             values: Config.Styles,
-            getLabel: LayerModConfigContext.GetStyleName,
+            getLabel: ModLayerConfigContext.GetStyleName,
             onChanged: (index, Value) => Context.SelectedStyleIndex = index,
             width: 240
         );

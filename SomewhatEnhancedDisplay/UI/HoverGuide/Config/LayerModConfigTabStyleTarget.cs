@@ -10,7 +10,7 @@ using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Extensions;
 
 namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
-internal abstract class LayerModConfigTabStyleTarget : YKLayout<LayerModConfigContext>
+internal abstract class ModLayerConfigTabStyleTarget : YKLayout<ModLayerConfigContext>
 {
     private static readonly Dictionary<ModItemDisplayMode, string> _itemDisplayModeIdLangs = new() {
         {ModItemDisplayMode.Hide, ModConsts.SourceId.ItemDisplayModeHide},
@@ -21,7 +21,7 @@ internal abstract class LayerModConfigTabStyleTarget : YKLayout<LayerModConfigCo
 
     protected EditStyleUIManager EditStyleUI { get; private set; } = new();
 
-    protected LayerModConfigContext Context => Layer.Data;
+    protected ModLayerConfigContext Context => Layer.Data;
     protected ModConfigHoverGuideStyle SelectedStyle => Context.SelectedStyle;
 
     public override void OnLayout()

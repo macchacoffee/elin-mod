@@ -6,7 +6,7 @@ using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 
 namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
-internal class LayerModConfigContext
+internal class ModLayerConfigContext
 {
     public int SelectedStyleIndex
     {
@@ -40,13 +40,13 @@ internal class LayerModConfigContext
     public ModConfigHoverGuideStyle SelectedStyle => Config.Styles[SelectedStyleIndex];
     public string SelectedStyleName => GetStyleName(SelectedStyleIndex, SelectedStyle);
 
-    public LayerModConfigContext()
+    public ModLayerConfigContext()
     {
         SampleChara = PickSampleCharaRandom();
         SampleThing = PickSampleThingRandom();
     }
 
-    public LayerModConfigContext(Chara sampleChara, Thing sampleThing)
+    public ModLayerConfigContext(Chara sampleChara, Thing sampleThing)
     {
         SampleChara = sampleChara;
         SampleThing = sampleThing;

@@ -1,6 +1,6 @@
 namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
-internal class LayerModConfigTabStyleTargetThing : LayerModConfigTabStyleTarget
+internal class ModLayerConfigTabStyleTargetThing : ModLayerConfigTabStyleTarget
 {
     private const int _cellWidth1 = 200;
     private const int _maxColumn1 = 3;

@@ -7,7 +7,7 @@ using Macchacoffee.ElinMods.NoPCC.Mod;
 
 namespace Macchacoffee.ElinMods.NoPCC.UI;
 
-internal class LayerModConfigTabMain : YKLayout<object>
+internal class ModLayerConfigTabMain : YKLayout<object>
 {
     public override void OnLayout()
     {

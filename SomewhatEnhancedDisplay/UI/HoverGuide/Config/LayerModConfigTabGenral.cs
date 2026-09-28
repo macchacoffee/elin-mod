@@ -9,7 +9,7 @@ using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Extensions;
 
 namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
-internal class LayerModConfigTabGenral : YKLayout<LayerModConfigContext>
+internal class ModLayerConfigTabGenral : YKLayout<ModLayerConfigContext>
 {
     private static ModConfigHoverGuide Config => ModContext.WorldConfig.HoverGuide;
     private static ModConfigHoverGuideColorSet ColorConfig => Config.ColorSet;

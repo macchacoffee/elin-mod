@@ -5,14 +5,14 @@ using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 
 namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
-internal class LayerModConfig : YKLayer<LayerModConfigContext>
+internal class ModLayerConfig : YKLayer<ModLayerConfigContext>
 {
     public override string Title { get; } = $"{ModConsts.SourceId.ModName.lang()} {ModConsts.SourceId.ConfigHoverGuide.lang()}";
     public override Rect Bound { get; } = new Rect(0, 0, 720, 540);
 
     private UIButton? ButtonReset { get; set; }
 
-    private LayerModConfigContext Context => Data;
+    private ModLayerConfigContext Context => Data;
     private static ModConfigHoverGuide Config => ModContext.WorldConfig.HoverGuide;
 
     public override string GetTextHeader(Window window)
@@ -33,12 +33,12 @@ internal class LayerModConfig : YKLayer<LayerModConfigContext>
         Context.SelectedStyleIndex = Config.CurrentStyleIndex;
         Context.AddSelectedStyleChangedListener((index, _) => Config.CurrentStyleIndex = index);
 
-        CreateTab<LayerModConfigTabGenral>(ModConsts.SourceId.ConfigGeneral, ModConsts.GameObjectName.ConfigGenaral);
-        CreateTab<LayerModConfigTabStyle>(ModConsts.SourceId.ConfigStyle, ModConsts.GameObjectName.ConfigStyle);
-        CreateTab<LayerModConfigTabStyleTargetChara>(
+        CreateTab<ModLayerConfigTabGenral>(ModConsts.SourceId.ConfigGeneral, ModConsts.GameObjectName.ConfigGenaral);
+        CreateTab<ModLayerConfigTabStyle>(ModConsts.SourceId.ConfigStyle, ModConsts.GameObjectName.ConfigStyle);
+        CreateTab<ModLayerConfigTabStyleTargetChara>(
             ModConsts.SourceId.ConfigStyleTargetChara,
             ModConsts.GameObjectName.ConfigStyleTargetChara);
-        CreateTab<LayerModConfigTabStyleTargetThing>(
+        CreateTab<ModLayerConfigTabStyleTargetThing>(
             ModConsts.SourceId.ConfigStyleTargetThing,
             ModConsts.GameObjectName.ConfigStyleTargetThing);
 
@@ -56,7 +56,7 @@ internal class LayerModConfig : YKLayer<LayerModConfigContext>
             {
                 Close();
                 ModContext.WorldConfig.ResetHoverGuide();
-                YK.CreateLayer<LayerModConfig, LayerModConfigContext>(new(Context.SampleChara, Context.SampleThing));
+                YK.CreateLayer<ModLayerConfig, ModLayerConfigContext>(new(Context.SampleChara, Context.SampleThing));
             });
         });
 
@@ -77,7 +77,7 @@ internal class LayerModConfig : YKLayer<LayerModConfigContext>
                 {
                     ModContext.WorldConfig.ResetHoverGuideStyle();
                 }
-                YK.CreateLayer<LayerModConfig, LayerModConfigContext>(new(Context.SampleChara, Context.SampleThing));
+                YK.CreateLayer<ModLayerConfig, ModLayerConfigContext>(new(Context.SampleChara, Context.SampleThing));
             });
         });
     }

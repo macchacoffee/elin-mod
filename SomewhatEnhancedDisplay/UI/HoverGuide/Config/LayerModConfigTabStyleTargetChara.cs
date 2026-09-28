@@ -7,7 +7,7 @@ using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Config;
 
 namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI.HoverGuide.Config;
 
-internal class LayerModConfigTabStyleTargetChara : LayerModConfigTabStyleTarget
+internal class ModLayerConfigTabStyleTargetChara : ModLayerConfigTabStyleTarget
 {
     private const int _cellWidth1 = 200;
     private const int _maxColumn1 = 3;

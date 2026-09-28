@@ -14,7 +14,7 @@ internal static class ModUI
 
         if (new KeyboardShortcut(ModContext.Config.NextStyleKey.Value).IsDown())
         {
-            if (EClass.ui.GetLayer<LayerModConfig>() is not null)
+            if (EClass.ui.GetLayer<ModLayerConfig>() is not null)
             {
                 // Modのホバーガイド設定画面が開いている時は処理を中断する。
                 return;
@@ -30,7 +30,7 @@ internal static class ModUI
 
         if (new KeyboardShortcut(ModContext.Config.LockKey.Value).IsDown())
         {
-            if (EClass.ui.GetLayer<LayerModConfig>() is not null)
+            if (EClass.ui.GetLayer<ModLayerConfig>() is not null)
             {
                 // Modのホバーガイド設定画面が開いている時は処理を中断する。
                 return;
