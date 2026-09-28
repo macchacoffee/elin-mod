@@ -23,7 +23,7 @@
  (矢の杖、球の巻物 といったものは増えません)
 [/list]
 
-衝撃属性については、設定によって対象にすることも可能です。[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3379819704]Mod Config GUI[/url]のゲーム内設定画面から変更、または以下の設定ファイルを編集してください。
+衝撃属性については、設定によって対象にすることも可能です。ゲーム内のMod設定画面から変更、または以下の設定ファイルを編集してください。
 [code]Elin\BepInEx\config\maccha-coffee.equalize-spellitems-for-major-elements.cfg[/code]
 
 Modの導入や利用停止はいつでも可能です。ただし本来魔法書が存在しない魔法をPCが覚えた場合、Modを無効化しても覚えたままになります。
@@ -46,7 +46,7 @@ For example, items such as a spellbook of Fire Arrow or a rod of Poison Bolt do 
 (Items such as a rod of arrow or a scroll of ball will not be added.)
 [/list]
 
-The Impact element can also be included, depending on the configuration. You can change this setting from the in-game settings menu provided by [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3379819704]Mod Config GUI[/url], or by editing the following configuration file:
+The Impact element can also be included, depending on the configuration. You can change this setting from the in-game mod settings menu, or by editing the following configuration file:
 [code]Elin\BepInEx\config\maccha-coffee.equalize-spellitems-for-major-elements.cfg[/code]
 
 This mod can be installed or disabled at any time. However, if the player character learns a spell for which no spellbook normally exists, they will retain that spell even after the mod is disabled.

@@ -3,9 +3,9 @@ using System.Reflection;
 
 using BepInEx;
 using BepInEx.Configuration;
+using EModding;
 using HarmonyLib;
 
-using Macchacoffee.ElinMods.ModUtility.External.ModConfigGUI;
 using Macchacoffee.ElinMods.ModUtility.Logging;
 
 namespace Macchacoffee.ElinMods.MoreEffectiveLuck;
@@ -18,7 +18,7 @@ internal static class PluginInfo
 }
 
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]
-internal class Plugin : BaseUnityPlugin
+internal class Plugin : BaseUnityPlugin, IModConfig
 {
     internal static Harmony? Harmony { get; private set; }
     private static ConfigFile? ConfigFile { get; set; }
@@ -38,8 +38,8 @@ internal class Plugin : BaseUnityPlugin
         }
     }
 
-    private void Start()
+    public void OnBuildConfig(UINote note)
     {
-        ModConfigGUISupport.ResisterConfig(PluginInfo.Guid, PluginInfo.Name, ConfigFile!);
+        note.AddAll(ConfigFile!);
     }
 }

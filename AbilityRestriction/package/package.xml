@@ -21,7 +21,7 @@
 これはアビリティの仕様上発生するものであり、不具合ではありません。
 
 [h2]設定[/h2]
-設定変更により、会話選択肢 (「実は…」→「行動について相談がある」) やインタラクションメニュー (ミドルクリック) からアビリティを制限できるようにすることも可能です。[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3379819704]Mod Config GUI[/url]のゲーム内設定画面から変更、または以下の設定ファイルを編集してください。
+設定変更により、会話選択肢 (「実は…」→「行動について相談がある」) やインタラクションメニュー (ミドルクリック) からアビリティを制限できるようにすることも可能です。ゲーム内のMod設定画面から変更、または以下の設定ファイルを編集してください。
 [code]Elin\BepInEx\config\maccha-coffee.ability-restriction.cfg[/code]
 
 このModはゲーム本体のデータに対して不可逆な変更を行いません。
@@ -47,7 +47,7 @@ Abilities that are restricted are treated as if the character has not learned th
 This behavior is due to the game's ability system and is not a bug.
 
 [h2]Settings[/h2]
-You can also enable the option to restrict abilities through conversation options ("Actually..." → "I'd like to talk about your actions.") or the interaction menu (middle-click). You can change this setting from the in-game settings screen provided by [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3379819704]Mod Config GUI[/url], or by editing the following configuration file:
+You can also enable the option to restrict abilities through conversation options ("Actually..." → "I'd like to talk about your actions.") or the interaction menu (middle-click). You can change this setting from the in-game mod settings menu, or by editing the following configuration file:
 [code]Elin\BepInEx\config\maccha-coffee.ability-restriction.cfg[/code]
 
 This mod does not make any irreversible changes to the game's core data.

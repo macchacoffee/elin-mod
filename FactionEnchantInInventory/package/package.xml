@@ -14,7 +14,7 @@
  [*] PCの勢力に属さないキャラクターのインベントリに存在している。
 [/list]
 
-「それは装備するたびに呪われる」のエンチャントが付いている装備については、設定によって対象にすることも可能です。[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3379819704]Mod Config GUI[/url]のゲーム内設定画面から変更、または以下の設定ファイルを編集してください。
+「それは装備するたびに呪われる」のエンチャントが付いている装備については、設定によって対象にすることも可能です。ゲーム内のMod設定画面から変更、または以下の設定ファイルを編集してください。
 [code]Elin\BepInEx\config\maccha-coffee.faction-enchant-in-inventory.cfg[/code]
 
 「諸々の理由で装備はできない…でも神様からのご褒美は自分のそばに置いておきたい！」といったロールプレイ用途を主に想定しています。
@@ -30,7 +30,7 @@ However, the effect will not apply in the following cases:
  [*] The artifact is in the inventory of a character who does not belong to the player's faction.
 [/list]
 
-Artifacts with the "It curses itself every time it is equipped" enchantment can also be included, depending on the configuration. You can change this setting from the in-game settings menu provided by [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3379819704]Mod Config GUI[/url], or by editing the following configuration file:
+Artifacts with the "It curses itself every time it is equipped" enchantment can also be included, depending on the configuration. You can change this setting from the in-game mod settings menu, or by editing the following configuration file:
 [code]Elin\BepInEx\config\maccha-coffee.faction-enchant-in-inventory.cfg[/code]
 
 This Mod is mainly intended for role-playing situations such as: "For one reason or another, I cannot equip it... but I still want to keep the reward from my god with me at all times!"

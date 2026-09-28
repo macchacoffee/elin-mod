@@ -3,9 +3,9 @@ using System.Reflection;
 
 using BepInEx;
 using BepInEx.Configuration;
+using EModding;
 using HarmonyLib;
 
-using Macchacoffee.ElinMods.ModUtility.External.ModConfigGUI;
 using Macchacoffee.ElinMods.ModUtility.Logging;
 using Macchacoffee.ElinMods.SomewhatEnhancedDisplay.UI;
 
@@ -15,11 +15,11 @@ internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.somewhat-enhanced-display";
     public const string Name = "Somewhat Enhanced Display";
-    public const string Version = "1.1.4";
+    public const string Version = "1.1.5";
 }
 
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]
-internal class Plugin : BaseUnityPlugin
+internal class Plugin : BaseUnityPlugin, IModConfig
 {
     private static ConfigFile? ConfigFile { get; set; }
 
@@ -37,9 +37,9 @@ internal class Plugin : BaseUnityPlugin
         }
     }
 
-    private void Start()
+    public void OnBuildConfig(UINote note)
     {
-        ModConfigGUISupport.ResisterConfig(PluginInfo.Guid, PluginInfo.Name, ConfigFile!);
+        note.AddAll(ConfigFile!);
     }
 
     private void Update()

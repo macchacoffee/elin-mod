@@ -3,9 +3,9 @@ using System.Reflection;
 
 using BepInEx;
 using BepInEx.Configuration;
+using EModding;
 using HarmonyLib;
 
-using Macchacoffee.ElinMods.ModUtility.External.ModConfigGUI;
 using Macchacoffee.ElinMods.ModUtility.Logging;
 
 namespace Macchacoffee.ElinMods.FactionEnchantInInventory;
@@ -14,11 +14,11 @@ internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.faction-enchant-in-inventory";
     public const string Name = "Faction Enchant in Inventory";
-    public const string Version = "1.0.1";
+    public const string Version = "1.0.2";
 }
 
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]
-internal class Plugin : BaseUnityPlugin
+internal class Plugin : BaseUnityPlugin, IModConfig
 {
     private static ConfigFile? ConfigFile { get; set; }
 
@@ -36,8 +36,8 @@ internal class Plugin : BaseUnityPlugin
         }
     }
 
-    private void Start()
+    public void OnBuildConfig(UINote note)
     {
-        ModConfigGUISupport.ResisterConfig(PluginInfo.Guid, PluginInfo.Name, ConfigFile!);
+        note.AddAll(ConfigFile!);
     }
 }

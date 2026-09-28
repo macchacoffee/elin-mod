@@ -88,7 +88,7 @@ These settings are saved separately for each save data in the following location
 [code]%USERPROFILE%\AppData\LocalLow\Lafrontier\Elin\Save\world_x\maccha-coffee.somewhat-enhanced-display.txt[/code]
 
 The mod's general settings allow you to enable or disable individual features and change key bindings (style switching and target locking).
-You can change these settings from the in-game settings screen provided by [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3379819704]Mod Config GUI[/url], or by editing the following configuration file:
+You can change these settings from the in-game mod settings menu, or by editing the following configuration file:
 [code]Elin\BepInEx\config\maccha-coffee.somewhat-enhanced-display.cfg[/code]
 
 If you want to clean up files that are no longer needed after you stop using this mod, delete the configuration files listed above.
