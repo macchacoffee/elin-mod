@@ -17,6 +17,6 @@ internal static class SoundManagerPatch
         }
 
         __result.allowMultiple = false;
-        __result.skipIfPlaying = true;
+        __result.skipIfPlaying = false;
     }
 }
