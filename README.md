@@ -21,6 +21,7 @@ Steam Workshopで公開していないModも含まれます。
 * [Colorful Light Source](https://github.com/macchacoffee/elin-mod/tree/main/ColorfulLightSource)
 * [Elin with AI - Individual Backgrounds](https://github.com/macchacoffee/elin-mod/tree/main/EmmersiveIndividualBackgrounds)
 * [Food Effect Multiplier](https://github.com/macchacoffee/elin-mod/tree/main/FoodEffectMultiplier)
+* [Gravity Gun Sound Overlap Fix](https://github.com/macchacoffee/elin-mod/tree/main/GravityGunSoundOverlapFix)
 * [More Effective Luck](https://github.com/macchacoffee/elin-mod/tree/main/MoreEffectiveLuck)
 * [NPC Goto Behavior Tweaks](https://github.com/macchacoffee/elin-mod/tree/main/NPCGotoBehaviorTweaks)
 * [NoPCC](https://github.com/macchacoffee/elin-mod/tree/main/NoPCC)
