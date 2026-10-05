@@ -12,7 +12,7 @@ internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.enable-dining-spot-sign-in-tent";
     public const string Name = "Enable Dining Spot Sign in Tent";
-    public const string Version = "1.0.2";
+    public const string Version = "1.1.0";
 }
 
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]

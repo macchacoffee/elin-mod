@@ -49,7 +49,7 @@ internal static class CharaPatch
             new CodeMatch(OpCodes.Callvirt, AccessTools.PropertyGetter(typeof(Card), nameof(Card.IsPCParty))),
             new CodeMatch(OpCodes.Brtrue)
         );
-        // テント内かつ食事目的で移動するAIである場合、押しのけ可能とするロジックを追加する
+        // テント内かつ食事目的で移動するAIである場合、押しのけ可能とするロジックを追加する。
         matcher.Opcode = OpCodes.Brfalse;
         matcher.CreateLabelWithOffsets(1, out var label1);
         matcher.CreateLabelWithOffsets(3, out var label2);
@@ -67,7 +67,7 @@ internal static class CharaPatch
 
     private static bool HasAIGotoForEat(Chara chara)
     {
-        // 特定のAI階層にAI_EatとAI_Gotoが存在する場合、食事目的で移動しているとみなす
+        // 特定のAI階層にAI_EatとAI_Gotoが存在する場合、食事目的で移動しているとみなす。
         AI_Eat? aiEat;
         var ai = chara.ai;
         while (true)

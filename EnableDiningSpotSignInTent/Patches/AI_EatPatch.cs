@@ -47,28 +47,25 @@ internal static class AI_EatRunPatch
             new CodeMatch(OpCodes.Ldc_I4_4)
         );
         // callvirt bool Zone::get_IsPCFaction() の get_IsPCFaction を get_IsPCFactionOrTent に置き換え、
-        // PCの拠点内またはテント内である場合にtrueとなるようにする
+        // PCの拠点内またはテント内である場合にtrueとなるようにする。
         matcher.Operand = AccessTools.PropertyGetter(typeof(Zone), nameof(Zone.IsPCFactionOrTent));
 
         // callvirt virtual bool Card::get_IsPCParty()
         // brtrue Label24
         // ldloc.1 NULL
-        matcher.MatchEndForward(
+        matcher.MatchStartForward(
             new CodeMatch(OpCodes.Callvirt, AccessTools.PropertyGetter(typeof(Card), nameof(Card.IsPCParty))),
             new CodeMatch(OpCodes.Brtrue)
         );
-        // DoGotoSpotの呼び出しをスキップする遷移に変えるため、brfalseに置き換える
-        matcher.Opcode = OpCodes.Brfalse;
-        // ownerがPCのパーティでない場合の遷移先となるLabelMod1を生成する
-        matcher.CreateLabelWithOffsets(1, out var label1);
-        // || EClass._zone is Zone_Tent の処理を追加する
-        // ownerがPCのパーティであってもテント内であればtrueとなるようにする
-        matcher.InsertAndAdvance(
-            new CodeInstruction(OpCodes.Brfalse, label1),
-            new CodeInstruction(OpCodes.Call, AccessTools.PropertyGetter(typeof(EClass), nameof(EClass._zone))),
-            new CodeInstruction(OpCodes.Isinst, typeof(Zone_Tent))
-        );
+        matcher.Opcode = OpCodes.Call;
+        matcher.Operand = AccessTools.Method(typeof(AI_EatRunPatch), nameof(ShouldSkipDiningSpot));
 
         return matcher.InstructionEnumeration();
+    }
+
+    private static bool ShouldSkipDiningSpot(Card owner)
+    {
+        // ownerがPC、またはPCのパーティかつテント外であれば対象外とする。
+        return owner.IsPC || (owner.IsPCParty && EClass._zone is not Zone_Tent);
     }
 }
