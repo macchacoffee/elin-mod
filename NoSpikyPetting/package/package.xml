@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Meta>
+  <title>No Spiky Petting</title>
+  <id>maccha_coffee_no_spiky_petting</id>
+  <author>抹茶コーヒー</author>
+  <loadPriority>100</loadPriority>
+  <version>0.23.351</version>
+  <description>
+フィート「トゲトゲ」持ちのキャラクターをNPCが撫でないようにします。
+
+[hr][/hr]
+Prevents NPCs from petting characters with the "Spiky" feat.
+
+[hr][/hr]
+[h2]Source Code[/h2]
+[url=https://github.com/macchacoffee/elin-mod/tree/main/NoSpikyPetting]GitHub[/url]
+  </description>
+  <tags>General</tags>
+  <visibility>Public</visibility>
+</Meta>
