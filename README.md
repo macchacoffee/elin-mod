@@ -25,4 +25,5 @@ Steam Workshopで公開していないModも含まれます。
 * [More Effective Luck](https://github.com/macchacoffee/elin-mod/tree/main/MoreEffectiveLuck)
 * [NPC Goto Behavior Tweaks](https://github.com/macchacoffee/elin-mod/tree/main/NPCGotoBehaviorTweaks)
 * [NoPCC](https://github.com/macchacoffee/elin-mod/tree/main/NoPCC)
+* [NoSpikyPetting](https://github.com/macchacoffee/elin-mod/tree/main/NoSpikyPetting)
 * [Selective Modesty for Moonlit Kin](https://github.com/macchacoffee/elin-mod/tree/main/SelectiveModestyForMoonlitKin)
