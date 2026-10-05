@@ -24,7 +24,10 @@ internal class Plugin : BaseUnityPlugin
 
         try
         {
-            Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), PluginInfo.Guid);
+            if (EClass.core.version.IsBelow(new Version { major = 0, minor = 23, batch = 346 }))
+            {
+                Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), PluginInfo.Guid);
+            }
         }
         catch (Exception ex)
         {
