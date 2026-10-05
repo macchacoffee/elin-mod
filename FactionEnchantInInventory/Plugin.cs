@@ -14,7 +14,7 @@ internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.faction-enchant-in-inventory";
     public const string Name = "Faction Enchant in Inventory";
-    public const string Version = "1.0.2";
+    public const string Version = "1.1.0";
 }
 
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]

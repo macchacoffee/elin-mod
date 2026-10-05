@@ -14,7 +14,7 @@ internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.food-effect-multiplier";
     public const string Name = "Food Effect Multiplier";
-    public const string Version = "1.0.2";
+    public const string Version = "1.1.0";
 }
 
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]

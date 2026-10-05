@@ -11,42 +11,7 @@ namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay.Patches;
 [HarmonyPatch(typeof(DNA))]
 internal static class DNAPatch
 {
-    private static readonly PatchTarget _patchTarget = new(
-        MaxVersion: new()
-        {
-            major = 0,
-            minor = 23,
-            batch = 339
-        }
-    );
-
-    [HarmonyPrepare]
-    private static bool Prepare(MethodBase? original)
-    {
-        return _patchTarget.IsPatchable(original) && ModContext.Config.EnableDNA.Value;
-    }
-
-    [HarmonyTranspiler]
-    [HarmonyPatch(nameof(DNA.WriteNote), [typeof(UINote), typeof(Chara)])]
-    private static IEnumerable<CodeInstruction> WriteNote_Transpiler(
-        IEnumerable<CodeInstruction> instructions,
-        ILGenerator generator)
-    {
-        return DNAPatchImpl.WriteNote_Transpiler(instructions, generator);
-    }
-}
-
-[HarmonyPatch(typeof(DNA))]
-internal static class DNAPatch_0_23_340
-{
-    private static readonly PatchTarget _patchTarget = new(
-        MinVersion: new()
-        {
-            major = 0,
-            minor = 23,
-            batch = 340
-        }
-    );
+    private static readonly PatchTarget _patchTarget = new();
 
     [HarmonyPrepare]
     private static bool Prepare(MethodBase? original)
@@ -57,16 +22,6 @@ internal static class DNAPatch_0_23_340
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(DNA.WriteNote), [typeof(UINote), typeof(Thing), typeof(Chara)])]
     private static IEnumerable<CodeInstruction> WriteNote_Transpiler(
-        IEnumerable<CodeInstruction> instructions,
-        ILGenerator generator)
-    {
-        return DNAPatchImpl.WriteNote_Transpiler(instructions, generator);
-    }
-}
-
-internal static class DNAPatchImpl
-{
-    internal static IEnumerable<CodeInstruction> WriteNote_Transpiler(
         IEnumerable<CodeInstruction> instructions,
         ILGenerator generator)
     {

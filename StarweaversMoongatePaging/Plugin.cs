@@ -14,7 +14,7 @@ internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.starweavers-moongate-paging";
     public const string Name = "Starweaver's Moongate Paging";
-    public const string Version = "1.0.1";
+    public const string Version = "1.1.0";
 }
 
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]

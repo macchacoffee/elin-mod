@@ -4,7 +4,7 @@
   <id>maccha_coffee_faction_enchant_in_inventory</id>
   <author>抹茶コーヒー</author>
   <loadPriority>100</loadPriority>
-  <version>0.23.325</version>
+  <version>0.23.352</version>
   <description>
 神々のアーティファクトが有するファクションエンチャントの発動条件に「インベントリに存在する時」を追加します。装備する必要はありません。
 ただし以下の場合は対象外です。

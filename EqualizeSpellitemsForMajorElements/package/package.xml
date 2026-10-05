@@ -4,7 +4,7 @@
   <id>maccha_coffee_equalize_spellitems_for_major_elements</id>
   <author>抹茶コーヒー</author>
   <loadPriority>100</loadPriority>
-  <version>0.23.325</version>
+  <version>0.23.352</version>
   <description>
 魔法系アイテム (魔法書、魔法杖、巻物) で属性ごとに設定されている魔法の制限を無くします。
 

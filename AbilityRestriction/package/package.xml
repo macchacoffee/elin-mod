@@ -4,7 +4,7 @@
   <id>maccha_coffee_ability_restriction</id>
   <author>抹茶コーヒー</author>
   <loadPriority>100</loadPriority>
-  <version>0.23.325</version>
+  <version>0.23.352</version>
   <description>
 キャラクターが使用するアビリティ (魔法も含む) を制限できるようにします。
 
