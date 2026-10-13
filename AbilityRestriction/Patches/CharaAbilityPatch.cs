@@ -36,18 +36,83 @@ internal static class CharaAbilityPatch
         // 禁止されているアビリティをcharaのCharaAbilityから削除する
         __instance.list.items.RemoveAll(item => deniedAbility.Contains(new(item)));
     }
+}
+
+[HarmonyPatch(typeof(CharaAbility))]
+internal static class CharaAbilityPatchNightly
+{
+    private static readonly PatchTarget _patchTarget = new(
+        MinVersion: new()
+        {
+            major = 0,
+            minor = 23,
+            batch = 356
+        }
+    );
+
+    [HarmonyPrepare]
+    private static bool Prepare(MethodBase? original)
+    {
+        return _patchTarget.IsPatchable(original);
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(CharaAbility.Add), [typeof(int), typeof(int), typeof(bool), typeof(bool)])]
+    private static void Add_Prefix(CharaAbility __instance, int id, int chance, bool pt, bool permanent = false)
+    {
+        CharaAbilityPatchImpl.Add_Prefix(__instance, id, chance, pt, permanent);
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(CharaAbility.Remove), [typeof(int), typeof(bool)])]
+    private static void Remove_Postfix(CharaAbility __instance, int id, bool permanent = false)
+    {
+        CharaAbilityPatchImpl.Remove_Postfix(__instance, id, permanent);
+    }
+}
+
+[HarmonyPatch(typeof(CharaAbility))]
+internal static class CharaAbilityPatchStable
+{
+    private static readonly PatchTarget _patchTarget = new(
+        MaxVersion: new()
+        {
+            major = 0,
+            minor = 23,
+            batch = 355
+        }
+    );
+
+    [HarmonyPrepare]
+    private static bool Prepare(MethodBase? original)
+    {
+        return _patchTarget.IsPatchable(original);
+    }
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(CharaAbility.Add), [typeof(int), typeof(int), typeof(bool)])]
     private static void Add_Prefix(CharaAbility __instance, int id, int chance, bool pt)
     {
-        var owner = __instance.owner;
-        Mod.AbilityRestriction.UnrestrictAbility(owner, new(id, pt));
+        CharaAbilityPatchImpl.Add_Prefix(__instance, id, chance, pt);
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(CharaAbility.Remove), [typeof(int)])]
     private static void Remove_Postfix(CharaAbility __instance, int id)
+    {
+        CharaAbilityPatchImpl.Remove_Postfix(__instance, id);
+    }
+}
+
+internal static class CharaAbilityPatchImpl
+{
+    internal static void Add_Prefix(CharaAbility __instance, int id, int chance, bool pt, bool permanent = false)
+    {
+        var owner = __instance.owner;
+        Mod.AbilityRestriction.UnrestrictAbility(owner, new(id, pt));
+    }
+
+    internal static void Remove_Postfix(CharaAbility __instance, int id, bool permanent = false)
     {
         var owner = __instance.owner;
         var actId = Mathf.Abs(id);
