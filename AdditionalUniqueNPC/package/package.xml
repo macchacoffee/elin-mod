@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Meta>
+  <title>Additional Unique NPC</title>
+  <id>maccha_coffee_additional_unique_npc</id>
+  <author>抹茶コーヒー</author>
+  <loadPriority>100</loadPriority>
+  <version>0.23.352</version>
+  <tags>General,NPC</tags>
+  <description></description>
+  <builtin>false</builtin>
+  <visibility>Private</visibility>
+</Meta>

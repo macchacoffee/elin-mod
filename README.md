@@ -16,6 +16,7 @@ Steam Workshopで公開していないModも含まれます。
 
 ## その他Mod (開発中 / 実験的なもの)
 
+* [Additional Unique NPC](https://github.com/macchacoffee/elin-mod/tree/main/AdditionalUniqueNPC)
 * [Add Palmia Times News to Log](https://github.com/macchacoffee/elin-mod/tree/main/AddPalmiaTimesNewsToLog)
 * [Allies Switch Ranged Weapons](https://github.com/macchacoffee/elin-mod/tree/main/AlliesSwitchRangedWeapons)
 * [Colorful Light Source](https://github.com/macchacoffee/elin-mod/tree/main/ColorfulLightSource)
@@ -23,7 +24,7 @@ Steam Workshopで公開していないModも含まれます。
 * [Food Effect Multiplier](https://github.com/macchacoffee/elin-mod/tree/main/FoodEffectMultiplier)
 * [Gravity Gun Sound Overlap Fix](https://github.com/macchacoffee/elin-mod/tree/main/GravityGunSoundOverlapFix)
 * [More Effective Luck](https://github.com/macchacoffee/elin-mod/tree/main/MoreEffectiveLuck)
-* [NoSpikyPetting](https://github.com/macchacoffee/elin-mod/tree/main/NoSpikyPetting)
 * [NoPCC](https://github.com/macchacoffee/elin-mod/tree/main/NoPCC)
+* [NoSpikyPetting](https://github.com/macchacoffee/elin-mod/tree/main/NoSpikyPetting)
 * [NPC Goto Behavior Tweaks](https://github.com/macchacoffee/elin-mod/tree/main/NPCGotoBehaviorTweaks)
 * [Selective Modesty for Moonlit Kin](https://github.com/macchacoffee/elin-mod/tree/main/SelectiveModestyForMoonlitKin)

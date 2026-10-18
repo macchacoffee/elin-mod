@@ -44,7 +44,7 @@ internal static class ModContext
     }
 
     public static void SaveWorldConfig(string root)
-    {
+    {   
         var filePath = BuildWorldConfigFilePath(root);
         var text = WorldConfig.Serialize();
         if (GameIO.compressSave)
