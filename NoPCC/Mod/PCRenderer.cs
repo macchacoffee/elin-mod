@@ -38,7 +38,7 @@ internal static class PCRenderer
         if (modRenderer is null)
         {
             var rendererReplacer = RendererReplacer.CreateFrom("adv", 0);
-            modRenderer = new CharaRenderer
+            modRenderer = new NoPCCCharaRenderer
             {
                 replacer = rendererReplacer,
                 data = rendererReplacer.data
