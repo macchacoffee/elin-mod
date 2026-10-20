@@ -5,7 +5,6 @@ using System.Reflection;
 using HarmonyLib;
 
 using Macchacoffee.ElinMods.AbilityRestriction;
-using Macchacoffee.ElinMods.ModUtility.Logging;
 using Macchacoffee.ElinMods.ModUtility.Patch;
 
 namespace Macchacoffee.ElinMods.AdditionalUniqueNPC.Patches;

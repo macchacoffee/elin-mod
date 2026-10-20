@@ -6,6 +6,7 @@
   <loadPriority>100</loadPriority>
   <version>0.23.352</version>
   <tags>General,NPC</tags>
+  <dependency id="maccha_coffee_additional_races_and_jobs" />
   <description></description>
   <builtin>false</builtin>
   <visibility>Private</visibility>

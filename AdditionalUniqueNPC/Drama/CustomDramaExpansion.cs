@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Macchacoffee.ElinMods.ModUtility.Logging;
 
 namespace Macchacoffee.ElinMods.AdditionalUniqueNPC.Drama;
 
@@ -22,7 +24,7 @@ internal static class CustomDramaExpansion
         return true;
     }
 
-    [ElinDramaActionInvoke("nodiscard")]
+    [ElinDramaActionInvoke]
     private static bool mc_aun_if_pc_faction(
         DramaManager dm,
         Dictionary<string, string> line,
@@ -31,5 +33,41 @@ internal static class CustomDramaExpansion
         var chara = dm.GetChara(line["actor"]);
 
         return chara.IsPCFaction ^ !isPositive;
+    }
+
+    [ElinDramaActionInvoke]
+    private static bool mc_aun_drain_mana_pc(
+        DramaManager dm,
+        Dictionary<string, string> line,
+        float ratio)
+    {
+        var chara = dm.GetChara(line["actor"]);
+        Chara target = EClass.pc;
+        if (target == null || ratio <= 0)
+        {
+            return false;
+        }
+
+        var before = target.mana.value;
+        if (before <= 0)
+        {
+            return false;
+        }
+
+        var amount = Math.Min(
+            before,
+            Math.Max(1, (int)(target.mana.max * ratio))
+        );
+
+        target.mana.Mod(-amount);
+
+        var drained = Math.Min(
+            before,
+            Math.Max(0, before - target.mana.value)
+        );
+
+        chara.mana.Mod(drained);
+
+        return true;
     }
 }
