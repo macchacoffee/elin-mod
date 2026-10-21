@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Macchacoffee.ElinMods.ModUtility.Logging;
 
-namespace Macchacoffee.ElinMods.AdditionalUniqueNPC.Drama;
+namespace Macchacoffee.ElinMods.AdditionalUniqueNPC.Mod;
 
 internal static class CustomDramaExpansion
 {

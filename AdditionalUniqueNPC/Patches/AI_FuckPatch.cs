@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 using HarmonyLib;
 
-using Macchacoffee.ElinMods.AbilityRestriction;
 using Macchacoffee.ElinMods.ModUtility.Patch;
 
 namespace Macchacoffee.ElinMods.AdditionalUniqueNPC.Patches;
@@ -19,11 +17,6 @@ internal static class AI_FuckPatch
     {
         return _patchTarget.IsPatchable(original);
     }
-
-    private const int _drainManaMultiplier = 20;
-    private static readonly HashSet<string> _drainManaCharaIds = [
-        ModConsts.SourceId.Misalie,
-    ];
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(AI_Fuck.Finish), [])]
@@ -44,7 +37,7 @@ internal static class AI_FuckPatch
         var target = __instance.target;
 
         if (attacker == null || target == null ||
-            !_drainManaCharaIds.Contains(attacker.id)  ||
+            !attacker.HasElement(ModConsts.SourceNumericId.FeatManaAbsorber) ||
             attacker == target ||
             !attacker.IsAliveInCurrentZone ||
             !target.IsAliveInCurrentZone)
@@ -71,7 +64,7 @@ internal static class AI_FuckPatch
 
         // ダイス結果の20倍をMPダメージとする。
         // ただし攻撃側のレベルが低い場合、レベルによる最大MPと同様の補正で威力を下げる。
-        var roll = Dice.Roll(num, sides * _drainManaMultiplier, 0, attacker);
+        var roll = Dice.Roll(num, sides * 20, 0, attacker);
         var damage = Math.Max(0L, roll) * Math.Min(attacker.LV, 25) / 25;
 
         __state = (int)Math.Min(damage, int.MaxValue);

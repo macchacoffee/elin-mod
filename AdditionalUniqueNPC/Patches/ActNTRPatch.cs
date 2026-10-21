@@ -4,7 +4,6 @@ using System.Reflection.Emit;
 
 using HarmonyLib;
 
-using Macchacoffee.ElinMods.AbilityRestriction;
 using Macchacoffee.ElinMods.ModUtility.Patch;
 
 namespace Macchacoffee.ElinMods.AdditionalUniqueNPC.Patches;
@@ -20,10 +19,6 @@ internal static class ActNTRPatch
         return _patchTarget.IsPatchable(original);
     }
 
-    private static readonly HashSet<string> _awakeNTRCharaIds = [
-        ModConsts.SourceId.Misalie,
-    ];
-
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(ActNTR.CanPerform), [])]
     private static IEnumerable<CodeInstruction> CanPerform_Transpiler(
@@ -36,7 +31,8 @@ internal static class ActNTRPatch
         // HasAwakePermission(Act.CC, 1239, false)
         var matcher = new CodeMatcher(instructions, generator);
 
-        // 特定のキャラは起きている相手もイラズラの対象にできるようにする。
+        // 特定のフィートを持っている場合、
+        // 起きている相手もイラズラの対象にできるようにする。
         matcher.MatchStartForward(
             new CodeMatch(OpCodes.Ldsfld, AccessTools.Field(typeof(Act), nameof(Act.CC))),
             new CodeMatch(OpCodes.Ldc_I4, 1239),
@@ -58,6 +54,6 @@ internal static class ActNTRPatch
         Card chara, int elementId, bool includeNegative)
     {
         return chara.HasElement(elementId, includeNegative) ||
-            _awakeNTRCharaIds.Contains(chara.id);
+            chara.HasElement(ModConsts.SourceNumericId.FeatDemonBlood);
     }
 }

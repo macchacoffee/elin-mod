@@ -1,4 +1,4 @@
-namespace Macchacoffee.ElinMods.AbilityRestriction;
+namespace Macchacoffee.ElinMods.AdditionalUniqueNPC;
 
 internal static class ModConsts
 {
@@ -9,6 +9,15 @@ internal static class ModConsts
 
         public static readonly string Misalie = Prefixed("misalie");
         public static readonly string DcFiamaPetExtra = Prefixed("dcFiamaPetExtra");
+    }
+
+    internal static class SourceNumericId
+    {
+        private const int _base = 395820000;
+        private static int Id(int id) => _base + id;
+
+        public static readonly int FeatManaAbsorber = Id(1);
+        public static readonly int FeatDemonBlood = Id(2);
     }
 
     internal static class DramaStep

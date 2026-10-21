@@ -5,7 +5,6 @@ using System.Reflection.Emit;
 using HarmonyLib;
 using UnityEngine;
 
-using Macchacoffee.ElinMods.AbilityRestriction;
 using Macchacoffee.ElinMods.ModUtility.Patch;
 
 namespace Macchacoffee.ElinMods.AdditionalUniqueNPC.Patches;
@@ -20,10 +19,6 @@ internal static class GoalCombatPatch
     {
         return _patchTarget.IsPatchable(original);
     }
-
-    private static readonly HashSet<string> ActNTRManaCharaIds = [
-        ModConsts.SourceId.Misalie,
-    ];
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(GoalCombat.TryUseAbility), [typeof(int), typeof(bool)])]
@@ -84,7 +79,7 @@ internal static class GoalCombatPatch
 
         if (owner == null ||
             ability.act?.id != ABILITY.ActNTR ||
-            !ActNTRManaCharaIds.Contains(owner.id))
+            !owner.HasElement(ModConsts.SourceNumericId.FeatManaAbsorber))
         {
             return num;
         }
