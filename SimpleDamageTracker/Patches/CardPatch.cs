@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -38,54 +39,84 @@ internal static class CardPatch
         ILGenerator generator)
     {
         // // 変更前
-        // else
-        // {
-        //     hp -= (int)dmg;
-        // }
-
         // if (isSynced && dmg != 0L)
-        // {
         // // 変更後
-        // else
-        // {
-        //     hp -= (int)dmg;
-        // }
-        //
-        // CardPatch.OnDamage(this, origin, dmg);
-        //
+        // CardPatch.RecordDamage(this, origin, dmg);
         // if (isSynced && dmg != 0L)
-        // {
         var matcher = new CodeMatcher(instructions, generator);
 
-        // ldfld long Card+<>c__DisplayClass835_0::dmg
-        // conv.i4 NULL
-        // sub NULL
-        // call void Card::set_hp(int value)
-        // ldarg.0 NULL [Label155]
-        // callvirt virtual bool Card::get_isSynced()
-        // brfalse Label156
-        matcher.MatchStartForward(
-            new CodeMatch(OpCodes.Ldfld),
-            new CodeMatch(OpCodes.Conv_I4),
-            new CodeMatch(OpCodes.Sub),
-            new CodeMatch(OpCodes.Call, AccessTools.PropertySetter(typeof(Card), nameof(Card.hp))),
+        // ldarg.0
+        // callvirt bool Card::get_isSynced()
+        // brfalse <skipDisplay>
+        // ldloc <damageClosure>
+        // ldfld long <damageClosure>::dmg
+        // brfalse <skipDisplay>
+        var pattern = new[]
+        {
             new CodeMatch(OpCodes.Ldarg_0),
             new CodeMatch(OpCodes.Callvirt, AccessTools.PropertyGetter(typeof(Card), nameof(Card.isSynced))),
-            new CodeMatch(OpCodes.Brfalse)
-        );
-        // 
-        var dmgOperand = matcher.Operand;
-        matcher.Advance(4);
-        var labelList1 = matcher.Labels.Copy();
+            new CodeMatch(code => code.opcode == OpCodes.Brfalse || code.opcode == OpCodes.Brfalse_S),
+            new CodeMatch(code => code.IsLdloc()),
+            new CodeMatch(code =>
+                code.opcode == OpCodes.Ldfld &&
+                code.operand is FieldInfo field &&
+                field.Name == "dmg" &&
+                field.FieldType == typeof(long)),
+            new CodeMatch(code => code.opcode == OpCodes.Brfalse || code.opcode == OpCodes.Brfalse_S)
+        };
+
+        matcher.MatchStartForward(pattern)
+            .ThrowIfInvalid("Could not find Card.DamageHP's damage display block.");
+
+        if (matcher.Clone().Advance(1).MatchStartForward(pattern).IsValid)
+        {
+            throw new InvalidOperationException("Card.DamageHP has multiple damage display blocks.");
+        }
+
+        if (matcher.InstructionAt(2).operand is not Label syncSkip ||
+            matcher.InstructionAt(5).operand is not Label damageSkip ||
+            matcher.Clone().Advance(6).MatchStartForward(
+                new CodeMatch(code =>
+                    code.labels.Contains(syncSkip) &&
+                    code.labels.Contains(damageSkip))
+            ).IsInvalid)
+        {
+            throw new InvalidOperationException("Card.DamageHP's display branch targets changed.");
+        }
+
+        if (matcher.Instruction.blocks.Count != 0)
+        {
+            throw new InvalidOperationException("Card.DamageHP's display block is on an unexpected exception boundary.");
+        }
+
+        var loadClosure = matcher.InstructionAt(3);
+        var dmgField = (FieldInfo)matcher.InstructionAt(4).operand;
+
+        // ldloc <damageClosure>
+        // ldarg.1
+        // stfld long <damageClosure>::dmg
+        var capture = matcher.Clone().Start().MatchStartForward(
+            new CodeMatch(code => code.opcode == loadClosure.opcode && Equals(code.operand, loadClosure.operand)),
+            new CodeMatch(OpCodes.Ldarg_1),
+            new CodeMatch(OpCodes.Stfld, dmgField)
+        ).ThrowIfInvalid("Could not find Card.DamageHP's captured dmg argument.");
+
+        if (capture.Pos >= matcher.Pos)
+        {
+            throw new InvalidOperationException(
+                "Card.DamageHP's dmg argument must be captured before damage is applied.");
+        }
+
+        var labels = matcher.Labels.Copy();
         matcher.Labels.Clear();
         matcher.Insert(
             new CodeInstruction(OpCodes.Ldarg_0),
-            new CodeInstruction(OpCodes.Ldarg_S, 5),
-            new CodeInstruction(OpCodes.Ldloc_0),
-            new CodeInstruction(OpCodes.Ldfld, dmgOperand),
+            new CodeInstruction(OpCodes.Ldarg_S, (byte)5),
+            new CodeInstruction(loadClosure.opcode, loadClosure.operand),
+            new CodeInstruction(OpCodes.Ldfld, dmgField),
             CodeInstruction.Call(() => RecordDamage(default!, default!, default))
         );
-        matcher.AddLabels(labelList1);
+        matcher.AddLabels(labels);
 
         return matcher.InstructionEnumeration();
     }

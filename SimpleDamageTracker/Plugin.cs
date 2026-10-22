@@ -12,7 +12,7 @@ internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.simple-damage-tracker";
     public const string Name = "Simple Damage Tracker";
-    public const string Version = "1.1.0";
+    public const string Version = "1.1.1";
 }
 
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]

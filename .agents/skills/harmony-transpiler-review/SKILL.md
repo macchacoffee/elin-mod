@@ -12,17 +12,18 @@ Transpiler を「コードとしてそれっぽいか」ではなく、実際の
 ## 手順
 
 1. Patch 対象の type / method / overload を特定する。
-2. 利用可能なゲーム本体ソースまたは decompile 結果から、対象メソッドの元実装を確認する。
+2. 元実装と、ゲーム同梱 Harmony が Transpiler へ渡す命令列を確認する。分岐命令の正規化を考慮する。
 3. 元の高水準制御フローを短く説明する。
 4. Transpiler の matcher が、元 IL のどの instruction sequence を狙っているか対応付ける。
 5. 追加・削除・置換される instruction ごとに evaluation stack の入出力を確認する。
-6. branch target、label、exception block を移動・破壊していないか確認する。
+6. branch target、label、exception block を移動・破壊していないか確認する。Label の等値と分岐先命令の一致を区別する。
 7. local / argument index をハードコードしている場合、その前提が必要か確認する。
 8. matcher が広すぎて別の類似パターンへ一致しないか確認する。
 9. matcher が狭すぎる場合も、単に緩くするのではなく何を invariant として使うべきか考える。
 10. Elin 更新で壊れそうな前提を列挙する。
 11. Prefix / Postfix で同じ変更が可能か確認する。ただし vanilla 処理の大量コピーが必要なら Transpiler 維持を正当な選択肢とする。
 12. このリポジトリの Harmony version で提案 API が利用可能か確認する。
+13. 変更内容に応じてパッチ適用を確認し、ビルド成功と適用成功を区別する。未実施の確認を明記する。
 
 ## 出力
 

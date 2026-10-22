@@ -35,14 +35,14 @@ internal static class GoalCombatPatch
 
         // ldloc.s num
         // ldc.i4.0
-        // ble.s ...
+        // ble / ble.s ...
         // ldloc.s num
         // ldloc.s ability
         // ldfld int GoalCombat.ItemAbility::priorityMod
         matcher.MatchStartForward(
             new CodeMatch(OpCodes.Ldloc_S),
             new CodeMatch(OpCodes.Ldc_I4_0),
-            new CodeMatch(OpCodes.Ble_S),
+            new CodeMatch(code => code.opcode == OpCodes.Ble || code.opcode == OpCodes.Ble_S),
             new CodeMatch(OpCodes.Ldloc_S),
             new CodeMatch(OpCodes.Ldloc_S),
             new CodeMatch(
