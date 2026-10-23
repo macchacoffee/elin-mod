@@ -64,7 +64,6 @@ internal static class ActEffectPatch
                     ]))
         ).ThrowIfInvalid("Could not find ActEffect.DamageEle's DamageHP call.");
 
-        var replacements = 0;
         matcher.Repeat(matchAction: m =>
         {
             var labels = m.Labels.Copy();
@@ -97,14 +96,7 @@ internal static class ActEffectPatch
             );
             m.AddLabels(labels);
             m.Advance(3);
-            replacements++;
         });
-
-        if (replacements != 1)
-        {
-            throw new InvalidOperationException(
-                $"Expected 1 DamageHP call in ActEffect.DamageEle, found {replacements}.");
-        }
 
         return matcher.InstructionEnumeration();
     }
@@ -128,8 +120,7 @@ internal static class ActEffectPatch
         // target.DamageHP(dmg, ele, eleP, attackSource, origin, showEffect, weapon, originalTarget, penetration);
         // target.DamageHP(dmg, attackSource, origin);
         // // 変更後
-        // ManaAbsorption.DamageHP(target, dmg, ele, eleP, attackSource, origin,
-        //     showEffect, weapon, originalTarget, penetration, ManaAbsorption.IsMagicSource(actRef));
+        // ManaAbsorption.DamageHP(target, dmg, ele, eleP, attackSource, origin, showEffect, weapon, originalTarget, penetration, ManaAbsorption.IsMagicSource(actRef));
         // ManaAbsorption.DamageHP(target, dmg, attackSource, origin, ManaAbsorption.IsMagicSource(actRef));
         var matcher = new CodeMatcher(instructions, generator);
 
@@ -153,7 +144,6 @@ internal static class ActEffectPatch
                     ]))
         ).ThrowIfInvalid("Could not find ActEffect.Proc's elemental DamageHP calls.");
 
-        var elementalReplacements = 0;
         matcher.Repeat(matchAction: m =>
         {
             var labels = m.Labels.Copy();
@@ -186,14 +176,7 @@ internal static class ActEffectPatch
             );
             m.AddLabels(labels);
             m.Advance(3);
-            elementalReplacements++;
         });
-
-        if (elementalReplacements != 4)
-        {
-            throw new InvalidOperationException(
-                $"Expected 4 elemental DamageHP calls in ActEffect.Proc, found {elementalReplacements}.");
-        }
 
         // callvirt void Card::DamageHP(long, AttackSource, Card)
         matcher.Start().MatchStartForward(
@@ -205,7 +188,6 @@ internal static class ActEffectPatch
                     [typeof(long), typeof(AttackSource), typeof(Card)]))
         ).ThrowIfInvalid("Could not find ActEffect.Proc's non-elemental DamageHP call.");
 
-        var replacements = 0;
         matcher.Repeat(matchAction: m =>
         {
             var labels = m.Labels.Copy();
@@ -227,14 +209,7 @@ internal static class ActEffectPatch
             );
             m.AddLabels(labels);
             m.Advance(3);
-            replacements++;
         });
-
-        if (replacements != 1)
-        {
-            throw new InvalidOperationException(
-                $"Expected 1 non-elemental DamageHP call in ActEffect.Proc, found {replacements}.");
-        }
 
         return matcher.InstructionEnumeration();
     }

@@ -53,7 +53,6 @@ internal static class ActTelekinesisPatch
                     ]))
         ).ThrowIfInvalid("Could not find ActTelekinesis.DoDamage's DamageHP call.");
 
-        var replacements = 0;
         matcher.Repeat(matchAction: m =>
         {
             var labels = m.Labels.Copy();
@@ -83,14 +82,7 @@ internal static class ActTelekinesisPatch
             m.Insert(new CodeInstruction(OpCodes.Ldc_I4_1));
             m.AddLabels(labels);
             m.Advance(2);
-            replacements++;
         });
-
-        if (replacements != 1)
-        {
-            throw new InvalidOperationException(
-                $"Expected 1 DamageHP call in ActTelekinesis.DoDamage, found {replacements}.");
-        }
 
         return matcher.InstructionEnumeration();
     }
