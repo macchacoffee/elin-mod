@@ -2,7 +2,7 @@ namespace Macchacoffee.ElinMods.SomewhatEnhancedDisplay;
 
 internal static class ModConsts
 {
-    internal static class GameObjectName
+    public static class GameObjectName
     {
         private const string _prefix = "MCSED";
         private static string Prefixed(string id) => $"{_prefix}{id}";
@@ -24,7 +24,7 @@ internal static class ModConsts
         public static readonly string ColorPicker = Prefixed("ColorPicker");
     }
 
-    internal static class SourceId
+    public static class SourceId
     {
         private const string _prefix = "mc_sed_";
         private static string Prefixed(string id) => $"{_prefix}{id}";

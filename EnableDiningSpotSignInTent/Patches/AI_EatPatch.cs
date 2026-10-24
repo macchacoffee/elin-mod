@@ -22,7 +22,7 @@ internal static class AI_EatRunPatch
     [HarmonyTranspiler]
     [HarmonyPatch(MethodType.Enumerator)]
     [HarmonyPatch(nameof(AI_Eat.Run), [])]
-    internal static IEnumerable<CodeInstruction> MoveNext_Transpiler(
+    public static IEnumerable<CodeInstruction> MoveNext_Transpiler(
         IEnumerable<CodeInstruction> instructions,
         ILGenerator generator)
     {

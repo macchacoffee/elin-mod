@@ -2,13 +2,13 @@ namespace Macchacoffee.ElinMods.AddPalmiaTimesNewsToLog;
 
 internal static class ModConsts
 {
-    internal static class GameObjectName
+    public static class GameObjectName
     {
         private const string _prefix = "MCAPTNTL";
         private static string Prefixed(string id) => $"{_prefix}{id}";
     }
 
-    internal static class SourceId
+    public static class SourceId
     {
         private const string _prefix = "mc_aptntl_";
         private static string Prefixed(string id) => $"{_prefix}{id}";

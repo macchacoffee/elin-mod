@@ -2,7 +2,7 @@ namespace Macchacoffee.ElinMods.AbilityRestriction;
 
 internal static class ModConsts
 {
-    internal static class SourceId
+    public static class SourceId
     {
         private const string _prefix = "mc_ar_";
         private static string Prefixed(string id) => $"{_prefix}{id}";

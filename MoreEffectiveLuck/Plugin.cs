@@ -20,7 +20,7 @@ internal static class PluginInfo
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]
 internal class Plugin : BaseUnityPlugin, IModConfig
 {
-    internal static Harmony? Harmony { get; private set; }
+    public static Harmony? Harmony { get; private set; }
     private static ConfigFile? ConfigFile { get; set; }
 
     private void Awake()

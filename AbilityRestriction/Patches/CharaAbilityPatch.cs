@@ -106,13 +106,13 @@ internal static class CharaAbilityPatchStable
 
 internal static class CharaAbilityPatchImpl
 {
-    internal static void Add_Prefix(CharaAbility __instance, int id, int chance, bool pt, bool permanent = false)
+    public static void Add_Prefix(CharaAbility __instance, int id, int chance, bool pt, bool permanent = false)
     {
         var owner = __instance.owner;
         Mod.AbilityRestriction.UnrestrictAbility(owner, new(id, pt));
     }
 
-    internal static void Remove_Postfix(CharaAbility __instance, int id, bool permanent = false)
+    public static void Remove_Postfix(CharaAbility __instance, int id, bool permanent = false)
     {
         var owner = __instance.owner;
         var actId = Mathf.Abs(id);

@@ -839,7 +839,7 @@ internal static class CharaPatch
     }
 
     [HarmonyPatch(typeof(CraftUtil))]
-    internal static class CraftUtilPatch
+    public static class CraftUtilPatch
     {
         private static readonly PatchTarget _patchTarget = new();
 

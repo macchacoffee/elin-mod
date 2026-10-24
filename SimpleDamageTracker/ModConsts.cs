@@ -2,7 +2,7 @@ namespace Macchacoffee.ElinMods.SimpleDamageTracker;
 
 internal static class ModConsts
 {
-    internal static class GameObjectName
+    public static class GameObjectName
     {
         private const string _prefix = "MCSDT";
         private static string Prefixed(string id) => $"{_prefix}{id}";
@@ -14,7 +14,7 @@ internal static class ModConsts
         public static readonly string DamageDisplayTakenPercentage = Prefixed("DamageDisplayTakenPercentage");
     }
 
-    internal static class SourceId
+    public static class SourceId
     {
         private const string _prefix = "mc_sdt_";
         private static string Prefixed(string id) => $"{_prefix}{id}";

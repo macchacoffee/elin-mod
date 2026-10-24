@@ -23,7 +23,7 @@ internal static class LayerPanelAccess
     private static readonly MethodInfo _reopenMethod = AccessTools.Method(_layerType, "Reopen")
         ?? throw new MissingMethodException(_layerType.FullName, "Reopen");
 
-    internal static void Reopen()
+    public static void Reopen()
     {
         try
         {
@@ -39,7 +39,7 @@ internal static class LayerPanelAccess
         }
     }
 
-    internal static void ScheduleReopenPreservingScrollPosition()
+    public static void ScheduleReopenPreservingScrollPosition()
     {
         var plugin = Plugin.Instance;
         if (plugin is null)
@@ -51,7 +51,7 @@ internal static class LayerPanelAccess
         plugin.SchedulePanelReopen(GetCurrentScrollPosition());
     }
 
-    internal static void RestoreScrollPosition(float position)
+    public static void RestoreScrollPosition(float position)
     {
         var scrollRect = GetCurrentScrollRect();
         scrollRect?.verticalNormalizedPosition = Mathf.Clamp01(position);

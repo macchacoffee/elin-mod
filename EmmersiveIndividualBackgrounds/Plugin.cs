@@ -22,7 +22,7 @@ internal static class PluginInfo
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]
 internal class Plugin : BaseUnityPlugin
 {
-    internal static Plugin? Instance { get; private set; }
+    public static Plugin? Instance { get; private set; }
 
     private bool _panelReopenScheduled;
 
@@ -49,7 +49,7 @@ internal class Plugin : BaseUnityPlugin
         }
     }
 
-    internal void SchedulePanelReopen(float? scrollPosition)
+    public void SchedulePanelReopen(float? scrollPosition)
     {
         if (_panelReopenScheduled)
         {

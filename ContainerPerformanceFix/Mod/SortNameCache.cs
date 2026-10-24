@@ -15,12 +15,12 @@ internal static class SortNameCache
 
     private static bool _enabled;
 
-    internal static void Enable()
+    public static void Enable()
     {
         _enabled = true;
     }
 
-    internal static void Begin()
+    public static void Begin()
     {
         if (!_enabled)
         {
@@ -36,7 +36,7 @@ internal static class SortNameCache
         _cache.Clear();
     }
 
-    internal static void End()
+    public static void End()
     {
         if (!_enabled || _depth <= 0 || --_depth != 0)
         {
@@ -46,7 +46,7 @@ internal static class SortNameCache
         _cache?.Clear();
     }
 
-    internal static string GetName(Card card, NameStyle style, int num)
+    public static string GetName(Card card, NameStyle style, int num)
     {
         var cache = _cache;
         if (!_enabled || _depth <= 0 || cache is null)
@@ -73,7 +73,7 @@ internal static class SortNameCache
 
     private sealed class CardReferenceComparer : IEqualityComparer<Card>
     {
-        internal static readonly CardReferenceComparer Instance = new();
+        public static readonly CardReferenceComparer Instance = new();
 
         public bool Equals(Card? x, Card? y)
         {

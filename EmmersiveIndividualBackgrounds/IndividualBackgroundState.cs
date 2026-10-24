@@ -11,9 +11,9 @@ namespace Macchacoffee.ElinMods.EmmersiveIndividualBackgrounds;
 
 internal static class IndividualBackgroundState
 {
-    internal const string IndividualsDirectory = "Emmersive/Characters/Individuals";
+    public const string IndividualsDirectory = "Emmersive/Characters/Individuals";
 
-    internal static readonly List<string> ModeLabels = ["Common", "Individual"];
+    public static readonly List<string> ModeLabels = ["Common", "Individual"];
 
     private static readonly Func<Chara, string> _getUnifiedId = CreateUnifiedIdGetter();
     private static readonly ConcurrentDictionary<string, bool> _individualModes = new();
@@ -23,29 +23,29 @@ internal static class IndividualBackgroundState
     [ThreadStatic]
     private static Chara? _currentChara;
 
-    internal static Chara? CurrentChara
+    public static Chara? CurrentChara
     {
         get => _currentChara;
         set => _currentChara = value;
     }
 
-    internal static string GetCommonPath(Chara chara)
+    public static string GetCommonPath(Chara chara)
     {
         return $"Emmersive/Characters/{_getUnifiedId(chara)}.txt";
     }
 
-    internal static string GetIndividualPath(Chara chara)
+    public static string GetIndividualPath(Chara chara)
     {
         return $"{IndividualsDirectory}/{Game.id}/{chara.uid}.txt";
     }
 
-    internal static void Register(Chara chara)
+    public static void Register(Chara chara)
     {
         var key = new ResourceKey(GetIndividualPath(chara));
         _charactersByIndividualPath[key.ResourcePath] = new(chara);
     }
 
-    internal static bool TryGetRegisteredChara(ResourceKey key, out Chara chara)
+    public static bool TryGetRegisteredChara(ResourceKey key, out Chara chara)
     {
         if (_charactersByIndividualPath.TryGetValue(key.ResourcePath, out var reference)
             && reference.TryGetTarget(out chara))
@@ -57,34 +57,34 @@ internal static class IndividualBackgroundState
         return false;
     }
 
-    internal static bool IsIndividualMode(Chara chara)
+    public static bool IsIndividualMode(Chara chara)
     {
         var path = GetIndividualPath(chara);
         return _individualModes.GetOrAdd(path, _ => HasCustomResource(new ResourceKey(path)));
     }
 
-    internal static void SetIndividualMode(Chara chara, bool enabled)
+    public static void SetIndividualMode(Chara chara, bool enabled)
     {
         _individualModes[GetIndividualPath(chara)] = enabled;
     }
 
-    internal static bool HasIndividualBackground(Chara chara)
+    public static bool HasIndividualBackground(Chara chara)
     {
         return HasCustomResource(new ResourceKey(GetIndividualPath(chara)));
     }
 
-    internal static bool HasCustomResource(ResourceKey key)
+    public static bool HasCustomResource(ResourceKey key)
     {
         var fullPath = ResourceFetch.CustomFolder + key;
         return File.Exists(fullPath.ResourcePath);
     }
 
-    internal static void RequestRefresh()
+    public static void RequestRefresh()
     {
         Interlocked.Exchange(ref _refreshRequested, 1);
     }
 
-    internal static bool ConsumeRefreshRequest()
+    public static bool ConsumeRefreshRequest()
     {
         return Interlocked.Exchange(ref _refreshRequested, 0) != 0;
     }
