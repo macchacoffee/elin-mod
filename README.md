@@ -16,6 +16,7 @@ Steam Workshopで公開していないModも含まれます。
 
 ## その他Mod (開発中 / 実験的なもの)
 
+* [Additional Races and Jobs](https://github.com/macchacoffee/elin-mod/tree/main/AdditionalRacesAndJobs)
 * [Additional Unique NPC](https://github.com/macchacoffee/elin-mod/tree/main/AdditionalUniqueNPC)
 * [Add Palmia Times News to Log](https://github.com/macchacoffee/elin-mod/tree/main/AddPalmiaTimesNewsToLog)
 * [Allies Switch Ranged Weapons](https://github.com/macchacoffee/elin-mod/tree/main/AlliesSwitchRangedWeapons)
