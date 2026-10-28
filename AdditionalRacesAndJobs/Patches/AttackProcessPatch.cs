@@ -35,11 +35,12 @@ internal static class AttackProcessPatch
             return;
         }
 
-        var multiplier = !__instance.IsRanged && (__instance.IsMartial || __instance.IsMartialWeapon)
-            ? ModConsts.Value.MonkMartialAttackMultiple
-            : -ModConsts.Value.MonkNonMartialAttackMultiple;
+        var attackMultiplier = !__instance.IsRanged && (__instance.IsMartial || __instance.IsMartialWeapon)
+            ? ModConsts.Value.MonkMartialAttackMultiplier
+            : -ModConsts.Value.MonkNonMartialAttackMultiplier;
 
-        __instance.dMulti += featLevel * multiplier;
-        __instance.toHit = (long)Mathf.Max(__instance.toHit * (1 + featLevel * multiplier), 0);
+        var multiplier = Mathf.Max(1 + featLevel * attackMultiplier, 0);
+        __instance.dMulti *= multiplier;
+        __instance.toHit = (long)(__instance.toHit * multiplier);
     }
 }

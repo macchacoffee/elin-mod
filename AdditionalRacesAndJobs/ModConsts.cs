@@ -14,7 +14,7 @@ internal static class ModConsts
     {
         public static readonly int MonkMartialPotential = 50;
         public static readonly int MonkNonMartialPotential = -20;
-        public static readonly float MonkMartialAttackMultiple = 0.1f;
-        public static readonly float MonkNonMartialAttackMultiple = -0.15f;
+        public static readonly float MonkMartialAttackMultiplier = 0.1f;
+        public static readonly float MonkNonMartialAttackMultiplier = -0.15f;
     }
 }
