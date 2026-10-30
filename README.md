@@ -28,4 +28,5 @@ Steam Workshopで公開していないModも含まれます。
 * [NoPCC](https://github.com/macchacoffee/elin-mod/tree/main/NoPCC)
 * [NoSpikyPetting](https://github.com/macchacoffee/elin-mod/tree/main/NoSpikyPetting)
 * [NPC Goto Behavior Tweaks](https://github.com/macchacoffee/elin-mod/tree/main/NPCGotoBehaviorTweaks)
+* [Selective Autosave](https://github.com/macchacoffee/elin-mod/tree/main/SelectiveAutosave)
 * [Selective Modesty for Moonlit Kin](https://github.com/macchacoffee/elin-mod/tree/main/SelectiveModestyForMoonlitKin)

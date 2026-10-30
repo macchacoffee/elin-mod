@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Meta>
+  <title>Selective Autosave</title>
+  <id>maccha_coffee_selective_autosave</id>
+  <author>抹茶コーヒー</author>
+  <loadPriority>100</loadPriority>
+  <version>0.23.355</version>
+  <description>自動セーブの有効/無効を項目ごとに切り替えられるようにします。</description>
+  <tags>General</tags>
+  <visibility>Public</visibility>
+</Meta>

@@ -23,6 +23,5 @@ internal class ModConfig : BepInExModConfigBase<ModConfig>
 
     public BepInExModConfigEntry<bool> EnableForAllNPC { get; } = new(
         _cheats, "EnableForAllNPC", false,
-        // "すべてのNPCに対してアビリティ制限を有効にする。\n*注意* ゲームバランスが壊れたり予期しない事象を引き起こしたりする可能性があります。\nEnable ability restrictions for all NPC.\n*Warning* This may disrupt game balance or cause unexpected behavior.");
         $"すべてのNPCに対してアビリティ制限を有効にする。\n{"*注意*".TagColor(Color.red)} ゲームバランスが壊れたり予期しない事象を引き起こしたりする可能性があります。\nEnable ability restrictions for all NPC.\n{"*Warning*".TagColor(Color.red)} This may disrupt game balance or cause unexpected behavior.");
 }
