@@ -119,6 +119,11 @@ internal class HoverGuideItem
         HealthBar.StopTracking();
     }
 
+    public void Dispose()
+    {
+        HealthBar.Dispose();
+    }
+
     private static string AddLockMarker(string text)
     {
         var index = text.IndexOf(Environment.NewLine);

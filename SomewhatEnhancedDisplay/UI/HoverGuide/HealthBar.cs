@@ -269,6 +269,17 @@ internal class HealthBar
         TargetModifier = null;
     }
 
+    public void Dispose()
+    {
+        FGRestoreTween?.Kill(false);
+        FGDamageTween?.Kill(false);
+        FGRestoreTween = null;
+        FGDamageTween = null;
+
+        Target.SetTarget(null);
+        TargetModifier = null;
+    }
+
     private static double GetHealthRatio(Chara chara, HoverGuideTargetModifier? modifier)
     {
         var hasManaBodyPreview = modifier?.HasManaBodyHealthBarPreview == true;

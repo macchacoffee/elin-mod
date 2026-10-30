@@ -244,4 +244,12 @@ internal class HoverGuide
         Item1.ClearTarget();
         Item2.ClearTarget();
     }
+
+    public void Dispose()
+    {
+        Item1.Dispose();
+        Item2.Dispose();
+        UnlockCard();
+        ClearLockCandidate();
+    }
 }

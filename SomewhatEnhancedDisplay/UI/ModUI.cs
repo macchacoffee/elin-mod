@@ -10,6 +10,13 @@ internal static class ModUI
 
     public static void Update()
     {
+        if (EClass.core == null || !EClass.core.IsGameStarted)
+        {
+            HoverGuide?.Dispose();
+            HoverGuide = null;
+            return;
+        }
+
         HoverGuide?.UpdateHealthBars();
 
         if (new KeyboardShortcut(ModContext.Config.NextStyleKey.Value).IsDown())

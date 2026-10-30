@@ -15,7 +15,7 @@ internal static class PluginInfo
 {
     public const string Guid = "maccha-coffee.somewhat-enhanced-display";
     public const string Name = "Somewhat Enhanced Display";
-    public const string Version = "1.2.0";
+    public const string Version = "1.2.1";
 }
 
 [BepInPlugin(PluginInfo.Guid, PluginInfo.Name, PluginInfo.Version)]

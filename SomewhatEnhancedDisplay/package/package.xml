@@ -5,8 +5,7 @@
   <author>抹茶コーヒー</author>
   <loadPriority>100</loadPriority>
   <version>0.23.352</version>
-  <description>
-Enhances several in-game display features, allowing various types of information to be shown.
+  <description>Enhances several in-game display features, allowing various types of information to be shown.
 
 In addition to displaying numerical values in status notifications and tooltips, this mod enhances the hover guides shown when you move the mouse cursor over characters and items.
 The hover guide can be customized in detail, including what information is displayed and how it looks, and you can create multiple display styles and switch between them during gameplay.
@@ -106,8 +105,7 @@ It may be possible to use such mods together by disabling some features in the g
 
 [hr][/hr]
 [h2]Source Code[/h2]
-[url=https://github.com/macchacoffee/elin-mod/tree/main/SomewhatEnhancedDisplay]GitHub[/url]
-  </description>
+[url=https://github.com/macchacoffee/elin-mod/tree/main/SomewhatEnhancedDisplay]GitHub[/url]</description>
   <tags>General,QoL</tags>
   <visibility>Public</visibility>
 </Meta>
