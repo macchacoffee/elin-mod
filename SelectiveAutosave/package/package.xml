@@ -5,7 +5,22 @@
   <author>抹茶コーヒー</author>
   <loadPriority>100</loadPriority>
   <version>0.23.355</version>
-  <description>自動セーブの有効/無効を項目ごとに切り替えられるようにします。</description>
+  <description>自動セーブの有効/無効をタイミングごとに切り替えられるようにします。
+
+ゲーム内のMod設定画面から変更、または以下の設定ファイルを編集することで自動セーブの設定を変更できます。
+[code]Elin\BepInEx\config\maccha-coffee.selective-autosave.cfg[/code]
+デフォルトではすべて無効、すなわちすべての自動セーブが無効になります。
+
+[hr][/hr]
+This mod allows you to enable or disable autosaving for each trigger.
+
+You can change these settings from the in-game mod settings menu, or by editing the following configuration file:
+[code]Elin\BepInEx\config\maccha-coffee.selective-autosave.cfg[/code]
+All settings are disabled by default, meaning all autosaves are disabled.
+
+[hr][/hr]
+[h2]Source Code[/h2]
+[url=https://github.com/macchacoffee/elin-mod/tree/main/SelectiveAutosave]GitHub[/url]</description>
   <tags>General</tags>
   <visibility>Public</visibility>
 </Meta>

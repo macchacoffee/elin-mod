@@ -10,6 +10,7 @@ Steam Workshopで公開していないModも含まれます。
 * [Enable Dining Spot Sign in Tent](https://github.com/macchacoffee/elin-mod/tree/main/EnableDiningSpotSignInTent)
 * [Equalize Spellitems for Major Elements](https://github.com/macchacoffee/elin-mod/tree/main/EqualizeSpellitemsForMajorElements)
 * [Faction Enchant in Inventory](https://github.com/macchacoffee/elin-mod/tree/main/FactionEnchantInInventory)
+* [Selective Autosave](https://github.com/macchacoffee/elin-mod/tree/main/SelectiveAutosave)
 * [Simple Damage Tracker](https://github.com/macchacoffee/elin-mod/tree/main/SimpleDamageTracker)
 * [Somewhat Enhanced Display](https://github.com/macchacoffee/elin-mod/tree/main/SomewhatEnhancedDisplay)
 * [Starweaver's Moongate Paging](https://github.com/macchacoffee/elin-mod/tree/main/StarweaversMoongatePaging)
@@ -28,5 +29,4 @@ Steam Workshopで公開していないModも含まれます。
 * [NoPCC](https://github.com/macchacoffee/elin-mod/tree/main/NoPCC)
 * [NoSpikyPetting](https://github.com/macchacoffee/elin-mod/tree/main/NoSpikyPetting)
 * [NPC Goto Behavior Tweaks](https://github.com/macchacoffee/elin-mod/tree/main/NPCGotoBehaviorTweaks)
-* [Selective Autosave](https://github.com/macchacoffee/elin-mod/tree/main/SelectiveAutosave)
 * [Selective Modesty for Moonlit Kin](https://github.com/macchacoffee/elin-mod/tree/main/SelectiveModestyForMoonlitKin)
