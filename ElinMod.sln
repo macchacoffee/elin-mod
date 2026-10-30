@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoSpikyPetting", "NoSpikyPe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPCGotoBehaviorTweaks", "NPCGotoBehaviorTweaks\NPCGotoBehaviorTweaks.csproj", "{4B810E61-0AEB-B274-A764-55E39C5F888B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelectiveAutosave", "SelectiveAutosave\SelectiveAutosave.csproj", "{A3CC6DD2-6F03-43F4-BE35-61F727482FDA}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelectiveModestyForMoonlitKin", "SelectiveModestyForMoonlitKin\SelectiveModestyForMoonlitKin.csproj", "{7D8A2C41-5F93-4E6B-A1D0-C27B9E46F835}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDamageTracker", "SimpleDamageTracker\SimpleDamageTracker.csproj", "{85FC5A1B-4D3E-4F6A-9B2C-1D3E4F5A6B7C}"
@@ -118,6 +120,10 @@ Global
 		{4B810E61-0AEB-B274-A764-55E39C5F888B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B810E61-0AEB-B274-A764-55E39C5F888B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B810E61-0AEB-B274-A764-55E39C5F888B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3CC6DD2-6F03-43F4-BE35-61F727482FDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3CC6DD2-6F03-43F4-BE35-61F727482FDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3CC6DD2-6F03-43F4-BE35-61F727482FDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3CC6DD2-6F03-43F4-BE35-61F727482FDA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7D8A2C41-5F93-4E6B-A1D0-C27B9E46F835}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7D8A2C41-5F93-4E6B-A1D0-C27B9E46F835}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D8A2C41-5F93-4E6B-A1D0-C27B9E46F835}.Release|Any CPU.ActiveCfg = Release|Any CPU
