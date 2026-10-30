@@ -8,23 +8,23 @@ internal class ModConfig : BepInExModConfigBase<ModConfig>
 
     public BepInExModConfigEntry<bool> SaveOnMapChange { get; } = new(
         _general, "SaveOnMapChange", false,
-        "マップの移動に伴う自動セーブを有効にする。\nEnable autosaving when changing maps.");
+        "マップ移動時の自動セーブを有効にする。\nEnable autosaving when changing maps.");
 
     public BepInExModConfigEntry<bool> SaveOnSleep { get; } = new(
         _general, "SaveOnSleep", false,
-        "睡眠が完了した後の自動セーブを有効にする。\nEnable autosaving after sleeping.");
+        "就寝時の自動セーブを有効にする。\nEnable autosaving after sleeping.");
 
     public BepInExModConfigEntry<bool> SaveOnBossDefeat { get; } = new(
         _general, "SaveOnBossDefeat", false,
-        "ボス撃破による自動セーブを有効にする。\nEnable autosaving after defeating a boss.");
+        "ボス撃破時の自動セーブを有効にする。\nEnable autosaving after defeating a boss.");
 
     public BepInExModConfigEntry<bool> SaveOnTreasureDiscovery { get; } = new(
         _general, "SaveOnTreasureDiscovery", false,
-        "宝の地図の宝を掘り当てた後の自動セーブを有効にする。\nEnable autosaving after digging up treasure from a treasure map.");
+        "宝の地図で宝を発見した時の自動セーブを有効にする。\nEnable autosaving when discovering treasure using a treasure map.");
 
     public BepInExModConfigEntry<bool> SaveOnRelocation { get; } = new(
         _general, "SaveOnRelocation", false,
-        "拠点の移設に伴う自動セーブを有効にする。\nEnable autosaving when relocating a base.");
+        "拠点の移設時の自動セーブを有効にする。\nEnable autosaving when relocating a base.");
 
     public BepInExModConfigEntry<bool> SaveOnEvent { get; } = new(
         _general, "SaveOnEvent", false,
