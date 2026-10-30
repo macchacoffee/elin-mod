@@ -5,7 +5,6 @@ namespace Macchacoffee.ElinMods.SelectiveAutosave.Config;
 internal class ModConfig : BepInExModConfigBase<ModConfig>
 {
     private const string _general = "General";
-    private const string _experimental = "Experimental";
 
     public BepInExModConfigEntry<bool> SaveOnMapChange { get; } = new(
         _general, "SaveOnMapChange", false,
@@ -27,6 +26,10 @@ internal class ModConfig : BepInExModConfigBase<ModConfig>
         _general, "SaveOnRelocation", false,
         "拠点の移設に伴う自動セーブを有効にする。\nEnable autosaving when relocating a base.");
 
+    public BepInExModConfigEntry<bool> SaveOnEvent { get; } = new(
+        _general, "SaveOnEvent", false,
+        "イベント (会話など) による強制セーブを有効にする。\nEnable forced saves triggered by events, such as dialogue.");
+
     public BepInExModConfigEntry<bool> SaveOnReturnToTitle { get; } = new(
         _general, "SaveOnReturnToTitle", false,
         "タイトルへ戻る時の自動セーブを有効にする。\nEnable autosaving when returning to the title screen.");
@@ -34,8 +37,4 @@ internal class ModConfig : BepInExModConfigBase<ModConfig>
     public BepInExModConfigEntry<bool> SaveOnQuit { get; } = new(
         _general, "SaveOnQuit", false,
         "ゲーム内メニューから終了する時の自動セーブを有効にする。\nEnable autosaving when exiting from the in-game menu.");
-
-    public BepInExModConfigEntry<bool> SaveOnEvent { get; } = new(
-        _experimental, "SaveOnEvent", true,
-        "イベント (会話など) による強制セーブを有効にする。\nEnable forced saves triggered by events, such as dialogue.");
 }

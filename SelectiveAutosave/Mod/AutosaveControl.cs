@@ -19,7 +19,27 @@ internal static class AutosaveControl
 
     public static bool SaveOnEvent(Game game, bool isAutoSave, bool silent)
     {
-        return !ModContext.Config.SaveOnEvent.Value || game.Save(isAutoSave, silent);
+        if (!ModContext.Config.SaveOnEvent.Value && !IsNewGameIntroSave())
+        {
+            return true;
+        }
+
+        return game.Save(isAutoSave, silent);
+    }
+
+    private static bool IsNewGameIntroSave()
+    {
+        var layer = LayerDrama.Instance;
+        if (!layer)
+        {
+            return false;
+        }
+
+        // 新規開始時の初回自動セーブは無効にしない。
+        var drama = layer.drama;
+        return drama?.setup?.book == "_main" &&
+            drama.setup.sheet == "mono" &&
+            drama.sequence?.lastStep == "1-2";
     }
 
     public static void RequestBossAutosave(Player player, bool value)
