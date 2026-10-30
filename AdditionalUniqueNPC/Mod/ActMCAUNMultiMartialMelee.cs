@@ -45,7 +45,7 @@ public class ActMCAUNMultiMartialMelee : Ability
             }
         }
 
-        var count = 4 + rnd(6) + CC.Evalue(FEAT.featComat);
+        var count = 3 + rnd(4) + CC.Evalue(FEAT.featComat);
 
         for (var i = 0; i < count; i++)
         {
@@ -61,13 +61,14 @@ public class ActMCAUNMultiMartialMelee : Ability
                 : null;
 
             var effectId = GetHitEffectId(CC, weapon);
-            var playEffect = i % 4 == 0;
+            var playEffect = i % 3 == 0;
             var delay = i * 0.07f;
 
             TweenUtil.Delay(delay, delegate
             {
                 if (playEffect)
                 {
+                    TC.pos.PlayEffect("scream");
                     TC.pos.PlayEffect(effectId);
                 }
 
