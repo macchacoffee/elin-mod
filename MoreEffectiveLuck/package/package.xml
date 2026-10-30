@@ -5,8 +5,7 @@
   <author>抹茶コーヒー</author>
   <loadPriority>100</loadPriority>
   <version>0.23.352</version>
-  <description>
-</description>
+  <description>能力の一つ「運」が戦闘以外の要素にも適用されるようにします。</description>
   <tags>General</tags>
   <visibility>Public</visibility>
 </Meta>

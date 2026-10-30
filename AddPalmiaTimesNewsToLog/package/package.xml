@@ -5,8 +5,7 @@
   <author>抹茶コーヒー</author>
   <loadPriority>100</loadPriority>
   <version>0.23.295</version>
-  <description>
-  </description>
+  <description>ゲーム内新聞「パルミア・タイムズ」のニュースなどを定期的にログに流します。</description>
   <tags>General</tags>
   <visibility>Public</visibility>
 </Meta>

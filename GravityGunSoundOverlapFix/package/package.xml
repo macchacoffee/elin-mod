@@ -5,16 +5,14 @@
   <author>抹茶コーヒー</author>
   <loadPriority>100</loadPriority>
   <version>0.23.338</version>
-  <description>
-グラヴィティガンの効果音が連射で重なるのを抑えます。
+  <description>グラヴィティガンの効果音が連射で重なるのを抑えます。
 
 [hr][/hr]
 Prevents the gravity gun sound from overlapping during rapid fire.
 
 [hr][/hr]
 [h2]Source Code[/h2]
-[url=https://github.com/macchacoffee/elin-mod/tree/main/GravityGunSoundOverlapFix]GitHub[/url]
-</description>
+[url=https://github.com/macchacoffee/elin-mod/tree/main/GravityGunSoundOverlapFix]GitHub[/url]</description>
   <tags>General</tags>
   <visibility>Public</visibility>
 </Meta>

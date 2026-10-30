@@ -5,8 +5,7 @@
   <author>抹茶コーヒー</author>
   <loadPriority>101</loadPriority>
   <version>0.23.325</version>
-  <description>
-  </description>
+  <description>Elin with AIのCharacter Backgroundで個別のキャラクター単位でも設定できるようにします。</description>
   <tags>General</tags>
   <visibility>Public</visibility>
 </Meta>

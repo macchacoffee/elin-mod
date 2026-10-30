@@ -5,8 +5,7 @@
   <author>抹茶コーヒー</author>
   <loadPriority>100</loadPriority>
   <version>0.23.352</version>
-  <description>
-テント内で「食堂の立札」が完全に機能するようにします。
+  <description>テント内で「食堂の立札」が完全に機能するようにします。
 
 [list]
   [*] テント内に食堂の立札が設置されていれば、パーティメンバーはその有効範囲に移動して食事するようになります。
@@ -26,8 +25,7 @@ It can be enabled or disabled at any time, even for existing save data.
 
 [hr][/hr]
 [h2]Source Code[/h2]
-[url=https://github.com/macchacoffee/elin-mod/tree/main/EnableDiningSpotSignInTent]GitHub[/url]
-  </description>
+[url=https://github.com/macchacoffee/elin-mod/tree/main/EnableDiningSpotSignInTent]GitHub[/url]</description>
   <tags>General,QoL</tags>
   <visibility>Public</visibility>
 </Meta>

@@ -5,8 +5,7 @@
   <author>抹茶コーヒー</author>
   <loadPriority>100</loadPriority>
   <version>0.23.352</version>
-  <description>
-神々のアーティファクトが有するファクションエンチャントの発動条件に「インベントリに存在する時」を追加します。装備する必要はありません。
+  <description>神々のアーティファクトが有するファクションエンチャントの発動条件に「インベントリに存在する時」を追加します。装備する必要はありません。
 ただし以下の場合は対象外です。
 [list]
  [*] 「それは装備するたびに呪われる」のエンチャントが付いている。
@@ -39,8 +38,7 @@ Due to implementation limitations, changing the PC's deity through non-standard 
 
 [hr][/hr]
 [h2]Source Code[/h2]
-[url=https://github.com/macchacoffee/elin-mod/tree/main/FactionEnchantInInventory]GitHub[/url]
-</description>
+[url=https://github.com/macchacoffee/elin-mod/tree/main/FactionEnchantInInventory]GitHub[/url]</description>
   <tags>General</tags>
   <visibility>Public</visibility>
 </Meta>

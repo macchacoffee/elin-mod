@@ -5,8 +5,7 @@
   <author>抹茶コーヒー</author>
   <loadPriority>100</loadPriority>
   <version>0.23.325</version>
-  <description>
-パーティメンバーごとのダメージとダメージ比率をパーティウィジェット上に表示します。
+  <description>パーティメンバーごとのダメージとダメージ比率をパーティウィジェット上に表示します。
 多様な情報を提供することではなく、基本的なダメージ計測機能に絞って軽量に動作することを重視しています。
 
 [h2]必須Mod[/h2]
@@ -60,8 +59,7 @@ If you want to clean up unnecessary files after you stop using this Mod, delete 
 
 [hr][/hr]
 [h2]Source Code[/h2]
-[url=https://github.com/macchacoffee/elin-mod/tree/main/SimpleDamageTracker]GitHub[/url]
-  </description>
+[url=https://github.com/macchacoffee/elin-mod/tree/main/SimpleDamageTracker]GitHub[/url]</description>
   <tags>General,QoL</tags>
   <visibility>Public</visibility>
 </Meta>

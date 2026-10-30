@@ -5,8 +5,7 @@
   <author>抹茶コーヒー</author>
   <loadPriority>100</loadPriority>
   <version>0.23.338</version>
-  <description>
-[h1]重要[/h1]
+  <description>[h1]重要[/h1]
 EA 23.346 Nightlyの公式アップデートで★収納箱などのソート時に関するパフォーマンスの改善が行われました。
 そのため現在は本Modを利用する必要はありません。
 
@@ -29,8 +28,7 @@ This mod does not modify game data and can be added to or removed from existing 
 
 [hr][/hr]
 [h2]Source Code[/h2]
-[url=https://github.com/macchacoffee/elin-mod/tree/main/ContainerPerformanceFix]GitHub[/url]
-  </description>
+[url=https://github.com/macchacoffee/elin-mod/tree/main/ContainerPerformanceFix]GitHub[/url]</description>
   <tags>General</tags>
   <visibility>Unlisted</visibility>
 </Meta>

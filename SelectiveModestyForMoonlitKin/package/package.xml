@@ -5,8 +5,7 @@
   <author>抹茶コーヒー</author>
   <loadPriority>100</loadPriority>
   <version>0.23.338</version>
-  <description>
-フィート「月夜の眷属」を持つ仲間に「もっと慎みをもって欲しい」と伝えた後も、戦闘中にアビリティ「イタズラ」を使用できるようにします。
+  <description>フィート「月夜の眷属」を持つ仲間に「もっと慎みをもって欲しい」と伝えた後も、戦闘中にアビリティ「イタズラ」を使用できるようにします。
 
 バニラではこの会話選択肢により、寝ているキャラクターに対して自発的に「気持ちいいこと」を始める行動と、アビリティ「イタズラ」の両方が無効になります。
 このModを導入すると自発的な行動だけが無効になり、「イタズラ」は通常どおり使用できます。
@@ -25,8 +24,7 @@ It can be enabled or disabled at any time, even for existing save data.
 
 [hr][/hr]
 [h2]Source Code[/h2]
-[url=https://github.com/macchacoffee/elin-mod/tree/main/SelectiveModestyForMoonlitKin]GitHub[/url]
-  </description>
+[url=https://github.com/macchacoffee/elin-mod/tree/main/SelectiveModestyForMoonlitKin]GitHub[/url]</description>
   <tags>General</tags>
   <visibility>Public</visibility>
 </Meta>

@@ -5,8 +5,7 @@
   <author>抹茶コーヒー</author>
   <loadPriority>100</loadPriority>
   <version>0.23.352</version>
-  <description>
-魔法系アイテム (魔法書、魔法杖、巻物) で属性ごとに設定されている魔法の制限を無くします。
+  <description>魔法系アイテム (魔法書、魔法杖、巻物) で属性ごとに設定されている魔法の制限を無くします。
 
 例えば炎の矢の魔法書、毒の光線の杖といったアイテムは存在しませんが、このModを導入すると生成されるようになります。ただし専門領域で選べない属性 (衝撃、無) は対象外です。
 
@@ -53,8 +52,7 @@ This mod can be installed or disabled at any time. However, if the player charac
 
 [hr][/hr]
 [h2]Source Code[/h2]
-[url=https://github.com/macchacoffee/elin-mod/tree/main/EqualizeSpellitemsForMajorElements]GitHub[/url]
-</description>
+[url=https://github.com/macchacoffee/elin-mod/tree/main/EqualizeSpellitemsForMajorElements]GitHub[/url]</description>
   <tags>General,Balance</tags>
   <visibility>Public</visibility>
 </Meta>

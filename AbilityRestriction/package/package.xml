@@ -5,8 +5,7 @@
   <author>抹茶コーヒー</author>
   <loadPriority>100</loadPriority>
   <version>0.23.352</version>
-  <description>
-キャラクターが使用するアビリティ (魔法も含む) を制限できるようにします。
+  <description>キャラクターが使用するアビリティ (魔法も含む) を制限できるようにします。
 
 住民掲示板の住民をクリックした時の選択肢にある「アビリティの使用制限」から設定可能です。
 設定画面でチェックを外したアビリティは非戦闘時、戦闘時を問わず使用しなくなります。
@@ -59,8 +58,7 @@ If you want to clean up unnecessary files after stopping use of the mod, or if y
 
 [hr][/hr]
 [h2]Source Code[/h2]
-[url=https://github.com/macchacoffee/elin-mod/tree/main/AbilityRestriction]GitHub[/url]
-  </description>
+[url=https://github.com/macchacoffee/elin-mod/tree/main/AbilityRestriction]GitHub[/url]</description>
   <tags>General,QoL</tags>
   <visibility>Public</visibility>
 </Meta>

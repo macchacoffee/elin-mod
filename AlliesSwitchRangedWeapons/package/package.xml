@@ -5,8 +5,7 @@
   <author>抹茶コーヒー</author>
   <loadPriority>100</loadPriority>
   <version>0.23.338</version>
-  <description>
-味方が特定の遠隔武器を使い続けるのではなく、所持しているすべての遠隔武器から選んで使うようになります。
+  <description>味方が特定の遠隔武器を使い続けるのではなく、所持しているすべての遠隔武器から選んで使うようになります。
 
 選ばれる遠隔武器は完全にランダムです。同じ武器が連続することもあります。
 
@@ -23,8 +22,7 @@ If you give them multiple ranged weapons, they may put the spare weapons into st
 
 [hr][/hr]
 [h2]Source Code[/h2]
-[url=https://github.com/macchacoffee/elin-mod/tree/main/AlliesSwitchRangedWeapons]GitHub[/url]
-  </description>
+[url=https://github.com/macchacoffee/elin-mod/tree/main/AlliesSwitchRangedWeapons]GitHub[/url]</description>
   <tags>General,QoL</tags>
   <visibility>Public</visibility>
 </Meta>

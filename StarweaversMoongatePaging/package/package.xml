@@ -5,8 +5,7 @@
   <author>抹茶コーヒー</author>
   <loadPriority>100</loadPriority>
   <version>0.23.352</version>
-  <description>
-★星詠みのムーンゲートの行き先リストにページング機能を追加します。
+  <description>★星詠みのムーンゲートの行き先リストにページング機能を追加します。
 
 訪問済みのユーザーマップが大量に保存されている場合、バニラではリスト内のすべての項目についてUIを一度に生成します。このModでは1ページに表示する件数を制限することで、リストを開く際の負荷やスクロール時の動作を改善します。
 
@@ -31,8 +30,7 @@ It does not change the game's own process of reading all saved user map data, so
 
 [hr][/hr]
 [h2]Source Code[/h2]
-[url=https://github.com/macchacoffee/elin-mod/tree/main/StarweaversMoongatePaging]GitHub[/url]
-  </description>
+[url=https://github.com/macchacoffee/elin-mod/tree/main/StarweaversMoongatePaging]GitHub[/url]</description>
   <tags>General</tags>
   <visibility>Public</visibility>
 </Meta>
