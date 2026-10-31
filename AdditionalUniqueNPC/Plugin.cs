@@ -4,6 +4,7 @@ using System.Reflection;
 using BepInEx;
 using HarmonyLib;
 
+using Macchacoffee.ElinMods.AdditionalUniqueNPC.Mod;
 using Macchacoffee.ElinMods.ModUtility.Logging;
 
 namespace Macchacoffee.ElinMods.AdditionalUniqueNPC;
@@ -22,6 +23,8 @@ internal class Plugin : BaseUnityPlugin
     {
         ModLog.Initialize(Logger);
 
+        BaseModManager.SubscribeEvent<Act>("elin.act_performed", ConMCAUNMartialCounter.OnActPerformed);
+
         try
         {
             Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), PluginInfo.Guid);
@@ -30,5 +33,10 @@ internal class Plugin : BaseUnityPlugin
         {
             ModLog.Error($"Failed to apply harmony patch: {ex}");
         }
+    }
+
+    private void OnDestroy()
+    {
+        BaseModManager.UnsubscribeEvent<Act>("elin.act_performed", ConMCAUNMartialCounter.OnActPerformed);
     }
 }
