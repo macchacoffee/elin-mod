@@ -4,6 +4,26 @@ namespace Macchacoffee.ElinMods.AdditionalUniqueNPC.Mod;
 
 public class ActMCAUNMultiMartialMelee : Ability
 {
+    public override Cost GetCost(Chara c)
+    {
+        var result = base.GetCost(c);
+
+        if (result.type != CostType.SP)
+        {
+            return result;
+        }
+
+        var cost = source.cost[0] + (c.body.CountWeapons() - 2) * 2;
+
+        if (!c.IsPC && cost > 2)
+        {
+            cost /= 2;
+        }
+
+        result.cost = cost;
+        return result;
+    }
+
     public override bool CanPerform()
     {
         if (TC == null || !ACT.Melee.CanPerform())
