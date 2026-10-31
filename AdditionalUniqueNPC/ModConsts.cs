@@ -8,6 +8,7 @@ internal static class ModConsts
         private static string Prefixed(string id) => $"{_prefix}{id}";
 
         public static readonly string Misalie = Prefixed("misalie");
+        public static readonly string Eirwen = Prefixed("eirwen");
         public static readonly string DcFiamaPetExtra = Prefixed("dcFiamaPetExtra");
     }
 

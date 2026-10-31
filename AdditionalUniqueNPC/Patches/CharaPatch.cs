@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 using System.Reflection;
 
 using HarmonyLib;
 
+using Macchacoffee.ElinMods.AdditionalUniqueNPC.Mod;
 using Macchacoffee.ElinMods.ModUtility.Patch;
 
 namespace Macchacoffee.ElinMods.AdditionalUniqueNPC.Patches;
@@ -18,47 +18,10 @@ internal static class CharaPatch
         return _patchTarget.IsPatchable(original);
     }
 
-    private static readonly HashSet<string> OnBanishTargetCharaIds = [
-        ModConsts.SourceId.Misalie,
-    ];
-
-    [HarmonyPostfix]
+    [HarmonyPrefix]
     [HarmonyPatch(nameof(Chara.OnBanish), [])]
-    private static void OnBanish_Postfix(Chara __instance)
+    private static void OnBanish_Prefix(Chara __instance)
     {
-        if (!OnBanishTargetCharaIds.Contains(__instance.id) || !__instance.IsGlobal)
-        {
-            return;
-        }
-
-        var uniqueData = __instance.c_uniqueData;
-        if (uniqueData != null &&
-            EClass.game.spatials.map.ContainsKey(uniqueData.uidZone))
-        {
-            return;
-        }
-
-        if (!ModUtil.TryGetContent<CustomCharaContent>(
-                $"Chara/{__instance.id}", out var content) ||
-            content.spawnZones.Count != 1)
-        {
-            return;
-        }
-
-        var spawnZone = content.spawnZones[0];
-        if (spawnZone == "*")
-        {
-            return;
-        }
-
-        var zone = ModUtil.FindZoneByFullName(spawnZone);
-        if (zone == null)
-        {
-            return;
-        }
-
-        __instance.SetHomeZone(zone);
-        __instance.MoveZone(
-            zone, ZoneTransition.EnterState.RandomVisit);
+        FixedUniqueCharaPlacement.EnsureReturnLocation(__instance);
     }
 }
