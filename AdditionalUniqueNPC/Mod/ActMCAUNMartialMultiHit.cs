@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Macchacoffee.ElinMods.AdditionalUniqueNPC.Mod;
 
-public class ActMCAUNMultiMartialMelee : Ability
+public class ActMCAUNMartialMultiHit : Ability
 {
     public override Cost GetCost(Chara c)
     {
@@ -31,19 +31,7 @@ public class ActMCAUNMultiMartialMelee : Ability
             return false;
         }
 
-        foreach (var slot in CC.body.slots)
-        {
-            var weapon = slot.thing;
-
-            // 素手か暗器を装備している場合のみ使用可能。
-            if (weapon != null && weapon.IsWeapon &&
-                (!weapon.IsMeleeWeapon || weapon.category.skill != SKILL.martial))
-            {
-                return false;
-            }
-        }
-
-        return true;
+        return MartialMeleeAbility.CanPerformWithEquipedWeapons(CC);
     }
 
     public override bool Perform()
@@ -82,6 +70,7 @@ public class ActMCAUNMultiMartialMelee : Ability
 
             var effectId = GetHitEffectId(CC, weapon);
             var playEffect = i % 3 == 0;
+            var playHitSound = i % 2 == 0;
             var delay = i * 0.07f;
 
             TweenUtil.Delay(delay, delegate
@@ -91,7 +80,10 @@ public class ActMCAUNMultiMartialMelee : Ability
                     TC.pos.PlayEffect("scream");
                     TC.pos.PlayEffect(effectId);
                 }
-
+                if (playHitSound)
+                {
+                    TC.pos.PlaySound("mc_aun_martial_hit1");
+                }
                 TC.pos.PlaySound(effectId);
             });
 
