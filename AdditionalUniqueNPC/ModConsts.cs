@@ -14,11 +14,12 @@ internal static class ModConsts
 
     public static class SourceNumericId
     {
-        private const int _base = 395820000;
+        private const int _base = 132000;
         private static int Id(int id) => _base + id;
 
         public static readonly int FeatManaAbsorber = Id(1);
         public static readonly int FeatDemonBlood = Id(2);
+        public static readonly int ActMartialCounter = Id(5);
     }
 
     public static class DramaStep
